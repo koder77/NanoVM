@@ -1,0 +1,25 @@
+<html>
+    <head>
+        <title>nano server admin page</title>
+    </head>
+    <body bgcolor="white" text="black" link="#1025C3" vlink="red" alink="green">
+        <h2>admin action?</h2>
+        <form action="/cgi-bin/admin.html" method="get">
+            <p>
+                <select name="action" size="1">
+                    <option>show logfile</option>
+                    <option>reset logfile</option>
+                    <option>shutdown server</option>
+                </select>
+            </p>
+            <p>
+                password:<br>
+                <input name="password" type="password" size="10" maxlength="10">
+            </p>
+            <p>
+                <input type="submit" value=" send ">
+            </p>
+        </form>
+    </body>
+</html>
+

@@ -1,0 +1,174 @@
+//  $VER: string.nch 0.1 (21.02.13)
+//  string library
+
+func string_search (string str[4000], int startpos, string searchstr[4000])
+    int null = 0; int one = 1;
+
+    int pos = -1;
+    int i;
+    int j;
+    int f;
+    int str_len; 
+    int searchstr_len;
+    int check = 0;
+    
+    string str_ch[2];
+    string searchstr_ch[2];
+    
+    strlen (str, str_len);
+    strlen (searchstr, searchstr_len);
+    
+    str_len = --;
+    searchstr_len = --;
+    
+    f = startpos > str_len;
+    if f;
+        goto string_search_end;
+    endif;
+    
+    i = startpos;
+    j = 0;
+    
+lab string_search_loop;
+    check = 0;
+    part2string (str, i, str_ch);
+    part2string (searchstr, j, searchstr_ch);
+    
+    f = str_ch == searchstr_ch;
+    if f;
+        check = 1;
+        pos = i;
+    
+lab string_search_check;
+        f = i < str_len;
+        if f;
+            i = ++;
+            f = j < searchstr_len;
+            if f;
+                j = ++;
+            else;
+                goto string_search_check_end;
+            endif;
+
+            part2string (str, i, str_ch);
+            part2string (searchstr, j, searchstr_ch);
+        
+            f = str_ch != searchstr_ch;
+            if f;
+                check = 0;
+                goto string_search_check_end;
+            endif;
+            goto string_search_check;
+        endif;
+    endif;
+    
+lab string_search_check_end;
+    f = check == 1;
+    if f;
+        goto string_search_end;
+    endif;
+    j = 0; check = 0;
+    
+    f = i < str_len;
+    if f;
+        i = ++;
+    else;
+        pos = -1;
+        goto string_search_end;
+    endif;
+    
+    goto string_search_loop;
+    
+lab string_search_end;
+    return (pos);
+funcend
+
+func string_search_ab (qint Paddress, qint Parray_size, qint Pstartpos, string Psearchstr[4000])
+    byte a[1];
+    
+    byte Px[Parray_size];
+    string Psearchstr_ch[2];
+    
+    byte Pv1; byte Psearchb; qint Pi; qint Pj; int Pf;
+    int Psearchstr_len;
+    int Pcheck; qint Ppos = -1Q;
+    qint Parraymax;
+	
+	Parraymax = Parray_size - 1;
+    strlen (Psearchstr, Psearchstr_len);
+	Psearchstr_len = --;
+    
+    pointer (Paddress, a, string_search_ab_copya);
+    
+//  copy array
+   
+    Pi = 0;
+    for;
+lab string_search_ab_copya;
+        array2var (a, Pi, Pv1);
+        pvar2array (Pv1, Px, Pi);
+
+        Pi = ++;
+        Pf = Pi < Parray_size;
+    next Pf;
+    
+    Pi = Pstartpos;
+    Pj = 0;
+    
+lab string_search_ab_loop;
+    Pcheck = 0;
+    parray2var (Px, Pi, Pv1);
+    part2string (Psearchstr, Pj, Psearchstr_ch);
+    asc (Psearchstr_ch, Psearchb);
+
+    Pf = Pv1 == Psearchb;
+    if Pf;
+        Pcheck = 1;
+        Ppos = Pi;
+	
+lab string_search_ab_check;
+        Pf = Pi < Parraymax;
+        if Pf;
+            Pi = ++;
+            Pf = Pj < Psearchstr_len;
+            if Pf;
+                Pj = ++;
+            else;
+                goto string_search_ab_check_end;
+            endif;
+
+            parray2var (Px, Pi, Pv1);
+            part2string (Psearchstr, Pj, Psearchstr_ch);
+            asc (Psearchstr_ch, Psearchb);
+        
+            Pf = Pv1 != Psearchb;
+            if Pf;
+                Pcheck = 0;
+                goto string_search_ab_check_end;
+            endif;
+			
+            goto string_search_ab_check;
+        endif;
+    endif;
+
+lab string_search_ab_check_end;
+    Pf = Pcheck == 1;
+    if Pf;
+        goto string_search_ab_end;
+    endif;
+    Pj = 0; Pcheck = 0;
+    
+    Pf = Pi < Parray_size;
+    if Pf;
+        Pi = ++;
+    else;
+        Ppos = -1;
+        goto string_search_ab_end;
+    endif;
+    
+    goto string_search_ab_loop;
+    
+lab string_search_ab_end;
+    pdealloc (Px);
+    return (Ppos);
+funcend

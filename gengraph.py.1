@@ -1,0 +1,58 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.\" First parameter, NAME, should be all caps
+.\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
+.\" other parameters are allowed: see man(7), man(1)
+.TH GENGRAPH.PY 1 "September 10, 2006"
+.\" Please adjust this date whenever revising the manpage.
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.SH NAME
+gengraph.py \- Produces a call graph in dot format from an ncc-generated file.
+.SH SYNOPSIS
+.B gengraph.py
+.RI [options]
+.RI <nccout>
+.RI <function>
+.RI ...
+.SH OPTIONS
+.TP
+.BI
+-h | --help: usage statement
+.TP
+.BI
+-V | --version: print version and exit
+.TP
+.BI
+-D | --dot: additional options to dot
+.TP
+.BI
+-d | --depth: max depth of graph
+.TP
+.BI
+-i | --ignore: functions to ignore
+.TP
+.BI
+-l | --location: show file names of function declarations
+.TP
+.BI
+-s | --show: show function but ignore sub-functions
+.SH SAMPLE USAGE
+
+.B
+gengraph.py -i "exit strlen" nccout main | dot -Tsvg -o func.svg
+
+.B
+gengraph.py -i "exit strlen" nccout main | springgraph > output.png
+
+.SH SEE ALSO
+.BR ncc (1),
+.BR nccnav (1)

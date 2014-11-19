@@ -1,0 +1,5 @@
+// $VER: endian.nch 1.0.0 (17.11.12)
+
+int endian_little = 1; int endian_big = 0;
+
+// EOF

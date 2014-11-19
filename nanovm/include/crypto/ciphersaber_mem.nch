@@ -1,0 +1,235 @@
+//  $VER: ciphersaber_mem.nch 1.0 (16.11.12)
+//  ciphersaber encryption library (array crypt/decrypt)
+//
+
+func ciphersaber_mem_run (qint input_address, qint output_address, qint size, int action, string password[247], int async)
+    #include <threads.nch>
+
+//  async = 0 => wait till run is finished
+//  async = 1 => don't wait, return = asynchron run
+
+
+    int thread; int thread_state;
+    
+    int one = 1; int two = 2;
+    int f;
+    
+    threadcreate (thread, ciphersaber_mem);
+    
+    threadsync (thread);
+     
+    threadpush (thread, password);
+    threadpush (thread, action);
+    threadpush (thread, size);
+    threadpush (thread, output_address);
+    threadpush (thread, input_address);
+    
+    threadpushsync (thread);
+    
+    f = async == one;
+    if f;
+        goto ciphersaber_mem_run_end;
+    endif;
+    
+lab ciphersaber_mem_run_wait;
+    waitsec (one);
+     
+    threadstate (thread, thread_state);
+    f = thread_state == thread_running;
+    if f; goto ciphersaber_mem_run_wait; endif;
+    
+lab ciphersaber_mem_run_end;
+    return (thread);
+funcend
+
+
+func ciphersaber_mem (#sync, qint Pinput_address, qint Poutput_address, qint Psize, int Paction, string Ppassword[247])
+//  action: 1 = encrypt, 2 = decrypt
+//  returns 0 = ok, 1 = error
+
+    int Pkey_len; int Pkeyset_repeat = 32;
+    int Pencrypt = 1; int Pdecrypt = 2; int Pten = 10;
+    int Pf;
+    int Pret = 0;
+    int Pi; int Pj; int Pk; byte Pv; int Pn; byte Pstatei; byte Pkeyi; int Pkeyind;
+    int Prandstart; double Prandom; double Pmaxrandom = 255.0; byte Prandomb;
+    byte Ps1; byte Ps2; 
+    
+    byte ina[1]; byte outa[1]; qint Pina_ind = 0Q; qint Pouta_ind = 0Q;
+    byte Pin; byte Pout;
+    int Pnull = 0; int Pone = 1;
+    
+    byte Pkey[256]; byte Pstate[256]; byte Pinit_vect[10];
+    
+    string Pch[2];
+    
+    strlen (Ppassword, Pkey_len);
+    Pkey_len = --;
+    
+    pointer (Pinput_address, ina, ciphersaber_mem_v1);
+    pointer (Poutput_address, outa, ciphersaber_mem_v2);
+    pointer (Pinput_address, ina, ciphersaber_mem_v3);
+    pointer (Poutput_address, outa, ciphersaber_mem_v4);
+    
+lab ciphersaber_mem_v1;
+    varlock (ina);
+    
+lab ciphersaber_mem_v2;
+    varlock (outa);
+    
+    
+    pointer (Pinput_address, ina, ciphersaber_mem_p1);
+    pointer (Poutput_address, outa, ciphersaber_mem_p2);
+    pointer (Pinput_address, ina, ciphersaber_mem_p3);
+    pointer (Poutput_address, outa, ciphersaber_mem_p4);
+    
+    Pi = 0;
+    for;
+        part2string (Ppassword, Pi, Pch);
+        asc (Pch, Pv);
+    
+        pvar2array (Pv, Pkey, Pi);
+    
+        Pi = ++;
+        Pf = Pi <= Pkey_len;
+    next Pf;
+        
+    Pkey_len = ++;
+    
+    srand (Prandstart);
+     
+    Pf = Paction == Pdecrypt;
+    if Pf;
+        Pi = 0;
+        for;
+        
+lab ciphersaber_mem_p1;
+            array2var (ina, Pina_ind, Pin);
+            pvar2array (Pin, Pinit_vect, Pi);
+        
+            Pi = ++;
+            Pina_ind = ++;
+            Pf = Pi < Pten;
+        next Pf;
+    
+        Pj = Pkey_len; Pi = 0;
+        for;
+            parray2var (Pinit_vect, Pi, Pv);
+            pvar2array (Pv, Pkey, Pj);
+        
+            Pj = ++;
+            Pi = ++;
+            Pf = Pi < Pten;
+        next Pf;      
+    else;
+        Pj = Pkey_len; Pi = 0;
+        for;
+            rand (Prandom);
+            Prandom = Prandom * Pmaxrandom;
+            2int (Prandom, Prandomb);
+            
+            pvar2array (Prandomb, Pkey, Pj);
+
+lab ciphersaber_mem_p2;        
+            var2array (Prandomb, outa, Pouta_ind);
+        
+            Pouta_ind = ++;
+        
+            Pj = ++;
+            Pi = ++;
+            Pf = Pi < Pten;
+        next Pf;
+    endif;
+    
+    Pkey_len = Pkey_len + Pten;
+    
+    Pi = 0;
+    for;
+        parray2var (Pkey, Pi, Pv);
+        
+        Pi = ++;
+        Pf = Pi <= Pkey_len;
+    next Pf;
+    
+    
+ // setup state array (don't remove nested code flag, it's needed there!!!)
+      
+    Pv = 0;
+    for;
+        #NESTED_CODE_OFF;
+        pvar2array (Pv, Pstate, Pv);
+    
+        Pv = ++;
+        Pf = Pv <= 255;
+    next Pf;
+    
+    Pk = 1; Pj = 0;
+    for;
+        #NESTED_CODE_OFF;
+        Pi = 0;
+        for;
+            #NESTED_CODE_OFF;
+            parray2var (Pstate, Pi, Pstatei);
+        
+            Pkeyind = Pi % Pkey_len;
+            parray2var (Pkey, Pkeyind, Pkeyi);
+        
+            Pj = Pj + Pstatei + Pkeyi % 256;
+        
+            parray2var (Pstate, Pi, Ps1);
+            parray2var (Pstate, Pj, Ps2);
+        
+            pvar2array (Ps1, Pstate, Pj);
+            pvar2array (Ps2, Pstate, Pi);
+            
+            Pi = ++;
+            Pf = Pi <= 255;
+        next Pf;
+        
+        Pk = ++;
+        Pf = Pk <= Pkeyset_repeat;
+    next Pf;
+    
+    
+//  encrypt / decrypt data
+    
+    Pi = 0; Pj = 0;
+    
+lab ciphersaber_mem_loop;
+
+lab ciphersaber_mem_p3;
+    array2var (ina, Pina_ind, Pin);
+    Pina_ind = ++;
+    
+    Pi = Pi + 1 % 256;
+    
+    parray2var (Pstate, Pi, Ps1);
+    Pj = Pj + Ps1 % 256;
+    
+    parray2var (Pstate, Pi, Ps1);
+    parray2var (Pstate, Pj, Ps2);
+        
+    pvar2array (Ps1, Pstate, Pj);
+    pvar2array (Ps2, Pstate, Pi);
+        
+    Pn = Ps1 + Ps2 % 256;
+     
+    parray2var (Pstate, Pn, Ps1);
+    Pout = Pin ^ Ps1;
+ 
+lab ciphersaber_mem_p4;    
+    var2array (Pout, outa, Pouta_ind);
+    Pouta_ind = ++;
+    
+    Pf = Pina_ind < Psize;
+    if Pf; goto ciphersaber_mem_loop; endif;
+    
+    
+lab ciphersaber_mem_v3;
+    varunlock (ina);
+    
+lab ciphersaber_mem_v4;
+    varunlock (outa);
+    
+    exit Pret;
+funcend

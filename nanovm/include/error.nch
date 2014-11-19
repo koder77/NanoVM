@@ -1,0 +1,52 @@
+//  $VER: error.nch 1.0 (02.11.12)
+//  error library
+
+func file_error ()
+    #include <file.nch>
+
+    int error;
+    
+    #ASSEMB
+        pull_i      err_file, error@file_error;
+    #ASSEMB_END
+
+    return (error);
+funcend
+
+func socket_error ()
+    #include <socket.nch>
+
+    int error;
+
+    #ASSEMB
+        pull_i      err_sock, error@socket_error;
+    #ASSEMB_END
+
+    return (error);
+funcend
+
+func memory_error ()
+    #include <memory.nch>
+
+    int error;
+
+    #ASSEMB
+        pull_i      err_alloc, error@memory_error;
+    #ASSEMB_END
+
+    return (error);
+funcend
+
+func process_error ()
+    #include <process.nch>
+
+    int error;
+
+    #ASSEMB
+        pull_i      err_process, error@process_error;
+    #ASSEMB_END
+
+    return (error);
+funcend
+
+//  EOF

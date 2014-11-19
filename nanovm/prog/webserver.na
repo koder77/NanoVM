@@ -1,0 +1,1592 @@
+//  webserver v2.1
+//  This is a "simple" http server.
+//  with threading
+
+    #include <file.nah>
+    #include <socket.nah>
+    #include <process.nah>
+
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, server;
+    #setreg_l       L5, _err_sock_ok;
+    #setreg_l       L6, _err_addrinuse;
+    #setreg_l       L7, _err_nosys;
+    #setreg_l       L8, port;
+    #setreg_l       L9, server_open;
+    #setreg_l       L10, server_act_open;
+    #setreg_l       L11, len;
+    #setreg_l       L12, shutdown;
+    #setreg_l       L13, if;
+    #setreg_l       L14, args;
+    #setreg_l       L15, n;
+    #setreg_l       L16, three;
+    #setreg_l       L17, four;
+    #setreg_l       L18, i;
+    #setreg_l       L19, file_ok;
+    #setreg_l       L20, file;
+    #setreg_l       L22, _err_file_ok;
+    #setreg_l       L23, file_size;
+    #setreg_l       L24, file_ok;
+    #setreg_l       L25, ncr;
+    #setreg_l       L26, nlf;
+    #setreg_l       L27, forbidden;
+    #setreg_l       L28, gmt_offset;
+    #setreg_l       L29, logfile;
+    #setreg_l       L30, ticks;
+    #setreg_l       L31, kbsec;
+    #setreg_l       L32, accept;
+    #setreg_l       L33, thread;
+    #setreg_l       L34, threadnum;
+    #setreg_l       L35, delay;
+    #setreg_l       L36, _err_no_such_process;
+
+    #setreg_d       D0, ticks_d;
+    #setreg_d       D1, timer_ticks_d;
+    #setreg_d       D2, secs_d;
+    #setreg_d       D3, k_bytes_d;
+    #setreg_d       D4, kb_d;
+    #setreg_d       D5, kb_sec_d;
+    #setreg_d       D6, null_d;
+
+
+    #setreg_s       S0, arg;
+    #setreg_s       S1, ip;
+    #setreg_s       S2, buf;
+    #setreg_s       S3, path;
+    #setreg_s       S4, cgi_path;
+    #setreg_s       S5, filename;
+    #setreg_s       S6, sendfilename;
+    #setreg_s       S7, logfilename;
+    #setreg_s       S8, logfilefullname;
+    #setreg_s       S9, configfilename;
+    #setreg_s       S10, head;
+    #setreg_s       S11, mime;
+    #setreg_s       S12, ext;
+    #setreg_s       S13, date;
+    #setreg_s       S14, dot;
+    #setreg_s       S15, ch;
+    #setreg_s       S16, nch;
+    #setreg_s       S17, cr;
+    #setreg_s       S18, lf;
+    #setreg_s       S19, comm;
+    #setreg_s       S20, password;
+    #setreg_s       S21, gmt_offset_str;
+    #setreg_s       S22, cgi_directory;
+    #setreg_s       S23, cgi_action;
+    #setreg_s       S24, cgi_file;
+    #setreg_s       S25, cgi_runprog;
+    #setreg_s       S26, cgi_ext;
+    #setreg_s       S27, cgi_ret;
+
+    #setreg_s       S28, show_logfile;
+    #setreg_s       S29, reset_logfile;
+    #setreg_s       S30, shutdown_server;
+    #setreg_s       S31, s;
+    #setreg_s       S32, empty;
+    #setreg_s       S33, waiting;
+    #setreg_s       S34, sending;
+    #setreg_s       S45, fnewline;
+    #setreg_s       S46, shutdowns;
+    #setreg_s       S47, forbiddens;
+
+    int logfile_err;
+
+    int logfile_lock;
+
+    ston;
+
+    push_i          0, null;
+    push_i          1, one;
+    push_i          2, two;
+    push_i          3, three;
+    push_i          4, four;
+    push_i          err_sock_ok, _err_sock_ok;
+    push_i          err_addrinuse, _err_addrinuse;
+    push_i          err_nosys, _err_nosys;
+    push_i          err_no_such_process, _err_no_such_process;
+    push_i          err_file_ok, _err_file_ok;
+    pull_i          one, _err_file;
+
+    push_d          1024.0, k_bytes_d;
+    push_d          0.0, null_d;
+
+    move_l          null, server_open;
+    move_l          null, server_act_open;
+    move_l          null, shutdown;
+    push_s          ".", dot;
+    push_s          "", empty;
+    push_s          "[waiting.................................]", waiting;
+
+    push_i          1, delay;
+
+    pull_i          null, logfile_err;
+
+//  nl = CRLF
+    push_i          13, ncr;
+    char            ncr, cr;
+    move_s          cr, fnewline;
+    push_i          10, nlf;
+    char            nlf, lf;
+    add_s           fnewline, lf, fnewline;
+    pull_s          fnewline, _fnewline;
+
+
+//  settings --------------------------------------------------------
+
+//  port: should be 80 for http, don't change
+    push_i          80, port;
+
+//  logfile name
+    push_s          "logfile.txt", logfilename;
+
+//  configfile name
+    push_s          "webserver.cfg", configfilename;
+
+//  cgi directory
+    push_s          "/cgi-bin/", cgi_directory;
+
+//  -----------------------------------------------------------------
+
+    push_s          "webserver v2.1", s;
+    print_s         s;
+    print_n         two;
+
+
+//  load config file
+
+    move_s          empty, path;
+    move_s          empty, password;
+    move_s          empty, gmt_offset_str;
+
+    push_s          "r", s;
+    fopen           file, configfilename, s;
+
+    neq_jmp_l       err_file, _err_file_ok, cfg_file_error;
+
+lab read_cfg;
+    fread_ls        file, buf;
+    neq_jmp_l       err_file, _err_file_ok, check_cfg;
+
+    push_s          "webserver root:", s;
+    eq_s            buf, s, if;
+    jmp_l           if, cfg_webserver_root;
+
+    push_s          "password:", s;
+    eq_s            buf, s, if;
+    jmp_l           if, cfg_password;
+
+    push_s          "gmt offset:", s;
+    eq_s            buf, s, if;
+    jmp_l           if, cfg_gmt_offset;
+
+    jmp             read_cfg;
+
+
+lab cfg_webserver_root;
+    fread_ls        file, path;
+    neq_jmp_l       err_file, _err_file_ok, cfg_file_error;
+    jmp             read_cfg;
+
+lab cfg_password;
+    fread_ls        file, password;
+    neq_jmp_l       err_file, _err_file_ok, cfg_file_error;
+    jmp             read_cfg;
+
+lab cfg_gmt_offset;
+    fread_ls        file, gmt_offset_str;
+    neq_jmp_l       err_file, _err_file_ok, cfg_file_error;
+    jmp             read_cfg;
+
+
+lab cfg_file_error;
+    fclose          file;
+
+    push_s          "[ERROR config file: ", s;
+    print_s         s;
+    print_s         configfilename;
+    push_s          " bad!]", s;
+    print_s         s;
+    push_i          5, i;
+    exit            i;
+
+lab check_cfg;
+    fclose          file;
+
+    eq_s            path, empty, if;
+    jmp_l           if, cfg_file_error;
+
+    eq_s            password, empty, if;
+    jmp_l           if, cfg_file_error;
+
+    eq_s            gmt_offset_str, empty, if;
+    jmp_l           if, cfg_file_error;
+
+    val_l           gmt_offset_str, gmt_offset;
+
+    push_s          "&password=", s;
+    add_s           s, password, password;
+
+//  cgi actions
+    push_s          "show+logfile", s;
+    add_s           s, password, show_logfile;
+    push_s          "reset+logfile", s;
+    add_s           s, password, reset_logfile;
+    push_s          "shutdown+server", s;
+    add_s           s, password, shutdown_server;
+
+    move_s          path, cgi_path;
+    push_s          "cgi-bin/", s;
+    add_s           cgi_path, s, cgi_path;
+    push_s          "cgi.html", s;
+    move_s          s, cgi_ret;
+
+//  check arguments
+
+    argnum          args;
+    neq_jmp_l       args, null, show_args;
+
+    argstr          null, arg;
+
+//  open logfile for append
+
+    add_s           path, logfilename, logfilefullname;
+
+//  "/logfilename"
+    push_s          "/", s;
+    move_s          s, buf;
+    add_s           buf, logfilename, logfilename;
+    jsr             open_logfile;
+
+
+//  open server
+
+    hostbyname      arg, ip;
+    eq_jmp_l        err_sock, _err_sock_ok, ip_ok;
+
+    hostbyaddr      arg, ip;
+
+lab ip_ok;
+    push_s          "[ip: ", s;
+    print_s         s;
+    print_s         ip;
+    push_s          ":", s;
+    print_s         s;
+    print_l         port;
+    push_s          "]", s;
+    print_s         s;
+    print_n         two;
+
+    ssopen          server, ip, port;
+    jsr             check_err;
+    move_l          one, server_open;
+
+lab wait_conn;
+    move_l          null, forbidden;
+
+    print_n         one;
+    print_s         waiting;
+    print_n         two;
+
+    var_lock        logfile_lock;
+    fwrite_n        logfile, one;
+    jsr             check_file_err;
+
+    fwrite_s        logfile, waiting;
+    jsr             check_file_err;
+
+    fwrite_n        logfile, two;
+    jsr             check_file_err;
+    var_unlock      logfile_lock;
+
+lab socket_reconnect;
+    ssopenact       server, accept;
+    eq_jmp_l        err_sock, _err_no_such_process, socket_wait;
+    jsr             check_err;
+
+    thread_create   thread, run;
+    thread_sync     thread;
+
+    thpush_l        thread, server;
+    thpush_l        thread, accept;
+    thpush_l        thread, logfile;
+    thpush_l        thread, forbidden;
+    thpush_s        thread, path;
+    thpush_s        thread, show_logfile;
+    thpush_s        thread, reset_logfile;
+    thpush_s        thread, shutdown_server;
+    thpush_s        thread, cgi_path;
+    thpush_s        thread, cgi_directory;
+    thpush_s        thread, cgi_ret;
+    thpush_s        thread, logfilename;
+    thpush_s        thread, logfilefullname;
+    thpush_sync     thread;
+
+    wait_t          delay;
+    jmp             wait_conn;
+
+
+lab socket_wait;
+    wait_s          delay;
+    push_s          "[socket error: no such process: wait 1 sec->reconnect...]", s;
+    print_s         s;
+    print_n         two;
+    jmp             socket_reconnect;
+
+//  -----------------------------------------------------------------------------------
+lab run;
+    push_i          0, null;
+    push_i          1, one;
+    push_i          2, two;
+    push_i          3, three;
+    push_i          4, four;
+    push_i          err_sock_ok, _err_sock_ok;
+    push_i          err_addrinuse, _err_addrinuse;
+    push_i          err_nosys, _err_nosys;
+    push_i          err_file_ok, _err_file_ok;
+    pull_i          one, _err_file;
+
+    push_d          1024.0, k_bytes_d;
+    push_d          0.0, null_d;
+
+    move_l          one, server_open;
+    move_l          one, server_act_open;
+    move_l          null, shutdown;
+    push_s          ".", dot;
+    push_s          "", empty;
+    push_s          "[sending: ", sending;
+    push_s          "[shutdown................................]", shutdowns;
+    push_s          "[FORBIDDEN!]", forbiddens;
+
+    pull_i          null, logfile_err;
+
+//  nl = CRLF
+    push_i          13, ncr;
+    char            ncr, cr;
+    move_s          cr, fnewline;
+    push_i          10, nlf;
+    char            nlf, lf;
+    add_s           fnewline, lf, fnewline;
+    pull_s          fnewline, _fnewline;
+
+
+//  settings --------------------------------------------------------
+
+//  port: should be 80 for http, don't change
+    push_i          80, port;
+
+    thread_num      threadnum;
+    push_s          "thread: ", s;
+    print_s         s;
+    print_l         threadnum;
+    print_n         two;
+
+    thpull_sync;
+    stpull_s        logfilefullname;
+    stpull_s        logfilename;
+    stpull_s        cgi_ret;
+    stpull_s        cgi_directory;
+    stpull_s        cgi_path;
+    stpull_s        shutdown_server;
+    stpull_s        reset_logfile;
+    stpull_s        show_logfile;
+    stpull_s        path;
+    stpull_l        forbidden;
+    stpull_l        logfile;
+    stpull_l        accept;
+    stpull_l        server;
+    move_l          one, server_act_open;
+
+    var_lock        logfile_lock;
+    push_s          "[thread: ", s;
+    fwrite_s        logfile, s;
+    str_l           threadnum, s;
+    fwrite_s        logfile, s;
+    push_s          "]", s;
+    fwrite_s        logfile, s;
+    fwrite_n        logfile, two;
+    var_unlock      logfile_lock;
+
+    jsr             get_date;
+
+    clientaddr      accept, buf;
+    push_s          "[get request from: ", s;
+    print_s         s;
+    print_s         buf;
+    push_s          "]", s;
+    print_s         s;
+    print_n         one;
+    push_s          "[date: ", s;
+    print_s         s;
+    print_s         date;
+    push_s          "]", s;
+    print_s         s;
+    print_n         two;
+
+    var_lock        logfile_lock;
+    push_s          "[get request from: ", s;
+    fwrite_s        logfile, s;
+    jsr             check_file_err;
+
+    fwrite_s        logfile, buf;
+    jsr             check_file_err;
+
+    push_s          "]", s;
+    fwrite_s        logfile, s;
+    jsr             check_file_err;
+
+    fwrite_n        logfile, one;
+    jsr             check_file_err;
+
+    push_s          "[date: ", s;
+    fwrite_s        logfile, s;
+    jsr             check_file_err;
+
+    fwrite_s        logfile, date;
+    jsr             check_file_err;
+
+    push_s          "]", s;
+    fwrite_s        logfile, s;
+    jsr             check_file_err;
+
+    fwrite_n        logfile, two;
+    jsr             check_file_err;
+    var_unlock      logfile_lock;
+
+lab read;
+    push_s          "HTTP/1.1 200 OK", head;
+
+    move_s          empty, cgi_file;
+    move_s          empty, cgi_action;
+
+    jsr             parse_request;
+
+    neq_s           cgi_action, empty, if;
+    jsr_l           if, cgi_action;
+
+    eq_s            filename, logfilename, if;
+    jsr_l           if, close_logfile;
+
+    eq_jsr_l        forbidden, one, forbidden;
+    jsr             open_file;
+    eq_jsr_l        file_ok, null, send_not_found;
+
+    jsr             send_header;
+
+    print_s         sending;
+    print_s         filename;
+    push_s          "]", s;
+    print_s         s;
+    print_n         one;
+
+    eq_s            filename, logfilename, if;
+    jmp_l           if, no_send_logfile_entry;
+
+    var_lock        logfile_lock;
+    fwrite_s        logfile, sending;
+    jsr             check_file_err;
+
+    fwrite_s        logfile, filename;
+    jsr             check_file_err;
+
+    push_s          "]", s;
+    fwrite_s        logfile, s;
+    jsr             check_file_err;
+
+    fwrite_n        logfile, one;
+    jsr             check_file_err;
+    var_unlock      logfile_lock;
+
+lab no_send_logfile_entry;
+    jsr             send_file;
+
+    eq_s            filename, logfilename, if;
+    jsr_l           if, open_logfile;
+
+    sscloseact      accept;
+    move_l          null, server_act_open;
+
+    eq_jmp_l        shutdown, one, shutdown;
+
+    exit            null;
+
+
+lab send_not_found;
+    jsr             not_found;
+    jsr             open_file;
+    rts;
+
+
+lab shutdown;
+    wait_s          one;
+    print_s         shutdowns;
+    print_n         two;
+
+    var_lock        logfile_lock;
+    fwrite_s        logfile, shutdowns;
+    jsr             check_file_err;
+
+    fwrite_n        logfile, two;
+    jsr             check_file_err;
+    var_unlock      logfile_lock;
+
+    ssclose         server;
+    jsr             check_err;
+    move_l          null, server_open;
+
+lab end;
+    eq_jsr_l        server_act_open, one, close_act_server;
+    eq_jsr_l        server_open, one, close_server;
+
+    fclose          logfile;
+    thread_join;
+    exit            null;
+
+
+lab close_act_server;
+    sscloseact      accept;
+    rts;
+
+lab close_server;
+    ssclose         server;
+    rts;
+
+lab check_err;
+    neq_jmp_l       err_sock, _err_sock_ok, socket_error;
+    rts;
+
+lab check_file_err;
+    neq_jmp_l       err_file, _err_file_ok, file_error;
+    rts;
+
+lab socket_error;
+    push_s          "[socket error: ", s;
+    print_s         s;
+    print_l         err_sock;
+
+    eq_jsr_l        err_sock, _err_addrinuse, addrinuse;
+
+    eq_jsr_l        err_sock, _err_nosys, no_tcp;
+
+    push_s          "]", s;
+    print_s         s;
+    print_n         one;
+    jmp             end;
+
+lab file_error;
+    push_s          "[logfile error: ", s;
+    print_s         s;
+    print_l         err_file;
+    push_s          "]", s;
+    print_s         s;
+    print_n         one;
+    pull_i          err_file, logfile_err;
+    rts;
+
+lab addrinuse;
+    print_n         one;
+    push_s          "[address already in use!]", s;
+    print_s         s;
+    print_n         one;
+    rts;
+
+lab no_tcp;
+    print_n         one;
+    push_s          "[tcp stack not running!]", s;
+    print_s         s;
+    print_n         one;
+    rts;
+
+lab show_args;
+    push_s          "webserver <ip>", s;
+    print_s         s;
+    print_n         one;
+    jmp             end;
+
+
+lab parse_request;
+
+lab read_line;
+	push_s			"", buf;
+    sread_ls        accept, buf;
+	jsr             check_err;
+
+    print_s         buf;
+    print_n         one;
+
+    var_lock        logfile_lock;
+    fwrite_s        logfile, buf;
+    jsr             check_file_err;
+
+    fwrite_n        logfile, one;
+    jsr             check_file_err;
+    var_unlock      logfile_lock;
+
+    strlen          buf, len;
+    dec_l           len;
+
+    neq_s           buf, empty, if;
+    jsr_l           if, read_comm;
+
+    eq_s            buf, empty, if;
+    jmp_l           if, read_line_end;
+
+    jmp             read_line;
+
+lab read_line_end;
+    rts;
+
+
+lab read_comm;
+    ls_jmp_l        len, three, no_comm_get;
+    strleft         buf, three, comm;
+
+    push_s          "GET", s;
+    eq_s            comm, s, if;
+    jsr_l           if, comm_get;
+
+lab no_comm_get;
+    rts;
+
+
+lab comm_get;
+    push_i          4, i;
+    move_s          empty, filename;
+
+lab comm_get_read;
+    eq_jmp_l        i, len, comm_get_read_end;
+    move_p2s        buf, i, ch;
+
+    push_s          " ", s;
+    eq_s            ch, s, if;
+    jmp_l           if, comm_get_read_end;
+    add_s           filename, ch, filename;
+    inc_l           i;
+    jmp             comm_get_read;
+
+lab comm_get_read_end;
+
+
+//  check for "/" end
+
+    strright        filename, one, ch;
+    push_s          "/", s;
+
+    eq_s            ch, s, if;
+    jsr_l           if, file_index;
+
+
+//  security check (no ":", ".." and "//" allowed)
+
+    move_l          null, i;
+    strlen          filename, len;
+    dec_l           len;
+
+lab security_check;
+    move_p2s        filename, i, ch;
+
+    push_s          "/", s;
+    eq_s            ch, s, if;
+    jsr_l           if, check_second_slash;
+
+    push_s          ".", s;
+    eq_s            ch, s, if;
+    jsr_l           if, check_second_dot;
+
+    push_s          ":", s;
+    eq_s            ch, s, if;
+    jsr_l           if, set_forbidden;
+
+    inc_lseq_jmp_l  i, len, security_check;
+
+
+//  cgi check
+
+    strlen          filename, n;
+    strlen          cgi_directory, i;
+
+    ls_jmp_l        n, i, no_cgi;
+
+    strleft         filename, i, buf;
+    eq_s            buf, cgi_directory, if;
+    jsr_l           if, parse_cgi;
+
+lab no_cgi;
+    rts;
+
+
+lab check_second_slash;
+    add_l           i, one, n;
+    move_p2s        filename, n, nch;
+    push_s          "/", s;
+    eq_s            nch, s, if;
+    jsr_l           if, set_forbidden;
+    rts;
+
+lab check_second_dot;
+    add_l           i, one, n;
+    move_p2s        filename, n, nch;
+    push_s          ".", s;
+    eq_s            nch, s, if;
+    jsr_l           if, set_forbidden;
+    rts;
+
+lab set_forbidden;
+    move_l          one, forbidden;
+    print_s         forbiddens;
+    print_n         two;
+
+    var_lock        logfile_lock;
+    fwrite_s        logfile, forbiddens;
+    jsr             check_file_err;
+
+    fwrite_n        logfile, two;
+    jsr             check_file_err;
+    var_unlock      logfile_lock;
+    rts;
+
+lab file_index;
+    push_s          "index.html", filename;
+    push_s          "[sending index.html]", s;
+    print_s         s;
+    print_n         two;
+    rts;
+
+
+//  parse cgi - get cgi_file and cgi_action
+
+lab parse_cgi;
+    strlen          cgi_directory, i;
+    move_l          i, n;
+
+lab check_quest;
+    move_p2s        filename, i, ch;
+    push_s          "?", s;
+    eq_s            ch, s, if;
+    jsr_l           if, get_cgi_file;
+
+    inc_lseq_jmp_l  i, len, check_quest;
+    rts;
+
+lab get_cgi_file;
+// i = "?" pos
+
+    dec_l           i;
+
+lab get_cgi_file_loop;
+    move_p2s        filename, n, ch;
+    add_s           cgi_file, ch, cgi_file;
+
+    inc_lseq_jmp_l  n, i, get_cgi_file_loop;
+
+    move_s          empty, buf;
+    add_l           i, two, i;
+    push_i          6, n;
+    add_l           n, i, n;
+
+    gr_jmp_l        n, len, get_action_end;
+
+//  "/cgi-bin/admin.html?action=show+logfile"
+
+lab get_action_str_loop;
+    move_p2s        filename, i, ch;
+    add_s           buf, ch, buf;
+
+    inc_lseq_jmp_l  i, n, get_action_str_loop;
+
+    push_s          "action=", s;
+    eq_s            buf, s, if;
+    jsr_l           if, get_action;
+
+lab get_action_end;
+    rts;
+
+lab get_action;
+    inc_l           n;
+
+lab get_action_loop;
+    move_p2s        filename, n, ch;
+    add_s           cgi_action, ch, cgi_action;
+
+    inc_lseq_jmp_l  n, len, get_action_loop;
+    rts;
+
+
+lab open_file;
+
+//  try to open file
+
+    move_l          one, file_ok;
+
+    add_s           path, filename, sendfilename;
+
+    push_s          "r", s;
+    fopen           file, sendfilename, s;
+    move_l          one, file_ok;
+    neq_jsr_l       err_file, _err_file_ok, file_error;
+    fsize           file, file_size;
+    fclose          file;
+    rts;
+
+lab file_error;
+    move_l          null, file_ok;
+    rts;
+
+
+
+lab send_header;
+    swrite_s        accept, head;
+    swrite_n        accept, one;
+
+    push_s          "Server: nano webaccept/2.1", s;
+    swrite_s        accept, s;
+    swrite_n        accept, one;
+
+    push_s          "Date: ", buf;
+    add_s           buf, date, buf;
+    swrite_s        accept, buf;
+    swrite_n        accept, one;
+
+    push_s          "Accept-Ranges: bytes", s;
+    swrite_s        accept, s;
+    swrite_n        accept, one;
+
+    push_s          "Content-Length: ", s;
+    swrite_s        accept, s;
+    swrite_sl       accept, file_size;
+    swrite_n        accept, one;
+
+    jsr             get_mime;
+
+    push_s          "Content-Type: ", buf;
+    add_s           buf, mime, buf;
+    swrite_s        accept, buf;
+    swrite_n        accept, two;
+    rts;
+
+
+lab send_file;
+//  buffer for sendig file
+    byte Pbuffer[512];
+    ton;
+    push_s          "r", s;
+    fopen           file, sendfilename, s;
+
+    move_l          null, i;
+    push_i          512, n;
+    ls_jsr_l        file_size, n, send_file_less_512;
+
+lab send_file_loop;
+    pfread_ab       file, Pbuffer, n;
+    pswrite_ab      accept, Pbuffer, n;
+    add_l           i, n, i;
+    sub_l           file_size, i, len;
+    ls_jsr_l        len, n, send_file_last_bytes;
+    ls_jmp_l        i, file_size, send_file_loop;
+    fclose          file;
+    toff;
+
+	pdealloc			Pbuffer;
+
+//  calculate transfer rate: KB/s
+
+    push_q          _timer, ticks;
+    2double         ticks, ticks_d;
+    push_l          _timertck, i;
+    2double         i, timer_ticks_d;
+    div_d           ticks_d, timer_ticks_d, secs_d;
+
+    2double         file_size, kb_d;
+    div_d           kb_d, k_bytes_d, kb_d;
+
+    gr_d            secs_d, null_d, if;
+    jmp_l           if, secs_not_zero;
+
+    inc_d           secs_d;
+
+lab secs_not_zero;
+    div_d           kb_d, secs_d, kb_sec_d;
+
+    push_s          "[", s;
+    print_s         s;
+    print_d         kb_sec_d;
+    push_s          " KB/s]", s;
+    print_s         s;
+    print_n         two;
+
+    eq_s            filename, logfilename, if;
+    jmp_l           if, no_kbs_logfile_entry;
+
+    var_lock        logfile_lock;
+    push_s          "[", s;
+    fwrite_s        logfile, s;
+    jsr             check_file_err;
+
+    fwrite_sd       logfile, kb_sec_d;
+    jsr             check_file_err;
+
+    push_s          " KB/s]", s;
+    fwrite_s        logfile, s;
+    jsr             check_file_err;
+
+    fwrite_n        logfile, two;
+    jsr             check_file_err;
+    var_unlock      logfile_lock;
+
+lab no_kbs_logfile_entry;
+    rts;
+
+lab send_file_less_512;
+    move_l          file_size, n;
+    rts;
+
+lab send_file_last_bytes;
+    move_l          len, n;
+    rts;
+
+
+lab get_mime;
+    strlen          filename, len;
+    dec_l           len;
+    move_l          len, i;
+    move_s          empty, ext;
+    push_s          "text/html", mime;
+
+lab get_ext;
+    move_p2s        filename, i, ch;
+    eq_s            ch, dot, if;
+    jmp_l           if, read_ext;
+    dec_l           i;
+    greq_jmp_l      i, null, get_ext;
+    rts;
+
+lab read_ext;
+    inc_l           len;
+    sub_l           len, i, i;
+    strright        filename, i, ext;
+    ucase           ext;
+
+//  check html
+    push_s          ".HTML", s;
+    eq_s            ext, s, if;
+    jmp_l           if, mime_html;
+
+    push_s          ".HTM", s;
+    eq_s            ext, s, if;
+    jmp_l           if, mime_html;
+
+    push_s          ".HML", s;
+    eq_s            ext, s, if;
+    jmp_l           if, mime_html;
+
+//  check text
+    push_s          ".TXT", s;
+    eq_s            ext, s, if;
+    jmp_l           if, mime_text;
+
+    push_s          ".DOC", s;
+    eq_s            ext, s, if;
+    jmp_l           if, mime_text;
+
+//  check aguide
+    push_s          ".GUIDE", s;
+    eq_s            ext, s, if;
+    jmp_l           if, mime_aguide;
+
+//  check gif
+    push_s          ".GIF", s;
+    eq_s            ext, s, if;
+    jmp_l           if, mime_gif;
+
+//  check png
+    push_s          ".PNG", s;
+    eq_s            ext, s, if;
+    jmp_l           if, mime_png;
+
+//  check jpeg
+    push_s          ".JPG", s;
+    eq_s            ext, s, if;
+    jmp_l           if, mime_jpeg;
+
+    push_s          ".JPEG", s;
+    eq_s            ext, s, if;
+    jmp_l           if, mime_jpeg;
+
+//  check bmp
+    push_s          ".BMP", s;
+    eq_s            ext, s, if;
+    jmp_l           if, mime_bmp;
+
+//  check audio
+    push_s          ".WAV", s;
+    eq_s            ext, s, if;
+    jmp_l           if, mime_audio;
+
+    push_s          ".AU", s;
+    eq_s            ext, s, if;
+    jmp_l           if, mime_audio;
+
+    push_s          ".8SVX", s;
+    eq_s            ext, s, if;
+    jmp_l           if, mime_audio;
+
+    push_s          ".MP3", s;
+    eq_s            ext, s, if;
+    jmp_l           if, mime_audio;
+
+//  check x-midi
+    push_s          ".MID", s;
+    eq_s            ext, s, if;
+    jmp_l           if, mime_x-midi;
+
+    push_s          ".MIDI", s;
+    eq_s            ext, s, if;
+    jmp_l           if, mime_x-midi;
+
+//  check octet-stream
+    push_s          ".ZIP", s;
+    eq_s            ext, s, if;
+    jmp_l           if, mime_octet-stream;
+
+    push_s          ".GZ", s;
+    eq_s            ext, s, if;
+    jmp_l           if, mime_octet-stream;
+
+    push_s          ".LHA", s;
+    eq_s            ext, s, if;
+    jmp_l           if, mime_octet-stream;
+
+    push_s          ".LZH", s;
+    eq_s            ext, s, if;
+    jmp_l           if, mime_octet-stream;
+
+    push_s          ".LZX", s;
+    eq_s            ext, s, if;
+    jmp_l           if, mime_octet-stream;
+
+    push_s         ".EXE", s;
+    eq_s            ext, s, if;
+    jmp_l           if, mime_octet-stream;
+
+//  check mocha
+    push_s          ".MOCHA", s;
+    eq_s            ext, s, if;
+    jmp_l           if, mime_mocha;
+
+//  check x-gsm
+    push_s         ".GSM", s;
+    eq_s            ext, s, if;
+    jmp_l           if, mime_x-gsm;
+
+    push_s          ".GSD", s;
+    eq_s            ext, s, if;
+    jmp_l           if, mime_x-gsm;
+
+//  check postscript
+    push_s          ".PS", s;
+    eq_s            ext, s, if;
+    jmp_l           if, mime_postscript;
+
+//  check pdf
+    push_s          ".PDF", s;
+    eq_s            ext, s, if;
+    jmp_l           if, mime_pdf;
+
+//  check quicktime
+    push_s          ".QT", s;
+    eq_s            ext, s, if;
+    jmp_l           if, mime_quicktime;
+
+    push_s          ".MOV", s;
+    eq_s            ext, s, if;
+    jmp_l           if, mime_quicktime;
+
+    push_s          ".MOOV", s;
+    eq_s            ext, s, if;
+    jmp_l           if, mime_quicktime;
+
+
+//  set mime type
+
+lab mime_html;
+    push_s          "text/html", mime;
+    rts;
+
+lab mime_text;
+    push_s          "text/plain", mime;
+    rts;
+
+lab mime_aguide;
+    push_s          "text/aguide", mime;
+    rts;
+
+lab mime_gif;
+    push_s          "image/gif", mime;
+    rts;
+
+lab mime_png;
+    push_s          "image/png", mime;
+    rts;
+
+lab mime_jpeg;
+    push_s          "image/jpeg", mime;
+    rts;
+
+lab mime_bmp;
+    push_s          "image/bmp", mime;
+    rts;
+
+lab mime_audio;
+    push_s          "audio/*", mime;
+    rts;
+
+lab mime_x-midi;
+    push_s          "audio/x-midi", mime;
+    rts;
+
+lab mime_octet-stream;
+    push_s          "application/octet-stream", mime;
+    rts;
+
+lab mime_mocha;
+    push_s          "language/mocha", mime;
+    rts;
+
+lab mime_x-gsm;
+    push_s          "audio/x-gsm", mime;
+    rts;
+
+lab mime_postscript;
+    push_s          "application/postscript", mime;
+    rts;
+
+lab mime_pdf;
+    push_s          "application/pdf", mime;
+    rts;
+
+lab mime_quicktime;
+    push_s          "video/quicktime", mime;
+    rts;
+
+
+lab get_date;
+    time;
+
+//  dayname
+
+    move_l          one, i;
+    push_i          _wday, n;
+
+    eq_jmp_l        n, i, date_sunday;
+
+    inc_l           i;
+    eq_jmp_l        n, i, date_monday;
+
+    inc_l           i;
+    eq_jmp_l        n, i, date_tuesday;
+
+    inc_l           i;
+    eq_jmp_l        n, i, date_wednesday;
+
+    inc_l           i;
+    eq_jmp_l        n, i, date_thursday;
+
+    inc_l           i;
+    eq_jmp_l        n, i, date_friday;
+
+    inc_l           i;
+    eq_jmp_l        n, i, date_saturday;
+
+lab found_dayname;
+    #setsepar       |;
+    push_s          ", "| s;
+    add_s           date| s| date;
+    #setsepar       default;
+
+
+//  day
+
+    push_i          _day, n;
+    str_l           n, buf;
+
+    add_s           date, buf, date;
+    push_s          " ", s;
+    add_s           date, s, date;
+
+
+//  month
+
+    move_l          one, i;
+    push_i          _month, n;
+
+    eq_jmp_l        n, i, date_january;
+
+    inc_l           i;
+    eq_jmp_l        n, i, date_february;
+
+    inc_l           i;
+    eq_jmp_l        n, i, date_march;
+
+    inc_l           i;
+    eq_jmp_l        n, i, date_april;
+
+    inc_l           i;
+    eq_jmp_l        n, i, date_may;
+
+    inc_l           i;
+    eq_jmp_l        n, i, date_june;
+
+    inc_l           i;
+    eq_jmp_l        n, i, date_july;
+
+    inc_l           i;
+    eq_jmp_l        n, i, date_august;
+
+    inc_l           i;
+    eq_jmp_l        n, i, date_september;
+
+    inc_l           i;
+    eq_jmp_l        n, i, date_october;
+
+    inc_l           i;
+    eq_jmp_l        n, i, date_november;
+
+    inc_l           i;
+    eq_jmp_l        n, i, date_december;
+
+lab found_month;
+    push_s          " ", s;
+    add_s           date, s, date;
+
+
+//  year
+
+    push_i          _year, n;
+    str_l           n, buf;
+    add_s           date, buf, date;
+    push_s          " ", s;
+    add_s           date, s, date;
+
+
+//  hour
+
+    push_i          _hour, n;
+
+//  add GMT offset
+
+    add_l           n, gmt_offset, n;
+
+    push_i          24, i;
+
+    lseq_jsr_l      n, null, time_to_less;
+    greq_jsr_l      n, i, time_to_great;
+
+    push_i          9, i;
+    lseq_jsr_l      n, i, wr_null;
+    str_l           n, buf;
+    add_s           date, buf, date;
+
+    push_s          ":", s;
+    add_s           date, s, date;
+
+//  min
+
+    push_i          _min, n;
+    lseq_jsr_l      n, i, wr_null;
+    str_l           n, buf;
+    add_s           date, buf, date;
+
+    push_s          ":", s;
+    add_s           date, s, date;
+
+//  sec
+
+    push_i          _sec, n;
+    lseq_jsr_l      n, i, wr_null;
+    str_l           n, buf;
+    add_s           date, buf, date;
+
+//  GMT
+
+    push_s          " GMT", s;
+    add_s           date, s, date;
+    rts;
+
+
+lab wr_null;
+    push_s          "0", s;
+    add_s           date, s, date;
+    rts;
+
+lab time_to_less;
+    add_l           i, n, n;
+    rts;
+
+lab time_to_great;
+    sub_l           n, i, n;
+    rts;
+
+lab date_sunday;
+    push_s          "Sunday", date;
+    jmp             found_dayname;
+
+lab date_monday;
+    push_s          "Monday", date;
+    jmp             found_dayname;
+
+lab date_tuesday;
+    push_s          "Tuesday", date;
+    jmp             found_dayname;
+
+lab date_wednesday;
+    push_s          "Wednesday", date;
+    jmp             found_dayname;
+
+lab date_thursday;
+    push_s          "Thursday", date;
+    jmp             found_dayname;
+
+lab date_friday;
+    push_s          "Friday", date;
+    jmp             found_dayname;
+
+lab date_saturday;
+    push_s          "Saturday", date;
+    jmp             found_dayname;
+
+
+lab date_january;
+    push_s          "Jan", s;
+    add_s           date, s, date;
+    jmp             found_month;
+
+lab date_february;
+    push_s          "Feb", s;
+    add_s           date, s, date;
+    jmp             found_month;
+
+lab date_march;
+    push_s          "Mar", s;
+    add_s           date, s, date;
+    jmp             found_month;
+
+lab date_april;
+    push_s          "Apr", s;
+    add_s           date, s, date;
+    jmp             found_month;
+
+lab date_may;
+    push_s          "May", s;
+    add_s           date, s, date;
+    jmp             found_month;
+
+lab date_june;
+    push_s          "Jun", s;
+    add_s           date, s, date;
+    jmp             found_month;
+
+lab date_july;
+    push_s          "Jul", s;
+    add_s           date, s, date;
+    jmp             found_month;
+
+lab date_august;
+    push_s          "Aug", s;
+    add_s           date, s, date;
+    jmp             found_month;
+
+lab date_september;
+    push_s          "Sep", s;
+    add_s           date, s, date;
+    jmp             found_month;
+
+lab date_october;
+    push_s          "Oct", s;
+    add_s           date, s, date;
+    jmp             found_month;
+
+lab date_november;
+    push_s          "Nov", s;
+    add_s           date, s, date;
+    jmp             found_month;
+
+lab date_december;
+    push_s          "Dec", s;
+    add_s           date, s, date;
+    jmp             found_month;
+
+
+//  open/close logfile;
+
+lab open_logfile;
+    push_s          "a", s;
+    fopen           logfile, logfilefullname, s;
+    rts;
+
+lab close_logfile;
+    fclose          logfile;
+    rts;
+
+lab reset_logfile;
+    jsr             close_logfile;
+    push_s          "w", s;
+    fopen           logfile, logfilefullname, s;
+    rts;
+
+
+// cgi actions
+
+lab cgi_action;
+    push_s          "[CGI ACTION: ", s;
+    print_s         s;
+
+    print_s         cgi_action;
+    push_s          " ", s;
+    print_s         s;
+
+    push_s          "admin.html", s;
+    neq_s           cgi_file, s, if;
+    jmp_l           if, cgi_runprog;
+
+    eq_s            cgi_action, show_logfile, if;
+    jsr_l           if, cgi_show_logfile;
+
+    eq_s            cgi_action, reset_logfile, if;
+    jsr_l           if, cgi_reset_logfile;
+
+    eq_s            cgi_action, shutdown_server, if;
+    jsr_l           if, cgi_shutdown_server;
+
+    push_s          "]", s;
+    print_s         s;
+    print_n         two;
+    rts;
+
+lab cgi_show_logfile;
+    push_s          "show logfile", s;
+    print_s         s;
+    move_s          logfilename, filename;
+    rts;
+
+lab cgi_reset_logfile;
+    push_s          "reset logfile", s;
+    print_s         s;
+    jsr             reset_logfile;
+    move_s          logfilename, filename;
+    rts;
+
+lab cgi_shutdown_server;
+    push_s          "shutdown server", s;
+    print_s         s;
+    push_s          "shutdown.html", filename;
+    move_l          one, shutdown;
+    rts;
+
+
+lab cgi_runprog;
+
+//  get extension
+
+    strlen          cgi_file, len;
+    dec_l           len;
+    move_l          len, i;
+    move_s          empty, cgi_ext;
+
+lab cgi_get_ext;
+    move_p2s        cgi_file, i, ch;
+    eq_s            ch, dot, if;
+    jmp_l           if, cgi_read_ext;
+    dec_l           i;
+    greq_jmp_l      i, null, cgi_get_ext;
+    rts;
+
+lab cgi_read_ext;
+    inc_l           len;
+    sub_l           len, i, i;
+    strright        cgi_file, i, cgi_ext;
+    ucase           cgi_ext;
+
+//  check nano
+    push_s          ".NO", s;
+    eq_s            cgi_ext, s, if;
+    jmp_l           if, cgi_nano;
+
+    #setquote       ';
+
+    push_s          '"', s;
+    move_s          s, cgi_runprog;
+    add_s           cgi_runprog, cgi_path, cgi_runprog;
+    add_s           cgi_runprog, cgi_file, cgi_runprog;
+    add_s           cgi_runprog, s, cgi_runprog;
+
+    push_s          ' ', s;
+    add_s           cgi_runprog, s, cgi_runprog;
+    add_s           cgi_runprog, cgi_action, cgi_runprog;
+    jmp             cgi_launch;
+
+lab cgi_nano;
+    strlen          cgi_file, len;
+    sub_l           len, i, len;
+    strleft         cgi_file, len, cgi_file;
+
+    push_s          'nano ', cgi_runprog;
+    push_s          '"', s;
+    add_s           cgi_runprog, s, cgi_runprog;
+    add_s           cgi_runprog, cgi_path, cgi_runprog;
+    add_s           cgi_runprog, cgi_file, cgi_runprog;
+    push_s          '"', s;
+    add_s           cgi_runprog, s, cgi_runprog;
+
+    push_s          ' ', s;
+    add_s           cgi_runprog, s, cgi_runprog;
+    add_s           cgi_runprog, cgi_action, cgi_runprog;
+
+    #setquote       ";
+
+//  "action=foo+bar" > "action=foo bar"    replace all "+" with spaces
+
+    strlen          cgi_runprog, len;
+    dec_l           len;
+    move_l          null, i;
+
+lab cgi_plus_check;
+    move_p2s        cgi_runprog, i, ch;
+    push_s          "+", s;
+    eq_s            ch, s, if;
+    jsr_l           if, cgi_plus_replace;
+
+    inc_lseq_jmp_l  i, len, cgi_plus_check;
+
+lab cgi_launch;
+    print_s         cgi_runprog;
+    push_s          "]", s;
+    print_s         s;
+    print_n         two;
+
+    runpr           cgi_runprog, n;
+    waitpr          n, i;
+
+    move_s          cgi_directory, filename;
+    add_s           filename, cgi_ret, filename;
+    rts;
+
+lab cgi_plus_replace;
+    push_s          " ", s;
+    move_s2p        s, cgi_runprog, i;
+    rts;
+
+
+
+//  errors
+
+lab not_found;
+    push_s          "HTTP/1.1 404 Not Found", head;
+    push_s          "404.html", filename;
+    rts;
+
+lab forbidden;
+    push_s          "HTTP/1.1 400 Forbidden", head;
+    push_s          "400.html", filename;
+    rts;

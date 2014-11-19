@@ -1,0 +1,85 @@
+func receive_file (int client, string download_filename[256])
+	#include <file.nch>
+	#include <socket.nch>
+
+    int null = 0; int one = 1; int two = 2;
+    int ret = 0;
+
+	qint filesize;
+	lint readbuf_max = 10240L;
+	qint todo;
+	qint read_max;
+	byte readbuf[readbuf_max];
+	
+	string write = "w";
+	
+	_err_file = 1;
+	int file; int error;
+	int f;
+	
+	fopen (file, download_filename, write);
+    @file_error ();
+    get (error);
+    f = error != err_file_ok;
+    if f;
+		ret = 1;
+		print "receive_file: ERROR: can't open file: ";
+		print download_filename;
+		printn one;
+		goto receive_file_end;
+	endif;
+	
+	sread (client, filesize);
+    @socket_error ();
+    get (error);
+    f = error != err_sock_ok;
+    if f;
+		ret = 1;
+		goto receive_file_end;
+	endif;
+	
+	todo = filesize;
+	f = todo > readbuf_max;
+	if f;
+		read_max = readbuf_max;
+	else;
+		read_max = todo;
+	endif;
+	
+lab receive_file_read;
+	sreadab (client, readbuf, read_max);
+	@socket_error ();
+	get (error);
+	f = error != err_sock_ok;
+	if f;
+		ret = 1;
+		goto receive_file_end;
+	endif;
+	
+	fwriteab (file, readbuf, read_max);
+	@file_error ();
+	get (error);
+	f = error != err_file_ok;
+	if f;
+		ret = 1;
+		goto receive_file_end;
+	endif;
+		
+	todo = todo - read_max;
+	f = todo > null;
+	if f;
+		f = todo > readbuf_max;
+		if f;
+			read_max = readbuf_max;
+		else;
+			read_max = todo;
+		endif;
+		goto receive_file_read;
+	else;
+		goto receive_file_end;
+	endif;
+   
+lab receive_file_end;
+	fclose (file);
+    return (ret);
+funcend

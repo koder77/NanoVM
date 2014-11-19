@@ -1,0 +1,3 @@
+/data/data/jackpal.androidterm/kbox2/bin/nanovm
+# program names for start menu:
+tic-tac-toe-1.3

@@ -1,0 +1,42 @@
+// $VER: file.nah 00.40 (31.03.04)
+
+int err_file_ok; int err_file_open; int err_file_close;
+int err_file_read; int err_file_write; int err_file_number;
+int err_file_eof; int err_file_fpos;
+int endian_little; int endian_big;
+
+#setreg_l       L254, err_file;
+
+
+push_i          0, L0;
+pull_i          L0, err_file_ok;
+
+push_i          1, L0;
+pull_i          L0, err_file_open;
+
+push_i          2, L0;
+pull_i          L0, err_file_close;
+
+push_i          3, L0;
+pull_i          L0, err_file_read;
+
+push_i          4, L0;
+pull_i          L0, err_file_write;
+
+push_i          5, L0;
+pull_i          L0, err_file_number;
+
+push_i          6, L0;
+pull_i          L0, err_file_eof;
+
+push_i          7, L0;
+pull_i          L0, err_file_fpos;
+
+push_i          1, L0;
+pull_i          L0, endian_little;
+
+push_i          0, L0;
+pull_i          L0, endian_big;
+
+// EOF
+

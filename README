@@ -1,0 +1,98 @@
+CREDITS
+=======
+
+See AUTHORS!
+
+
+Now with the Flow GUI/graphics server source code!
+See flow directory.
+Android version of flow is buildable with Pelyas SDL build environment.
+See Flow README file.
+
+
+AMIGA OS 3.x
+============
+
+Now Nano can be compiled with the crosscompiler on Linux.
+SEE COMPILING BELOW!!!
+
+I made some changes to the source code to make it possible.
+
+I can now run the N compiler and the assembler on WinUAE.
+But the VM fails to run. It seems to load programs but
+then it hangs.
+
+I don't know if this has something to do with the POSIX
+thread library on Amiga.
+
+I have to find out...
+
+
+COMPILING
+=========
+
+X86
+---
+./configure CFLAGS="-march=i386 -ffast-math -fomit-frame-pointer -O3 -s"
+./configure CFLAGS="-march=athlon -ffast-math -fomit-frame-pointer -O3 -s"
+./configure CFLAGS="-march=pentium -ffast-math -fomit-frame-pointer -O3 -s"
+
+===============================================================================
+gcc 4.6.2: new cpu flags example:
+-march=core2 -mtune=core2
+
+and -Ofast as new optimization flag
+
+see gcc documentation
+===============================================================================
+
+with relro protection (Linux):
+./configure CFLAGS="-ffast-math -fomit-frame-pointer -O3 -s -Wl,-z,relro,-z,now"
+
+for me:
+./configure CFLAGS="-ffast-math -fomit-frame-pointer -O3 -march=core2 -mtune=core2 -funsafe-loop-optimizations -floop-block -floop-parallelize-all -ftree-loop-distribution -fweb -ftracer -fivopts -ftree-loop-linear -ftree-loop-im -maccumulate-outgoing-args -s -Wl,-z,relro,-z,now"
+
+./configure CFLAGS="-ffast-math -O3 -march=core2 -mtune=core2 -fweb -ftracer -fivopts -maccumulate-outgoing-args -pg -s -Wl,-z,relro,-z,now"
+
+Amiga
+-----
+./configure CFLAGS="-m68020 -fomit-frame-pointer -O2 -s"
+./configure CFLAGS="-m68020 -m68881 -fomit-frame-pointer -O2 -s"
+./configure CFLAGS="-m68030 -m68881 -fomit-frame-pointer -O2 -s"
+
+Crosscompiling on Linux for Amiga
+---------------------------------
+1. Install the crosscompiler (http://cross.zerohero.se/os3.html)
+2. change nano/Makefile.am:
+    set exe_socket_ipv4_amiga.c as the socket source.
+    delete the CFLAGS -lm flag.
+
+3. Run the build script amigaos-crosscompile.sh
+
+Now nano should be compiled.
+
+
+MINGW gcc compiler
+------------------
+
+You have to add the socket library to the LIBS env variable.
+To compile for a Pentium, the configure call looks like this:
+
+./configure CFLAGS="-march=pentium -ffast-math -fomit-frame-pointer -O3 -s" LIBS="$LIBS -L../lib -lwsock32 -lws2_32"
+
+
+Crosscompiling under Linux with mingw32
+---------------------------------------
+./configure --host=i686-pc-mingw32 CFLAGS="-ffast-math -fomit-frame-pointer -O3 -s -D_WIN32" LIBS="$LIBS -L../lib -lwsock32"
+
+
+Raspberry Pi
+============
+
+Compiling on RPi:
+
+./configure CFLAGS="-s -Wcast-align -fno-strict-aliasing -fomit-frame-pointer -O3" LDFLAGS="-lrt"
+
+CFLAGS="-march=armv6 -mtune=arm1176jzf-s"
+CFLAGS="$CFLAGS -mfloat-abi=hard -mfpu=vfp -ffast-math -O3"
+

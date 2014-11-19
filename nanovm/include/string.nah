@@ -1,0 +1,97 @@
+//  $VER: string.nah 0.1 (08.05.10)
+//  string library
+
+lab string_search;
+#ASSEMB
+//  args: string string-to-be-searched, string-pattern
+//  return: lint position (if pattern was found, else zero)
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, i;
+    #setreg_l       L3, j;
+    #setreg_l       L4, pos;
+    #setreg_l       L5, search_len;
+    #setreg_l       L6, pattern_len;
+    #setreg_l       L7, check;
+    #setreg_l       L8, if;
+
+    push_i          0, null;
+    push_i          1, one;
+
+    #setreg_s       S0, _str_search;
+    #setreg_s       S1, _str_pattern;
+    #setreg_s       S2, _s_ch;
+    #setreg_s       S3, _p_ch;
+
+    stpull_s        _str_pattern;
+    stpull_s        _str_search;
+
+    strlen          _str_search, search_len;
+    strlen          _str_pattern, pattern_len;
+
+    dec_l           search_len;
+    dec_l           pattern_len;
+
+    move_l          null, i;
+    move_l          null, j;
+
+lab str_search_loop;
+    move_p2s        _str_search, i, _s_ch;
+    move_p2s        _str_pattern, j, _p_ch;
+
+    move_l          i, pos;
+    eq_s            _s_ch, _p_ch, if;
+    eq_jmp_l        if, one, str_search_check;
+
+lab str_search_next;
+    inc_l           i;
+    lseq_jmp_l      i, search_len, str_search_loop;
+
+    stpush_l        null;
+    rts;
+
+
+lab str_search_check;
+    move_l          one, check;
+
+    eq_jmp_l        pattern_len, null, str_search_found;
+
+    ls_jsr_l        i, search_len, str_search_inc_i;
+    ls_jsr_l        j, pattern_len, str_search_inc_j;
+
+    move_p2s        _str_search, i, _s_ch;
+    move_p2s        _str_pattern, j, _p_ch;
+
+    neq_s           _s_ch, _p_ch, if;
+    eq_jsr_l        if, one, str_search_check_false;
+
+    eq_jmp_l        check, null, str_search_go_next;
+
+    eq_jmp_l        j, pattern_len, str_search_found;
+    jmp             str_search_check;
+
+lab str_search_inc_i;
+    inc_l           i;
+    rts;
+
+lab str_search_inc_j;
+    inc_l           j;
+    rts;
+
+lab str_search_check_false;
+    move_l         null, check;
+    rts;
+
+lab str_search_go_next;
+    move_l          null, j;
+    move_l          pos, i;
+    jmp             str_search_next;
+
+lab str_search_found;
+    inc_l           pos;
+    stpush_l        pos;
+    rts;    
+#ASSEMB_END

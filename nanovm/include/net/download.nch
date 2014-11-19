@@ -1,0 +1,314 @@
+// $VER: download.nch 1.0.0 (08.06.13)
+// download routines
+
+lab http_send_request;
+#ASSEMB
+    #setreg_s       S0, s;
+    #setreg_s       S1, filename;
+    #setreg_s       S2, filerequest;
+    #setreg_s       S3, ip_arg;
+    #setreg_s       S4, http;
+
+    #setreg_l       L0, client;
+    #setreg_l       L1, one;
+
+    stpull_l        client;
+    stpull_s        ip_arg;
+    stpull_s        filename;
+
+    push_i          1, one;
+
+    #setsepar       |;
+
+    push_s          "GET "| filerequest;
+    push_s          " HTTP/1.1"| http;
+    add_s           filerequest| filename| filerequest;
+    add_s           filerequest| http| filerequest;
+
+    swrite_s        client| filerequest;
+    swrite_n        client| one;
+    push_s          "Host: "| s;
+    swrite_s        client| s;
+    swrite_s        client| ip_arg;
+    swrite_n        client| one;
+    push_s          "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"| s;
+    swrite_s        client| s;
+    swrite_n        client| one;
+    push_s          "Accept-Language: de-de,de;q=0.8,en-us;q=0.5,en;q=0.3"| s;
+    swrite_s        client| s;
+    swrite_n        client| one;
+
+//	compress;q=0, gzip;q=0, chunked;q=0
+
+    push_s          "Accept-Encoding: "| s;
+    swrite_s        client| s;
+    swrite_n        client| one;
+    push_s          "Accept-Charset: ISO-8859-1"| s;
+    swrite_s        client| s;
+    swrite_n        client| one;
+    push_s          "Connection: Keep-Alive"| s;
+    swrite_s        client| s;
+    swrite_n        client| one;
+    swrite_n        client| one;
+
+    #setsepar       ,;
+    rts;
+#ASSEMB_END
+    
+func http_download_file (int client, string download_filename[256])
+	#include <file.nch>
+	#include <socket.nch>
+
+    int null = 0; int one = 1; int two = 2;
+    string buf[256];
+    string buf2[256];
+    string ok[256] = "HTTP/1.1 200 OK";
+    string sizeheader[256] = "Content-Length:";
+    string chunkedheader[256] = "Transfer-Encoding: chunked";
+    int sizeheader_len;
+    int chunkedheader_len;
+    
+    int len; int sizelen;
+    int chunksize;
+    int bytesize;
+    qint filesize = 0Q; int chunked = 0;
+    int file; int error;
+    
+    string write = "w";
+    
+    byte chunkb;
+	lint readbuf_max = 10240L;
+	lint todo;
+	lint read_max;
+	byte readbuf[readbuf_max];
+	
+	int do_write = 1;
+    
+	
+    int f; int ret = 0;
+    int i;
+    string ch[2];
+    string space[2];
+    int spacecode = 32;
+    
+//   #NESTED_CODE_GLOBAL_OFF;
+	#NESTED_CODE_ON;
+    
+    _err_file = 1;
+    
+    fopen (file, download_filename, write);
+    @file_error ();
+    get (error);
+    f = error != err_file_ok;
+    if f;
+		ret = 1;
+		print "http_download_file: ERROR: can't open file: ";
+		print download_filename;
+		printn one;
+		goto download_file_end;
+	endif;
+    
+    strlen (sizeheader, sizeheader_len);
+    strlen (chunkedheader, chunkedheader_len);
+
+    char (spacecode, space);
+    
+    sreadls (client, buf);
+    @socket_error ();
+    get (error);
+    f = error != err_sock_ok;
+    if f;
+		ret = 1;
+		goto download_file_end;
+	endif;
+		
+    
+    print "[";
+    print buf;
+    print "]";
+    printn one;
+    
+//	check if ok HEADER
+
+    f = buf != ok;
+    if f;
+        ret = 1;
+		do_write = 0;
+    endif;
+      
+lab download_file_header;
+	sreadls (client, buf);
+	@socket_error ();
+    get (error);
+    f = error != err_sock_ok;
+    if f;
+		ret = 1;
+		goto download_file_end;
+	endif;
+    
+    print "[";
+    print buf;
+    print "]";
+    printn one;
+    
+    strlen (buf, len);
+    
+    f = len != null;
+    if f;
+		f = len > sizeheader_len;
+		if f;
+			strleft (buf, sizeheader_len, buf2);
+			f = buf2 == sizeheader;
+			if f;
+				i = len - sizeheader_len - 1;
+				strright (buf, i, buf2);
+			
+				val (buf2, filesize);
+			endif;
+		endif;
+		
+		f = len == chunkedheader_len;
+		if f;
+			f = buf == chunkedheader;
+			if f;
+				chunked = 1;
+			endif;
+		endif;
+    
+		goto download_file_header;
+	endif;
+
+	f = chunked == one;
+	if f;
+		goto download_file_chunked_loop;
+	else;
+		goto download_file_loop;
+	endif;
+	
+lab download_file_chunked_loop;
+	sreadls (client, buf);
+	@socket_error ();
+    get (error);
+    f = error != err_sock_ok;
+    if f;
+		ret = 1;
+		goto download_file_end;
+	endif;
+	
+	print "'";
+	print buf;
+	print "'";
+	printn one;
+	
+	buf = buf + "X";
+	val (buf, chunksize);
+	bytesize = chunksize + two;
+	
+	print "chunksize: ";
+	print chunksize;
+	printn one;
+	
+	f = chunksize == null;
+	if f;
+		print "chunksize zero: END";
+		printn one;
+		ret = 0;
+		goto download_file_end;
+	endif;
+	
+	todo = bytesize;
+	f = todo > readbuf_max;
+	if f;
+		read_max = readbuf_max;
+	else;
+		read_max = todo;
+	endif;
+
+lab do_chunk_read;	
+	sreadab (client, readbuf, read_max);
+	@socket_error ();
+	get (error);
+	f = error != err_sock_ok;
+	if f;
+		ret = 1;
+		print error; printn one;
+		goto download_file_end;
+	endif;
+		
+	f = do_write == one;
+	if f;
+		fwriteab (file, readbuf, read_max);
+		@file_error ();
+		get (error);
+		f = error != err_file_ok;
+		if f;
+			ret = 1;
+			goto download_file_end;
+		endif;
+	endif;
+	
+	todo = todo - read_max;
+	f = todo > null;
+	if f;
+		f = todo > readbuf_max;
+		if f;
+			read_max = readbuf_max;
+		else;
+			read_max = todo;
+		endif;
+		goto do_chunk_read;
+	else;
+		goto download_file_chunked_loop;
+	endif;
+	
+	
+    
+lab download_file_loop;
+	todo = filesize;
+	f = todo > readbuf_max;
+	if f;
+		read_max = readbuf_max;
+	else;
+		read_max = todo;
+	endif;
+	
+lab download_file_read;
+	sreadab (client, readbuf, read_max);
+	@socket_error ();
+	get (error);
+	f = error != err_sock_ok;
+	if f;
+		ret = 1;
+		goto download_file_end;
+	endif;
+	
+	f = do_write == one;
+	if f;
+		fwriteab (file, readbuf, read_max);
+		@file_error ();
+		get (error);
+		f = error != err_file_ok;
+		if f;
+			ret = 1;
+			goto download_file_end;
+		endif;
+	endif;
+		
+	todo = todo - read_max;
+	f = todo > null;
+	if f;
+		f = todo > readbuf_max;
+		if f;
+			read_max = readbuf_max;
+		else;
+			read_max = todo;
+		endif;
+		goto download_file_read;
+	else;
+		goto download_file_end;
+	endif;
+   
+lab download_file_end;
+	fclose (file);
+    return (ret);
+funcend

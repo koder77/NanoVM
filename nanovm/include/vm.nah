@@ -1,0 +1,13 @@
+// $VER: vm.nah 1.1.3 (13.03.11)
+
+#ASSEMB
+
+#setreg_l       L247, membsize;
+#setreg_l       L248, vmbsize;
+#setreg_l       L249, vmcachesize;
+#setreg_l       L250, vmuse;
+#setreg_l       L251, stsize;
+
+#ASSEMB_END
+
+// EOF

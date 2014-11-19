@@ -1,0 +1,119 @@
+This is flow, the nano graphics server.
+To run it start it like this with a port number:
+
+flow 2000
+
+And to use a client programm:
+
+nano lines 127.0.0.1 2000
+
+Also see the graphic library in the main archive how to
+use graphics.
+
+
+
+COMPILATION GUIDE
+=================
+
+This is just a short help on how to build Flow.
+
+
+Linux
+-----
+
+Just as usual:
+
+$ ./configure
+$ make
+# make install
+
+
+ENV VARIABLES
+=============
+
+You have to set the environment variables:
+
+in file .bashrc:
+
+export NANOGFXFONT=/home/stefan/nano/fonts/
+export NANOSFXSOUND=/home/stefan/nano/sound/
+
+Just change the directories to your location.
+
+
+Android
+-------
+
+Get the latest SDL build for Android via github:
+
+$ git clone https://github.com/pelya/commandergenius
+
+And follow the instructions in the README on how to make a build.
+
+Note: it's better to use my binary for Android :).
+
+The build script installs the APK file to your mobile device.
+So this should be easy.
+
+
+
+ANDROID README
+==============
+
+This is the experimental port of the Nano VM to Android ARM (ARM V7).
+
+INSTALLATION
+============
+
+Note: The Nano directory should be copied on the sdcard:
+
+/sdcard/
+    nanovm/
+        prog/
+        include/
+        home/
+        fonts/
+    
+The created or opened files always are in the home directory!
+You can't write to a different path!
+
+You have to install a terminal app now. I installed the Jack Palevich terminal app.
+It's on Google play.
+
+And KBOX2: http://kevinboone.net/kbox2.html, it's a Linux environmnet for Android.
+Follow the instructions there.
+
+Now copy the Nano binaries into the /bin directory of KBOX2 shell.
+Or copy the binaries to another location from where they can be executed.
+
+Modify the home/startmenu.txt first line, it's the full path to the Nano VM binary.
+
+Now you are ready to install the flow.apk file with the Flow GUI/graphics server.
+
+I looked for a more comfortable way to install Nano, but this is the way it works.
+Sorry for that.
+
+
+
+USAGE
+=====
+
+You need the programs and include files from: www.jay-t.de/nano
+
+You can run the compiler and assembler on Android, just like on Linux or Windows!
+
+
+I included the tic tac toe game as a demo:
+
+1. Start the Flow app.
+
+2. Click on the "ttt" button.
+
+3. Play the game.
+
+Have some fun!
+
+Stefan Pietzonke (jay-t@gmx.net)
+
+
+

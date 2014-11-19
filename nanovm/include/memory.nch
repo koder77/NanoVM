@@ -1,0 +1,10 @@
+// $VER: memory.nch 2.0.5 (04.02.12)
+
+int err_alloc_ok = 1; int err_alloc_nomem = 0;
+
+#ASSEMB
+#setreg_l       L225, err_alloc;
+#ASSEMB_END
+
+
+// EOF

@@ -1,0 +1,342 @@
+//  $VER: sort.nch 0.1 (29.10.12)
+//  sorting library
+
+func sort (qint address, qint array_size, int async)
+    #include <types.nch>
+
+    int type; int f; int one = 1; int two = 2;
+    int thread; int thread_state;
+    
+    gettype (address, type);
+    
+    f = type == byte_type;
+    if f;
+        threadcreate (thread, sort_byte);
+    endif;
+    
+    f = type == int_type;
+    if f;
+        threadcreate (thread, sort_int);
+    endif;
+    
+    f = type == lint_type;
+    if f;
+        threadcreate (thread, sort_lint);
+    endif;
+    
+    f = type == qint_type;
+    if f;
+        threadcreate (thread, sort_qint);
+    endif;
+   
+    threadsync (thread);
+     
+    threadpush (thread, array_size);
+    threadpush (thread, address);
+    threadpushsync (thread);
+
+    
+    f = async == one;
+    if f;
+        goto sort_end;
+    endif;
+    
+lab sort_wait;
+    waitsec (one);
+     
+    threadstate (thread, thread_state);
+    f = thread_state == two;
+    if f; goto sort_wait; endif;
+    
+lab sort_end;
+    return (thread);
+funcend
+
+
+func sort_byte (#sync, qint address, qint array_size)
+//  insertion sort - thread sort
+
+    byte a[1];
+    
+    qint Paddress; qint Parray_size;
+   
+    Paddress = address;
+    Parray_size = array_size;
+    
+    byte Px[Parray_size];
+    
+    qint Pi; qint Pj; qint Pk; byte Pindex; byte Pv1;
+    int Pf; int Pf1; int Pf2;
+    int Pnull = 0; int Pone = 1;
+   
+    pointer (Paddress, a, sort_byte_p1);
+    pointer (Paddress, a, sort_byte_p2);
+    
+//  copy array
+   
+    Pi = 0;
+    for;
+lab sort_byte_p1;
+        array2var (a, Pi, Pv1);
+        pvar2array (Pv1, Px, Pi);
+
+        Pi = ++;
+        Pf = Pi < Parray_size;
+    next Pf;
+    
+    Pi = 1;
+    for;
+        parray2var (Px, Pi, Pindex);
+        Pj = Pi;
+    
+lab sort_byte_loop;   
+        Pf1 = Pj > Pnull;
+        if Pf1;
+            Pk = Pj - 1;
+            parray2var (Px, Pk, Pv1);
+            Pf2 = Pindex < Pv1;
+            Pf = Pf1 && Pf2;
+            if Pf;
+                pvar2array (Pv1, Px, Pj);
+
+                Pj = --;
+                goto sort_byte_loop;
+            endif;
+        endif;
+             
+        pvar2array (Pindex, Px, Pj);
+        
+        Pi = ++;
+        Pf = Pi < Parray_size;
+    next Pf;
+    
+//  copy array back
+   
+    Pi = 0;
+    for;
+        parray2var (Px, Pi, Pv1);
+lab sort_byte_p2;
+        var2array (Pv1, a, Pi);
+       
+        Pi = ++;
+        Pf = Pi < Parray_size;
+    next Pf;
+    
+    exit Pnull;
+funcend
+
+func sort_int (#sync, qint address, qint array_size)
+//  insertion sort - thread sort
+
+    int a[1];
+    
+    qint Paddress; qint Parray_size;
+   
+    Paddress = address;
+    Parray_size = array_size;
+    
+    int Px[Parray_size];
+    
+    qint Pi; qint Pj; qint Pk; int Pindex; int Pv1;
+    int Pf; int Pf1; int Pf2;
+    int Pnull = 0; int Pone = 1;
+   
+    pointer (Paddress, a, sort_int_p1);
+    pointer (Paddress, a, sort_int_p2);
+    
+//  copy array
+   
+    Pi = 0;
+    for;
+lab sort_int_p1;
+        array2var (a, Pi, Pv1);
+        pvar2array (Pv1, Px, Pi);
+
+        Pi = ++;
+        Pf = Pi < Parray_size;
+    next Pf;
+    
+    Pi = 1;
+    for;
+        parray2var (Px, Pi, Pindex);
+        Pj = Pi;
+    
+lab sort_int_loop;   
+        Pf1 = Pj > Pnull;
+        if Pf1;
+            Pk = Pj - 1;
+            parray2var (Px, Pk, Pv1);
+            Pf2 = Pindex < Pv1;
+            Pf = Pf1 && Pf2;
+            if Pf;
+                pvar2array (Pv1, Px, Pj);
+
+                Pj = --;
+                goto sort_int_loop;
+            endif;
+        endif;
+             
+        pvar2array (Pindex, Px, Pj);
+        
+        Pi = ++;
+        Pf = Pi < Parray_size;
+    next Pf;
+    
+//  copy array back
+   
+    Pi = 0;
+    for;
+        parray2var (Px, Pi, Pv1);
+lab sort_int_p2;
+        var2array (Pv1, a, Pi);
+       
+        Pi = ++;
+        Pf = Pi < Parray_size;
+    next Pf;
+    
+    exit Pnull;
+funcend
+
+func sort_lint (#sync, qint address, qint array_size)
+//  insertion sort - thread sort
+
+    lint a[1];
+    
+    qint Paddress; qint Parray_size;
+   
+    Paddress = address;
+    Parray_size = array_size;
+    
+    lint Px[Parray_size];
+    
+    qint Pi; qint Pj; qint Pk; lint Pindex; lint Pv1;
+    int Pf; int Pf1; int Pf2;
+    int Pnull = 0; int Pone = 1;
+   
+    pointer (Paddress, a, sort_lint_p1);
+    pointer (Paddress, a, sort_lint_p2);
+    
+//  copy array
+   
+    Pi = 0;
+    for;
+lab sort_lint_p1;
+        array2var (a, Pi, Pv1);
+        pvar2array (Pv1, Px, Pi);
+
+        Pi = ++;
+        Pf = Pi < Parray_size;
+    next Pf;
+    
+    Pi = 1;
+    for;
+        parray2var (Px, Pi, Pindex);
+        Pj = Pi;
+    
+lab sort_lint_loop;   
+        Pf1 = Pj > Pnull;
+        if Pf1;
+            Pk = Pj - 1;
+            parray2var (Px, Pk, Pv1);
+            Pf2 = Pindex < Pv1;
+            Pf = Pf1 && Pf2;
+            if Pf;
+                pvar2array (Pv1, Px, Pj);
+
+                Pj = --;
+                goto sort_lint_loop;
+            endif;
+        endif;
+             
+        pvar2array (Pindex, Px, Pj);
+        
+        Pi = ++;
+        Pf = Pi < Parray_size;
+    next Pf;
+    
+//  copy array back
+   
+    Pi = 0;
+    for;
+        parray2var (Px, Pi, Pv1);
+lab sort_lint_p2;
+        var2array (Pv1, a, Pi);
+       
+        Pi = ++;
+        Pf = Pi < Parray_size;
+    next Pf;
+    
+    exit Pnull;
+funcend
+
+func sort_qint (#sync, qint address, qint array_size)
+//  insertion sort - thread sort
+
+    qint a[1];
+    
+    qint Paddress; qint Parray_size;
+   
+    Paddress = address;
+    Parray_size = array_size;
+    
+    qint Px[Parray_size];
+    
+    qint Pi; qint Pj; qint Pk; qint Pindex; qint Pv1;
+    int Pf; int Pf1; int Pf2;
+    int Pnull = 0; int Pone = 1;
+   
+    pointer (Paddress, a, sort_qint_p1);
+    pointer (Paddress, a, sort_qint_p2);
+    
+//  copy array
+   
+    Pi = 0;
+    for;
+lab sort_qint_p1;
+        array2var (a, Pi, Pv1);
+        pvar2array (Pv1, Px, Pi);
+
+        Pi = ++;
+        Pf = Pi < Parray_size;
+    next Pf;
+    
+    Pi = 1;
+    for;
+        parray2var (Px, Pi, Pindex);
+        Pj = Pi;
+    
+lab sort_qint_loop;   
+        Pf1 = Pj > Pnull;
+        if Pf1;
+            Pk = Pj - 1;
+            parray2var (Px, Pk, Pv1);
+            Pf2 = Pindex < Pv1;
+            Pf = Pf1 && Pf2;
+            if Pf;
+                pvar2array (Pv1, Px, Pj);
+
+                Pj = --;
+                goto sort_qint_loop;
+            endif;
+        endif;
+             
+        pvar2array (Pindex, Px, Pj);
+        
+        Pi = ++;
+        Pf = Pi < Parray_size;
+    next Pf;
+    
+//  copy array back
+   
+    Pi = 0;
+    for;
+        parray2var (Px, Pi, Pv1);
+lab sort_qint_p2;
+        var2array (Pv1, a, Pi);
+       
+        Pi = ++;
+        Pf = Pi < Parray_size;
+    next Pf;
+    
+    exit Pnull;
+funcend

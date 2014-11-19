@@ -1,0 +1,14 @@
+// $VER: threads.nah 1.1.8 (12.12.11)
+
+int thread_unused; int thread_stopped; int thread_running;
+
+push_i          0, L0;
+pull_i          L0, thread_unused;
+
+push_i          1, L0;
+pull_i          L0, thread_stopped;
+
+push_i          2, L0;
+pull_i          L0, thread_running;
+
+// EOF

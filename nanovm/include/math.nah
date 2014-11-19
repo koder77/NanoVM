@@ -1,0 +1,47 @@
+// $VER: math.nah 00.40 (10.05.03)
+
+double m_e;
+double m_log2e; double m_log10e; double m_ln2; double m_ln10;
+double m_pi; double m_pi_2; double m_pi_4; double m_1_pi; double m_2_pi;
+double m_2_sqrtpi; double m_sqrt2; double m_sqrt1_2;
+
+push_d          2.7182818284590452354, D0;
+pull_d          D0, m_e;
+
+push_d          1.4426950408889634074, D0;
+pull_d          D0, m_log2e;
+
+push_d          0.43429448190325182765, D0;
+pull_d          D0, m_log10e;
+
+push_d          0.69314718055994530942, D0;
+pull_d          D0, m_ln2;
+
+push_d          2.30258509299404568402, D0;
+pull_d          D0, m_ln10;
+
+push_d          3.14159265358979323846, D0;
+pull_d          D0, m_pi;
+
+push_d          1.57079632679489661923, D0;
+pull_d          D0, m_pi_2;
+
+push_d          0.78539816339744830962, D0;
+pull_d          D0, m_pi_4;
+
+push_d          0.31830988618379067154, D0;
+pull_d          D0, m_1_pi;
+
+push_d          0.63661977236758134308, D0;
+pull_d          D0, m_2_pi;
+
+push_d          1.12837916709551257390, D0;
+pull_d          D0, m_2_sqrtpi;
+
+push_d          1.41421356237309504880, D0;
+pull_d          D0, m_sqrt2;
+
+push_d          0.70710678118654752440, D0;
+pull_d          D0, m_sqrt1_2;
+
+// EOF

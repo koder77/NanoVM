@@ -1,0 +1,13 @@
+// $VER: file.nch 2.0.5 (02.02.12)
+
+int err_file_ok = 0; int err_file_open = 1; int err_file_close = 2;
+int err_file_read = 3; int err_file_write = 4; int err_file_number = 5;
+int err_file_eof = 6; int err_file_fpos = 7;
+int endian_little = 1; int endian_big = 0;
+
+#ASSEMB
+#setreg_l       L254, err_file;
+#ASSEMB_END
+
+// EOF
+

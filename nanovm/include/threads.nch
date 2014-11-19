@@ -1,0 +1,5 @@
+// $VER: threads.nch 2.0.5 (04.02.12)
+
+int thread_unused = 0; int thread_stopped = 1; int thread_running = 2;
+
+// EOF

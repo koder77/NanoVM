@@ -1,0 +1,913 @@
+nano (3.3.0)
+	Nanoc: new experimental #ATOMIC / #ATOMIC_END for setting vector array start and end elements.
+	Threading safe!
+
+	vm/exe_elist () added QINT type at pvarlist contstants init. 
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Mon 17 Nov 2014 21:00 +0100
+
+nano (3.2.9)
+	VM: thread exit code is now a 64 bit return value.
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun 14 Sep 2014 20:55 +0200
+
+nano (3.2.8)
+	VM: new functions for reading directory contents, filenames and
+	directory names: dobjects, dnames
+	see exe_file.
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun 7 Sep 2014 08:22 +0200
+
+nano (3.2.7)
+	Nanoc: foobar> (x, y, z);  
+	The greater sign sets not to reverse the order of arguments pushed on stack.
+	This is usefull for calling assembly functions.
+	
+	Now N has a new file extension ".nanoc". The old ".nc" extension was set to "nesC"
+	in the Kate editor all the time if a new file with ".nc" extension was loaded.
+	So with the new ".nanoc" extension this will not happen as it is shown right highlighted
+	then.
+	You _still can use_ ".nc" as a extension but it is _not recommended_ for new programs!
+	
+	N: (nanoc) arrays can be used in math expressions: 
+	x = y * z; is the same as vmul2 (y, z, x);
+	And x = y * 5; is the same as vmul (y, 5, x);
+	
+	N: string compare bugfix -> should work again!
+	
+	moved include "arch.h" behind "global_d.h" to get gcc 4.8.x build the code on Windows MinGW.
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Mon 19 May 2014 22:04 +0200	
+	
+nano (3.2.6)
+	Nanoc: fixed bug if variable type wasn't set at initializing variable:
+	qint x = 1000;  now works.
+	
+	Updated AsmJit to version 1.1 found on github. (asmjit directory).
+	
+	New lib/vm.c with paging (_EXPERIMENTAL_ virtual memory).
+	
+	Updated vm/register.c: new default search paths if NANOVM_ROOT was not set.
+	Registry file now saved in /home directory.
+	
+	If the VM can't register then simply save a file "register" in the /home directory
+	that contains a single "*" char in. That's all to do!
+	
+	Fixed bug in pointer opcode.
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Thu 15 Mar 2014 10:23 +0100
+
+nano (3.2.3)
+	Nanoc: function calls can now be with variable constants:
+	
+	@mul (5, 4);
+	get (ret);
+	
+	Updated the JIT-compiler code, now the JIT-compiler works with 32 bit
+	systems. And I made a running Windows 32 bit build.
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat 25 Jan 2014 15:30 +0100
+
+nano (3.2.2)
+	Flow: new start menu with EXIT button.
+	Android like start menu via START_MENU define in global_d.h.
+	
+	The start menu is the default on Android and Flow starts the
+	VM automatically with the selected program.
+	The TCP/IP port is 2000 for connection.
+	The program running on the VM has to shutdown Flow on exit.
+	See the tic tac toe program as an example.
+	
+	Flow Android:
+	Text input on Android via touch screen keyboard.
+	To end the input click on area outside of text gadget.
+	
+	Nano VM: fixed compiler warning on pthread_create() calls, using
+	void pointer for called function.
+	
+	BUGFIXES: nanoc: sreads removed and string type put to sread!
+	flow now compiles and runs on desktop OS too!
+	And fixes to other things...
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun, 19 Jan 2014 02:00 +0100
+
+nano (3.2.1-2)
+	exe_vector_arr.c LOCK() UNLOCK() macros for mutexes.
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun, 05 Jan 2014 15:23 +0100	
+
+nano (3.2.1-1)
+	File access redesign. More secure fopen.
+	Now only one ENV variable must be set: NANOVM_ROOT.
+	
+	Start and end variables for exe_vector_arr.c, for threaded
+	calculations.
+	
+	Flow: added loadscan.c for Android splash screen.
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat, 07 Dec 2013 12:03 +0100
+
+nano (3.2.0-3)
+	VM: home directory for desktop OS too:
+	NANOHOME env variable should be set to home directory.
+	(vm/exe_file.c/exe_fopen ())
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun, 17 Nov 2013 12:29 +0100
+
+nano (3.2.0-2)
+	assembler: fixed warnings on blank line with spaces/tabs.
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Tue, 12 Nov 2013 22:39 +0100
+
+nano (3.2.0-1)
+	checkd.c - checkdigit: removed recognition for a - f lowercase hex chars.
+	Now all hex numbers must be with uppercase letters: A - F: exp.: FF = 255.
+	This is better because if variable names like 
+	int f;
+	are used it was not clear what the meaning of 
+	f = a;
+	was!!
+	Now a variable a will be assigned not value A hex!
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun, 20 Oct 2013 14:39 +0200	
+
+nano (3.2.0)
+	Android ARM compatibility "fixes".
+	Added alignment for 64 bit variables.
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun, 13 Oct 2013 12:37 +0200	
+
+nano (3.1.1)
+	BUGFIXES!!!
+	
+	new functions for the JIT compiler.
+	
+	JIT compiler: double compare functions (if/else). bugfixes.
+	bugfix: compiler not ! bugfix. (x = ! y;)
+	
+	wait tick is now wait time in milliseconds.
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat, 14 Sep 2013 09:22 +0200	
+
+nano (3.1.00)
+	new: byte storm JIT compiler (AsmJit)
+	
+	supported opcodes (so far):
+	
+	MOVE_L
+	INC_L, DEC_L
+	
+	ADD_L, SUB_L, MUL_L, DIV_L
+	
+	AND_L, OR_L
+	
+	INC_LESS_OR_EQ_JMP_L, DEC_GREATER_OR_EQ_JMP_L
+	
+	Speedups are huge compared to Nano without JIT compiler.
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Mon, 19 Aug 2013 20:00 +0200
+
+nano (3.0.36)
+	missing = in expression now prints sourcecode line.
+	fclose now flushes file data with fflush (); before close.
+	
+	bugfix in optimizer: -O2 flag now works on nested for loops too.
+	new nanoc opcode: pull variable;  pulls variable out of register back to memory.
+	For use with #NESTED_CODE_GLOBAL_OFF.
+	
+	#NESTED_CODE_GLOBAL_OFF for use with -O flags, for more optimized code.
+	
+	val () now filters out spaces and strings like "  123456    " now
+	can be converted to numbers. (lib/checkd.c)
+	
+	String constant bugfix: string foobar[256] = "   foobar   "; now possible.
+	
+	timeron () / timeroff () now returning time in milliseconds (ms)
+	_timer variable: now is a qint variable (64 bit)
+	
+	SOCKBUFSIZE for socket read is now 10240 bytes.
+	
+	checkdigit and make_val: binary numbers are now like this:
+	$11111111 = 255 - this works now with strtoll and the base setting.
+	I removed my conv routines and this works now in the assembler and compiler!
+	So number constant handling is the same on both.
+	
+	input functions (exe_main.c): now fgets () return value is checked.
+	
+	stpush_all_l stpush_all_d stpush_all_s and pull... superopcodes:
+	stpush_all_all and stpull_all_all -> for function call speedup.
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Tue, 08 Aug 2013 20:20 +0200
+
+nano (3.0.35)
+	hs-client bugfix
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun, 07 July 2013 15:50 +0200
+
+nano (3.0.34)
+	checkd.c: hexstring handling improved.
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun, 02 June 2013 09:54 +0200
+
+nano (3.0.33)
+	exe_main.c: val () function now can be used with hex strings too.
+	(t_var.base = 16 for hex string or 10 for normal number)
+	N compiler: int i = FF; now works.
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat, 30 April 2013 22:52 +0200		
+
+nano (3.0.32)
+	64 bit indexes for array variables.
+	64 bit limit for virtual memory.
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat, 06 April 2013 21:35 +0200		
+
+nano (3.0.31)
+	new: hyperspace for load/save arrays to server.
+	server/client functions.
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat, 06 April 2013 21:04 +0200	
+
+nano (3.0.30)
+	new: compiler supports now lists:
+	int a[10];
+	a = [ 1 5 6 7] 0;
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Fri, 29 March 2013 12:57 +0100
+
+nano (3.0.29-5)
+    compiler: val (), str(): byte variable type added.
+    
+-- Stefan Pietzonke <jay-t@gmx.net>  Fri, 1 March 2013 17:18 +0100
+
+nano (3.0.29-4)
+    online registering activated again (statistics only).
+    
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun, 10 Feb 2013 11:51 +0100
+
+nano (3.0.29-3)
+    new: compiler: changed expression handling: x = y + z sets now the type of y.
+    
+-- Stefan Pietzonke <jay-t@gmx.net>  Fri, 18 Jan 2013 17:27 +0100
+
+nano (3.0.29-3)
+    new: mod_d for modulo on double types.
+    
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun, 13 Jan 2013 20:13 +0100
+
+nano (3.0.29)
+    new: AROS socket error message handling.
+    
+-- Stefan Pietzonke <jay-t@gmx.net>  Wed, 9 Jan 2013 14:03 +0100
+
+nano (3.0.27)
+    new: searchpaths for "portable" install on a USB stick.
+    new: fixed the pointer opcode: now no errors on Windows or crashs on
+    AROS anymore!!
+    
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat, 5 Jan 2013 13:09 +0100
+
+nano (3.0.26)
+    AROS now officially supported as host OS.
+    Still TO DO process creation: exe_process.c
+    password input with no echo: exe_passw_input.c
+    
+-- Stefan Pietzonke <jay-t@gmx.net>  Tue, 1 Jan 2013 20:20 +0100
+
+nano (3.0.25)
+    new: makedir to create a new directory
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Mon, 31 Dec 2012 11:45 +0100
+
+nano (3.0.24)
+    new: include file search in programm path:
+    #include <foobar.nch>
+    -> nanoc /home/stefan/nano/prog/foobar/foo.nc
+    -> searches in /home/stefan/nano/prog/foobar/
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun, 30 Dec 2012 13:51 +0100
+
+nano (3.0.23)
+    new: #NESTED_CODE_ON to make string concatenation possible... ;)
+    
+    bugfix: VM string compare equal.
+    bugfix: return value one exit: exit ()
+    bugfix: compiler: fremove/frename argument count (translate.c)
+    
+    Builds now on AROS!
+    
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat, 29 Dec 2012 09:05 +0100
+
+nano (3.0.22)
+    new: password  for reading passwords with no echo to console:
+    
+    password (string, length);
+    
+-- Stefan Pietzonke <jay-t@gmx.net>  Fri, 7 Dec 2012 20:42 +0100
+
+nano (3.0.21)
+    new: move opcodes to get a byte of an number variable into a register
+    and store them back into a variable:
+    
+    lint var;
+    byte1 = var[0]: push_i 0 index; move_ip_b   var, index, byte1;
+    byte2 = var[1]: push_i 1 index; move_ip_b   var, index, byte2;
+    
+    And so on.
+    
+    added var: _qintsize and _endian (machine endianess)
+    bugfix: exe_fwrite_array_byte: now allocates bigger file buffer if len > bufsize!
+    
+-- Stefan Pietzonke <jay-t@gmx.net>  Fri, 16 Nov 2012 22:04 +0100        
+  
+nano (3.0.20)
+    new: N compiler: #NESTED_CODE_OFF; switches nested_code to FALSE:
+    sometimes needed to get correct code:
+    
+    v = 0;
+    for;
+#NESTED_CODE_OFF;
+        var2array (v, state, v);
+    
+        v = ++;
+        f = v <= 255;
+    next f;
+    
+    Loads "v" only once into a register.
+    The "for" loop begin normally switches nested_code to TRUE, that is
+    not needed here.
+    
+    bugfix: object file now can be stripped "-s" when private variables are used.
+    I added varlist[].constant (if it's CONST_VAR then it's a constant).
+    So the empty variable names couldn't be checked, because in a stripped
+    object file all variable names are empty. FIXED!
+       
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun, 11 Nov 2012 09:45 +0100        
+
+nano (3.0.19)
+    new: atan2 function, ppointer, pgettype
+    bugfix: ppull_q & ppush_q: now executing right opcode.
+    Some bugfixes to private variables functions.
+    
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat, 27 Oct 2012 17:46 +0200    
+
+nano (3.0.16)
+    Windows: long long int as 64 bit datatype: for better compatibility
+    and easier Windows build.
+    
+    Changed VM binary name to nanovm. 
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun, 12 Aug 2012 10:45 +0200
+
+nano (3.0.15)
+    translate.c: getvarind_comp for array[var]; bugfix.
+    works now.
+    comp/translate.c: ssopenact wrong arguments bugfix
+                      var_lock & var_unlock bugfix.
+                      qint function call return value not set: bugfix.
+    lib/mem.c: allocate bugfix: qint array dim
+    
+    exe_main.c: string registers are now initialized to BINUL on start.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Mon, 06 Aug 2012 11:48 +0200
+
+nano (3.0.14)
+    include/types.nah and types.nch updated.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Wed, 06 June 2012 23:32 +0200
+
+nano (3.0.13)
+    * new: checks now version numbers on first run.
+    via checkupdate.no
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat, 02 June 2012 23:53 +0200
+
+nano (3.0.12)
+    * bugfix: compiler: array output in emit code.
+    Nano: fflush for all print functions.
+    register.c: added MSG_NOSIGNAL
+
+    nanoa: added linenumber info to "label already defined" error message.
+    removed DIMS DEBUG printf.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat, 02 June 2012 00:04 +0200
+
+nano (3.0.11)
+    * new: register.c for online registering
+    this isn't collecting any private data!
+    just for statistics.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Thu, 31 May 2012 20:59 +0200
+
+nano (3.0.10)
+    * new: dynamic variable type for dynamic arrays
+    see the example dyn.na.
+
+    bugfix in the socket code for close accept function.
+    and added pointer support for all array functions now.
+
+    Nano can now be compiled with the crosscompiler for m68k Amiga OS
+    on Linux. I wrote a special socket source file to make this work.
+
+    I can now run the N compiler and the assembler on WinUAE.
+    But the VM fails to run. It seems to load programs but
+    then it hangs.
+
+    I don't know if this has something to do with the POSIX
+    thread library on Amiga.
+
+    I have to find out...
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Wed, 30 May 2012 21:30 +0200
+
+nano (3.0.9)
+    * N compiler: emit.c: byte type emit bugfix
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Wed, 16 May 2012 22:44 +0200
+
+nano (3.0.8)
+    * N compiler: new regspill.c: functions for "register spilling".
+    If all registers are full, spill the least used register (variable) back to variable.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Wed, 16 May 2012 19:00 +0200
+
+
+nano (3.0.7)
+    * N compiler: fixed variable not defined error message.
+    fixed string compare bug.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun, 13 May 2012 20:10 +0200
+
+nano (3.0.6)
+    * Cygwin compatibility
+
+nano (3.0.5)
+    * N compiler: bugfix: nested code (goto used) bugfix.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Thu, 3 May 2012 17:47 +0200
+
+nano (3.0.4)
+    * N compiler: bugfix: nested if, endif "label not found" assembler bugfix.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Fri, 22 Apr 2012 08:37 +0200
+
+nano (3.0.3)
+    * new: int2hex (hex) for converting integer to hex string
+    hash64_ab: 64 bit hash of byte array.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Fri, 13 Apr 2012 18:24 +0200
+
+nano (3.0.1)
+    * changes for Windows build: exe_socket IPV6 stuff:
+    define WINVER to 0x0501
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Mon, 2 Apr 2012 17:55 +0200
+
+nano (3.0.0)
+    * 64 bit version: qint as 64 bit integer. All registers are now 64 bit wide.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Thu, 22 Mar 2012 16:58 +0100
+
+nano (2.0.7)
+    * N compiler: new: -O optimizer option to optimize for loops.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat, 10 Mar 2012 21:11 +0100
+
+nano (2.0.6)
+    * N compiler: bugfix in the COMP_TOKEN part.
+                  bugfix: nested for/next: works now.
+                  bugfix: expressions like x = y + z;
+                  bugfix: some other stuff.
+
+                  wrote lines_2.nc (lines.na rewriting in N): works now.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat, 10 Mar 2012 11:28 +0100
+
+nano (2.0.5-15)
+    * N compiler: auto translate table and code (translate.c)
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Tue, 21 Feb 2012 20:31 +0100
+
+nano (2.0.5-14)
+    * N compiler: lab & goto
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Wed, 15 Feb 2012 19:25 +0100
+
+nano (2.0.5-13)
+    * N compiler: var_comp.c/getvarstr_comp BUGFIX: now array variables are parsed right.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Fri, 10 Feb 2012 20:40 +0100
+
+nano (2.0.5-12)
+    * N compiler: for, next
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun, 5 Feb 2012 00:22 +0100
+
+nano (2.0.5-11)
+    * assembler: inline assembler defines added, for compatibility with N compiler
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Thu, 2 Feb 2012 21:18 +0100
+
+nano (2.0.5-10)
+    * N compiler: inline assembler
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun, 29 Jan 2012 19:42 +0100
+
+nano (2.0.5-9)
+    * N compiler: global variables: starting with "_"
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun, 29 Jan 2012 00:04 +0100
+
+nano (2.0.5-8)
+    * new: N compiler: if, else, endif
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat, 28 Jan 2012 23:22 +0100
+
+nano (2.0.5-4)
+    * new: not_l opcode
+    * sread_ab, swrite_ab now with virtual memory support!!
+    * comp/nanoc: the new experimental N compiler:
+    - working? assign math expressions
+    - print
+    - printn
+    - function calls, now with return () to put vars on stack.
+    - "Hello world!"
+    - TODO: loops
+    - TODO: more commands...
+    This is still a work in progress, but gets more and more usefull...
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat, 14 Jan 2012 13:22 +0100
+
+nano (2.0.4)
+    move_a_s, move_s_a assembler bugfix.
+    * opcode.c/set_opcode assemb/main.c cleanup:
+      insert labels code
+      now uses the definitions in opcodes.h
+      with only few exceptions set in set_opcode.
+    * bugfix: assembler now prints out the right filename on error.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Wed, 4 Jan 2012 18:52 +0100
+
+nano (2.0.0)
+    * S_REG: string registers: push_s, pull_s, #setreg_s, #unsetreg_all_s
+    ppush_s, ppull_s
+    pmove_a_i, pmove_a_l, pmove_a_d, pmove_a_b, pmove_a_s
+    pmove_i_a, pmove_l_a, pmove_d_a, pmove_b_a, pmove_s_a
+    stpush_all_s, stpull_all_s
+
+    * update: new thread handling, it's working now!!! After hours of debugging
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat, 31 Dec 2011 04:20 +0100
+
+nano (1.1.11)
+    * private variables for thread:
+    * new opcodes: ppush_i, ppush_l, ppush_d, ppush_b,
+    ppull_i, ppull_l, ppull_d, ppull_b: for thread private variables.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Fri, 27 Dec 2011 04:09 +0100
+
+nano (1.1.10)
+    * saveo.c / openo.c: now uses a word for the opcode => wordcode.
+    * mem.c/exe_alloc_var bugfix: array dims (multiply all dimensions)
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Fri, 23 Dec 2011 19:35 +0100
+
+nano (1.1.9)
+    * new opcodes: thpush_l, thpush_d, thpush_s to send data to a thread-stack.
+    * changed: show_stack threadnum (L_REG).
+    * changed: exe_stack.c: LOCK/UNLOCK (mutexes).
+    * new opodes: thpush_sync / thpull_sync for syncing thread-stack (WORKING!!!! YEAHHH!!!!)
+    * thread_sync for syncing (WORKING).
+    * stack_set: for setting stack/memory setting registers to global variables.
+    * bugfix: exe_open_server working again!
+    * new exe_socket: thread support for exe_open_accept_server, possible now:
+      opens a new socket handle.
+    * mem.c: cleanup for a new varlist handling.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Wed, 21 Dec 2011 19:51 +0100
+
+nano (1.1.8)
+    * new opode: thread_join: for waiting for other threads to be finished (in the main thread)
+    * new opode: thread_num: returns the number of current thread.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Wed, 14 Dec 2011 20:40 +0100
+
+nano (1.1.7)
+    * separated virtual machine registers for each thread.
+    * updated stack code, stack works now again. TESTED with stack.na.
+    * exe_elist: single thread already running.
+    * exe_stack.c multiple threads support: pthreads structure. (WORKING).
+    * new opcodes: var_lock & var_unlock for mutexing variables.
+    * new opcodes: thread_create for creating a new thread. (STATUS RUNNING...).
+    * overall nano exe_* code cleanup.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun, 11 Dec 2011 10:16 +0100
+
+
+nano (1.1.6)
+    update: exe_socket.c cleanup.
+    exe_file/exe_fwrite FLAG for binary write, to write the full read buffer (fread_ab / fwrite_ab).
+    To avoid the writing 0 bytes bug.
+    exe_fwrite_array_byte bugfix.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Fri, 18 Nov 2011 23:51 +0100
+
+
+nano (1.1.5)
+    update: exe_socket_ipv6.c for IP version 6 support.
+    changed new: exe_socket_ipv6.c, global_d.h, Makefile.am, configure.ac
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Su, 14 Aug 2011 15:20 +0200
+
+
+nano (1.1.4)
+    exe_fread: dynamic buffer for read.
+
+    CHANGED: exe_file.c, global_d.h, ChangeLog, exe_main.c, vm/main.c, assemb/main.c, assemb/main_d.h, protos.h
+    README
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sa, 16 Apr 2011 20:48 +0200
+
+
+nano (1.1.3)
+    256 registers.
+    hash32.c: hash function for 32 bit hashes: hash32_ab
+    CHANGED: global_d.h, hash32.c, ChangeLog, opcodes.h, exe_main.c, Makefile.am
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sa, 2 Apr 2011 10:23 +0200
+
+
+nano (1.1.2)
+
+updated: include/host.h, assemb/loadp.c, vm/main.c, ChangeLog (uploaded)
+updated global_d.h
+
+changed env variable handling to set defaults if not set:
+
+NANOPROG:
+OS_AMIGA || OS_AROS:
+"Work:nano/prog/"
+
+OS_LINUX:
+"~/nano/prog/"
+
+OS_WINDOWS:
+"C:/nano/prog/"
+
+
+NANOINC:
+OS_AMIGA || OS_AROS:
+"Work:nano/include/"
+
+OS_LINUX:
+"/usr/local/share/nano/include/"
+
+OS_WINDOWS:
+"C:/nano/include/"
+
+Changed type for int to int from long, for 64 bit compatbility.
+Now nano compiles as 64 bit version.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Fri, 6 Aug 2010 16:00 +0200
+
+
+nano (1.1.1)
+    * new opcodes:
+    inc_ls_jmp_l, inc_lseq_jmp_l, dec_gr_jmp_l, dec_greq_jmp_l
+    inc_ls_jsr_l, inc_lseq_jsr_l, dec_gr_jsr_l, dec_greq_jsr_l
+
+    to speedup loops.
+
+    Example:
+    inc_l           L1;
+    lseq_jmp_l      L1, L2, loop;
+
+    can be replaced with:
+
+    inc_lseq_jmp_l  L1, L2, loop;
+
+    which is faster.
+
+    * changed directory name to nanovm, to avoid some name confusion
+    with the nano editor by the debian package stuff.
+    If I do checkinstall.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun, 7 Feb 2010 10:20 +0100
+
+
+nano (1.1.0)
+    AROS port (nanoa, nano)
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Fr, 1 Jan 2010 21:15 +0100
+
+
+nano (1.0.9)
+    * new opcodes: stelements, gettype
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat, 3 Oct 2009 00:39 +0200
+
+
+nano (1.0.8)
+    * new opcodes: stgettype, getaddress, pointer
+    for indirect addressing of arrays.
+
+    See the pdf manual for more.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat,  29 Aug 2009 12:21 +0200
+
+
+nano (1.0.7)
+    * changed some things in watchdog.c
+    * All nano include files changed to lowercase variable
+      names to avoid some strange things in the assembler.
+    * New: the flow gfx headers released together with the
+      flow sources on www.jay-t.de/nano
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun,  5 July 2009 09:50 +0200
+
+
+nano (1.0.6)
+    * added watchdog.c for debugging, it adds memory protection
+    to all constant variables. For debugging only.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat,  20 June 2009 13:07 +0200
+
+
+nano (1.0.5)
+    Now assembler and VM show the filenames with error messages.
+    New -includes assembler option.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Fri,  3 Apr 2009 22:10 +0200
+
+
+nano (1.0.4)
+    * added suport for hex numbers in the assembler:
+      exp: &FF% in var.c/conv_hex
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat,  7 Mar 2009 13:06 +0100
+
+
+nano (1.0.3)
+    * added support for binary numbers in the assembler:
+      exp: B1001%, in var.c/conv_binary to t_var.digitstr
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat,  14 Feb 2009 17:17 +0100
+
+
+nano (1.0.2)
+    * more DEBUG printfs
+      cleanup
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Wed,  14 May 2008 21:10 +0200
+
+
+nano (1.0.1)
+    * bugfix: assembler: lab now warns if the label was already defined.
+      jumplist[i].islabel is set by opcode.c
+
+    * change: vm/exe_main.c: input_l and input_d
+      uses now fgets and sscanf for input reading.
+
+    * bugfix: sqrt_d wanted three arguments. Changed to two and works now.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Fri,  11 Jan 2008 20:12 +0100
+
+
+nano (1.0.0)
+    * new opcode: show_stack, prints the stack for debugging
+
+    * bugfix: vm/exe_main.c: add_s uses now STRING_TMP_1 and STRING_TMP_2
+      variables for temp use, to avoid possible memory overlapping by
+      strcat().
+
+    * bugfix: vm/exe_socket.c: added MSG_NOSIGNAL in exe_sread and
+      exe_swrite, to avoid programm exit on SIGPIPE when other side
+      of socket is closed during read/write.
+
+      Checked on Linux.
+
+    * bugfix: vm/exe_socket.c: exe_sread_line_string
+      now breaks read, if the reading fails at first char.
+
+      Added checking for the right range of slist_ind, the socket index,
+      on all write functions. This fixes the illegal read bug.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Tue,  14 Dec 2007 07:14 +0100
+
+
+nano (0.99.10)
+    * bugfix: openo.c bytecode verifier
+      sets now a return value
+
+    * loadp.c: conv_include_name
+      fixed possible overflow through env variable reading
+
+    * vm/arch.h, vm/exe_process.c
+      changed the Windows sleep() function to Sleep()
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Mon,  26 Feb 2007 20:52 +0100
+
+
+nano (0.99.9)
+    * bugfixes: memory leaks in the assembler again!
+      Now you get an error message, if the source file is too long.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun,  27 Aug 2006 01:20 +0200
+
+
+nano (0.99.8)
+    * bugfixes: memory leaks in the assembler fixed.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun,  30 Jul 2006 18:33 +0200
+
+
+nano (0.99.7)
+    * code cleanup
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Fri,  21 Jul 2006 11:02 +0200
+
+
+nano (0.99.6)
+    * added move_a_s and move_s_a opcodes for string arrays
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun,  18 Jul 2006 10:05 +0200
+
+
+nano (0.99.5)
+    * added assembler: new warning if end of line mark (semicolon)
+      is not set. Some preprocessor bugfixes.
+
+    * MAXVARNAME = 64, MAXJUMPNAME = 64
+      Variable names and label names can now be 64 chars long.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun,  25 Jun 2006 18:00 +0200
+
+
+nano (0.99.4)
+    * new assembler preprocessor functions:
+      #unsetreg_all_l
+      #unsetreg_all_d
+
+      for unsetting all L or D register names
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Thu,  15 Jun 2006 19:08 +0200
+
+
+nano (0.99.3)
+
+    * added -stacks cli option, for stacksize override
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat,  3 Jun 2006 20:12 +0200
+
+
+nano (0.99.2)
+
+    * Updated the random number generator to the new Mersenne Twister
+      mt19937ar.c from Makoto Matsumoto and Takuji Nishimura, 2002/1/26
+
+      http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun,  24 Apr 2006 18:31 +0200
+
+
+nano (0.99)
+
+    * Added stack functions
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun,  23 Apr 2006 01:11 +0200
+
+
+nano (0.98)
+
+    * Added bytecode verifier
+    * Added _os variable and host.nah include.
+      See info.na program
+
+    * bugfixes:
+      vm/exe_socket.c: removed error in the accept() call.
+      vm/exe_process.c: Linux code fixed
+
+    * Manual updated
+
+    * exe_socket.c
+      Patched the Windows socket includes to use "winsock2" and "ws2tcpip.h".
+      Because "socklen_t" is not declared in "winsock.h".
+
+      Amiga: defined "socklen_t". It's not in the includes.
+
+ -- Stefan Pietzonke <jay-t@gmx.net>  Thu,  6 Apr 2006 23:30 +0200
+
+
+nano (0.97.4)
+
+    * Added NEWS, README
+      Sources converted to unix LF format
+
+ -- Stefan Pietzonke <jay-t@gmx.net>  Wed,  7 Sep 2005 21:37:12 +0200
+
+
+nano (0.97.3)
+
+    * Added GNU build environment
+
+ -- Roland Stigge <stigge@antcom.de>  Sat,  3 Sep 2005 13:17:57 +0200

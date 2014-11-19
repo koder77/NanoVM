@@ -1,0 +1,2884 @@
+//  $VER: flow.nah 0.8 (13.11.13)
+//  graphics & sound library
+// 	RS232 receive/send
+//
+//	0.8: new: progress bar gadget.
+//	0.7: new: RS232 receive/send functions, see end of code.
+
+lab nanogfx_init;
+#ASSEMB
+//  command definitions, this function must be called first to set needed variables.
+
+    #unsetreg_all_l;
+
+    int end; int shutdown; int open_screen; int close_screen; int clear_screen; int update_screen;
+
+    int color; int pixel; int line; int rectangle; int rectangle_fill; int circle; int circle_fill;
+    int ellipse; int ellipse_fill; int pie; int pie_fill; int trigon; int trigon_fill; int polygon; int polygon_fill;
+    int bezier;
+    int text_bmap; int loadfont_bmap; int text_ttf; int loadfont_ttf; int load_picture; int getpixel; int getmouse;
+
+    int gadget_color_border_light; int gadget_color_border_shadow;
+    int gadget_color_backgr_light; int gadget_color_backgr_shadow;
+    int gadget_color_text_light; int gadget_color_text_shadow;
+    int gadget_button; int gadget_checkbox; int gadget_cycle; int gadget_string; int gadget_box; int gadget_event;
+    int gadget_get_x2y2; int gadget_checkbox_change; int gadget_string_change; int gadget_box_change;
+
+    int sound_play_wav; int sound_stop_channel; int sound_play_music; int sound_stop_music;
+
+	int gadget_progress_bar; int gadget_progress_bar_change;
+
+//	RS232 send/receive functions
+    int rs232_open_comport; int rs232_poll_comport; int rs232_send_byte; int rs232_send_buf; int rs232_close_comport;
+
+//  type definitions
+
+    int screennum; int width; int height; int bit;
+    int X; int Y; int X2; int Y2; int X3; int Y3;
+    int vectors; int steps; int radius; int Xradius; int Yradius; int startangle; int endangle;
+
+    int r_c; int g_c; int b_c; int r_bg; int g_bg; int b_bg; int alpha;
+
+    int fontwidth; int fontheight; int fontsize; int fontstyle;
+    int fontstyle_normal; int fontstyle_bold; int fontstyle_italic; int fontstyle_underline;
+
+    int gadget; int gadgets; int gadget_status; int gadget_int_value; int gadget_cycle_entries;
+    int gadget_string_str_len; int gadget_string_vis_len;
+
+    int VX; int VY;
+    int text; int screentitle; int screenicon; int picturename; int fontname;
+    int gadget_string_value; int gadget_cycle_text;
+
+    int sound_wav_file; int sound_channel; int sound_loops; int sound_music_file;
+
+//	RS232 type definitions
+    int rs232_comport_number; int rs232_baudrate; int rs232_buf_size; int rs232_byte; int rs232_buf;
+
+	int gadget_progress_bar_value;
+
+    push_i          1, L0;
+    pull_i          L0, end;
+
+    push_i          2, L0;
+    pull_i          L0, shutdown;
+
+    push_i          3, L0;
+    pull_i          L0, open_screen;
+
+    push_i          4, L0;
+    pull_i          L0, close_screen;
+
+    push_i          5, L0;
+    pull_i          L0, clear_screen;
+
+    push_i          6, L0;
+    pull_i          L0, update_screen;
+
+    push_i          7, L0;
+    pull_i          L0, color;
+
+    push_i          8, L0;
+    pull_i          L0, pixel;
+
+    push_i          9, L0;
+    pull_i          L0, line;
+
+    push_i          10, L0;
+    pull_i          L0, rectangle;
+
+    push_i          11, L0;
+    pull_i          L0, rectangle_fill;
+
+    push_i          12, L0;
+    pull_i          L0, circle;
+
+    push_i          13, L0;
+    pull_i          L0, circle_fill;
+
+    push_i          14, L0;
+    pull_i          L0, ellipse;
+
+    push_i          15, L0;
+    pull_i          L0, ellipse_fill;
+
+    push_i          16, L0;
+    pull_i          L0, pie;
+
+    push_i          17, L0;
+    pull_i          L0, pie_fill;
+
+    push_i          18, L0;
+    pull_i          L0, trigon;
+
+    push_i          19, L0;
+    pull_i          L0, trigon_fill;
+
+    push_i          20, L0;
+    pull_i          L0, polygon;
+
+    push_i          21, L0;
+    pull_i          L0, polygon_fill;
+
+    push_i          22, L0;
+    pull_i          L0, bezier;
+
+    push_i          23, L0;
+    pull_i          L0, text_bmap;
+
+    push_i          24, L0;
+    pull_i          L0, loadfont_bmap;
+
+    push_i          25, L0;
+    pull_i          L0, text_ttf;
+
+    push_i          26, L0;
+    pull_i          L0, loadfont_ttf;
+
+    push_i          27, L0;
+    pull_i          L0, load_picture;
+
+    push_i          28, L0;
+    pull_i          L0, getpixel;
+
+    push_i          29, L0;
+    pull_i          L0, getmouse;
+
+    push_i          30, L0;
+    pull_i          L0, gadget_color_border_light;
+
+    push_i          31, L0;
+    pull_i          L0, gadget_color_border_shadow;
+
+    push_i          32, L0;
+    pull_i          L0, gadget_color_backgr_light;
+
+    push_i          33, L0;
+    pull_i          L0, gadget_color_backgr_shadow;
+
+    push_i          34, L0;
+    pull_i          L0, gadget_color_text_light;
+
+    push_i          35, L0;
+    pull_i          L0, gadget_color_text_shadow;
+
+    push_i          36, L0;
+    pull_i          L0, gadget_button;
+
+    push_i          37, L0;
+    pull_i          L0, gadget_checkbox;
+
+    push_i          38, L0;
+    pull_i          L0, gadget_cycle;
+
+    push_i          39, L0;
+    pull_i          L0, gadget_string;
+
+    push_i          40, L0;
+    pull_i          L0, gadget_box;
+
+	push_i			41, L0;
+	pull_i			L0, gadget_progress_bar;
+
+    push_i          42, L0;
+    pull_i          L0, gadget_event;
+
+    push_i          43, L0;
+    pull_i          L0, gadget_get_x2y2;
+
+    push_i          44, L0;
+    pull_i          L0, gadget_checkbox_change;
+
+    push_i          45, L0;
+    pull_i          L0, gadget_string_change;
+
+    push_i          46, L0;
+    pull_i          L0, gadget_box_change;
+
+	push_i			47, L0;
+	pull_i			L0, gadget_progress_bar_change;
+	
+    push_i          48, L0;
+    pull_i          L0, sound_play_wav;
+
+    push_i          49, L0;
+    pull_i          L0, sound_stop_channel;
+
+    push_i          50, L0;
+    pull_i          L0, sound_play_music;
+
+    push_i          51, L0;
+    pull_i          L0, sound_stop_music;
+
+    push_i			52, L0;
+    pull_i			L0, rs232_open_comport;
+
+    push_i			53, L0;
+    pull_i			L0, rs232_poll_comport;
+
+    push_i			54, L0;
+    pull_i			L0, rs232_send_byte;
+
+    push_i			55, L0;
+    pull_i			L0, rs232_send_buf;
+
+    push_i			56, L0;
+    pull_i			L0, rs232_close_comport;
+
+    push_i          57, L0;
+    pull_i          L0, screennum;
+
+    push_i          58, L0;
+    pull_i          L0, width;
+
+    push_i          59, L0;
+    pull_i          L0, height;
+
+    push_i          60, L0;
+    pull_i          L0, bit;
+
+    push_i          61, L0;
+    pull_i          L0, X;
+
+    push_i          62, L0;
+    pull_i          L0, Y;
+
+    push_i          63, L0;
+    pull_i          L0, X2;
+
+    push_i          64, L0;
+    pull_i          L0, Y2;
+
+    push_i          65, L0;
+    pull_i          L0, X3;
+
+    push_i          66, L0;
+    pull_i          L0, Y3;
+
+    push_i          67, L0;
+    pull_i          L0, vectors;
+
+    push_i          68, L0;
+    pull_i          L0, steps;
+
+    push_i          69, L0;
+    pull_i          L0, radius;
+
+    push_i          70, L0;
+    pull_i          L0, Xradius;
+
+    push_i          71, L0;
+    pull_i          L0, Yradius;
+
+    push_i          72, L0;
+    pull_i          L0, startangle;
+
+    push_i          73, L0;
+    pull_i          L0, endangle;
+
+    push_i          74, L0;
+    pull_i          L0, r_c;
+
+    push_i          75, L0;
+    pull_i          L0, g_c;
+
+    push_i          76, L0;
+    pull_i          L0, b_c;
+
+    push_i          77, L0;
+    pull_i          L0, r_bg;
+
+    push_i          78, L0;
+    pull_i          L0, g_bg;
+
+    push_i          79, L0;
+    pull_i          L0, b_bg;
+
+    push_i          80, L0;
+    pull_i          L0, alpha;
+
+    push_i          81, L0;
+    pull_i          L0, fontwidth;
+
+    push_i          82, L0;
+    pull_i          L0, fontheight;
+
+    push_i          83, L0;
+    pull_i          L0, fontsize;
+
+    push_i          84, L0;
+    pull_i          L0, fontstyle;
+
+    push_i          85, L0;
+    pull_i          L0, fontstyle_normal;
+
+    push_i          86, L0;
+    pull_i          L0, fontstyle_bold;
+
+    push_i          87, L0;
+    pull_i          L0, fontstyle_italic;
+
+    push_i          88, L0;
+    pull_i          L0, fontstyle_underline;
+
+    push_i          89, L0;
+    pull_i          L0, gadget;
+
+    push_i          90, L0;
+    pull_i          L0, gadgets;
+
+    push_i          91, L0;
+    pull_i          L0, gadget_status;
+
+    push_i          92, L0;
+    pull_i          L0, gadget_int_value;
+
+    push_i          93, L0;
+    pull_i          L0, gadget_cycle_entries;
+
+    push_i          94, L0;
+    pull_i          L0, gadget_string_str_len;
+
+    push_i          95, L0;
+    pull_i          L0, gadget_string_vis_len;
+
+    push_i          96, L0;
+    pull_i          L0, VX;
+
+    push_i          97, L0;
+    pull_i          L0, VY;
+
+    push_i          98, L0;
+    pull_i          L0, text;
+
+    push_i          99, L0;
+    pull_i          L0, screentitle;
+
+    push_i          100, L0;
+    pull_i          L0, screenicon;
+
+    push_i          101, L0;
+    pull_i          L0, picturename;
+
+    push_i          102, L0;
+    pull_i          L0, fontname;
+
+    push_i          103, L0;
+    pull_i          L0, gadget_string_value;
+
+    push_i          104, L0;
+    pull_i          L0, gadget_cycle_text;
+
+    push_i          105, L0;
+    pull_i          L0, sound_wav_file;
+
+    push_i          106, L0;
+    pull_i          L0, sound_channel;
+
+    push_i          107, L0;
+    pull_i          L0, sound_loops;
+
+    push_i          108, L0;
+    pull_i          L0, sound_music_file;
+
+	push_i			109, L0;
+	pull_i			L0, rs232_comport_number;
+
+	push_i			110, L0;
+	pull_i			L0, rs232_baudrate;
+
+	push_i			111, L0;
+	pull_i			L0, rs232_buf_size;
+
+	push_i			112, L0;
+	pull_i			L0, rs232_byte;
+
+	push_i			113, L0;
+	pull_i			L0, rs232_buf;
+	
+	push_i			114, L0;
+	pull_i			L0, gadget_progress_bar_value;
+
+    rts;
+#ASSEMB_END
+
+lab nanogfx_openscreen;
+#ASSEMB
+//  args: lint socket, screen-num, string screentitle, screenicon, lint width, height, bit-depth, alpha-channel
+//  return: lint error-code
+
+    #unsetreg_all_l;
+    #unsetreg_all_s;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, screen;
+    #setreg_l       L5, _width;
+    #setreg_l       L6, _height;
+    #setreg_l       L7, _bit;
+    #setreg_l       L8, _alpha;
+    #setreg_l       L9, ret;
+    #setreg_l       L10, comm;
+
+    #setreg_s       S0, _nanogfx_screentitle;
+    #setreg_s       S1, _nanogfx_screenicon;
+
+    push_i          0, L0;
+    push_i          1, one;
+    push_i          2, two;
+
+    stpull_l        _alpha;
+    stpull_l        _bit;
+    stpull_l        _height;
+    stpull_l        _width;
+    stpull_s        _nanogfx_screenicon;
+    stpull_s        _nanogfx_screentitle;
+    stpull_l        screen;
+    stpull_l        socket;
+
+    push_i          screennum, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, screen;
+
+    push_i          screentitle, comm;
+    swrite_b        socket, comm;
+    swrite_s        socket, _nanogfx_screentitle;
+    swrite_n        socket, one;
+
+    push_i          screenicon, comm;
+    swrite_b        socket, comm;
+    swrite_s        socket, _nanogfx_screenicon;
+    swrite_n        socket, one;
+
+    push_i          width, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _width;
+
+    push_i          height, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _height;
+
+    push_i          bit, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _bit;
+
+    push_i          alpha, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _alpha;
+
+    push_i          open_screen, comm;
+    swrite_b        socket, comm;
+
+    sread_b         socket, ret;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_closescreen;
+#ASSEMB
+//  args: lint socket, screen-num
+//  return: lint error-code
+
+    #unsetreg_all_l;
+    #unsetreg_all_s;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, screen;
+	#setreg_l       L5, ret;
+    #setreg_l       L6, comm;
+
+    push_i          0, L0;
+    push_i          1, one;
+    push_i          2, two;
+
+    stpull_l        screen;
+    stpull_l        socket;
+
+    push_i          screennum, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, screen;
+
+    push_i          close_screen, comm;
+    swrite_b        socket, comm;
+
+    sread_b         socket, ret;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+	
+	
+lab nanogfx_clearscreen;
+#ASSEMB
+//  args: lint socket
+//  return: lint error-code
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, ret;
+    #setreg_l       L5, comm;
+
+    stpull_l        socket;
+
+    push_i          clear_screen, comm;
+    swrite_b        socket, comm;
+
+    sread_b         socket, ret;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_updatescreen;
+#ASSEMB
+//  args: lint socket
+//  return: lint error-code
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, ret;
+    #setreg_l       L5, comm;
+
+    stpull_l        socket;
+
+    push_i          update_screen, comm;
+    swrite_b        socket, comm;
+
+    sread_b         socket, ret;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_end;
+#ASSEMB
+//  args: lint socket
+//  return: lint error-code
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, ret;
+    #setreg_l       L5, comm;
+
+    stpull_l        socket;
+
+    push_i          end, comm;
+    swrite_b        socket, comm;
+
+    sread_b         socket, ret;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END	
+	
+// --------------------------------------------------------	
+	
+lab nanogfx_shutdown;
+#ASSEMB
+//  args: lint socket
+//  return: lint error-code
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, ret;
+    #setreg_l       L5, comm;
+
+    stpull_l        socket;
+
+    push_i          shutdown, comm;
+    swrite_b        socket, comm;
+
+    sread_b         socket, ret;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_screen;
+#ASSEMB
+//  args: lint socket, screen
+//  return: none
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, screen;
+    #setreg_l       L5, comm;
+
+    stpull_l        screen;
+    stpull_l        socket;
+
+    push_i          screennum, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, screen;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_color;
+#ASSEMB
+//  args: lint socket, r, g, b
+//  return: none
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, r;
+    #setreg_l       L5, g;
+    #setreg_l       L6, b;
+    #setreg_l       L7, comm;
+
+    stpull_l        b;
+    stpull_l        g;
+    stpull_l        r;
+    stpull_l        socket;
+
+    push_i          r_c, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, r;
+
+    push_i          g_c, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, g;
+
+    push_i          b_c, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, b;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_color_bg;
+#ASSEMB
+//  args: lint socket, r, g, b
+//  return: none
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, r;
+    #setreg_l       L5, g;
+    #setreg_l       L6, b;
+    #setreg_l       L7, comm;
+
+    stpull_l        b;
+    stpull_l        g;
+    stpull_l        r;
+    stpull_l        socket;
+
+    push_i          r_bg, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, r;
+
+    push_i          g_bg, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, g;
+
+    push_i          b_bg, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, b;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_alpha;
+#ASSEMB
+//  args: lint socket, alpha
+//  return: none
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, _alpha;
+    #setreg_l       L5, comm;
+
+    stpull_l        _alpha;
+    stpull_l        socket;
+
+    push_i          alpha, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _alpha;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_line;
+#ASSEMB
+//  args: lint socket, x, y, x2, y2
+//  return: lint error-code
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, x;
+    #setreg_l       L5, y;
+    #setreg_l       L6, x2;
+    #setreg_l       L7, y2;
+    #setreg_l       L8, ret;
+    #setreg_l       L9, comm;
+
+    stpull_l        y2;
+    stpull_l        x2;
+    stpull_l        y;
+    stpull_l        x;
+    stpull_l        socket;
+
+    push_i          X, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, x;
+
+    push_i          Y, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, y;
+
+    push_i          X2, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, x2;
+
+    push_i          Y2, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, y2;
+
+    push_i          line, comm;
+    swrite_b        socket, comm;
+
+    sread_b         socket, ret;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_pixel;
+#ASSEMB
+//  args: lint socket, x, y
+//  return: lint error-code
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, x;
+    #setreg_l       L5, y;
+    #setreg_l       L6, ret;
+    #setreg_l       L7, comm;
+
+    stpull_l        y;
+    stpull_l        x;
+    stpull_l        socket;
+
+    push_i          X, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, x;
+
+    push_i          Y, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, y;
+
+    push_i          pixel, comm;
+    swrite_b        socket, comm;
+
+    sread_b         socket, ret;
+    stpush_l        ret;
+
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+#ASSEMB
+//  args: lint socket, x, y, x2, y2
+//  return: lint error-code
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, x;
+    #setreg_l       L5, y;
+    #setreg_l       L6, x2;
+    #setreg_l       L7, y2;
+    #setreg_l       L8, ret;
+    #setreg_l       L9, comm;
+    #setreg_l       L10, gcomm;
+#ASSEMB_END
+
+lab nanogfx_rectangle_filled;
+#ASSEMB
+    push_i          rectangle_fill, gcomm;
+    jmp             nanogfx_rectangle_main;
+#ASSEMB_END
+
+lab nanogfx_rectangle;
+#ASSEMB
+    push_i          rectangle, gcomm;
+
+lab nanogfx_rectangle_main;
+    stpull_l        y2;
+    stpull_l        x2;
+    stpull_l        y;
+    stpull_l        x;
+    stpull_l        socket;
+
+    push_i          X, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, x;
+
+    push_i          Y, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, y;
+
+    push_i          X2, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, x2;
+
+    push_i          Y2, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, y2;
+
+    swrite_b        socket, gcomm;
+
+    sread_b         socket, ret;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+#ASSEMB
+//  args: lint socket, x, y, radius
+//  return: lint error-code
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, x;
+    #setreg_l       L5, y;
+    #setreg_l       L6, _radius;
+    #setreg_l       L7, ret;
+    #setreg_l       L8, comm;
+    #setreg_l       L9, gcomm;
+#ASSEMB_END
+
+lab nanogfx_circle_filled;
+#ASSEMB
+    push_i          circle_fill, gcomm;
+    jmp             nanogfx_circle_main;
+#ASSEMB_END
+
+lab nanogfx_circle;
+#ASSEMB
+    push_i          circle, gcomm;
+
+lab nanogfx_circle_main;
+    stpull_l        _radius;
+    stpull_l        y;
+    stpull_l        x;
+    stpull_l        socket;
+
+    push_i          X, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, x;
+
+    push_i          Y, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, y;
+
+    push_i          radius, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _radius;
+
+    swrite_b        socket, gcomm;
+
+    sread_b         socket, ret;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+#ASSEMB
+//  args: lint socket, x, y, xradius, yradius
+//  return: lint error-code
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, x;
+    #setreg_l       L5, y;
+    #setreg_l       L6, xradius;
+    #setreg_l       L7, yradius;
+    #setreg_l       L8, ret;
+    #setreg_l       L9, comm;
+    #setreg_l       L10, gcomm;
+#ASSEMB_END
+
+lab nanogfx_ellipse_filled;
+#ASSEMB
+    push_i          ellipse_fill, gcomm;
+    jmp             nanogfx_ellipse_main;
+#ASSEMB_END
+
+lab nanogfx_ellipse;
+#ASSEMB
+    push_i          ellipse, gcomm;
+
+lab nanogfx_ellipse_main;
+    stpull_l        yradius;
+    stpull_l        xradius;
+    stpull_l        y;
+    stpull_l        x;
+    stpull_l        socket;
+
+    push_i          X, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, x;
+
+    push_i          Y, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, y;
+
+    push_i          Xradius, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, xradius;
+
+    push_i          Yradius, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, yradius;
+
+    swrite_b        socket, gcomm;
+
+    sread_b         socket, ret;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+#ASSEMB
+//  args: lint socket, x, y, radius, startangle, endangle
+//  return: lint error-code
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, x;
+    #setreg_l       L5, y;
+    #setreg_l       L6, _radius;
+    #setreg_l       L7, _startangle;
+    #setreg_l       L8, _endangle;
+    #setreg_l       L9, ret;
+    #setreg_l       L10, comm;
+    #setreg_l       L11, gcomm;
+#ASSEMB_END
+
+lab nanogfx_pie_filled;
+#ASSEMB
+    push_i          pie_fill, gcomm;
+    jmp             nanogfx_pie_main;
+#ASSEMB_END
+
+lab nanogfx_pie;
+#ASSEMB
+    push_i          pie, gcomm;
+
+lab nanogfx_pie_main;
+    stpull_l        _endangle;
+    stpull_l        _startangle;
+    stpull_l        _radius;
+    stpull_l        y;
+    stpull_l        x;
+    stpull_l        socket;
+
+    push_i          X, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, x;
+
+    push_i          Y, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, y;
+
+    push_i          radius, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _radius;
+
+    push_i          startangle, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _startangle;
+
+    push_i          endangle, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _endangle;
+
+    swrite_b        socket, gcomm;
+
+    sread_b         socket, ret;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+#ASSEMB
+//  args: lint socket, x, y, x2, y2, x3, y3
+//  return: lint error-code
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, x;
+    #setreg_l       L5, y;
+    #setreg_l       L6, x2;
+    #setreg_l       L7, y2;
+    #setreg_l       L8, x3;
+    #setreg_l       L9, y3;
+    #setreg_l       L10, ret;
+    #setreg_l       L11, comm;
+    #setreg_l       L12, gcomm;
+#ASSEMB_END
+
+lab nanogfx_trigon_filled;
+#ASSEMB
+    push_i          trigon_fill, gcomm;
+    jmp             nanogfx_trigon_main;
+#ASSEMB_END
+
+lab nanogfx_trigon;
+#ASSEMB
+    push_i          trigon, gcomm;
+
+lab nanogfx_trigon_main;
+    stpull_l        y3;
+    stpull_l        x3;
+    stpull_l        y2;
+    stpull_l        x2;
+    stpull_l        y;
+    stpull_l        x;
+    stpull_l        socket;
+
+    push_i          X, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, x;
+
+    push_i          Y, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, y;
+
+    push_i          X2, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, x2;
+
+    push_i          Y2, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, y2;
+
+    push_i          X3, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, x3;
+
+    push_i          Y3, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, y3;
+
+    swrite_b        socket, gcomm;
+
+    sread_b         socket, ret;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+#ASSEMB
+//  args: lint socket, vx, vy, vectors
+//  return: lint error-code
+//
+//  vectors is the number of vx/vy pairs
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, x;
+    #setreg_l       L5, y;
+    #setreg_l       L6, _vectors;
+    #setreg_l       L7, i;
+    #setreg_l       L8, _steps;
+    #setreg_l       L9, ret;
+    #setreg_l       L10, comm;
+    #setreg_l       L11, gcomm;
+#ASSEMB_END
+
+lab nanogfx_polygon_filled;
+#ASSEMB
+    push_i          polygon_fill, gcomm;
+    jmp             nanogfx_polygon_main;
+#ASSEMB_END
+
+lab nanogfx_polygon;
+#ASSEMB
+    push_i          polygon, gcomm;
+
+lab nanogfx_polygon_main;
+    lint _nanogfx_asize;
+
+    stpull_l        _vectors;
+    mul_l           _vectors, two, _vectors;
+    pull_l          _vectors, _nanogfx_asize;
+
+//  allocate array to save the text entries
+
+    lint _nanogfx_vec_a[_nanogfx_asize];
+
+    move_l          _vectors, i;
+    dec_l           i;
+    jsr             nanogfx_get_vector_data;
+
+    stpull_l        socket;
+
+    push_i          vectors, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _vectors;
+
+    move_l          null, i;
+    jsr             nanogfx_send_vector_data;
+
+    swrite_i        socket, gcomm;
+
+    sread_b         socket, ret;
+    stpush_l        ret;
+    dealloc         _nanogfx_vec_a;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+
+//  args: lint socket, vx, vy, vectors, steps
+//  return: lint error-code
+//
+//  vectors is the number of vx/vy pairs
+//  steps sets the number of parts, higher value = smoother
+
+lab nanogfx_bezier;
+#ASSEMB
+    lint _nanogfx_asize;
+
+    stpull_l        _steps;
+    stpull_l        _vectors;
+
+    mul_l           _vectors, two, _vectors;
+    pull_l          _vectors, _nanogfx_asize;
+
+//  allocate array to save the text entries
+
+    lint _nanogfx_vec_a[_nanogfx_asize];
+
+    move_l          _vectors, i;
+    dec_l           i;
+    jsr             nanogfx_get_vector_data;
+
+    stpull_l        socket;
+
+    push_i          steps, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _steps;
+
+    push_i          vectors, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _vectors;
+
+    move_l          null, i;
+    jsr             nanogfx_send_vector_data;
+
+    push_i          bezier, comm;
+    swrite_b        socket, comm;
+
+    sread_b         socket, ret;
+    stpush_l        ret;
+    dealloc         _nanogfx_vec_a;
+    rts;
+
+//  -------------------------------------------------------
+
+lab nanogfx_get_vector_data;
+    stpull_l        y;
+    stpull_l        x;
+
+    move_l_a        y, _nanogfx_vec_a, i;
+    dec_l           i;
+    move_l_a        x, _nanogfx_vec_a, i;
+    dec_l           i;
+
+    greq_jmp_l      i, null, nanogfx_get_vector_data;
+    rts;
+
+lab nanogfx_send_vector_data;
+    move_a_l        _nanogfx_vec_a, i, x;
+    inc_l           i;
+    move_a_l        _nanogfx_vec_a, i, y;
+    inc_l           i;
+
+    push_i          VX, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, x;
+
+    push_i          VY, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, y;
+
+    ls_jmp_l        i, _vectors, nanogfx_send_vector_data;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_loadfont_bmap;
+#ASSEMB
+//  args: lint socket, string fontname, lint fontwidth, fontheight
+//  return: lint error-code
+
+    #unsetreg_all_l;
+    #unsetreg_all_s;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, _fontwidth;
+    #setreg_l       L5, _fontheight;
+    #setreg_l       L6, ret;
+    #setreg_l       L7, comm;
+
+    #setreg_s       S0, _nanogfx_fontname;
+
+    push_i          1, one;
+
+    stpull_l        _fontheight;
+    stpull_l        _fontwidth;
+    stpull_s        _nanogfx_fontname;
+    stpull_l        socket;
+
+    push_i          fontname, comm;
+    swrite_b        socket, comm;
+    swrite_s        socket, _nanogfx_fontname;
+    swrite_n        socket, one;
+
+    push_i          fontwidth, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _fontwidth;
+
+    push_i          fontheight, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _fontheight;
+
+    push_i          loadfont_bmap, comm;
+    swrite_b        socket, comm;
+
+    sread_b         socket, ret;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_text_bmap;
+#ASSEMB
+//  args: lint socket, x, y, string text
+//  return: lint error-code
+
+    #unsetreg_all_l;
+    #unsetreg_all_s;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, x;
+    #setreg_l       L5, y;
+    #setreg_l       L6, ret;
+    #setreg_l       L7, comm;
+
+    #setreg_s       S0, _nanogfx_text;
+
+    push_i          1, one;
+
+    stpull_s        _nanogfx_text;
+    stpull_l        y;
+    stpull_l        x;
+    stpull_l        socket;
+
+    push_i          X, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, x;
+
+    push_i          Y, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, y;
+
+    push_i          text, comm;
+    swrite_b        socket, comm;
+    swrite_s        socket, _nanogfx_text;
+    swrite_n        socket, one;
+
+    push_i          text_bmap, comm;
+    swrite_b        socket, comm;
+
+    sread_b         socket, ret;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_loadfont_ttf;
+#ASSEMB
+//  args: lint socket, string fontname, lint fontsize
+//  return: lint error-code
+
+    #unsetreg_all_l;
+    #unsetreg_all_s;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L5, _fontsize;
+    #setreg_l       L6, ret;
+    #setreg_l       L7, comm;
+
+    #setreg_s       S0, _nanogfx_fontname;
+
+    push_i          1, one;
+
+    stpull_l        _fontsize;
+    stpull_s        _nanogfx_fontname;
+    stpull_l        socket;
+
+    push_i          fontname, comm;
+    swrite_b        socket, comm;
+    swrite_s        socket, _nanogfx_fontname;
+    swrite_n        socket, one;
+
+    push_i          fontsize, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _fontsize;
+
+    push_i          loadfont_ttf, comm;
+    swrite_b        socket, comm;
+
+    sread_b         socket, ret;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_text_style_ttf;
+#ASSEMB
+//  args: lint socket, lint style
+//  return: none
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, style;
+    #setreg_l       L5, comm;
+
+    stpull_l        style;
+    stpull_l        socket;
+
+    push_i          fontstyle, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, style;
+    rts;
+#ASSEMB_END
+//  -------------------------------------------------------
+
+lab nanogfx_text_ttf;
+#ASSEMB
+//  args: lint socket, x, y, string text
+//  return: lint error-code
+
+    #unsetreg_all_l;
+    #unsetreg_all_s;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, x;
+    #setreg_l       L5, y;
+    #setreg_l       L6, ret;
+    #setreg_l       L7, comm;
+
+    #setreg_s       S0, _nanogfx_text;
+
+    push_i          1, one;
+
+    stpull_s        _nanogfx_text;
+    stpull_l        y;
+    stpull_l        x;
+    stpull_l        socket;
+
+    push_i          X, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, x;
+
+    push_i          Y, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, y;
+
+    push_i          text, comm;
+    swrite_b        socket, comm;
+    swrite_s        socket, _nanogfx_text;
+    swrite_n        socket, one;
+
+    push_i          text_ttf, comm;
+    swrite_b        socket, comm;
+
+    sread_b         socket, ret;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_load_picture;
+#ASSEMB
+//  args: lint socket, x, y, string picture_name
+//  return: lint error-code
+
+    #unsetreg_all_l;
+    #unsetreg_all_s;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, x;
+    #setreg_l       L5, y;
+    #setreg_l       L6, ret;
+    #setreg_l       L7, comm;
+
+    #setreg_s       S0, _nanogfx_picture_name;
+
+    push_i          1, one;
+
+    stpull_s        _nanogfx_picture_name;
+    stpull_l        y;
+    stpull_l        x;
+    stpull_l        socket;
+
+    push_i          X, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, x;
+
+    push_i          Y, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, y;
+
+    push_i          picturename, comm;
+    swrite_b        socket, comm;
+    swrite_s        socket, _nanogfx_picture_name;
+    swrite_n        socket, one;
+
+    push_i          load_picture, comm;
+    swrite_b        socket, comm;
+
+    sread_b         socket, ret;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_getpixel;
+#ASSEMB
+//  args: lint socket, x, y
+//  return: lint error-code, lint r, g, b
+//
+//  if the error-code is OK, then the color codes are on the stack.
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, x;
+    #setreg_l       L5, y;
+    #setreg_l       L6, getpixel_r;
+    #setreg_l       L7, getpixel_g;
+    #setreg_l       L8, getpixel_b;
+    #setreg_l       L9, ret;
+    #setreg_l       L10, comm;
+
+    push_i          0, null;
+
+    stpull_l        y;
+    stpull_l        x;
+    stpull_l        socket;
+
+    push_i          X, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, x;
+
+    push_i          Y, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, y;
+
+    push_i          getpixel, comm;
+    swrite_b        socket, comm;
+
+    sread_b         socket, ret;
+    neq_jmp_l       ret, null, nanogfx_getpixel_end;
+
+    sread_i         socket, getpixel_r;
+    sread_i         socket, getpixel_g;
+    sread_i         socket, getpixel_b;
+
+    stpush_l        getpixel_b;
+    stpush_l        getpixel_g;
+    stpush_l        getpixel_r;
+
+lab nanogfx_getpixel_end;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_getmouse;
+#ASSEMB
+//  args: lint socket
+//  return: lint error-code, lint x, y, mousebutton
+//
+//  if the error-code is "ok", then the mouse data is on the stack.
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, x;
+    #setreg_l       L5, y;
+    #setreg_l       L6, mousebutton;
+    #setreg_l       L7, ret;
+    #setreg_l       L8, comm;
+
+    push_i          0, null;
+
+    stpull_l        socket;
+
+    push_i          getmouse, comm;
+    swrite_b        socket, comm;
+
+    sread_b         socket, ret;
+    neq_jmp_l       ret, null, nanogfx_getmouse_end;
+
+    sread_i         socket, x;
+    sread_i         socket, y;
+    sread_i         socket, mousebutton;
+
+    stpush_l        mousebutton;
+    stpush_l        y;
+    stpush_l        x;
+
+lab nanogfx_getmouse_end;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END
+
+//  gadget functions --------------------------------------
+
+lab nanogfx_gadgets;
+#ASSEMB
+//  args: lint socket, gadgets (size of gadget list)
+//  return: none
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, _gadgets;
+    #setreg_l       L5, comm;
+
+    stpull_l        _gadgets;
+    stpull_l        socket;
+
+    push_i          gadgets, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _gadgets;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_gadget_color_border_light;
+#ASSEMB
+//  args lint socket
+//  return none
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, comm;
+
+    stpull_l        socket;
+
+    push_i          gadget_color_border_light, comm;
+    swrite_b        socket, comm;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_gadget_color_border_shadow;
+#ASSEMB
+//  args lint socket
+//  return none
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, comm;
+
+    stpull_l        socket;
+
+    push_i          gadget_color_border_shadow, comm;
+    swrite_b        socket, comm;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_gadget_color_background_light;
+#ASSEMB
+//  args lint socket
+//  return none
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, comm;
+
+    stpull_l        socket;
+
+    push_i          gadget_color_backgr_light, comm;
+    swrite_b        socket, comm;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_gadget_color_background_shadow;
+#ASSEMB
+//  args lint socket
+//  return none
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, comm;
+
+    stpull_l        socket;
+
+    push_i          gadget_color_backgr_shadow, comm;
+    swrite_b        socket, comm;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_gadget_color_text_light;
+#ASSEMB
+//  args lint socket
+//  return none
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, comm;
+
+    stpull_l        socket;
+
+    push_i          gadget_color_text_light, comm;
+    swrite_b        socket, comm;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_gadget_color_text_shadow;
+#ASSEMB
+//  args lint socket
+//  return none
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, comm;
+
+    stpull_l        socket;
+
+    push_i          gadget_color_text_shadow, comm;
+    swrite_b        socket, comm;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_set_gadget_button;
+#ASSEMB
+//  args: lint socket, gadget, x, y, status, string text
+//  return: lint error-code
+
+    #unsetreg_all_l;
+    #unsetreg_all_s;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, _gadget;
+    #setreg_l       L5, _gadget_status;
+    #setreg_l       L6, x;
+    #setreg_l       L7, y;
+    #setreg_l       L8, ret;
+    #setreg_l       L9, comm;
+
+    #setreg_s       S0, _nanogfx_text;
+
+    push_i          1, one;
+
+    stpull_s        _nanogfx_text;
+    stpull_l        _gadget_status;
+    stpull_l        y;
+    stpull_l        x;
+    stpull_l        _gadget;
+    stpull_l        socket;
+
+    push_i          gadget, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _gadget;
+
+    push_i          X, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, x;
+
+    push_i          Y, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, y;
+
+    push_i          gadget_status, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _gadget_status;
+
+    push_i          text, comm;
+    swrite_b        socket, comm;
+    swrite_s        socket, _nanogfx_text;
+    swrite_n        socket, one;
+
+    push_i          gadget_button, comm;
+    swrite_b        socket, comm;
+
+    sread_b         socket, ret;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_set_gadget_progress_bar;
+#ASSEMB
+//  args: lint socket, gadget, x, y, status, string text, value
+//  return: lint error-code
+
+    #unsetreg_all_l;
+    #unsetreg_all_s;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, _gadget;
+    #setreg_l       L5, _gadget_status;
+    #setreg_l       L6, x;
+    #setreg_l       L7, y;
+    #setreg_l       L8, ret;
+    #setreg_l       L9, comm;
+	#setreg_l		L10, value;
+
+    #setreg_s       S0, _nanogfx_text;
+
+    push_i          1, one;
+
+	stpull_l		value;
+    stpull_s        _nanogfx_text;
+    stpull_l        _gadget_status;
+    stpull_l        y;
+    stpull_l        x;
+    stpull_l        _gadget;
+    stpull_l        socket;
+
+    push_i          gadget, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _gadget;
+
+    push_i          X, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, x;
+
+    push_i          Y, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, y;
+
+    push_i          gadget_status, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _gadget_status;
+
+    push_i          text, comm;
+    swrite_b        socket, comm;
+    swrite_s        socket, _nanogfx_text;
+    swrite_n        socket, one;
+
+	push_i			gadget_progress_bar_value, comm;
+	swrite_b		socket, comm;
+	swrite_i		socket, value;
+
+    push_i          gadget_progress_bar, comm;
+    swrite_b        socket, comm;
+
+    sread_b         socket, ret;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_set_gadget_checkbox;
+#ASSEMB
+//  args: lint socket, gadget, x, y, status, value, string text
+//  return: lint error-code
+
+    #unsetreg_all_l;
+    #unsetreg_all_s;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, _gadget;
+    #setreg_l       L5, _gadget_status;
+    #setreg_l       L6, gadget_value;
+    #setreg_l       L7, x;
+    #setreg_l       L8, y;
+    #setreg_l       L9, ret;
+    #setreg_l       L10, comm;
+
+    #setreg_s        S0, _nanogfx_text;
+
+    push_i          1, one;
+
+    stpull_s        _nanogfx_text;
+    stpull_l        gadget_value;
+    stpull_l        _gadget_status;
+    stpull_l        y;
+    stpull_l        x;
+    stpull_l        _gadget;
+    stpull_l        socket;
+
+    push_i          gadget, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _gadget;
+
+    push_i          X, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, x;
+
+    push_i          Y, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, y;
+
+    push_i          gadget_status, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _gadget_status;
+
+    push_i          gadget_int_value, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, gadget_value;
+
+    push_i          text, comm;
+    swrite_b        socket, comm;
+    swrite_s        socket, _nanogfx_text;
+    swrite_n        socket, one;
+
+    push_i          gadget_checkbox, comm;
+    swrite_b        socket, comm;
+
+    sread_b         socket, ret;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_set_gadget_cycle;
+#ASSEMB
+//  args: lint socket, gadget, x, y, status, value, string text, lint entries
+//  return: lint error-code
+
+    #unsetreg_all_l;
+    #unsetreg_all_s;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, _gadget;
+    #setreg_l       L5, _gadget_status;
+    #setreg_l       L6, gadget_value;
+    #setreg_l       L7, gadget_entries;
+    #setreg_l       L8, x;
+    #setreg_l       L9, y;
+    #setreg_l       L10, i;
+    #setreg_l       L11, ret;
+    #setreg_l       L12, comm;
+
+    #setreg_s       S0, _nanogfx_text;
+
+    lint _nanogfx_asize;
+
+    push_i          0, null;
+    push_i          1, one;
+    push_i          2, two;
+
+    stpull_l        gadget_entries;
+    pull_l          gadget_entries, _nanogfx_asize;
+
+//  allocate array to save the text entries
+
+    string _nanogfx_text_a[_nanogfx_asize][512];
+
+    move_l          gadget_entries, i;
+    dec_l           i;
+
+lab nanogfx_cycle_get_text_data;
+    stpull_s        _nanogfx_text;
+    move_s_a        _nanogfx_text, _nanogfx_text_a, i;
+
+    dec_l           i;
+    greq_jmp_l      i, null, nanogfx_cycle_get_text_data;
+
+    stpull_l        gadget_value;
+    stpull_l        _gadget_status;
+    stpull_l        y;
+    stpull_l        x;
+    stpull_l        _gadget;
+    stpull_l        socket;
+
+    push_i          gadget, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _gadget;
+
+    push_i          X, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, x;
+
+    push_i          Y, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, y;
+
+    push_i          gadget_cycle_entries, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, gadget_entries;
+
+    move_l          null, i;
+
+lab nanogfx_cycle_send_text_data;
+    move_a_s        _nanogfx_text_a, i, _nanogfx_text;
+
+    push_i          gadget_cycle_text, comm;
+    swrite_b        socket, comm;
+    swrite_s        socket, _nanogfx_text;
+    swrite_n        socket, one;
+
+    inc_l           i;
+    ls_jmp_l        i, gadget_entries, nanogfx_cycle_send_text_data;
+
+    push_i          gadget_status, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _gadget_status;
+
+    push_i          gadget_int_value, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, gadget_value;
+
+    push_i          gadget_cycle, comm;
+    swrite_b        socket, comm;
+
+    sread_b         socket, ret;
+    stpush_l        ret;
+    dealloc         _nanogfx_text_a;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_set_gadget_string;
+#ASSEMB
+//  args: lint socket, gadget, x, y, status, string text, value, lint string-len, visible-len
+//  return: lint error-code
+
+    #unsetreg_all_l;
+    #unsetreg_all_s;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, _gadget;
+    #setreg_l       L5, _gadget_status;
+    #setreg_l       L6, gadget_string_len;
+    #setreg_l       L7, gadget_visible_len;
+    #setreg_l       L8, x;
+    #setreg_l       L9, y;
+    #setreg_l       L10, ret;
+    #setreg_l       L11, comm;
+
+    #setreg_s       S0, _nanogfx_text;
+    #setreg_s       S1, _nanogfx_string_value;
+
+    push_i          1, one;
+
+    stpull_l        gadget_visible_len;
+    stpull_l        gadget_string_len;
+    stpull_s        _nanogfx_string_value;
+    stpull_s        _nanogfx_text;
+    stpull_l        _gadget_status;
+    stpull_l        y;
+    stpull_l        x;
+    stpull_l        _gadget;
+    stpull_l        socket;
+
+    push_i          gadget, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _gadget;
+
+    push_i          X, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, x;
+
+    push_i          Y, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, y;
+
+    push_i          gadget_status, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _gadget_status;
+
+    push_i          text, comm;
+    swrite_b        socket, comm;
+    swrite_s        socket, _nanogfx_text;
+    swrite_n        socket, one;
+
+    push_i          gadget_string_value, comm;
+    swrite_b        socket, comm;
+    swrite_s        socket, _nanogfx_string_value;
+    swrite_n        socket, one;
+
+    push_i          gadget_string_str_len, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, gadget_string_len;
+
+    push_i          gadget_string_vis_len, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, gadget_visible_len;
+
+    push_i          gadget_string, comm;
+    swrite_b        socket, comm;
+
+    sread_b         socket, ret;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_set_gadget_box;
+#ASSEMB
+//  args: lint socket, gadget, x, y, x2, y2, status
+//  return: lint error-code
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, _gadget;
+    #setreg_l       L5, _gadget_status;
+    #setreg_l       L6, x;
+    #setreg_l       L7, y;
+    #setreg_l       L8, x2;
+    #setreg_l       L9, y2;
+    #setreg_l       L10, ret;
+    #setreg_l       L11, comm;
+
+    push_i          1, one;
+
+    stpull_l        _gadget_status;
+    stpull_l        y2;
+    stpull_l        x2;
+    stpull_l        y;
+    stpull_l        x;
+    stpull_l        _gadget;
+    stpull_l        socket;
+
+    push_i          gadget, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _gadget;
+
+    push_i          X, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, x;
+
+    push_i          Y, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, y;
+
+    push_i          X2, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, x2;
+
+    push_i          Y2, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, y2;
+
+    push_i          gadget_status, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _gadget_status;
+
+    push_i          gadget_box, comm;
+    swrite_b        socket, comm;
+
+    sread_b         socket, ret;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_change_gadget_checkbox;
+#ASSEMB
+//  args: lint socket, gadget, status, value
+//  return: lint error-code
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, _gadget;
+    #setreg_l       L5, _gadget_status;
+    #setreg_l       L6, _gadget_value;
+    #setreg_l       L7, ret;
+    #setreg_l       L8, comm;
+
+    stpull_l        _gadget_value;
+    stpull_l        _gadget_status;
+    stpull_l        _gadget;
+    stpull_l        socket;
+
+    push_i          gadget, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _gadget;
+
+    push_i          gadget_status, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _gadget_status;
+
+    push_i          gadget_int_value, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _gadget_value;
+
+    push_i          gadget_checkbox_change, comm;
+    swrite_b        socket, comm;
+
+    sread_b         socket, ret;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_change_gadget_string;
+#ASSEMB
+//  args: lint socket, gadget, status, string value
+//  return: lint error-code
+
+    #unsetreg_all_l;
+    #unsetreg_all_s;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, _gadget;
+    #setreg_l       L5, _gadget_status;
+    #setreg_l       L6, ret;
+    #setreg_l       L7, comm;
+
+    #setreg_s       S0, _nanogfx_string_value;
+    #setreg_s       S1, _nanogfx_text;
+
+    push_i          1, one;
+
+    stpull_s        _nanogfx_string_value;
+    stpull_l        _gadget_status;
+    stpull_l        _gadget;
+    stpull_l        socket;
+
+    push_i          gadget, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _gadget;
+
+    push_i          gadget_status, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _gadget_status;
+
+    push_i          gadget_string_value, comm;
+    swrite_b        socket, comm;
+    swrite_s        socket, _nanogfx_text;
+    swrite_n        socket, one;
+
+    push_i          gadget_string_change, comm;
+    swrite_b        socket, comm;
+
+    sread_b         socket, ret;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END
+	
+//  -------------------------------------------------------
+	
+lab nanogfx_change_gadget_progress_bar;
+#ASSEMB
+//  args: lint socket, gadget, status, int value
+//  return: lint error-code
+
+	#unsetreg_all_l;
+    #unsetreg_all_s;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, _gadget;
+    #setreg_l       L5, _gadget_status;
+    #setreg_l       L6, ret;
+    #setreg_l       L7, comm;
+	#setreg_l		L8, value;
+
+    push_i          1, one;
+
+    stpull_l		value;
+    stpull_l        _gadget_status;
+    stpull_l        _gadget;
+    stpull_l        socket;
+
+    push_i          gadget, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _gadget;
+
+    push_i          gadget_status, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _gadget_status;
+
+    push_i          gadget_progress_bar_value, comm;
+    swrite_b        socket, comm;
+    swrite_i		socket, value;
+
+    push_i          gadget_progress_bar_change, comm;
+    swrite_b        socket, comm;
+
+    sread_b         socket, ret;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_get_gadget_x2y2;
+#ASSEMB
+//  args: lint socket, gadget
+//  return: lint error-code, lint x2, y2
+//
+//  if the error-code is OK, then the coordinate data is on the stack.
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, _gadget;
+    #setreg_l       L5, x2;
+    #setreg_l       L6, y2;
+    #setreg_l       L7, ret;
+    #setreg_l       L8, comm;
+
+    push_i          0, null;
+
+    stpull_l        _gadget;
+    stpull_l        socket;
+
+    push_i          gadget, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _gadget;
+
+    push_i          gadget_get_x2y2, comm;
+    swrite_b        socket, comm;
+
+    sread_b         socket, ret;
+    neq_jmp_l       ret, null, nanogfx_get_gadget_x2y2_end;
+
+    sread_i         socket, x2;
+    sread_i         socket, y2;
+
+    stpush_l        y2;
+    stpush_l        x2;
+
+lab nanogfx_get_gadget_x2y2_end;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanogfx_gadget_event;
+#ASSEMB
+//  args: lint socket
+//  return: lint error-code, lint gadget, l-value, double d-value, string s-value
+//
+//  if the error-code is OK, then the event data is on the stack.
+
+    #unsetreg_all_l;
+    #unsetreg_all_s;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, _gadget;
+    #setreg_l       L5, l_value;
+    #setreg_l       L6, gadget_type;
+    #setreg_l       L7, gadget_int_type;
+    #setreg_l       L8, gadget_string_type;
+    #setreg_l       L9, data_end;
+    #setreg_l       L10, ret;
+    #setreg_l       L11, comm;
+
+    #setreg_d       D0, d_value;
+
+    #setreg_s       S0, _nanogfx_string_value;
+
+    push_i          0, null;
+
+    push_i          gadget, gadget_type;
+    push_i          gadget_int_value, gadget_int_type;
+    push_i          gadget_string_value, gadget_string_type;
+    push_i          end, data_end;
+
+    push_i          0, l_value;
+    push_d          0.0, d_value;
+    push_s          "", _nanogfx_string_value;
+
+    stpull_l        socket;
+
+    push_i          gadget_event, comm;
+    swrite_b        socket, comm;
+
+    sread_b         socket, ret;
+    neq_jmp_l       ret, null, nanogfx_gadget_event_end;
+
+lab nanogfx_gadget_event_read;
+    sread_b         socket, ret;
+
+    eq_jsr_l        ret, gadget_type, nanogfx_gadget_event_gadget;
+    eq_jsr_l        ret, gadget_int_type, nanogfx_gadget_event_int_value;
+    eq_jsr_l        ret, gadget_string_type, nanogfx_gadget_event_string_value;
+
+    neq_jmp_l       ret, data_end, nanogfx_gadget_event_read;
+
+    stpush_s        _nanogfx_string_value;
+    stpush_d        d_value;
+    stpush_l        l_value;
+    stpush_l        _gadget;
+
+    push_i          0, ret;
+    jmp             nanogfx_gadget_event_end;
+
+
+lab nanogfx_gadget_event_gadget;
+    sread_i         socket, _gadget;
+    rts;
+
+lab nanogfx_gadget_event_int_value;
+    sread_i         socket, l_value;
+    rts;
+
+lab nanogfx_gadget_event_string_value;
+    sread_ls        socket, _nanogfx_string_value;
+    rts;
+
+lab nanogfx_gadget_event_end;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanosfx_play_wav;
+#ASSEMB
+//  args: lint socket, string wav_file, lint channel, lint loops
+
+    #unsetreg_all_l;
+    #unsetreg_all_s;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, _channel;
+    #setreg_l       L5, _loops;
+    #setreg_l       L6, comm;
+
+    #setreg_s       S0, _nanosfx_wavname;
+
+    push_i          1, one;
+
+    stpull_l        _loops;
+    stpull_l        _channel;
+    stpull_s        _nanosfx_wavname;
+    stpull_l        socket;
+
+    push_i          sound_wav_file, comm;
+    swrite_b        socket, comm;
+    swrite_s        socket, _nanosfx_wavname;
+    swrite_n        socket, one;
+
+    push_i          sound_channel, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _channel;
+
+    push_i          sound_loops, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _loops;
+
+    push_i          sound_play_wav, comm;
+    swrite_b        socket, comm;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanosfx_stop_channel;
+#ASSEMB
+//  args: lint socket, lint channel
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, _channel;
+    #setreg_l       L5, _loops;
+    #setreg_l       L6, comm;
+
+    stpull_l        _channel;
+    stpull_l        socket;
+
+    push_i          sound_channel, comm;
+    swrite_b        socket, comm;
+    swrite_i        socket, _channel;
+
+    push_i          sound_stop_channel, comm;
+    swrite_b        socket, comm;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanosfx_play_music;
+#ASSEMB
+//  args: lint socket, string music_file
+
+    #unsetreg_all_l;
+    #unsetreg_all_s;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, _channel;
+    #setreg_l       L5, _loops;
+    #setreg_l       L6, comm;
+
+    #setreg_s       S0, _nanosfx_musicname;
+
+    push_i          1, one;
+
+    stpull_s        _nanosfx_musicname;
+    stpull_l        socket;
+
+    push_i          sound_music_file, comm;
+    swrite_b        socket, comm;
+    swrite_s        socket, _nanosfx_musicname;
+    swrite_n        socket, one;
+
+    push_i          sound_play_music, comm;
+    swrite_b        socket, comm;
+    rts;
+#ASSEMB_END
+
+//  -------------------------------------------------------
+
+lab nanosfx_stop_music;
+#ASSEMB
+//  args: lint socket
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, _channel;
+    #setreg_l       L5, _loops;
+    #setreg_l       L6, comm;
+
+    stpull_l        socket;
+
+    push_i          sound_stop_music, comm;
+    swrite_b        socket, comm;
+    rts;
+#ASSEMB_END
+
+//	RS232 functions ------------------------------------------
+// 	all functions: return an error code: 0 at success!
+
+lab rs232_open_comport;
+#ASSEMB
+//	args: lint socket, lint comport, lint baudrate
+
+	#unsetreg_all_l;
+
+	#setreg_l		L0, socket;
+	#setreg_l		L1, comport;
+	#setreg_l		L2, baudrate;
+	#setreg_l		L3, comm;
+	#setreg_l		L4, ret;
+
+	stpull_l		baudrate;
+	stpull_l		comport;
+	stpull_l		socket;
+
+	push_i			rs232_baudrate, comm;
+	swrite_b		socket, comm;
+	swrite_i		socket, baudrate;
+
+	push_i			rs232_comport_number, comm;
+	swrite_b		socket, comm;
+	swrite_i		socket, comport;
+
+	push_i			rs232_open_comport, comm;
+	swrite_b		socket, comm;
+
+	sread_b			socket, ret;
+	stpush_l		ret;
+	rts;
+#ASSEMB_END
+
+// -------------------------------------------------------------
+
+lab rs232_poll_comport;
+#ASSEMB
+//	args: lint socket, lint comport, lint buf_addr, lint size
+
+	#unsetreg_all_l;
+
+	#setreg_l		L0, socket;
+	#setreg_l		L1, comport;
+	#setreg_l		L2, buf_addr;
+	#setreg_l		L3, size;
+	#setreg_l		L4, i;
+	#setreg_l		L5, ret;
+	#setreg_l		L6, null;
+	#setreg_l		L7, one;
+	#setreg_l		L8, buf;
+	#setreg_l		L9, comm;
+	#setreg_l		L10, readsize;
+
+	push_i			0, null;
+	push_i			1, one;
+	push_i			0, i;
+
+	stpull_l		size;
+	stpull_l		buf_addr;
+	stpull_l		comport;
+	stpull_l		socket;
+
+	int buf_size;
+	pull_i			size, buf_size;
+
+	byte _rs232_buf[buf_size];
+
+	pointer			buf_addr, _rs232_buf, rs232_poll_comport_pointer;
+
+	push_i			rs232_comport_number, comm;
+	swrite_b		socket, comm;
+	swrite_i		socket, comport;
+
+	push_i			rs232_buf_size, comm;
+	swrite_b		socket, comm;
+	swrite_i		socket, size;
+
+	push_i			rs232_poll_comport, comm;
+	swrite_b		socket, comm;
+
+	sread_i			socket, readsize;
+
+	gr_jmp_l		readsize, null, rs232_poll_comport_return_data;
+	eq_jmp_l		readsize, null, rs232_poll_comport_end;
+
+lab rs232_poll_comport_return_data;
+	sread_b 		socket, buf;
+
+//	print_l			buf;
+//	print_n			one;
+
+lab	rs232_poll_comport_pointer;
+	move_b_a		buf, _rs232_buf, i;
+	inc_l			i;
+
+	ls_jmp_l		i, readsize, rs232_poll_comport_return_data;
+
+lab rs232_poll_comport_end;
+	dealloc			_rs232_buf;
+	stpush_l		readsize;
+	rts;
+#ASSEMB_END
+
+//	------------------------------------------------------------	
+
+lab rs232_send_byte;
+#ASSEMB
+//	args: lint socket, lint comport, byte send_byte
+
+	#unsetreg_all_l;
+
+	#setreg_l		L0, socket;
+	#setreg_l		L1, comport;
+	#setreg_l		L2, send_byte;
+	#setreg_l		L3, comm;
+	#setreg_l		L4, ret;
+
+	stpull_l		send_byte;
+	stpull_l		comport;
+	stpull_l		socket;
+
+	push_i			rs232_comport_number, comm;
+	swrite_b		socket, comm;
+	swrite_i		socket, comport;
+
+	push_i			rs232_byte, comm;
+	swrite_b		socket, comm;	
+	swrite_b		socket, send_byte;
+
+	push_i			rs232_send_byte, comm;
+	swrite_b		socket, comm;
+
+	sread_b			socket, ret;
+	stpush_l		ret;
+	rts;
+#ASSEMB_END
+
+// -------------------------------------------------------------
+
+lab rs232_send_buf;
+#ASSEMB
+//	args: lint socket, lint comport, lint buf_addr, lint size
+
+	#unsetreg_all_l;
+
+	#setreg_l		L0, socket;
+	#setreg_l		L1, comport;
+	#setreg_l		L2, buf_addr;
+	#setreg_l		L3, size;
+	#setreg_l		L4, i;
+	#setreg_l		L5, ret;
+	#setreg_l		L6, null;
+	#setreg_l		L7, one;
+	#setreg_l		L8, buf;
+	#setreg_l		L9, comm;
+
+	push_i			0, null;
+	push_i			1, one;
+	push_i			0, i;
+
+	stpull_l		size;
+	stpull_l		buf_addr;
+	stpull_l		comport;
+	stpull_l		socket;
+
+	int buf_size;
+	pull_i			size, buf_size;
+
+	byte _rs232_buf[buf_size];
+
+	push_i			rs232_comport_number, comm;
+	swrite_b		socket, comm;
+	swrite_i		socket, comport;
+
+	push_i			rs232_buf_size, comm;
+	swrite_b		socket, comm;
+	swrite_i		socket, size;
+
+	push_i			rs232_buf, comm;
+	swrite_b		socket, comm;
+
+	pointer			buf_addr, _rs232_buf, rs232_send_buf_send_data;
+
+lab rs232_send_buf_send_data;
+	move_a_b		_rs232_buf, i, buf;
+
+	swrite_b		socket, buf;
+
+	inc_l			i;
+	ls_jmp_l		i, size, rs232_send_buf_send_data;
+
+	push_i			rs232_send_buf, comm;
+	swrite_b		socket, comm;
+
+	sread_b			socket, ret;
+	stpush_l		ret;
+	rts;
+#ASSEMB_END
+
+// -------------------------------------------------------------
+
+lab rs232_close_comport;
+#ASSEMB
+//	args: lint socket, lint comport
+
+	#unsetreg_all_l;
+
+	#setreg_l		L0, socket;
+	#setreg_l		L1, comport;
+	#setreg_l		L2, comm;
+	#setreg_l		L3, ret;
+
+	stpull_l		comport;
+	stpull_l		socket;
+
+	push_i			rs232_comport_number, comm;
+	swrite_b		socket, comm;
+	swrite_i		socket, comport;
+
+	push_i			rs232_close_comport, comm;
+	swrite_b		socket, comm;
+
+	sread_b			socket, ret;
+	stpush_l		ret;
+	rts;
+#ASSEMB_END

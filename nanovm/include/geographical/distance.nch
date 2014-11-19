@@ -1,0 +1,51 @@
+//  $VER: distance.nch 1.1 (20.09.13)
+//  geo distance functions library
+
+func geo_distance (double lat_pos, double lon_pos, double lat_dest, double lon_dest)
+//  calculate distance (earth)
+//  return value: distance in km
+
+	double R = 6371.0;
+	double one = 1.0; double two = 2.0;
+	
+	double dlat; double dlon;
+	double dlat_2; double dlon_2;
+	double va; double vc;
+	double distance;
+	
+	double i; double j; double k; double l; double m; double n; double o; double p;
+	
+	dlat = lat_dest - lat_pos;
+	@deg2rad (dlat);
+	get (dlat);
+	
+	dlon = lon_dest - lon_pos;
+	@deg2rad (dlon);
+	get (dlon);
+	
+	@deg2rad (lat_pos);
+	get (lat_pos);
+	
+	@deg2rad (lat_dest);
+	get (lat_dest);
+	
+	dlat_2 = dlat / two;
+	dlon_2 = dlon / two;
+	
+	
+	sin (dlat_2, i); cos (lat_pos, j); cos (lat_dest, k); sin (dlon_2, l);
+	o = i * i;
+	p = j * k * l * l;
+	va = o + p;
+	
+	sqrt (va, i);
+	j = one - va;
+	sqrt (j, k);
+	atan2 (i, k, l);
+	vc = two * l;
+	
+	distance = R * vc;
+	
+	return (distance);
+funcend
+	

@@ -1,0 +1,46 @@
+This is packetman the Nano VM packetmanager #
+===========================================
+Configure packetman
+
+You have to edit the file nano/prog/packetman.conf:
+
+If you have installed nano in your /home directory you set:
+
+/home/yourname/nano/
+
+That's all to do. Now you are ready to install packages.
+Install packages with packetman
+
+Packets can be installed with packetman:
+
+$ nanovm packetman base.np install
+
+Installs all include files and examples. With the remove option the files can be removed.
+
+To update packetman, simply use:
+
+$ nanovm packetman packetman.np install
+
+Available packets:
+------------------
+base.np              includes and examples (important)
+packetman.np         (important too)
+make.np              make tool: builds packets objectfiles (*.no)
+ciphersaber.np       the ciphersaber crypto library
+gridray.np           POVray distributed rendering tool
+
+Note: if you get error messages during install, make sure that the install directory exists: To install gridray for example you have to create the directory:
+
+nano/prog/gridray
+
+Then you are ready to install the package.
+Compiling/assembling packets
+
+Installed packets can be compiled/assembled with make:
+
+$ nanovm make base.np
+
+Builds all example programs.
+
+---------------------------
+Stefan Pietzonke  aka jay-t

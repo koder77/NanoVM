@@ -1,0 +1,11 @@
+// $VER: memory.nah 00.40 (31.10.03)
+
+int err_alloc_ok; int err_alloc_nomem;
+
+push_i          0, L0;
+pull_i          L0, err_alloc_nomem;
+
+push_i          1, L0;
+pull_i          L0, err_alloc_ok;
+
+// EOF

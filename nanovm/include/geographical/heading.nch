@@ -1,0 +1,49 @@
+//  $VER: heading.nch 1.1 (20.9.13)
+//  geo heading functions library
+
+func geo_heading (double lat_pos, double lon_pos, double lat_dest, double lon_dest)
+//  calculate heading
+//  return value: bearing in degrees (int)
+
+	#include <math.nch>
+
+	double bearing;
+	double x; double y; double dlon;
+	
+	double i; double j; double k; double l; double m; 
+	double n; double o;
+	
+	int bearing_i;
+	
+	@deg2rad (lat_pos);
+	get (lat_pos);
+	
+	@deg2rad (lat_dest);
+	get (lat_dest);
+	
+	dlon = lon_dest - lon_pos;
+	@deg2rad (dlon);
+	get (dlon);
+	
+	sin (dlon, i); sin (lat_dest, j);
+	y = i * j;
+	
+	cos (lat_pos, i); sin (lat_dest, j);
+	sin (lat_pos, k); cos (lat_dest, l); cos (dlon, m);
+	
+	n = i * j;
+	o = k * l * m;
+	
+	x = n - o;
+	
+	atan2 (y, x, bearing);
+	@rad2deg (bearing);
+	get (bearing);
+	
+	2int (bearing, bearing_i);
+	
+	bearing_i = bearing_i + 360 % 360;
+	
+	return (bearing_i);
+funcend
+	

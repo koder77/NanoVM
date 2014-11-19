@@ -1,0 +1,47 @@
+// $VER: socket.nch 2.0.5 (04.02.12)
+// network - argument errors
+
+int err_sock_ok = 0;
+int err_no_such_process = 3;
+int err_io_error = 5;
+int err_notsock = 88;
+int err_destaddrreq = 89;
+int err_msgsize = 90;
+int err_prototype = 91;
+int err_noprotoopt = 92;
+int err_protonosupport = 93;
+int err_socktnosupport = 94;
+int err_opnotsupport = 95;
+int err_pfnosupport = 96;
+int err_afnosupport = 97;
+int err_addrinuse = 98;
+int err_addrnotavail = 99;
+
+// network - operational errors
+
+int err_netdown = 100;
+int err_netunreach = 101;
+int err_netreset = 102;
+int err_connaborted = 103;
+int err_connreset = 104;
+int err_nobufs = 105;
+int err_isconn 106;
+int err_notconn = 107;
+int err_shutdown = 108;
+int err_toomanyrefs = 109;
+int err_timedout = 110;
+int err_connrefused = 111;
+int err_nosys = 78;
+int err_host_is_down = 112;
+int err_no_route_to_host = 113;
+
+#ASSEMB
+#setreg_l       L255, err_sock;
+#ASSEMB_END
+
+
+// FIXME  Is there any socket stuff missing?
+
+// EOF
+
+

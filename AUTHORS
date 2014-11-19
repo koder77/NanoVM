@@ -1,0 +1,14 @@
+Main Developers:
+================
+Stefan Pietzonke <jay-t@gmx.net>
+
+Contributors:
+=============	
+Roland Stigge <stigge@antcom.de>			GNU automake environment (./configure, etc.)
+
+
+Thanks goes to:
+===============
+Takuji Nishimura and Makoto Matsumoto			for the MT19937 random number generator
+VideoLAN project					for the strtoll.c - strtoll () function replacement
+Petr Kobalicek						for the AsmJit library

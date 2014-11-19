@@ -1,0 +1,122 @@
+// $VER: socket.nah 2.0.1 (03.01.12)
+
+int err_sock_ok; int err_no_such_process; int err_io_error;
+int err_notsock; int err_destaddrreq; int err_msgsize;
+int err_prototype; int err_noprotoopt; int err_protonosupport;
+int err_socktnosupport; int err_opnotsupport; int err_pfnosupport;
+int err_afnosupport; int err_addrinuse; int err_addrnotavail;
+
+int err_netdown; int err_netunreach; int err_netreset; int err_connaborted;
+int err_connreset; int err_nobufs; int err_isconn; int err_notconn;
+int err_shutdown; int err_toomanyrefs; int err_timedout; int err_connrefused;
+int err_nosys; int err_host_is_down; int err_no_route_to_host;
+
+#setreg_l       L255, err_sock;
+
+
+// network - argument errors
+
+push_i          0, L0;
+pull_i          L0, err_sock_ok;            No error
+
+push_i          3, L0;
+pull_i          L0, err_no_such_process;    No such process
+
+push_i          5, L0;
+pull_i          L0, err_io_error;           Input-/Output error
+
+push_i          88, L0;
+pull_i          L0, err_notsock;            Socket operation on non-socket
+
+push_i          89, L0;
+pull_i          L0, err_destaddrreq;        Destination address required
+
+push_i          90, L0;
+pull_i          L0, err_msgsize;            Message too long
+
+push_i          91, L0;
+pull_i          L0, err_prototype;          Protocol wrong type for socket
+
+push_i          92, L0;
+pull_i          L0, err_noprotoopt;         Protocol not available
+
+push_i          93, L0;
+pull_i          L0, err_protonosupport;     Protocol not supported
+
+push_i          94, L0;
+pull_i          L0, err_socktnosupport;     Socket type not supported
+
+push_i          95, L0;
+pull_i          L0, err_opnotsupport;       Operation not supported on socket
+
+push_i          96, L0;
+pull_i          L0, err_pfnosupport;        Protocol family not supported
+
+push_i          97, L0;
+pull_i          L0, err_afnosupport;        Address family not supported by protocol family
+
+push_i          98, L0;
+pull_i          L0, err_addrinuse;          Address already in use
+
+push_i          99, L0;
+pull_i          L0, err_addrnotavail;       Can't assign requested address
+
+
+// network - operational errors
+
+push_i          100, L0;
+pull_i          L0, err_netdown;            Network is down
+
+push_i          101, L0;
+pull_i          L0, err_netunreach;         Network is unreachable
+
+push_i          102, L0;
+pull_i          L0, err_netreset;           Network dropped connection on reset
+
+push_i          103, L0;
+pull_i          L0, err_connaborted;        Software caused connection abort
+
+push_i          104, L0;
+pull_i          L0, err_connreset;          Connection reset by peer
+
+push_i          105, L0;
+pull_i          L0, err_nobufs;             No buffer space available
+
+push_i          106, L0;
+pull_i          L0, err_isconn;             Socket is already connected
+
+push_i          107, L0;
+pull_i          L0, err_notconn;            Socket is not connected
+
+push_i          108, L0;
+pull_i          L0, err_shutdown;           Can't send after socket shutdown
+
+push_i          109, L0;
+pull_i          L0, err_toomanyrefs;        Too many references: can't splice
+
+push_i          110, L0;
+pull_i          L0, err_timedout;           Connection timed out
+
+push_i          111, L0;
+pull_i          L0, err_connrefused;        Connection refused
+
+push_i          112, L0;
+pull_i          L0, err_host_is_down;       Host is down
+
+push_i          113, L0;
+pull_i          L0, err_no_route_to_host;   No route to host
+
+
+
+
+// On Amiga I get this one, if the TCP stack isn't running:
+
+push_i          78, L0;
+pull_i          L0, err_nosys;              Function not implemented
+
+
+// FIXME  Is there any socket stuff missing?
+
+// EOF
+
+

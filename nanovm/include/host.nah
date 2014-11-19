@@ -1,0 +1,25 @@
+// $VER: host.nah 00.98 (06.04.06)
+
+int machine_68k; int machine_x86;
+int os_amiga; int os_aros; int os_linux; int os_windows;
+
+push_i          1, L0;
+pull_i          L0, machine_68k;
+
+push_i          2, L0;
+pull_i          L0, machine_x86;
+
+push_i          1, L0;
+pull_i          L0, os_amiga;
+
+push_i          2, L0;
+pull_i          L0, os_aros;
+
+push_i          3, L0;
+pull_i          L0, os_linux;
+
+push_i          4, L0;
+pull_i          L0, os_windows;
+
+// EOF
+

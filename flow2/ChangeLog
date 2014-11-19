@@ -1,0 +1,8 @@
+flow2 (2.0.0)
+	This is Flow for SDL 2.0.
+	Simple line draw test works.
+	Added code for other SDL_gfx primitives.
+	
+	This is under construction now.
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat 11 Jan 2013 13:22 +0100

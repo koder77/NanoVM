@@ -1,0 +1,19 @@
+func deg2rad (double deg)
+    #include <math.nch>
+    
+    double rad;
+    double half_circle = 180.0;
+    
+    rad = deg * m_pi / half_circle;
+    return (rad);
+funcend
+
+func rad2deg (double rad)
+    #include <math.nch>
+    
+    double deg;
+    double half_circle = 180.0;
+    
+    deg = rad * half_circle / m_pi;
+    return (deg);
+funcend

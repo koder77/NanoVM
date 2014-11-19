@@ -1,0 +1,14 @@
+// $VER: process.nah 00.95 (09.06.04)
+
+int err_process_ok; int err_process_fail;
+
+#setreg_l       L253, err_process;
+
+
+push_i          0, L0;
+pull_i          L0, err_process_fail;
+
+push_i          1, L0;
+pull_i          L0, err_process_ok;
+
+// EOF

@@ -1,0 +1,159 @@
+//  $VER: net.nah 2.0.5 (04.02.12)
+//  network library
+
+lab net_getfile;
+#ASSEMB
+//  args: lint socket, lint file, lint filesize, string filename
+//  return: lint error-code
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, i;
+    #setreg_l       L2, n;
+    #setreg_l       L3, filesize;
+    #setreg_l       L4, socket;
+    #setreg_l       L5, len;
+    #setreg_l       L6, file;
+    #setreg_l       L7, _err_sock_ok;
+    #setreg_l       L8, _err_file_ok;
+    #setreg_l       L9, _err_sock;
+    #setreg_l       L10, _err_file;
+    #setreg_l       L11, ret;
+
+    #setreg_s       S0, _net_getfile_filename[512];
+    #setreg_s       S1, flag;
+
+    byte _net_getfile_dbuf[512];
+
+    stpull_s        _net_getfile_filename;
+    stpull_l        filesize;
+    stpull_l        file;
+    stpull_l        socket;
+
+    push_i          err_sock_ok, _err_sock_ok;
+    push_i          err_file_ok, _err_file_ok;
+    push_s          "w", flag;
+
+lab net_getfile_save_file;
+    fopen           file, _net_getfile_filename, flag;
+    push_i          _file, _err_file;
+    neq_jmp_l       _err_file, _err_file_ok, net_getfile_write_error;
+
+    move_l          null, i;
+    push_i          512, n;
+    ls_jsr_l        filesize, n, net_getfile_save_file_less_512;
+
+lab net_getfile_save_file_loop;
+    sread_ab        socket, _net_getfile_dbuf, n;
+    push_i          _sock, _err_sock;
+    neq_jmp_l       _err_sock, _err_sock_ok, net_getfile_read_error;
+
+    fwrite_ab       file, _net_getfile_dbuf, n;
+    push_i          _file, _err_file;
+    neq_jmp_l       _err_file, _err_file_ok, net_getfile_write_error;
+
+    add_l           i, n, i;
+    sub_l           filesize, i, len;
+    ls_jsr_l        len, n, net_getfile_save_file_last_bytes;
+    ls_jmp_l        i, filesize, net_getfile_save_file_loop;
+
+    fclose          file;
+    stpush_l        null;
+    rts;
+
+
+lab net_getfile_save_file_less_512;
+    move_l          filesize, n;
+    rts;
+
+lab net_getfile_save_file_last_bytes;
+    move_l          len, n;
+    rts;
+
+
+lab net_getfile_read_error;
+lab net_getfile_write_error;
+    fclose          file;
+    push_i          1, ret;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END
+
+lab net_putfile;
+#ASSEMB
+//  args: lint socket, lint file, lint filesize, string filename
+//  return: lint error-code
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, i;
+    #setreg_l       L2, n;
+    #setreg_l       L3, filesize;
+    #setreg_l       L4, socket;
+    #setreg_l       L5, len;
+    #setreg_l       L6, file;
+    #setreg_l       L7, _err_sock_ok;
+    #setreg_l       L8, _err_file_ok;
+    #setreg_l       L9, _err_sock;
+    #setreg_l       L10, _err_file;
+    #setreg_l       L11, ret;
+
+    #setreg_s       S0, _net_putfile_filename[512];
+    #setreg_s       S1, flag;
+    byte _net_putfile_dbuf[512];
+
+    stpull_s        _net_putfile_filename;
+    stpull_l        file;
+    stpull_l        socket;
+
+    push_i          err_sock_ok, _err_sock_ok;
+    push_i          err_file_ok, _err_file_ok;
+    push_s          "r", flag;
+
+lab net_putfile_send_file;
+    fopen           file, _net_putfile_filename, flag;
+    push_i          _file, _err_file;
+    neq_jmp_l       _err_file, _err_file_ok, net_putfile_read_error;
+
+    fsize           file, filesize;
+    move_l          null, i;
+    push_i          512, n;
+    ls_jsr_l        filesize, n, net_putfile_send_file_less_512;
+
+lab net_putfile_send_file_loop;
+    fread_ab        file, _net_putfile_dbuf, n;
+    push_i          _file, _err_file;
+    neq_jmp_l       _err_file, _err_file_ok, net_putfile_write_error;
+
+    swrite_ab       socket, _net_putfile_dbuf, n;
+    push_i          _sock, _err_sock;
+    neq_jmp_l       _err_sock, _err_sock_ok, net_putfile_read_error;
+
+    add_l           i, n, i;
+    sub_l           filesize, i, len;
+    ls_jsr_l        len, n, net_putfile_send_file_last_bytes;
+    ls_jmp_l        i, filesize, net_putfile_send_file_loop;
+
+    fclose          file;
+    stpush_l        null;
+    rts;
+
+
+lab net_putfile_send_file_less_512;
+    move_l          filesize, n;
+    rts;
+
+lab net_putfile_send_file_last_bytes;
+    move_l          len, n;
+    rts;
+
+
+lab net_putfile_read_error;
+lab net_putfile_write_error;
+    fclose          file;
+    push_i          1, ret;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END

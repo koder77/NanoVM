@@ -1,0 +1,9 @@
+// $VER: process.nch 2.0.5 (04.02.12)
+
+int err_process_ok = 1; int err_process_fail = 0;
+
+#ASSEMB
+#setreg_l       L253, err_process;
+#ASSEMB_END
+
+// EOF

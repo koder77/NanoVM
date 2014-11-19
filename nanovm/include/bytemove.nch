@@ -1,0 +1,201 @@
+//  $VER: bytemove.nch 1.0 (16.11.12)
+//  byte move library - byte access to int, lint, qint and double variables
+
+lab move_intp2byte;
+#ASSEMB
+//  args: value, value_index
+//  return: return_byte
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, value;
+    #setreg_l       L1, value_index;
+    #setreg_l       L2, ret_byte;
+
+    stpull_l        value;
+    stpull_l        value_index;
+
+    int Pvar@move_intp2byte;
+
+    ppull_i         value, Pvar@move_intp2byte;
+    pmove_ip_b      Pvar@move_intp2byte, value_index, ret_byte;
+
+    stpush_l        ret_byte;
+    rts;
+#ASSEMB_END
+
+lab move_lintp2byte;
+#ASSEMB
+//  args: value, value_index
+//  return: return_byte
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, value;
+    #setreg_l       L1, value_index;
+    #setreg_l       L2, ret_byte;
+
+    stpull_l        value;
+    stpull_l        value_index;
+
+    lint Pvar@move_lintp2byte;
+
+    ppull_l         value, Pvar@move_lintp2byte;
+    pmove_lp_b      Pvar@move_lintp2byte, value_index, ret_byte;
+
+    stpush_l        ret_byte;
+    rts;
+#ASSEMB_END
+
+ lab move_qintp2byte;
+#ASSEMB
+//  args: value, value_index
+//  return: return_byte
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, value;
+    #setreg_l       L1, value_index;
+    #setreg_l       L2, ret_byte;
+
+    stpull_l        value;
+    stpull_l        value_index;
+
+    qint Pvar@move_qintp2byte;
+
+    ppull_q         value, Pvar@move_qintp2byte;
+    pmove_qp_b      Pvar@move_qintp2byte, value_index, ret_byte;
+
+    stpush_l        ret_byte;
+    rts;
+#ASSEMB_END
+
+lab move_doublep2byte;
+#ASSEMB
+//  args: value, value_index
+//  return: return_byte
+
+    #unsetreg_all_l;
+    #unsetreg_all_d;
+
+    #setreg_d       D0, value;
+    #setreg_l       L1, value_index;
+    #setreg_l       L2, ret_byte;
+
+    stpull_d        value;
+    stpull_l        value_index;
+
+    double Pvar@move_doublep2byte;
+
+    ppull_d         value, Pvar@move_doublep2byte;
+    pmove_dp_b      Pvar@move_doublep2byte, value_index, ret_byte;
+
+    stpush_l        ret_byte;
+    rts;
+#ASSEMB_END
+
+
+lab move_byte2intp;
+#ASSEMB
+//  args: value, value_index, byte
+//  return: return_value
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, value;
+    #setreg_l       L1, value_index;
+    #setreg_l       L2, byte;
+
+    stpull_l        value;
+    stpull_l        value_index;
+    stpull_l        byte;
+
+    int Pvar@move_byte2intp;
+
+    ppull_i         value, Pvar@move_byte2intp;
+    pmove_b_ip      byte, Pvar@move_byte2intp, value_index;
+
+    ppush_i         Pvar@move_byte2intp, value;
+
+    stpush_l        value;
+    rts;
+#ASSEMB_END
+
+lab move_byte2lintp;
+#ASSEMB
+//  args: value, value_index, byte
+//  return: return_value
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, value;
+    #setreg_l       L1, value_index;
+    #setreg_l       L2, byte;
+
+    stpull_l        value;
+    stpull_l        value_index;
+    stpull_l        byte;
+
+    lint Pvar@move_byte2lintp;
+
+    ppull_l         value, Pvar@move_byte2lintp;
+    pmove_b_lp      byte, Pvar@move_byte2lintp, value_index;
+
+    ppush_l         Pvar@move_byte2lintp, value;
+
+    stpush_l        value;
+    rts;
+#ASSEMB_END
+
+lab move_byte2qintp;
+#ASSEMB
+//  args: value, value_index, byte
+//  return: return_value
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, value;
+    #setreg_l       L1, value_index;
+    #setreg_l       L2, byte;
+
+    stpull_l        value;
+    stpull_l        value_index;
+    stpull_l        byte;
+
+    qint Pvar@move_byte2qintp;
+
+    ppull_q         value, Pvar@move_byte2qintp;
+    pmove_b_qp      byte, Pvar@move_byte2qintp, value_index;
+
+    ppush_q         Pvar@move_byte2qintp, value;
+
+    stpush_l        value;
+    rts;
+#ASSEMB_END
+
+lab move_byte2doublep;
+#ASSEMB
+//  args: value, value_index, byte
+//  return: return_value (double)
+
+    #unsetreg_all_l;
+    #unsetreg_all_d;
+
+    #setreg_d       D0, value;
+    #setreg_l       L1, value_index;
+    #setreg_l       L2, byte;
+
+    stpull_d        value;
+    stpull_l        value_index;
+    stpull_l        byte;
+
+    double Pvar@move_byte2doublep;
+
+    ppull_d         value, Pvar@move_byte2doublep;
+    pmove_b_dp      byte, Pvar@move_byte2doublep, value_index;
+
+    ppush_d         Pvar@move_byte2doublep, value;
+
+    stpush_d        value;
+    rts;
+#ASSEMB_END

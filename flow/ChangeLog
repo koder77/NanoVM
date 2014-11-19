@@ -1,0 +1,53 @@
+flow (0.6.2)
+	New: cycle gadget change function, change selected item.
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Wed 06 Aug 2014 20:00 +0200
+
+flow (0.6.1)
+	Android: BUGFIX: string gadgets now working!
+
+	New: -menu flag to show start menu.
+
+	New: Raspberry Pi GPIO pins support. See raspberry-pi.c.
+	Not tested yet...
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat 22 Mar 2014 16:00 +0100
+
+flow (0.6.0)
+	Android: bugfix: screen now gets updated if app was in background!
+	Text input now works via touch screen keyboard.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Wed 15 Jan 2014 20:35 +0100
+
+flow (0.5.5)
+	Added RS232 send/receive functions (Linux/Windows)
+
+	Android patches: now runs on Android too.
+	Progress bar gadget.
+	Updated build environment.
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Tue 12 Nov 2013 16:00 +0100
+	
+flow (0.5.4)
+    Added sound play functions for mp3 and ogg, etc...
+    
+-- Stefan Pietzonke <jay-t@gmx.net>  Sa, 4 Jun 2010 23:15 +0200
+    
+
+flow (0.5.3)
+    Added sound functions for playing wav files and stopping channels
+    sound.c
+
+    Soundpath is set with env variable NANOSFXSOUND
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sa, 4 Jun 2010 23:15 +0200
+
+flow (0.5.2)
+    Changed env variable reading: NANOFONTS
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Th, 5 Aug 2010 20:04 +0200
+
+flow (0.5.1)
+    First release with ./configure environment.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Fr, 1 Jan 2010 21:15 +0100

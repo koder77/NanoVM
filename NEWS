@@ -1,0 +1,32 @@
+NEW: source code now under dual license: GPL & MPL.
+see COPYING!
+
+nano (2.0.5-2)
+    I'm working on a N compiler now.
+    This will be a high level language which emits nano assembler.
+    It's still a WIP, but gets more and more usefull.
+    See changelog for more info.
+
+
+nano (0.99.8)
+   You can get a PDF manual with lots of examples.
+   Check the download section on my homepage.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun,  30 Jul 2006 18:33 +0200
+
+
+nano (0.97.4)
+
+    * GNU build environment available.
+      See README.
+
+    * All source files are now in unix LF format.
+
+ -- Stefan Pietzonke <jay-t@gmx.net>  Wed,  7 Sep 2005
+
+
+nano (0.98)
+
+    * Bytecode verifier
+
+ -- Stefan Pietzonke <jay-t@gmx.net>  Thu,  2 Feb 2006
