@@ -1,3 +1,45 @@
+ABOUT
+=========
+
+This is Nano VM, a virtual machine.
+Nano has a full 64 bit CPU core with registers for 64 bit integer, double and strings.
+Programs for the VM can be written in assembly or my own high level language N.
+Also inline assembly can be used from the N code.
+
+The virtual machine supports multi threading and has a own virtual memory management
+for array variables.
+
+Execution can be speeded up by the JIT compiler (AsmJit library).
+Currently only X86 CPUs are supported (32 and 64 bit).
+
+Features:
+- 64 bit CPU with lots of registers
+- stack for function call arguments
+- multi threading
+- virtual memory manager for array variables
+- JIT compiler
+- file I/O
+- TCP/IP sockets
+- rights management
+- virtual file system (own work directory)
+- "hyperspace" data sharing between virtual machines
+- "memory protection" in debugging mode
+- assembler
+- N compiler (high level language)
+- GUI/sound server flow
+
+
+With Flow the GUI/sound server graphics applications are possible.
+Also RS232 serial port access can be made with Flow.
+
+Supported OS:
+Linux
+Android
+Windows
+
+AROS (testing)
+
+
 CREDITS
 =======
 
