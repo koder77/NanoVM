@@ -1410,7 +1410,9 @@ U1 exe_dobjects (U1 *directory, S8 *objects)
     DIR *dp;
     struct dirent *files;
 	
-	S8 dir_obj = 0 ALIGN;
+	S8 dir_obj ALIGN;
+	
+	dir_obj = 0;
 	
     /*structure for storing inode numbers and files in dir
     struct dirent
@@ -1506,12 +1508,14 @@ U1 exe_dnames (U1 *directory, struct varlist *varlist, S8 sreg)
     DIR *dp;
     struct dirent *files;
 	
-	S8 index = 0 ALIGN;
+	S8 index ALIGN;
 	S8 path_len ALIGN;
 	S8 len ALIGN;
 	S8 i ALIGN;
 	S8 j ALIGN;
 	S8 max ALIGN;
+	
+	index = 0;
 	
     /*structure for storing inode numbers and files in dir
     struct dirent

@@ -4,7 +4,9 @@ nano (3.3.0)
 
 	vm/exe_elist () added QINT type at pvarlist contstants init. 
 	
--- Stefan Pietzonke <jay-t@gmx.net>  Mon 17 Nov 2014 21:00 +0100
+	exe_files.c alignment bugfix for Android/ARM.
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat 22 Nov 2014 17:18 +0100
 
 nano (3.2.9)
 	VM: thread exit code is now a 64 bit return value.
