@@ -718,6 +718,7 @@ U1 exe_assemble (S4 start, S4 end)
                             if (! compile ()) 
 							{
 								printf ("ERROR compile!\n");
+								printf ("%s\n", prepstr);
 								ret_ok = FALSE;
 							}
 
@@ -756,6 +757,7 @@ U1 exe_assemble (S4 start, S4 end)
                         if (! compile ())
 						{
 							printf ("ERROR compile!\n");
+							printf ("%s\n", prepstr);
 							ret_ok = FALSE;
 						}
 
@@ -768,6 +770,7 @@ U1 exe_assemble (S4 start, S4 end)
                         if (! compile ())
 						{	
 							printf ("ERROR compile!\n");
+							printf ("%s\n", linestr);
 							ret_ok = FALSE;
 						}
 						
