@@ -106,7 +106,8 @@ am_nanovm_OBJECTS = main.$(OBJEXT) openo.$(OBJEXT) openend.$(OBJEXT) \
 	pthread.$(OBJEXT) snprintf.$(OBJEXT) dynamic_array.$(OBJEXT) \
 	strtoll.$(OBJEXT) register.$(OBJEXT) exe_vector_arr.$(OBJEXT) \
 	exe_passw_input.$(OBJEXT) hyperspace_server.$(OBJEXT) \
-	hyperspace_client.$(OBJEXT) jit.$(OBJEXT) rights.$(OBJEXT)
+	hyperspace_client.$(OBJEXT) jit.$(OBJEXT) rights.$(OBJEXT) \
+	dlload.$(OBJEXT)
 nanovm_OBJECTS = $(am_nanovm_OBJECTS)
 nanovm_LDADD = $(LDADD)
 nanovm_DEPENDENCIES = ../lib/libshared.a ../asmjit/libAsmJit.a
@@ -296,7 +297,8 @@ nanovm_SOURCES = main.c \
 	       hyperspace_server.c \
 	       hyperspace_client.c \
 	       jit.cpp \
-	       rights.c
+	       rights.c \
+	       dlload.c
 
 noinst_HEADERS = main_d.h \
 		 arch.h \
@@ -307,9 +309,9 @@ noinst_HEADERS = main_d.h \
 		 snprintf.h \
 		 jit_x86.h
 
-LDADD = ../lib/libshared.a ../asmjit/libAsmJit.a
+LDADD = ../lib/libshared.a ../asmjit/libAsmJit.a -ldl
 #LDADD = ../lib/libshared.a
-AM_CFLAGS = -O0 -g -lm
+AM_CFLAGS = -O0 -g -lm -ldl
 AM_CPPFLAGS = -I../include
 all: all-am
 
@@ -398,6 +400,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dlload.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dynamic_array.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/exe_arr.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/exe_file.Po@am__quote@

@@ -1,0 +1,25 @@
+func main ()
+	lint null = 0; lint one = 1;
+	lint dll; lint function;
+	lint ret;
+
+	string dllname[256] = "libtest.so";
+	string functionname[256] = "showstr";
+	
+//	open libtest.so library in nanovm/lib directory
+	lopen (dll, dllname);
+	
+//	set functionname as function "function"
+	lfunc (dll, function, functionname);
+	
+//	call function
+	lcall (dll, function);
+	
+//	get returnvalue from stack, note: ">" sign as last argument sets no stpull_all_all in assembly code!!!
+	get (ret, >);
+	
+//	print return value
+	print ret; printn one;
+
+	exit null;
+funcend

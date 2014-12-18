@@ -220,6 +220,7 @@ U1 compile ()
 {
     S4 i, str_len, var, var2, var3, var_i, opcode, if_pos, for_pos;
     U1 private_variable = FALSE, func_call_reverse_args;
+	U1 get_no_stack_pull;
     U1 ok, found, type, type2, type3, type_i, op_found, set_pull_all, type_const, array_type;
     U1 buf[MAXLINELEN + 1];
     S2 reg1, reg2, reg3, translate;
@@ -1987,6 +1988,7 @@ U1 compile ()
 
         case COMP_GET:
             get:
+            get_no_stack_pull = FALSE;
             if (src_line.args > 0)
             {
                 /* pull arguments from stack */
@@ -1994,6 +1996,22 @@ U1 compile ()
                 ok = TRUE;
                 while (ok)
                 {
+					if (strcmp (src_line.arg[i], GET_NO_ST_PULL_SB) == 0)
+					{
+						get_no_stack_pull = TRUE;
+						
+						/* set i to next src line argument */
+						
+						if (i > 1)
+						{
+							i = i - 1;
+						}
+						else
+						{
+							ok = FALSE;
+						}
+					}
+					
                     var = getvarind_comp (src_line.arg[i]);
                     if (var == NOTDEF)
                     {
@@ -2183,19 +2201,24 @@ U1 compile ()
                         ok = FALSE;
                     }
                 }
+                
             }
-            /* restore all registers */
-            if (! set0 (STPULL_ALL_S))
-            {
-                return (MEMORY);
-            }
-            if (! set0 (STPULL_ALL_D))
-            {
-                return (MEMORY);
-            }
-            if (! set0 (STPULL_ALL_L))
-            {
-                return (MEMORY);
+            
+            if (get_no_stack_pull == FALSE)
+			{
+				/* restore all registers */
+				if (! set0 (STPULL_ALL_S))
+				{
+					return (MEMORY);
+				}
+				if (! set0 (STPULL_ALL_D))
+				{
+					return (MEMORY);
+				}
+				if (! set0 (STPULL_ALL_L))
+				{
+					return (MEMORY);
+				}
             }
             break;
 

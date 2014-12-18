@@ -1209,6 +1209,7 @@ void dealloc_stack (void)
     
 }
 
+
 void free_memory (void)
 {
     S2 err;

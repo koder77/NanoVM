@@ -312,7 +312,8 @@ void *exe_elist (S4 threadnum)
 		&&hsvar, &&hsserver, &&hsload, &&hssave,
 		&&stpush_all_all, &&stpull_all_all,
 		&&jit, &&run_jit,
-		&&dobjects, &&dnames, &&pdnames
+		&&dobjects, &&dnames, &&pdnames,
+		&&lopen, &&lclose, &&lfunc, &&lcall
     };
     
 	PRINTD("exe_elist: releasing rinzler...\n");
@@ -5946,5 +5947,104 @@ void *exe_elist (S4 threadnum)
             ERREXIT();
         }
 
-        EXE_NEXT();		
+        EXE_NEXT();	
+		
+	/* DLL / SO library load functions ======================================== */
+	
+	lopen:
+        PRINTD("LIBRARY_OPEN");
+
+        i = exe_lopen (&vmreg.l[ARG1], vmreg.s[ARG2]);
+        if (i != ERR_FILE_OK)
+        {
+            if (*varlist[ERR_FILE].i_m == TRUE)
+            {
+                /* set _file */
+
+                vmreg.l[ERR_FILE_R] = i;
+            }
+            else
+            {
+                printerr (get_ferr (i), epos, ST_EXE, filename);
+                ERREXIT();
+            }
+        }
+        else
+        {
+            if (*varlist[ERR_FILE].i_m == TRUE)
+            {
+                /* set _file */
+
+                vmreg.l[ERR_FILE_R] = i;
+            }
+        }
+
+        EXE_NEXT();
+		
+	lclose:
+        PRINTD("LIBRARY_CLOSE");
+
+        i = exe_lclose (vmreg.l[ARG1]);
+        if (i != ERR_FILE_OK)
+        {
+            if (*varlist[ERR_FILE].i_m == TRUE)
+            {
+                /* set _file */
+
+                vmreg.l[ERR_FILE_R] = i;
+            }
+            else
+            {
+                printerr (get_ferr (i), epos, ST_EXE, filename);
+                ERREXIT();
+            }
+        }
+        else
+        {
+            if (*varlist[ERR_FILE].i_m == TRUE)
+            {
+                /* set _file */
+
+                vmreg.l[ERR_FILE_R] = i;
+            }
+        }
+
+        EXE_NEXT();
+		
+	lfunc:
+		PRINTD("LIBRARY_SET_FUNCTION");
+		
+		i = exe_lfunc (vmreg.l[ARG1], &vmreg.l[ARG2], vmreg.s[ARG3]);
+		if (i != ERR_FILE_OK)
+        {
+            if (*varlist[ERR_FILE].i_m == TRUE)
+            {
+                /* set _file */
+
+                vmreg.l[ERR_FILE_R] = i;
+            }
+            else
+            {
+                printerr (get_ferr (i), epos, ST_EXE, filename);
+                ERREXIT();
+            }
+        }
+        else
+        {
+            if (*varlist[ERR_FILE].i_m == TRUE)
+            {
+                /* set _file */
+
+                vmreg.l[ERR_FILE_R] = i;
+            }
+        }
+
+        EXE_NEXT();
+		
+	lcall:
+		PRINTD("LIBRARY_CALL_FUNCTION");
+		
+		exe_lcall (vmreg.l[ARG1], vmreg.l[ARG2], &pthreads, threadnum, vmreg_vm.l[STSIZE]);
+		
+		EXE_NEXT ();
 }

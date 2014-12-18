@@ -31,7 +31,8 @@ nanovm_SOURCES = main.c \
 	       hyperspace_server.c \
 	       hyperspace_client.c \
 	       jit.cpp \
-	       rights.c
+	       rights.c \
+	       dlload.c
 
 noinst_HEADERS = main_d.h \
 		 arch.h \
@@ -42,9 +43,9 @@ noinst_HEADERS = main_d.h \
 		 snprintf.h \
 		 jit_x86.h
 
-LDADD = ../lib/libshared.a ../asmjit/libAsmJit.a
+LDADD = ../lib/libshared.a ../asmjit/libAsmJit.a -ldl
 #LDADD = ../lib/libshared.a
 
-AM_CFLAGS = -O0 -g -lm
+AM_CFLAGS = -O0 -g -lm -ldl
 
 AM_CPPFLAGS = -I../include

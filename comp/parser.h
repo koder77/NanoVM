@@ -238,13 +238,14 @@
 
 #define AT_SB                           "@"
 #define NOTREVERSE_SB	 				'>'
+#define GET_NO_ST_PULL_SB				">"
 
 /* for translate.c (auto translater) */
 #define ARRAY_VAR                       19
 #define ALL                             20
 #define INTEGER_VAR                     21
 #define DIRECT                          -1
-#define TRANSLATE_MAX                   161     /* opcodes */
+#define TRANSLATE_MAX                   165     /* opcodes */
 
 struct comp_opcode
 {
@@ -305,8 +306,8 @@ struct translate
 
 /* message definitions */
 
-#define COMP_START_TXT      "nanoc 64 bit 1.1.0  (c) 2014 by Stefan Pietzonke jay-t@gmx.net\n-== free software: GPL/MPL ==-\n"
-#define VERSION_NANOC_TXT   "$VER: nanoc 1.1.0 (08.11.14)"
+#define COMP_START_TXT      "nanoc 64 bit 1.2.0  (c) 2014 by Stefan Pietzonke jay-t@gmx.net\n-== free software: GPL/MPL ==-\n"
+#define VERSION_NANOC_TXT   "$VER: nanoc 1.2.0 (18.12.14)"
 
 
 #define STATUS_OK_TXT       "ok"

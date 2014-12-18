@@ -202,6 +202,7 @@ struct rights rights =
 	FALSE, TRUE, FALSE, FALSE
 };
 
+struct dlls dlls[MAXDLLS];
 
 /* END */
 

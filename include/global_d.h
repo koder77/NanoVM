@@ -100,6 +100,16 @@
     typedef int socklen_t;          /* it's not declared in the includes */
 #endif
 
+/* DLL load */
+#if OS_WINDOWS
+#include <direct.h>
+#include <windows.h>
+#else
+#include <sys/types.h>
+#include <dlfcn.h>
+#endif
+
+
 /* POSIX threads definitions */
 #define MAXPTHREADS     256
 
@@ -188,7 +198,7 @@ typedef int                     NINT;
 #define MAXJUMPLEN          10000   /* jumps can be done, (goto ...) */
 #define MAXJUMPRECLEN       256     /* gosub calls (dynamic) */
 #define MAXSUBARG           32      /* number of subroutine arguments */
-#define MAXOPCODE           385     /* number of opcodes, 0 - x */
+#define MAXOPCODE           389     /* number of opcodes, 0 - x */
 #define OBJBUFSIZE          10      /* object bufsize (KB), assembler only! */
 #define MAXSHELLARG         10      /* shell arguments, vm */
 
@@ -349,7 +359,7 @@ typedef int                     NINT;
 #define VECTOR_END			35
 #define VECTOR_END_SB		"_vectorend"			
 
-#define VERSION_NUM         3300            /* version number */
+#define VERSION_NUM         3320            /* version number */
 #define VERSION_OBJECT      3101            /* object file version, required */
 
 #define BLOCK_TMP_1         0              /* TMP block handling */
@@ -429,7 +439,7 @@ typedef int                     NINT;
 #define DIV                 11
 
 
-/* vm defs ---------------------------------------------------------------------------------- */
+/* vm defs opcodes ---------------------------------------------------------------------------------- */
 
 #define PUSH_I              0
 #define PUSH_L              1
@@ -917,24 +927,30 @@ typedef int                     NINT;
 #define DNAMES					367
 #define PDNAMES					368
 
+/* DLL / so library opcodes */
+#define LOPEN					369
+#define LCLOSE					370
+#define LFUNC					371
+#define LCALL					372
+
 /* assembler */
-#define VM_INT                  369
-#define VM_LINT                 370
-#define VM_QINT                 371
-#define VM_DOUBLE               372
-#define VM_STRING               373
-#define VM_BYTE                 374
-#define VM_DYNAMIC              375
-#define VM_LAB                  376
-#define SETREG_L                377 
-#define SETREG_D                378
-#define SETREG_S                379
-#define UNSETREG_ALL_L          380
-#define UNSETREG_ALL_D          381
-#define UNSETREG_ALL_S          382
-#define SETQUOTE                383 
-#define SETSEPAR                384
-#define SETSEMICOL              385  /* 385 !!! */
+#define VM_INT                  373
+#define VM_LINT                 374
+#define VM_QINT                 375
+#define VM_DOUBLE               376
+#define VM_STRING               377
+#define VM_BYTE                 378
+#define VM_DYNAMIC              379
+#define VM_LAB                  380
+#define SETREG_L                381 
+#define SETREG_D                382
+#define SETREG_S                383
+#define UNSETREG_ALL_L          384
+#define UNSETREG_ALL_D          385
+#define UNSETREG_ALL_S          386
+#define SETQUOTE                387 
+#define SETSEPAR                388
+#define SETSEMICOL              389  /* 389 !!! */
 
 
 #define EMPTY               -1
@@ -1062,10 +1078,10 @@ typedef int                     NINT;
 
 /* message definitions */
 
-#define VM_START_TXT        "nano vm 64 bit 3.3.0 (c) 2014 by Stefan Pietzonke jay-t@gmx.net\n-== free software: GPL/MPL ==-\n     -==  byte storm  ==-\n        ==============\n"
-#define A_START_TXT         "nano assembler 64 bit 3.3.0  (c) 2014 by Stefan Pietzonke jay-t@gmx.net\n-== free software: GPL/MPL ==-\n"
+#define VM_START_TXT        "nano vm 64 bit 3.3.2 (c) 2014 by Stefan Pietzonke jay-t@gmx.net\n-== free software: GPL/MPL ==-\n     -==  byte storm  ==-\n        ==============\n"
+#define A_START_TXT         "nano assembler 64 bit 3.3.2  (c) 2014 by Stefan Pietzonke jay-t@gmx.net\n-== free software: GPL/MPL ==-\n"
 
-#define VERSION_TXT         "$VER: nano 3.3.0 (07.11.14)"
+#define VERSION_TXT         "$VER: nano 3.3.2 (18.12.14)"
 
 
 #define STATUS_OK_TXT       "ok"
@@ -1334,6 +1350,25 @@ struct rights
 };
 
 
+/* .dll / .so shared library functions ----------------------------------------- */
+
+#define MAXDLLS			32
+#define MAXDLLFUNC		64
+
+typedef S8 (*dll_func)(U1 *ptr, S4 threadnum, S8 stacksize);
+
+struct dlls
+{
+	U1 name[MAXSTRING_VAR + 1];  		/* dll name */   
+	
+	#if OS_WINDOWS						/* dll handle */
+		HINSTANCE lptr;
+	#else
+		void *lptr;
+	#endif
+		
+	dll_func func[MAXDLLFUNC];
+};
 
 #include "protos.h"
 

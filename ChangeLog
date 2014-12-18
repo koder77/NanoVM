@@ -1,4 +1,4 @@
-nano (3.3.0)
+nano (3.3.2)
 	Nanoc: new experimental #ATOMIC / #ATOMIC_END for setting vector array start and end elements.
 	Threading safe!
 
@@ -6,7 +6,11 @@ nano (3.3.0)
 	
 	exe_files.c alignment bugfix for Android/ARM.
 	
--- Stefan Pietzonke <jay-t@gmx.net>  Sat 22 Nov 2014 17:18 +0100
+	new: vm/dlload.c load DLL/so shared libraries.
+	Data can be exchanged over thread stack.
+	See example in nanovm/prog/dll!
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Thu 18 Dec 2014 19:18 +0100
 
 nano (3.2.9)
 	VM: thread exit code is now a 64 bit return value.

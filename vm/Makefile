@@ -106,7 +106,8 @@ am_nanovm_OBJECTS = main.$(OBJEXT) openo.$(OBJEXT) openend.$(OBJEXT) \
 	pthread.$(OBJEXT) snprintf.$(OBJEXT) dynamic_array.$(OBJEXT) \
 	strtoll.$(OBJEXT) register.$(OBJEXT) exe_vector_arr.$(OBJEXT) \
 	exe_passw_input.$(OBJEXT) hyperspace_server.$(OBJEXT) \
-	hyperspace_client.$(OBJEXT) jit.$(OBJEXT) rights.$(OBJEXT)
+	hyperspace_client.$(OBJEXT) jit.$(OBJEXT) rights.$(OBJEXT) \
+	dlload.$(OBJEXT)
 nanovm_OBJECTS = $(am_nanovm_OBJECTS)
 nanovm_LDADD = $(LDADD)
 nanovm_DEPENDENCIES = ../lib/libshared.a ../asmjit/libAsmJit.a
@@ -218,20 +219,20 @@ OBJEXT = o
 PACKAGE = nanovm
 PACKAGE_BUGREPORT = jay-t@gmx.net
 PACKAGE_NAME = nanovm
-PACKAGE_STRING = nanovm 3.3.0
+PACKAGE_STRING = nanovm 3.3.2
 PACKAGE_TARNAME = nanovm
 PACKAGE_URL = 
-PACKAGE_VERSION = 3.3.0
+PACKAGE_VERSION = 3.3.2
 PATH_SEPARATOR = :
 RANLIB = ranlib
 SET_MAKE = 
 SHELL = /bin/bash
 STRIP = 
-VERSION = 3.3.0
-abs_builddir = /home/stefan/Seafile/sources-sync/git/nanovm-3.3.0/vm
-abs_srcdir = /home/stefan/Seafile/sources-sync/git/nanovm-3.3.0/vm
-abs_top_builddir = /home/stefan/Seafile/sources-sync/git/nanovm-3.3.0
-abs_top_srcdir = /home/stefan/Seafile/sources-sync/git/nanovm-3.3.0
+VERSION = 3.3.2
+abs_builddir = /home/stefan/Seafile/sources-sync/git/nanovm-3.3.2-dlload/vm
+abs_srcdir = /home/stefan/Seafile/sources-sync/git/nanovm-3.3.2-dlload/vm
+abs_top_builddir = /home/stefan/Seafile/sources-sync/git/nanovm-3.3.2-dlload
+abs_top_srcdir = /home/stefan/Seafile/sources-sync/git/nanovm-3.3.2-dlload
 ac_ct_CC = gcc
 ac_ct_CXX = g++
 am__include = include
@@ -251,7 +252,7 @@ host_alias =
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /home/stefan/Seafile/sources-sync/git/nanovm-3.3.0/install-sh
+install_sh = ${SHELL} /home/stefan/Seafile/sources-sync/git/nanovm-3.3.2-dlload/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -296,7 +297,8 @@ nanovm_SOURCES = main.c \
 	       hyperspace_server.c \
 	       hyperspace_client.c \
 	       jit.cpp \
-	       rights.c
+	       rights.c \
+	       dlload.c
 
 noinst_HEADERS = main_d.h \
 		 arch.h \
@@ -307,9 +309,9 @@ noinst_HEADERS = main_d.h \
 		 snprintf.h \
 		 jit_x86.h
 
-LDADD = ../lib/libshared.a ../asmjit/libAsmJit.a
+LDADD = ../lib/libshared.a ../asmjit/libAsmJit.a -ldl
 #LDADD = ../lib/libshared.a
-AM_CFLAGS = -O0 -g -lm
+AM_CFLAGS = -O0 -g -lm -ldl
 AM_CPPFLAGS = -I../include
 all: all-am
 
@@ -398,6 +400,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+include ./$(DEPDIR)/dlload.Po
 include ./$(DEPDIR)/dynamic_array.Po
 include ./$(DEPDIR)/exe_arr.Po
 include ./$(DEPDIR)/exe_file.Po

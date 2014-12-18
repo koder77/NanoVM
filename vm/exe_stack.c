@@ -76,7 +76,7 @@ int init_stack (void)
     for (threadnum = 0; threadnum < MAXPTHREADS; threadnum++)
     {
         pthreads[threadnum].stack = NULL;
-	pthreads[threadnum].stack_elements = -1;
+		pthreads[threadnum].stack_elements = -1;
 	
         /* INITIALIZE VARIABLE MUTEX-STATE */
         

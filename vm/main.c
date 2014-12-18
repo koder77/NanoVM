@@ -269,8 +269,9 @@ run_prog:
     
     PRINTD("init_sockets\n");
 
+	init_dlls ();
     init_sockets ();
-
+	
     /* load program */
 
     PRINTD("exe_open_object\n");
@@ -502,6 +503,8 @@ cleanup:
 	#if HAVE_JIT_COMPILER
 		free_jit_code ();
 	#endif
+	
+	close_dll_handles ();
 		
     exe_shutdown (pthreads[0].ret_val);
 }

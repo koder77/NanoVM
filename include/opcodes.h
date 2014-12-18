@@ -461,6 +461,11 @@ struct opcode opcode[] =
 	{ "dnames", 			2, { S_REG,			STRING_VAR,		EMPTY } },
 	{ "pdnames",			2, { S_REG,			STRING_VAR,		EMPTY } },
 	
+	{ "lopen",				2, { L_REG,			S_REG,			EMPTY }, },
+	{ "lclose",				1, { L_REG,			EMPTY,			EMPTY }, },
+	{ "lfunc",				3, { L_REG,			L_REG,			S_REG }, },
+	{ "lcall", 				2, { L_REG,			L_REG,			EMPTY }, },
+	
     { "int",                1, { VAR,           EMPTY,          EMPTY } },
     { "lint",               1, { VAR,           EMPTY,          EMPTY } },
     { "qint",               1, { VAR,           EMPTY,          EMPTY } },

@@ -1,0 +1,36 @@
+In this directory is the shared library call example.
+
+Nano VM side:
+- loads libtest.so from program dll.
+- calls function showstr in dll libtest.so.
+
+The function showstr pushes a long integer number onto the calling threads stack.
+
+In nanovmlib.c all other functions which can be used for stack push/pull are included.
+The stgettype function gets the stack top element type.
+And the stelements function gets the number of stack elements.
+
+
+INTERNAL
+========
+How this works, in a few words:
+The shared library gets the pointer to the pthreads structure, in which the stack data of the thread is stored.
+So all stack manipulating works on the Nano VM stack.
+
+If you do something wrong you will get a runtime error on the Nano VM.
+For example pull something from an empty stack will cause a runtime error.
+
+You have to set the file access rights in the progams .nr file to load a shared library:
+
+file=on
+
+
+
+NOTE
+====
+THIS IS A EXPERIMENTAL FEATURE!!
+USE THIS ONLY IF YOU KNOW WHAT YOU ARE DOING.
+
+So this can be used as a wrapper to native C/C++ code.
+For example call a C library and return data over the stack to the Nano VM.
+

@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.13])
-AC_INIT([nanovm], [3.3.0], [jay-t@gmx.net])
+AC_INIT([nanovm], [3.3.2], [jay-t@gmx.net])
 AM_INIT_AUTOMAKE([1.9.6])
 
 
