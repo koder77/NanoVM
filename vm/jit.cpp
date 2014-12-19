@@ -26,17 +26,13 @@
 ***************************************************************************/
 
 
-
-
-
-
 #include "host.h"
 
-
-
-#if HAVE_JIT_COMPILER
+#define JIT_CPP  1
 
 #include "global_d.h"
+
+#if HAVE_JIT_COMPILER
 
 #if DEBUG
     extern U1 print_debug;

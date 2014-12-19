@@ -1489,7 +1489,7 @@ U1 exe_dobjects (U1 *directory, S8 *objects)
 #if OS_WINDOWS
 U1 exe_dobjects (U1 *directory, S8 *objects)
 {
-	printf ("dobjects ERROR: function not implemented on Windows!\n"
+	printf ("dobjects ERROR: function not implemented on Windows!\n");
 	return (ERR_FILE_OPEN);
 }
 #endif
@@ -1596,7 +1596,7 @@ U1 exe_dnames (U1 *directory, struct varlist *varlist, S8 sreg)
 #if OS_WINDOWS
 U1 exe_dnames (U1 *directory, struct varlist *varlist, S8 sreg)
 {
-	printf ("dnames ERROR: function not implemented on Windows!\n"
+	printf ("dnames ERROR: function not implemented on Windows!\n");
 	return (ERR_FILE_OPEN);
 }
 #endif

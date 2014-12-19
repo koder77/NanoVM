@@ -62,13 +62,14 @@
 
 
 /* for socket->servinfo: */
-
+#if JIT_CPP == 0
 #if OS_WINDOWS
     #include <winsock2.h>
     #include <ws2tcpip.h>
 
     #define CLOSEWINSOCK();             WSACleanup();
     #define SHUT_RDWR                   0x02
+#endif
 #endif
 
 #if OS_AROS

@@ -35,7 +35,7 @@
 
 /* switch ANDROID debugging: if set to one then programs will be searched in:
  * (slash)data/local/tmp/nanovm/prog/
- * 
+ *
  * if set to null then in:
  * (slash)mnt/sdcard/nanovm/prog/
  *
@@ -52,10 +52,10 @@
 
 /* switch JIT compiler on/off */
 
-#define HAVE_JIT_COMPILER	1
+#define HAVE_JIT_COMPILER	0
 
-#define JIT_X86_64 		TRUE
-#define JIT_X86_32		FALSE
+#define JIT_X86_64 		FALSE
+#define JIT_X86_32		TRUE
 
 #define JIT_X86 TRUE
 
@@ -74,9 +74,9 @@
     #define M_PC        TRUE
 
     #define M_AMIGA     FALSE
-    
+
 	#define M_ARM		FALSE
-    
+
 	#undef JIT_X86
 	#define JIT_X86		TRUE
 
@@ -90,22 +90,22 @@
     #define M_AMIGA     TRUE
 
     #define M_PC        FALSE
-    
+
 	#define M_ARM 		FALSE
 
     #pragma message("MACHINE = MC68000")
-    
+
 #elif __arm__
 	#undef M_PC
 	#undef M_AMIGA
 	#undef M_ARM
 
 	#define M_AMIGA FALSE
-	
+
 	#define M_PC	FALSE
-	
+
 	#define M_ARM	TRUE
-	
+
 	#pragma message("MACHINE = ARM")
 #endif
 
@@ -147,9 +147,9 @@
 	#undef  OS_ANDROID
 	#define OS_ANDROID   TRUE
 	#define OS_TYPE      OS_TYPE_ANDROID
-	
-	#pragma message("OS = ANDROID")    
-    
+
+	#pragma message("OS = ANDROID")
+
 #elif __linux__
     #undef  OS_LINUX
     #define OS_LINUX    TRUE
@@ -251,6 +251,6 @@
 	#error "host.h FATAL ERROR set JIT_X86 TYPE: 32 OR 64 bit!!!"
 #endif
 
-
+#define JIT_CPP        0
 /* END */
 
