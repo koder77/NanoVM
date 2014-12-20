@@ -102,7 +102,7 @@
 #endif
 
 /* DLL load */
-#if OS_WINDOWS
+#if OS_WINDOWS || OS_WINDOWS_CYGWIN
 #include <direct.h>
 #include <windows.h>
 #else
