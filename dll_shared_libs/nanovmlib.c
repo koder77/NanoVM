@@ -299,20 +299,3 @@ U1 stelements (S4 threadnum, struct pthreads *pthreads, S8 *reg)
     return (ERR_STACK_OK);
 }
 
-
-
-S8 showstr (U1 *ptr, S4 threadnum, S8 stacksize)
-{
-	S8 ret = 42;
-	struct pthreads *pthreads;
-	pthreads = (struct pthreads *) ptr;
-	
-	printf ("DLL start...\n");
-	
-	if (stpush_l (threadnum, pthreads, stacksize, ret) != ERR_STACK_OK) printf ("showstr: stack error!\n");
-		
-	
-	printf ("stack: %lli\n", ret);
-	printf ("EXIT DLL\n");
-	return (0);
-}

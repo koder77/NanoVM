@@ -10,7 +10,10 @@ nano (3.3.2)
 	Data can be exchanged over thread stack.
 	See example in nanovm/prog/dll!
 	
--- Stefan Pietzonke <jay-t@gmx.net>  Thu 18 Dec 2014 19:18 +0100
+	new: array data can be exchanged over DLL/so library.
+	See new example in dll directory.
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Mon 22 Dec 2014 19:16 +0100
 
 nano (3.2.9)
 	VM: thread exit code is now a 64 bit return value.

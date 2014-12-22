@@ -1356,7 +1356,7 @@ struct rights
 #define MAXDLLS			32
 #define MAXDLLFUNC		64
 
-typedef S8 (*dll_func)(U1 *ptr, S4 threadnum, S8 stacksize);
+typedef S8 (*dll_func)(U1 *pthreads_ptr, U1 *varlist_ptr, U1 *vm_mem_ptr, S4 threadnum, S8 stacksize);
 
 struct dlls
 {

@@ -1,19 +1,25 @@
 func main ()
 	lint null = 0; lint one = 1;
-	lint dll; lint function;
+	lint dll; lint functionpush; lint functioninitarray;
 	lint ret;
 
+	qint _q[10]; qint i; qint max = 9; int f; qint qptr;
+	qint x;
+	
 	string dllname[256] = "libtest.so";
-	string functionname[256] = "showstr";
+	string functionpushn[256] = "pushtostack";
+	string functioninitarrayn[256] = "initarrayq";
 	
 //	open libtest.so library in nanovm/lib directory
 	lopen (dll, dllname);
 	
-//	set functionname as function "function"
-	lfunc (dll, function, functionname);
+//	call pushtostack in shared lib and show the pushed value	
 	
-//	call function
-	lcall (dll, function);
+//	set functionname as function "functionpush"
+	lfunc (dll, functionpush, functionpushn);
+	
+//	call function in shared lib
+	lcall (dll, functionpush);
 	
 //	get returnvalue from stack, note: ">" sign as last argument sets no stpull_all_all in assembly code!!!
 	get (ret, >);
@@ -21,5 +27,35 @@ func main ()
 //	print return value
 	print ret; printn one;
 
+//	get pointer to variable q
+	getaddress (_q, qptr);
+	
+//	push pointer and index of last array element to stack
+	#ATOMIC;
+	pushtostack (qptr, max);
+	
+//	call initarray in shared lib and show array
+
+//	set functionname as function "functioninitarray"
+	lfunc (dll, functioninitarray, functioninitarrayn);
+
+// 	call function in shared lib	
+	lcall (dll, functioninitarray);
+	#ATOMIC_END;
+	
+	i = 0; max = 9;
+	for;
+		array2var (_q, i, x);
+		print x; printn one;
+		
+		i = ++;
+		f = i <= max;
+	next f;
+	
 	exit null;
 funcend
+
+lab pushtostack;
+#ASSEMB
+	rts;
+#ASSEMB_END

@@ -2,13 +2,18 @@ In this directory is the shared library call example.
 
 Nano VM side:
 - loads libtest.so from program dll.
-- calls function showstr in dll libtest.so.
+- calls function pushtostack in dll libtest.so.
 
 The function showstr pushes a long integer number onto the calling threads stack.
 
 In nanovmlib.c all other functions which can be used for stack push/pull are included.
 The stgettype function gets the stack top element type.
 And the stelements function gets the number of stack elements.
+
+
+NEW: now array data can be exchanged over a shared library too.
+See the new example code which initializes an array.
+It should be possible to write to arrays which are in the VMs own virtual memory.
 
 
 INTERNAL

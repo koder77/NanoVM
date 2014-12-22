@@ -286,9 +286,9 @@ U1 exe_lfunc (S8 llist_ind, S8 *flist_ind, U1 *fname)
 	return (ERR_FILE_OK);
 }
 
-U1 exe_lcall (S8 llist_ind, S8 flist_ind, U1 *ptr, S4 threadnum, S8 stacksize)
+U1 exe_lcall (S8 llist_ind, S8 flist_ind, U1 *pthreads_ptr, U1 *varlist_ptr, U1 *vm_mem_ptr, S4 threadnum, S8 stacksize)
 {
-	(*dlls[llist_ind].func[flist_ind])(ptr, threadnum, stacksize);
+	(*dlls[llist_ind].func[flist_ind])(pthreads_ptr, varlist_ptr, vm_mem_ptr, threadnum, stacksize);
 	return (0);
 }
 

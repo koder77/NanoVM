@@ -6044,7 +6044,7 @@ void *exe_elist (S4 threadnum)
 	lcall:
 		PRINTD("LIBRARY_CALL_FUNCTION");
 		
-		exe_lcall (vmreg.l[ARG1], vmreg.l[ARG2], &pthreads, threadnum, vmreg_vm.l[STSIZE]);
+		exe_lcall (vmreg.l[ARG1], vmreg.l[ARG2], &pthreads, varlist, &vm_mem, threadnum, vmreg_vm.l[STSIZE]);
 		
 		EXE_NEXT ();
 }
