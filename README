@@ -1,5 +1,5 @@
 ABOUT
-=========
+=====
 
 This is Nano VM, a virtual machine.
 Nano has a full 64 bit CPU core with registers for 64 bit integer, double and strings.
@@ -12,7 +12,7 @@ for array variables.
 Execution can be speeded up by the JIT compiler (AsmJit library).
 Currently only X86 CPUs are supported (32 and 64 bit).
 
-Features:
+Nano VM features:
 - 64 bit CPU with lots of registers
 - stack for function call arguments
 - multi threading
@@ -25,19 +25,29 @@ Features:
 - "hyperspace" data sharing between virtual machines
 - "memory protection" in debugging mode
 - assembler
+- expansions with DLL/shared libraries possible
+  stack and array variables can be accessed from library
 - N compiler (high level language)
-- GUI/sound server flow
 
 
-With Flow the GUI/sound server graphics applications are possible.
-Also RS232 serial port access can be made with Flow.
+Flow
+====
 
-Supported OS:
-Linux
-Android
-Windows
+For graphics/sound the Flow server can be used.
+Flow is connected over TCP/IP with the Nano VM.
+So the VM and Flow can run on different machines/OS as a remote
+control of the Nano VM. Or on the same machine over localhost connection.
 
-AROS (testing)
+You can connect the Flow server on your mobile phone with your Nano VM running on the PC.
+With this setup you can run CPU intense programs and "take them with you" on your phone.
+
+Flow server features:
+- graphics/GUI with SDL
+- sound with SDL_mixer
+- serial port RS232 access (Linux/Windows)
+- Raspberry Pi GPIO access (experimental)
+
+
 
 contact: jay-t(at)gmx(dot)net
 
@@ -48,95 +58,25 @@ CREDITS
 See AUTHORS!
 
 
+NEWS
+====
+
+Now DLL/shared libraries can be loaded. This makes it possible to expand the
+VM. There is a library to access the VM stack and array variables from the
+shared library. A little example is included, it shows how to use the stack
+and initialize an array.
+
 Now with the Flow GUI/graphics server source code!
 See flow directory.
 Android version of flow is buildable with Pelyas SDL build environment.
 See Flow README file.
 
 
-AMIGA OS 3.x
-============
-
-Now Nano can be compiled with the crosscompiler on Linux.
-SEE COMPILING BELOW!!!
-
-I made some changes to the source code to make it possible.
-
-I can now run the N compiler and the assembler on WinUAE.
-But the VM fails to run. It seems to load programs but
-then it hangs.
-
-I don't know if this has something to do with the POSIX
-thread library on Amiga.
-
-I have to find out...
-
-
 COMPILING
 =========
 
-X86
----
-./configure CFLAGS="-march=i386 -ffast-math -fomit-frame-pointer -O3 -s"
-./configure CFLAGS="-march=athlon -ffast-math -fomit-frame-pointer -O3 -s"
-./configure CFLAGS="-march=pentium -ffast-math -fomit-frame-pointer -O3 -s"
-
-===============================================================================
-gcc 4.6.2: new cpu flags example:
--march=core2 -mtune=core2
-
-and -Ofast as new optimization flag
-
-see gcc documentation
-===============================================================================
-
-with relro protection (Linux):
-./configure CFLAGS="-ffast-math -fomit-frame-pointer -O3 -s -Wl,-z,relro,-z,now"
-
-for me:
-./configure CFLAGS="-ffast-math -fomit-frame-pointer -O3 -march=core2 -mtune=core2 -funsafe-loop-optimizations -floop-block -floop-parallelize-all -ftree-loop-distribution -fweb -ftracer -fivopts -ftree-loop-linear -ftree-loop-im -maccumulate-outgoing-args -s -Wl,-z,relro,-z,now"
-
-./configure CFLAGS="-ffast-math -O3 -march=core2 -mtune=core2 -fweb -ftracer -fivopts -maccumulate-outgoing-args -pg -s -Wl,-z,relro,-z,now"
-
-Amiga
------
-./configure CFLAGS="-m68020 -fomit-frame-pointer -O2 -s"
-./configure CFLAGS="-m68020 -m68881 -fomit-frame-pointer -O2 -s"
-./configure CFLAGS="-m68030 -m68881 -fomit-frame-pointer -O2 -s"
-
-Crosscompiling on Linux for Amiga
----------------------------------
-1. Install the crosscompiler (http://cross.zerohero.se/os3.html)
-2. change nano/Makefile.am:
-    set exe_socket_ipv4_amiga.c as the socket source.
-    delete the CFLAGS -lm flag.
-
-3. Run the build script amigaos-crosscompile.sh
-
-Now nano should be compiled.
-
-
-MINGW gcc compiler
-------------------
-
-You have to add the socket library to the LIBS env variable.
-To compile for a Pentium, the configure call looks like this:
-
-./configure CFLAGS="-march=pentium -ffast-math -fomit-frame-pointer -O3 -s" LIBS="$LIBS -L../lib -lwsock32 -lws2_32"
-
-
-Crosscompiling under Linux with mingw32
----------------------------------------
-./configure --host=i686-pc-mingw32 CFLAGS="-ffast-math -fomit-frame-pointer -O3 -s -D_WIN32" LIBS="$LIBS -L../lib -lwsock32"
-
-
-Raspberry Pi
-============
-
-Compiling on RPi:
-
-./configure CFLAGS="-s -Wcast-align -fno-strict-aliasing -fomit-frame-pointer -O3" LDFLAGS="-lrt"
-
-CFLAGS="-march=armv6 -mtune=arm1176jzf-s"
-CFLAGS="$CFLAGS -mfloat-abi=hard -mfpu=vfp -ffast-math -O3"
-
+To compile Nano VM there are automake build scripts for:
+- Android
+- Linux
+- Raspberry Pi (Raspbian Linux)
+- Windows (tested with MinGW gcc compiler)

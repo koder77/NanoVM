@@ -2193,7 +2193,8 @@ S2 start_menu (void)
 	nanovm_path[j] = '\0';
 	
 	
-	strcpy (menu[i], "EXIT");
+	strcpy (menu[i], "EXIT"); i++;
+	strcpy (menu[i], "connect remote VM...");
 	
 	ok = 0;
 	while (ok == 0)
@@ -2244,8 +2245,103 @@ S2 start_menu (void)
 	
 	return (gadget);
 }
-	
 
+
+S2 get_server_ip (U1 *ip)
+{
+	Uint8 request[256];
+	SDL_Event event;
+    SDLKey key;
+	Uint8 wait;
+	Sint16 ip_len;
+	Uint8 ip_str[80];
+	
+	strcpy (ip_str, "192.168.1.1");
+	strcpy (request, "enter client ip: ");
+	strcat (request, ip_str);
+	ip_len = strlen (ip_str);
+	
+	
+	draw_text_ttf (0, request, 50, 50, 255, 255, 255);
+	update_screen (0);
+	
+	SDL_Delay (4000);
+	
+#if __ANDROID__
+	/* show on screen keyboard */
+	SDL_ANDROID_GetScreenKeyboardTextInput (ip_str, 79);
+	
+	strcpy (request, "server ip: ");
+	strcat (request, ip_str);
+		
+	boxRGBA (screen[0].bmap, 0, 0, screen[0].width - 1, screen[0].height - 1, 0, 0, 0, 255);
+	draw_text_ttf (0, request, 50, 50, 255, 255, 255);
+	update_screen (0);
+	
+	SDL_Delay (4000);
+	
+	strcpy (ip, ip_str);
+	return (0);
+}
+	
+#else
+	
+	wait = TRUE;
+
+    while (wait)
+    {
+		SDL_Delay (50);
+		while (SDL_PollEvent (&event))
+		{
+			switch (event.type)
+			{
+				case SDL_KEYDOWN:
+					key = event.key.keysym.sym;
+					switch (key)
+					{
+						case SDLK_BACKSPACE:
+							printf ("BACKSPACE\n");
+
+							ip_len = strlen (ip_str);
+							if (ip_len > 0)
+							{
+								ip_str[ip_len - 1] = '\0';
+							}
+							break;
+						
+						case SDLK_RETURN:
+							wait = FALSE;
+							break;
+						
+						default:
+							ip_len = strlen (ip_str);
+							if (ip_len < 256)
+							{
+								ip_str[ip_len] = event.key.keysym.unicode;
+								ip_str[ip_len + 1] = '\0';
+							}
+							break;
+					}
+					break;
+			}
+		}
+		
+		strcpy (request, "enter server ip: ");
+		strcat (request, ip_str);
+		
+		boxRGBA (screen[0].bmap, 0, 0, screen[0].width - 1, screen[0].height - 1, 0, 0, 0, 255);
+		draw_text_ttf (0, request, 50, 50, 255, 255, 255);
+		update_screen (0);
+	}
+	
+	strcpy (ip, ip_str);
+	return (0);
+}		
+
+#endif
+
+
+	
 
 
 /* read_command () neu ENDE ------------------------------------------- */
@@ -2437,19 +2533,33 @@ S2 start_menu (void)
 			exit (0);
 		}
 	
-		draw_text_ttf (0, "starting Nano VM...", 50, 400, 0, 0, 0);
+		if (program == 1)
+		{
+			// user want to connect to remote VM, ask IP of the Nano VM
+			
+			get_server_ip (ip);
+		}
+		else
+		{
+			draw_text_ttf (0, "starting Nano VM...", 50, 400, 0, 0, 0);
 	
-		// strcpy (command_shell, "/data/data/jackpal.androidterm/kbox2/bin/nanovm ");
-		strcpy (command_shell, nanovm_path);
-		strcat (command_shell, " ");
-		strcat (command_shell, menu[program]);
-		strcat (command_shell, " 127.0.0.1 2000 &");
+			// strcpy (command_shell, "/data/data/jackpal.androidterm/kbox2/bin/nanovm ");
+			strcpy (command_shell, nanovm_path);
+			strcat (command_shell, " ");
+			strcat (command_shell, menu[program]);
+			strcat (command_shell, " 127.0.0.1 2000 &");
+		}
 	}
 		
 #if SOCKETS_NATIVE
 	printf ("starting native socket...\n");
 
-	strcpy (ip, "127.0.0.1");
+	if (program != 1)
+	{
+		// Nano VM runs on this machine, use localhost for connection
+		strcpy (ip, "127.0.0.1");
+	}
+		
 	//exe_gethostbyaddr (ip, &addr);
 	
 #if _WIN32	

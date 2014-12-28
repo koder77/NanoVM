@@ -171,7 +171,7 @@ AUTOMAKE = automake-1.14
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -ffast-math -fomit-frame-pointer -O3
+CFLAGS = -ffast-math -fomit-frame-pointer -O6 -march=core2
 CPP = gcc -E
 CPPFLAGS = 
 CXX = g++

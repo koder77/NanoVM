@@ -43,7 +43,7 @@ func main ()
 	lcall (dll, functioninitarray);
 	#ATOMIC_END;
 	
-	i = 0; max = 9;
+	i = 0;
 	for;
 		array2var (_q, i, x);
 		print x; printn one;

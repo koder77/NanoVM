@@ -1,7 +1,9 @@
 flow (0.6.2)
 	New: cycle gadget change function, change selected item.
+	New: in start menu the user can set a server ip to let a remote
+	client connect to Flow.
 	
--- Stefan Pietzonke <jay-t@gmx.net>  Wed 06 Aug 2014 20:00 +0200
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun 28 Dec 2014 11:19 +0100
 
 flow (0.6.1)
 	Android: BUGFIX: string gadgets now working!
