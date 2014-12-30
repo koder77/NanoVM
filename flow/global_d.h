@@ -271,109 +271,112 @@
 #define RPI_GPIO_MODE						59
 #define RPI_GPIO_READ						60
 #define RPI_GPIO_WRITE						61
+
+#define SAVE_PICTURE						62						
+
 /* types */
 
-#define SCREENNUM                           62
-#define WIDTH                               63
-#define HEIGHT                              64
-#define BIT                                 65
+#define SCREENNUM                           10001
+#define WIDTH                               10002
+#define HEIGHT                              10003
+#define BIT                                 10004
 
-#define X                                   66
-#define Y                                   67
-#define X2                                  68
-#define Y2                                  69
-#define X3                                  70
-#define Y3                                  71
+#define X                                   10005
+#define Y                                   10006
+#define X2                                  10007
+#define Y2                                  10008
+#define X3                                  10009
+#define Y3                                  10010
 
-#define VECTORS                             72
-#define STEPS                               73
-#define RADIUS                              74
-#define XRADIUS                             75
-#define YRADIUS                             76
-#define STARTANGLE                          77
-#define ENDANGLE                            78
+#define VECTORS                             10011
+#define STEPS                               10012
+#define RADIUS                              10013
+#define XRADIUS                             10014
+#define YRADIUS                             10015
+#define STARTANGLE                          10016
+#define ENDANGLE                            10017
 
 
 /* normal colors */
 
-#define R                                   79
-#define G                                   80
-#define B                                   81
+#define R                                   10018
+#define G                                   10019
+#define B                                   10020
 
 
 /* background colors (unused) */
 
-#define R_BG                                82
-#define G_BG                                83
-#define B_BG                                84
+#define R_BG                                10021
+#define G_BG                                10022
+#define B_BG                                10023
 
 
 /* alpha channel */
 
-#define ALPHA                               85
+#define ALPHA                               10024
 
 
-#define FONTWIDTH                           86
-#define FONTHEIGHT                          87
-#define FONTSIZE                            88
-#define FONTSTYLE                           89
+#define FONTWIDTH                           10025
+#define FONTHEIGHT                          10026
+#define FONTSIZE                            10027
+#define FONTSTYLE                           10028
 
 /* true type font styles */
 
-#define FONTSTYLE_NORMAL                    90
-#define FONTSTYLE_BOLD                      91
-#define FONTSTYLE_ITALIC                    92
-#define FONTSTYLE_UNDERLINE                 93
+#define FONTSTYLE_NORMAL                    10029
+#define FONTSTYLE_BOLD                      10030
+#define FONTSTYLE_ITALIC                    10031
+#define FONTSTYLE_UNDERLINE                 10032
 
 
-#define GADGET                              94
-#define GADGETS                             95
-#define GADGET_STATUS                       96
-#define GADGET_INT_VALUE                    97
-#define GADGET_CYCLE_ENTRIES                98
-#define GADGET_STRING_STR_LEN               99
-#define GADGET_STRING_VIS_LEN               100
+#define GADGET                              10033
+#define GADGETS                             10034
+#define GADGET_STATUS                       10035
+#define GADGET_INT_VALUE                    10036
+#define GADGET_CYCLE_ENTRIES                10037
+#define GADGET_STRING_STR_LEN               10038
+#define GADGET_STRING_VIS_LEN               10039
 
 
 /* vectors (x, y pairs) */
 
-#define VX                                  101
-#define VY                                  102
+#define VX                                  10040
+#define VY                                  10041
 
 /* string data */
 
-#define TEXT                                103
-#define SCREENTITLE                         104
-#define SCREENICON                          105
-#define PICTURENAME                         106
-#define FONTNAME                            107
-#define GADGET_STRING_VALUE                 108
-#define GADGET_CYCLE_TEXT                   109
+#define TEXT                                10042
+#define SCREENTITLE                         10043
+#define SCREENICON                          10044
+#define PICTURENAME                         10045
+#define FONTNAME                            10046
+#define GADGET_STRING_VALUE                 10047
+#define GADGET_CYCLE_TEXT                   10048
 
 /* sound data */
 
-#define SOUND_WAV_FILE                      110
-#define SOUND_CHANNEL                       111
-#define SOUND_LOOPS                         112
-#define SOUND_MUSIC_FILE                    113
+#define SOUND_WAV_FILE                      10049
+#define SOUND_CHANNEL                       10050
+#define SOUND_LOOPS                         10051
+#define SOUND_MUSIC_FILE                    10052
 
 /* RS232 data */
 
-#define RS232_COMPORT_NUMBER				114
-#define RS232_BAUDRATE						115
-#define RS232_BUF_SIZE						116
-#define RS232_BYTE							117
-#define RS232_BUF							118
+#define RS232_COMPORT_NUMBER				10053
+#define RS232_BAUDRATE						10054
+#define RS232_BUF_SIZE						10055
+#define RS232_BYTE							10056
+#define RS232_BUF							10057
 
 /* RPI GPIO data */
 
-#define RPI_GPIO_PIN						119
-#define RPI_GPIO_VALUE						120
+#define RPI_GPIO_PIN						10058
+#define RPI_GPIO_VALUE						10059
 
 
 /* progress bar */
 
-#define GADGET_PROGRESS_BAR_VALUE			121
+#define GADGET_PROGRESS_BAR_VALUE			10060
 
 
 #define OK                                  0

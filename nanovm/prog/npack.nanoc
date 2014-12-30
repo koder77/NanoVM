@@ -1,0 +1,185 @@
+// npack.nanoc V 1.0
+// create Nano .np packages from file list
+//
+// needs: tar, bzip2, gpg, cd, cp, rm
+//
+// Own private gpg key for signing the *.tar.bz2 archive.
+
+func main ()
+	#include <file.nch>
+
+	string packetnameuser[256];
+	string packetname[256];
+	string packetlist[256];
+	string version[256];
+	
+	string dest[256];
+	string buf[256];
+	string buf2[256];
+	lint slen;
+	lint clen;
+	
+	string read[2] = "r";
+    string write[2] = "w";
+    string processcall[256] = "";
+    
+    string nanopath[2] = "/";
+    string temp[256] = "temp/";
+    string repo[256] = "repo/";
+    
+    string tarbz2[256] = "tar -cvjf ";
+    string gpg_sign[256] = "gpg --armor --detach-sign ";
+    
+    string dotnpack[7] = ".npack";
+    string dotnp[4] = ".np";
+    string dotbz2[9] = ".tar.bz2";
+    string dotasc[12] = ".tar.bz2.asc";
+    
+    string command[2] = ":";
+    
+    string files[30] = ":files";
+    string requires[30] = ":requires";
+    string replaces[30] = ":replaces";
+    string end[30] = ":end";
+    string fileend[30] = ":fend";
+    string createdir[30] = ":mkdir";
+    
+//    _err_file = 1;
+	lint pret;
+    
+    
+    
+    int listfile;
+    int npfile;
+    
+    int null = 0; int one = 1; int two = 2;
+    int f; int args;
+    int error;
+    
+    argnum (args);
+    f = args < null;
+    if f;
+        print "npack <packet-name>";
+        printn one;
+        exit one;
+    endif;
+    
+    argstr (null, packetnameuser);
+    packetlist = packetnameuser + dotnpack;
+    
+    fopen (listfile, packetlist, read);
+
+//	create temp/ directory
+	makedir (temp);
+	
+//	read version
+	freadls (listfile, version);
+	
+lab readloop;
+	freadls (listfile, buf);
+	
+	f = buf == "";
+	if f;
+		goto readloop;
+	endif;
+	
+// 	check for command
+	strleft (buf, one, buf2);
+	f = buf2 == command;
+	if f;
+		f = buf == files;
+		if f;
+lab files;
+			freadls (listfile, buf);
+			f = buf != end;
+			if f;
+				buf2 = temp + dest;
+				processcall = "cp " + _nanopath + buf + " " + _nanopath + "home/" + temp + dest + "/";
+
+				runsh (processcall, pret);
+				f = pret != null;
+				if f;
+					print "copy FAILED!";
+					exit one;
+				endif;
+				
+				goto files;
+			endif;
+		endif;
+		
+		f = buf == createdir;
+		if f;
+			freadls (listfile, dest);
+			buf2 = temp + dest;
+			makedir (buf2);
+		endif;
+		
+		f = buf == fileend;
+		if f;
+			fclose (listfile);
+			
+//	create archive
+			processcall = "cd " + _nanopath + "home/" + temp + " && " + tarbz2 + packetnameuser + dotbz2 + " *";
+			
+			runsh (processcall, pret);
+			f = pret != null;
+			if f;
+				print "create archive FAILED!"; printn one;
+				exit one;
+			endif;
+			
+			processcall = "cd " + _nanopath + "home/" + temp + " && " + gpg_sign + packetnameuser + dotbz2;
+			
+			runsh (processcall, pret);
+			f = pret != null;
+			if f;
+				print "gpg sign archive FAILED!"; printn one;
+				exit one;
+			endif;
+			
+			buf = repo + packetnameuser + dotnp;
+			print "create " buf; printn one;
+			
+			fopen (npfile, buf, write);
+			fwrite (npfile, version);
+			fwriten (npfile, one);
+			
+			buf = packetnameuser + dotbz2;
+			fwrite (npfile, buf);
+			fwriten (npfile, one);
+			
+			buf = packetnameuser + dotasc;
+			fwrite (npfile, buf);
+			fwriten (npfile, one);
+			
+			fclose (npfile);
+			
+			printn one; print "copy files..."; printn one;
+			
+			processcall = "cd " + _nanopath + "home/" + temp + " && " + "cp *" + dotbz2 + " *" + dotasc + " " + _nanopath + "home/" + repo;
+			
+			runsh (processcall, pret);
+			f = pret != null;
+			if f;
+				print "copy files to /home/repo/ FAILED!"; printn one;
+				exit one;
+			endif;
+			
+			print "remove /home/temp/ ...";
+			
+			processcall = "rm " + _nanopath + "home/" + temp + " -R";
+			
+			runsh (processcall, pret);
+			f = pret != null;
+			if f;
+				print "remove /home/temp/ FAILED!"; printn one;
+				exit one;
+			endif;
+			
+			print "done!"; printn one;
+			exit null;
+		endif;
+	endif;
+	goto readloop;
+funcend
+    

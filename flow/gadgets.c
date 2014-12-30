@@ -1075,7 +1075,7 @@ void gadget_event (S2 screennum)
     if (! screen[screennum].gadget)
     {
         printf ("gadget_event: error gadget list not allocated!\n");
-        send_8 (new_tcpsock, ERROR);
+        send_16 (new_tcpsock, ERROR);
         return;
     }
 
@@ -1096,7 +1096,7 @@ void gadget_event (S2 screennum)
             if (! SDL_WaitEvent (&event))
             {
                 printf ("gadget_event: error can't wait for event!\n");
-                send_8 (new_tcpsock, ERROR);
+                send_16 (new_tcpsock, ERROR);
                 return;
             }
 
@@ -1166,7 +1166,7 @@ void gadget_event (S2 screennum)
                                     if (! draw_gadget_button (screennum, i, GADGET_SELECTED))
                                     {
                                         printf ("gadget_event: error can't draw gadget!\n");
-                                        send_8 (new_tcpsock, ERROR);
+                                        send_16 (new_tcpsock, ERROR);
                                         return;
                                     }
                                 }
@@ -1177,7 +1177,7 @@ void gadget_event (S2 screennum)
                                     if (! draw_gadget_button (screennum, i, GADGET_NOT_SELECTED))
                                     {
                                         printf ("gadget_event: error can't draw gadget!\n");
-                                        send_8 (new_tcpsock, ERROR);
+                                        send_16 (new_tcpsock, ERROR);
                                         return;
                                     }
                                 }
@@ -1186,7 +1186,7 @@ void gadget_event (S2 screennum)
                             if (! draw_gadget_button (screennum, i, GADGET_NOT_SELECTED))
                             {
                                 printf ("gadget_event: error can't draw gadget!\n");
-                                send_8 (new_tcpsock, ERROR);
+                                send_16 (new_tcpsock, ERROR);
                                 return;
                             }
 
@@ -1197,10 +1197,10 @@ void gadget_event (S2 screennum)
                                 printf ("gadget_event: button gadget %i selected.\n", i);
 
                                 /* send data */
-                                send_8 (new_tcpsock, OK);
-                                send_8 (new_tcpsock, GADGET);
+                                send_16 (new_tcpsock, OK);
+                                send_16 (new_tcpsock, GADGET);
                                 send_16 (new_tcpsock, i);
-                                send_8 (new_tcpsock, END);
+                                send_16 (new_tcpsock, END);
                                 return;
                             }
                         }
@@ -1231,7 +1231,7 @@ void gadget_event (S2 screennum)
                                     if (! draw_gadget_checkbox (screennum, i, GADGET_SELECTED, checkbox->value))
                                     {
                                         printf ("gadget_event: error can't draw gadget!\n");
-                                        send_8 (new_tcpsock, ERROR);
+                                        send_16 (new_tcpsock, ERROR);
                                         return;
                                     }
                                 }
@@ -1242,7 +1242,7 @@ void gadget_event (S2 screennum)
                                     if (! draw_gadget_checkbox (screennum, i, GADGET_NOT_SELECTED, checkbox->value))
                                     {
                                         printf ("gadget_event: error can't draw gadget!\n");
-                                        send_8 (new_tcpsock, ERROR);
+                                        send_16 (new_tcpsock, ERROR);
                                         return;
                                     }
                                 }
@@ -1251,7 +1251,7 @@ void gadget_event (S2 screennum)
                             if (! draw_gadget_checkbox (screennum, i, GADGET_NOT_SELECTED, checkbox->value))
                             {
                                 printf ("gadget_event: error can't draw gadget!\n");
-                                send_8 (new_tcpsock, ERROR);
+                                send_16 (new_tcpsock, ERROR);
                                 return;
                             }
 
@@ -1271,19 +1271,19 @@ void gadget_event (S2 screennum)
                                 if (! draw_gadget_checkbox (screennum, i, GADGET_NOT_SELECTED, checkbox->value))
                                 {
                                     printf ("gadget_event: error can't draw gadget!\n");
-                                    send_8 (new_tcpsock, ERROR);
+                                    send_16 (new_tcpsock, ERROR);
                                     return;
                                 }
 
                                 printf ("gadget_event: checkbox gadget %i selected.\n", i);
 
                                 /* send data */
-                                send_8 (new_tcpsock, OK);
-                                send_8 (new_tcpsock, GADGET);
+                                send_16 (new_tcpsock, OK);
+                                send_16 (new_tcpsock, GADGET);
                                 send_16 (new_tcpsock, i);
-                                send_8 (new_tcpsock, GADGET_INT_VALUE);
+                                send_16 (new_tcpsock, GADGET_INT_VALUE);
                                 send_16 (new_tcpsock, checkbox->value);
-                                send_8 (new_tcpsock, END);
+                                send_16 (new_tcpsock, END);
                                 return;
                             }
                         }
@@ -1314,7 +1314,7 @@ void gadget_event (S2 screennum)
                                     if (! draw_gadget_cycle (screennum, i, GADGET_SELECTED, cycle->value))
                                     {
                                         printf ("gadget_event: error can't draw gadget!\n");
-                                        send_8 (new_tcpsock, ERROR);
+                                        send_16 (new_tcpsock, ERROR);
                                         return;
                                     }
                                 }
@@ -1325,7 +1325,7 @@ void gadget_event (S2 screennum)
                                     if (! draw_gadget_cycle (screennum, i, GADGET_NOT_SELECTED, cycle->value))
                                     {
                                         printf ("gadget_event: error can't draw gadget!\n");
-                                        send_8 (new_tcpsock, ERROR);
+                                        send_16 (new_tcpsock, ERROR);
                                         return;
                                     }
                                 }
@@ -1334,7 +1334,7 @@ void gadget_event (S2 screennum)
                             if (! draw_gadget_cycle (screennum, i, GADGET_NOT_SELECTED, cycle->value))
                             {
                                 printf ("gadget_event: error can't draw gadget!\n");
-                                send_8 (new_tcpsock, ERROR);
+                                send_16 (new_tcpsock, ERROR);
                                 return;
                             }
 
@@ -1345,7 +1345,7 @@ void gadget_event (S2 screennum)
                                 if (! draw_gadget_cycle (screennum, i, GADGET_MENU_DOWN, cycle->value))
                                 {
                                     printf ("gadget_event: error can't draw gadget!\n");
-                                    send_8 (new_tcpsock, ERROR);
+                                    send_16 (new_tcpsock, ERROR);
                                     return;
                                 }
 
@@ -1430,7 +1430,7 @@ void gadget_event (S2 screennum)
                                             if (! draw_gadget_cycle (screennum, i, GADGET_MENU_DOWN, cycle->value))
                                             {
                                                 printf ("gadget_event: error can't draw gadget!\n");
-                                                send_8 (new_tcpsock, ERROR);
+                                                send_16 (new_tcpsock, ERROR);
                                                 return;
                                             }
                                         }
@@ -1461,7 +1461,7 @@ void gadget_event (S2 screennum)
                                             if (! draw_gadget_cycle (screennum, i, GADGET_MENU_DOWN, cycle->value))
                                             {
                                                 printf ("gadget_event: error can't draw gadget!\n");
-                                                send_8 (new_tcpsock, ERROR);
+                                                send_16 (new_tcpsock, ERROR);
                                                 return;
                                             }
                                         }
@@ -1495,18 +1495,18 @@ void gadget_event (S2 screennum)
                                 if (! draw_gadget_cycle (screennum, i, GADGET_MENU_UP, cycle->value))
                                 {
                                     printf ("gadget_event: error can't draw gadget!\n");
-                                    send_8 (new_tcpsock, ERROR);
+                                    send_16 (new_tcpsock, ERROR);
                                     return;
                                 }
 
                                 printf ("gadget_event: cycle gadget %i selected.\n", i);
 
-                                send_8 (new_tcpsock, OK);
-                                send_8 (new_tcpsock, GADGET);
+                                send_16 (new_tcpsock, OK);
+                                send_16 (new_tcpsock, GADGET);
                                 send_16 (new_tcpsock, i);
-                                send_8 (new_tcpsock, GADGET_INT_VALUE);
+                                send_16 (new_tcpsock, GADGET_INT_VALUE);
                                 send_16 (new_tcpsock, cycle->value);
-                                send_8 (new_tcpsock, END);
+                                send_16 (new_tcpsock, END);
                                 return;
                             }
                         }
@@ -1537,7 +1537,7 @@ void gadget_event (S2 screennum)
                                     if (! event_gadget_string (screennum, i))
                                     {
                                         printf ("gadget_event: error can't draw gadget!\n");
-                                        send_8 (new_tcpsock, ERROR);
+                                        send_16 (new_tcpsock, ERROR);
                                         return;
                                     }
                                     else
@@ -1549,18 +1549,18 @@ void gadget_event (S2 screennum)
 										if (! draw_gadget_string (screennum, i, GADGET_NOT_SELECTED))
 										{
 											printf ("gadget_event: error can't draw gadget!\n");
-											send_8 (new_tcpsock, ERROR);
+											send_16 (new_tcpsock, ERROR);
 											return;
 										}
 
 										/* send data */
-										send_8 (new_tcpsock, OK);
-										send_8 (new_tcpsock, GADGET);
+										send_16 (new_tcpsock, OK);
+										send_16 (new_tcpsock, GADGET);
 										send_16 (new_tcpsock, i);
-										send_8 (new_tcpsock, GADGET_STRING_VALUE);
+										send_16 (new_tcpsock, GADGET_STRING_VALUE);
 										send_line_string (new_tcpsock, string->value);
 										send_line_string (new_tcpsock, "");         /* send empty line, to mark end of string */
-										send_8 (new_tcpsock, END);
+										send_16 (new_tcpsock, END);
 										return;
 									}
                                 }
@@ -1571,7 +1571,7 @@ void gadget_event (S2 screennum)
                                     if (! draw_gadget_string (screennum, i, GADGET_NOT_SELECTED))
                                     {
                                         printf ("gadget_event: error can't draw gadget!\n");
-                                        send_8 (new_tcpsock, ERROR);
+                                        send_16 (new_tcpsock, ERROR);
                                         return;
                                     }
                                 }
@@ -1580,7 +1580,7 @@ void gadget_event (S2 screennum)
                             if (! draw_gadget_string (screennum, i, GADGET_NOT_SELECTED))
                             {
                                 printf ("gadget_event: error can't draw gadget!\n");
-                                send_8 (new_tcpsock, ERROR);
+                                send_16 (new_tcpsock, ERROR);
                                 return;
                             }
 
@@ -1591,13 +1591,13 @@ void gadget_event (S2 screennum)
                                 printf ("gadget_event: string gadget %i selected.\n", i);
 
                                 /* send data */
-                                send_8 (new_tcpsock, OK);
-                                send_8 (new_tcpsock, GADGET);
+                                send_16 (new_tcpsock, OK);
+                                send_16 (new_tcpsock, GADGET);
                                 send_16 (new_tcpsock, i);
-                                send_8 (new_tcpsock, GADGET_STRING_VALUE);
+                                send_16 (new_tcpsock, GADGET_STRING_VALUE);
                                 send_line_string (new_tcpsock, string->value);
                                 send_line_string (new_tcpsock, "");         /* send empty line, to mark end of string */
-                                send_8 (new_tcpsock, END);
+                                send_16 (new_tcpsock, END);
                                 return;
                             }
                         }
@@ -1629,10 +1629,10 @@ void gadget_event (S2 screennum)
                                 printf ("gadget_event: box gadget %i selected.\n", i);
 
                                 /* send data */
-                                send_8 (new_tcpsock, OK);
-                                send_8 (new_tcpsock, GADGET);
+                                send_16 (new_tcpsock, OK);
+                                send_16 (new_tcpsock, GADGET);
                                 send_16 (new_tcpsock, i);
-                                send_8 (new_tcpsock, END);
+                                send_16 (new_tcpsock, END);
                                 return;
                             }
                         }
@@ -2492,7 +2492,7 @@ void get_gadget_x2y2 (S2 screennum)
     }
 
     /* send data */
-    send_8 (new_tcpsock, OK);
+    send_16 (new_tcpsock, OK);
     send_16 (new_tcpsock, x2);
     send_16 (new_tcpsock, y2);
 }

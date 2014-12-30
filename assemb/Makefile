@@ -104,32 +104,32 @@ am_nanoa_OBJECTS = main.$(OBJEXT) loadp.$(OBJEXT) saveo.$(OBJEXT) \
 nanoa_OBJECTS = $(am_nanoa_OBJECTS)
 nanoa_LDADD = $(LDADD)
 nanoa_DEPENDENCIES = ../lib/libshared.a
-AM_V_P = $(am__v_P_$(V))
-am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))
+AM_V_P = $(am__v_P_@AM_V@)
+am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
 am__v_P_1 = :
-AM_V_GEN = $(am__v_GEN_$(V))
-am__v_GEN_ = $(am__v_GEN_$(AM_DEFAULT_VERBOSITY))
+AM_V_GEN = $(am__v_GEN_@AM_V@)
+am__v_GEN_ = $(am__v_GEN_@AM_DEFAULT_V@)
 am__v_GEN_0 = @echo "  GEN     " $@;
 am__v_GEN_1 = 
-AM_V_at = $(am__v_at_$(V))
-am__v_at_ = $(am__v_at_$(AM_DEFAULT_VERBOSITY))
+AM_V_at = $(am__v_at_@AM_V@)
+am__v_at_ = $(am__v_at_@AM_DEFAULT_V@)
 am__v_at_0 = @
 am__v_at_1 = 
-DEFAULT_INCLUDES = -I. -I$(top_builddir)
+DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-AM_V_CC = $(am__v_CC_$(V))
-am__v_CC_ = $(am__v_CC_$(AM_DEFAULT_VERBOSITY))
+AM_V_CC = $(am__v_CC_@AM_V@)
+am__v_CC_ = $(am__v_CC_@AM_DEFAULT_V@)
 am__v_CC_0 = @echo "  CC      " $@;
 am__v_CC_1 = 
 CCLD = $(CC)
 LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-AM_V_CCLD = $(am__v_CCLD_$(V))
-am__v_CCLD_ = $(am__v_CCLD_$(AM_DEFAULT_VERBOSITY))
+AM_V_CCLD = $(am__v_CCLD_@AM_V@)
+am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
 SOURCES = $(nanoa_SOURCES)
@@ -160,19 +160,19 @@ am__define_uniq_tagged_files = \
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = aclocal-1.14
-AMTAR = $${TAR-tar}
-AM_DEFAULT_VERBOSITY = 1
-AUTOCONF = autoconf
-AUTOHEADER = autoheader
-AUTOMAKE = automake-1.14
+ACLOCAL = ${SHELL} /home/stefan/Seafile/sources-sync/git/nanovm-3.3.3-2/missing --run aclocal-1.9
+AMTAR = ${SHELL} /home/stefan/Seafile/sources-sync/git/nanovm-3.3.3-2/missing --run tar
+AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
+AUTOCONF = ${SHELL} /home/stefan/Seafile/sources-sync/git/nanovm-3.3.3-2/missing --run autoconf
+AUTOHEADER = ${SHELL} /home/stefan/Seafile/sources-sync/git/nanovm-3.3.3-2/missing --run autoheader
+AUTOMAKE = ${SHELL} /home/stefan/Seafile/sources-sync/git/nanovm-3.3.3-2/missing --run automake-1.9
 AWK = gawk
-CC = gcc
+CC = arm-linux-androideabi-gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -ffast-math -fomit-frame-pointer -O6 -march=core2
-CPP = gcc -E
+CFLAGS = -marm -march=armv7-a -mfloat-abi=softfp -Wcast-align -fno-strict-aliasing -O0 -I/home/stefan/build/ndk-r10-arm-linux-androideabi-4.8-15/sysroot/usr/include
+CPP = arm-linux-androideabi-cpp
 CPPFLAGS = 
-CXX = g++
+CXX = arm-linux-androideabi-g++
 CXXDEPMODE = depmode=gcc3
 CXXFLAGS = -g -O2
 CYGPATH_W = echo
@@ -188,38 +188,38 @@ INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
-INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-LDFLAGS = -lrt
-LIBOBJS = 
-LIBS = -lpthread 
-LTLIBOBJS = 
-MAKEINFO = makeinfo
-MKDIR_P = /bin/mkdir -p
+INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
+LDFLAGS = -marm -march=armv7-a -Wl,--fix-cortex-a8 -llog -landroid -lc -L/home/stefan/build/ndk-r10-arm-linux-androideabi-4.8-15/sysroot/usr/lib
+LIBOBJS =  ${LIBOBJDIR}malloc$U.o
+LIBS = 
+LTLIBOBJS =  ${LIBOBJDIR}malloc$U.lo
+MAKEINFO = ${SHELL} /home/stefan/Seafile/sources-sync/git/nanovm-3.3.3-2/missing --run makeinfo
+MKDIR_P = @MKDIR_P@
 OBJEXT = o
 PACKAGE = nanovm
 PACKAGE_BUGREPORT = jay-t@gmx.net
 PACKAGE_NAME = nanovm
-PACKAGE_STRING = nanovm 3.3.2
+PACKAGE_STRING = nanovm 3.1.1
 PACKAGE_TARNAME = nanovm
 PACKAGE_URL = 
-PACKAGE_VERSION = 3.3.2
+PACKAGE_VERSION = 3.1.1
 PATH_SEPARATOR = :
-RANLIB = ranlib
+RANLIB = arm-linux-androideabi-ranlib
 SET_MAKE = 
 SHELL = /bin/bash
-STRIP = 
-VERSION = 3.3.2
-abs_builddir = /home/stefan/Seafile/sources-sync/git/nanovm-3.3.3/assemb
-abs_srcdir = /home/stefan/Seafile/sources-sync/git/nanovm-3.3.3/assemb
-abs_top_builddir = /home/stefan/Seafile/sources-sync/git/nanovm-3.3.3
-abs_top_srcdir = /home/stefan/Seafile/sources-sync/git/nanovm-3.3.3
-ac_ct_CC = gcc
-ac_ct_CXX = g++
+STRIP = arm-linux-androideabi-strip
+VERSION = 3.1.1
+abs_builddir = /home/stefan/Seafile/sources-sync/git/nanovm-3.3.3-2/assemb
+abs_srcdir = /home/stefan/Seafile/sources-sync/git/nanovm-3.3.3-2/assemb
+abs_top_builddir = /home/stefan/Seafile/sources-sync/git/nanovm-3.3.3-2
+abs_top_srcdir = /home/stefan/Seafile/sources-sync/git/nanovm-3.3.3-2
+ac_ct_CC = 
+ac_ct_CXX = 
 am__include = include
 am__leading_dot = .
 am__quote = 
-am__tar = $${TAR-tar} chof - "$$tardir"
-am__untar = $${TAR-tar} xf -
+am__tar = ${AMTAR} chof - "$$tardir"
+am__untar = ${AMTAR} xf -
 bindir = ${exec_prefix}/bin
 build_alias = 
 builddir = .
@@ -228,20 +228,20 @@ datarootdir = ${prefix}/share
 docdir = ${datarootdir}/doc/${PACKAGE_TARNAME}
 dvidir = ${docdir}
 exec_prefix = ${prefix}
-host_alias = 
+host_alias = arm-linux-androideabi
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /home/stefan/Seafile/sources-sync/git/nanovm-3.3.3/install-sh
+install_sh = /home/stefan/Seafile/sources-sync/git/nanovm-3.3.3-2/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
 localstatedir = ${prefix}/var
 mandir = ${datarootdir}/man
-mkdir_p = $(MKDIR_P)
+mkdir_p = mkdir -p --
 oldincludedir = /usr/include
 pdfdir = ${docdir}
-prefix = /usr/local
+prefix = /home/stefan/build/ndk-r10-arm-linux-androideabi-4.8-15/usr
 program_transform_name = s,x,x,
 psdir = ${docdir}
 sbindir = ${exec_prefix}/sbin
@@ -372,14 +372,14 @@ include ./$(DEPDIR)/var.Po
 	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
 #	$(AM_V_CC)source='$<' object='$@' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(COMPILE) -c -o $@ $<
+#	$(AM_V_CC@am__nodep@)$(COMPILE) -c -o $@ $<
 
 .c.obj:
 	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
 	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
 #	$(AM_V_CC)source='$<' object='$@' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(COMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+#	$(AM_V_CC@am__nodep@)$(COMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique

@@ -1,4 +1,5 @@
 // UPDATE: 1.2 computer and player can start the game -> do the first move.
+// Multiplayer for two players over TCP/IP socket.
 
 func main ()
     #NESTED_CODE_ON;

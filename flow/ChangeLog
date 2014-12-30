@@ -1,3 +1,12 @@
+flow (0.6.3)
+	Now command is received as a short int 16 bit number.
+	And data types start with number 10001!
+	gadgets.c: gadgets event uses now 16 bit for return data.
+	
+	New: save screen as bit map picture (.bmp).
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Mon 29 Dec 2014 20:22 +0100
+
 flow (0.6.2)
 	New: cycle gadget change function, change selected item.
 	New: in start menu the user can set a server ip to let a remote

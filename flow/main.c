@@ -305,7 +305,7 @@ void create_screen_copy_surface (void)
 		#endif
 
 		screen_copy = SDL_CreateRGBSurface (SDL_SWSURFACE, screen[screennum].width, screen[screennum].height, screen[screennum].video_bpp, 0, 0, 0, 0);
-		if(screen_copy == NULL) 
+		if (screen_copy == NULL) 
 		{
 			fprintf(stderr, "CreateRGBSurface failed: %s\n", SDL_GetError());
 			exit(1);
@@ -852,6 +852,35 @@ U1 load_picture (S2 screennum)
     return (TRUE);
 }
 
+U1 save_picture (S2 screennum)
+{
+	SDL_Surface *output_surf;
+	Uint32 rmask, gmask, bmask, amask;
+
+	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+	rmask = 0xff000000; gmask = 0x00ff0000; bmask = 0x0000ff00; amask = 0x000000ff;
+	#else
+	rmask = 0x000000ff; gmask = 0x0000ff00; bmask = 0x00ff0000; amask = 0xff000000;
+	#endif
+	
+	update_screen (screennum);
+	
+	/* Creating the output surface to save */
+//	output_surf = SDL_CreateRGBSurface (screen[screennum].bmap->flags, screen[screennum].bmap->w, screen[screennum].bmap->h, screen[screennum].bmap->format->BitsPerPixel, rmask, gmask, bmask, amask);
+	output_surf = SDL_CreateRGBSurface (screen[screennum].bmap->flags, screen[screennum].bmap->w, screen[screennum].bmap->h, screen[screennum].bmap->format->BitsPerPixel, 0, 0, 0, 0);
+	copy_surface (screen[screennum].bmap, NULL, output_surf, NULL);
+
+	if (SDL_SaveBMP (output_surf, screen[screennum].picture_name) < 0)
+	{
+		SDL_FreeSurface (output_surf);
+		return (FALSE);
+	}
+	else
+	{
+		SDL_FreeSurface (output_surf);
+		return (TRUE);
+	}
+}
 
 /*
  * Return the pixel value at (x, y)
@@ -966,9 +995,10 @@ U1 restore_screen ()
 
 U1 read_command ()
 {
-    U1 arg[256], command, ret_command = 0, endconn = FALSE;
+    U1 arg[256], endconn = FALSE;
     U2 buf2;
     S2 i;
+	S2 command, ret_command = 0;
 	U2 ret;
     SDL_Event event;
 	U1 resized = 0;
@@ -1011,7 +1041,7 @@ wait_command:
 		// update_screen (0);
 		
 #endif		
-        if (! read_8 (new_tcpsock, &command))
+        if (! read_16 (new_tcpsock, &command))
         {
             printf ("error: can't read command!\n");
 			
@@ -1028,7 +1058,7 @@ wait_command:
 		LOGD("read-command: %i\n", command);
 #endif
 
-        if (command >= END && command <= RPI_GPIO_WRITE)
+        if (command >= END && command <= SAVE_PICTURE)
         {
             switch (command)
             {
@@ -1455,6 +1485,17 @@ wait_command:
 				case RPI_GPIO_WRITE:
 					rpi_gpio_write (rpi.value);
 					break;
+					
+				case SAVE_PICTURE:
+					if (save_picture (screennum))
+                    {
+                        send_8 (new_tcpsock, OK);
+                    }
+                    else
+                    {
+                        send_8 (new_tcpsock, ERROR);
+                    }
+                    break;
             }
         }
 
@@ -2378,7 +2419,7 @@ S2 get_server_ip (U1 *ip)
 	U1 command_shell[256];
 	pid_t pID;
 	
-    printf ("flow 0.6.2\n");
+    printf ("flow 0.6.3\n");
 
 	
     if (ac < 2)

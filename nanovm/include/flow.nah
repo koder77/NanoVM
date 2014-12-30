@@ -1,7 +1,10 @@
-//  $VER: flow.nah 0.8 (13.11.13)
+//  $VER: flow.nah 0.9 (30.12.14)
 //  graphics & sound library
 // 	RS232 receive/send
-//
+//	Raspberry Pi GPIO read/write
+//	
+//	0.9: new: data types start with 10001! This version is not backwards compatible with old versions!
+//		 new: screens can be saved as a bitmap picture .bmp.
 //	0.8: new: progress bar gadget.
 //	0.7: new: RS232 receive/send functions, see end of code.
 
@@ -22,7 +25,7 @@ lab nanogfx_init;
     int gadget_color_backgr_light; int gadget_color_backgr_shadow;
     int gadget_color_text_light; int gadget_color_text_shadow;
     int gadget_button; int gadget_checkbox; int gadget_cycle; int gadget_string; int gadget_box; int gadget_event;
-    int gadget_get_x2y2; int gadget_checkbox_change; int gadget_string_change; int gadget_box_change;
+    int gadget_get_x2y2; int gadget_checkbox_change; int gadget_cycle_change; int gadget_string_change; int gadget_box_change;
 
     int sound_play_wav; int sound_stop_channel; int sound_play_music; int sound_stop_music;
 
@@ -31,6 +34,12 @@ lab nanogfx_init;
 //	RS232 send/receive functions
     int rs232_open_comport; int rs232_poll_comport; int rs232_send_byte; int rs232_send_buf; int rs232_close_comport;
 
+//	RPI GPIO functions
+	int rpi_gpio_start; int rpi_gpio_mode; int rpi_gpio_read; int rpi_gpio_write;
+	
+//  save screen as picture
+	int save_picture;
+	
 //  type definitions
 
     int screennum; int width; int height; int bit;
@@ -54,348 +63,378 @@ lab nanogfx_init;
 //	RS232 type definitions
     int rs232_comport_number; int rs232_baudrate; int rs232_buf_size; int rs232_byte; int rs232_buf;
 
+//	RPI GPIO type defs
+	int rpi_gpio_pin; int rpi_gpio_value;
+	
 	int gadget_progress_bar_value;
 
+//	commands
     push_i          1, L0;
     pull_i          L0, end;
 
-    push_i          2, L0;
+    inc_l 			L0;
     pull_i          L0, shutdown;
 
-    push_i          3, L0;
+    inc_l 			L0;
     pull_i          L0, open_screen;
 
-    push_i          4, L0;
+    inc_l 			L0;
     pull_i          L0, close_screen;
 
-    push_i          5, L0;
+    inc_l 			L0;
     pull_i          L0, clear_screen;
 
-    push_i          6, L0;
+    inc_l 			L0;
     pull_i          L0, update_screen;
 
-    push_i          7, L0;
+    inc_l 			L0;
     pull_i          L0, color;
 
-    push_i          8, L0;
+    inc_l 			L0;
     pull_i          L0, pixel;
 
-    push_i          9, L0;
+    inc_l 			L0;
     pull_i          L0, line;
 
-    push_i          10, L0;
+    inc_l 			L0;
     pull_i          L0, rectangle;
 
-    push_i          11, L0;
+    inc_l 			L0;
     pull_i          L0, rectangle_fill;
 
-    push_i          12, L0;
+    inc_l 			L0;
     pull_i          L0, circle;
 
-    push_i          13, L0;
+    inc_l 			L0;
     pull_i          L0, circle_fill;
 
-    push_i          14, L0;
+    inc_l 			L0;
     pull_i          L0, ellipse;
 
-    push_i          15, L0;
+    inc_l 			L0;
     pull_i          L0, ellipse_fill;
 
-    push_i          16, L0;
+    inc_l 			L0;
     pull_i          L0, pie;
 
-    push_i          17, L0;
+    inc_l 			L0;
     pull_i          L0, pie_fill;
 
-    push_i          18, L0;
+    inc_l 			L0;
     pull_i          L0, trigon;
 
-    push_i          19, L0;
+    inc_l 			L0;
     pull_i          L0, trigon_fill;
 
-    push_i          20, L0;
+    inc_l 			L0;
     pull_i          L0, polygon;
 
-    push_i          21, L0;
+    inc_l 			L0;
     pull_i          L0, polygon_fill;
 
-    push_i          22, L0;
+    inc_l 			L0;
     pull_i          L0, bezier;
 
-    push_i          23, L0;
+    inc_l 			L0;
     pull_i          L0, text_bmap;
 
-    push_i          24, L0;
+    inc_l 			L0;
     pull_i          L0, loadfont_bmap;
 
-    push_i          25, L0;
+    inc_l 			L0;
     pull_i          L0, text_ttf;
 
-    push_i          26, L0;
+    inc_l 			L0;
     pull_i          L0, loadfont_ttf;
 
-    push_i          27, L0;
+    inc_l 			L0;
     pull_i          L0, load_picture;
 
-    push_i          28, L0;
+    inc_l 			L0;
     pull_i          L0, getpixel;
 
-    push_i          29, L0;
+    inc_l 			L0;
     pull_i          L0, getmouse;
 
-    push_i          30, L0;
+    inc_l 			L0;
     pull_i          L0, gadget_color_border_light;
 
-    push_i          31, L0;
+    inc_l 			L0;
     pull_i          L0, gadget_color_border_shadow;
 
-    push_i          32, L0;
+    inc_l 			L0;
     pull_i          L0, gadget_color_backgr_light;
 
-    push_i          33, L0;
+    inc_l 			L0;
     pull_i          L0, gadget_color_backgr_shadow;
 
-    push_i          34, L0;
+    inc_l 			L0;
     pull_i          L0, gadget_color_text_light;
 
-    push_i          35, L0;
+    inc_l 			L0;
     pull_i          L0, gadget_color_text_shadow;
 
-    push_i          36, L0;
+    inc_l 			L0;
     pull_i          L0, gadget_button;
 
-    push_i          37, L0;
+    inc_l 			L0;
     pull_i          L0, gadget_checkbox;
 
-    push_i          38, L0;
+    inc_l 			L0;
     pull_i          L0, gadget_cycle;
 
-    push_i          39, L0;
+    inc_l 			L0;
     pull_i          L0, gadget_string;
 
-    push_i          40, L0;
+    inc_l 			L0;
     pull_i          L0, gadget_box;
 
-	push_i			41, L0;
+	inc_l 			L0;
 	pull_i			L0, gadget_progress_bar;
 
-    push_i          42, L0;
+    inc_l 			L0;
     pull_i          L0, gadget_event;
 
-    push_i          43, L0;
+    inc_l 			L0;
     pull_i          L0, gadget_get_x2y2;
 
-    push_i          44, L0;
+    inc_l 			L0;
     pull_i          L0, gadget_checkbox_change;
 
-    push_i          45, L0;
+	inc_l 			L0;
+	pull_i			L0, gadget_cycle_change;
+	
+    inc_l 			L0;
     pull_i          L0, gadget_string_change;
 
-    push_i          46, L0;
+    inc_l 			L0;
     pull_i          L0, gadget_box_change;
 
-	push_i			47, L0;
+	inc_l 			L0;
 	pull_i			L0, gadget_progress_bar_change;
 	
-    push_i          48, L0;
+    inc_l 			L0;
     pull_i          L0, sound_play_wav;
 
-    push_i          49, L0;
+    inc_l 			L0;
     pull_i          L0, sound_stop_channel;
 
-    push_i          50, L0;
+    inc_l 			L0;
     pull_i          L0, sound_play_music;
 
-    push_i          51, L0;
+    inc_l 			L0;
     pull_i          L0, sound_stop_music;
 
-    push_i			52, L0;
+    inc_l 			L0;
     pull_i			L0, rs232_open_comport;
 
-    push_i			53, L0;
+    inc_l 			L0;
     pull_i			L0, rs232_poll_comport;
 
-    push_i			54, L0;
+    inc_l 			L0;
     pull_i			L0, rs232_send_byte;
 
-    push_i			55, L0;
+    inc_l 			L0;
     pull_i			L0, rs232_send_buf;
 
-    push_i			56, L0;
+    inc_l 			L0;
     pull_i			L0, rs232_close_comport;
 
-    push_i          57, L0;
+    inc_l 			L0;
+	pull_i			L0, rpi_gpio_start;
+	
+	inc_l 			L0;
+	pull_i			L0, rpi_gpio_mode;
+	
+	inc_l 			L0;
+	pull_i			L0, rpi_gpio_read;
+	
+	inc_l 			L0;
+	pull_i			L0, rpi_gpio_write;
+	
+	inc_l 			L0;
+	pull_i			L0, save_picture;
+	
+	
+//	types
+	push_i          10001, L0;
     pull_i          L0, screennum;
 
-    push_i          58, L0;
+    inc_l 			L0;
     pull_i          L0, width;
 
-    push_i          59, L0;
+    inc_l 			L0;
     pull_i          L0, height;
 
-    push_i          60, L0;
+    inc_l 			L0;
     pull_i          L0, bit;
 
-    push_i          61, L0;
+    inc_l 			L0;
     pull_i          L0, X;
 
-    push_i          62, L0;
+    inc_l 			L0;
     pull_i          L0, Y;
 
-    push_i          63, L0;
+    inc_l 			L0;
     pull_i          L0, X2;
 
-    push_i          64, L0;
+    inc_l 			L0;
     pull_i          L0, Y2;
 
-    push_i          65, L0;
+    inc_l 			L0;
     pull_i          L0, X3;
 
-    push_i          66, L0;
+    inc_l 			L0;
     pull_i          L0, Y3;
 
-    push_i          67, L0;
+    inc_l 			L0;
     pull_i          L0, vectors;
 
-    push_i          68, L0;
+    inc_l 			L0;
     pull_i          L0, steps;
 
-    push_i          69, L0;
+    inc_l 			L0;
     pull_i          L0, radius;
 
-    push_i          70, L0;
+    inc_l 			L0;
     pull_i          L0, Xradius;
 
-    push_i          71, L0;
+    inc_l 			L0;
     pull_i          L0, Yradius;
 
-    push_i          72, L0;
+    inc_l 			L0;
     pull_i          L0, startangle;
 
-    push_i          73, L0;
+    inc_l 			L0;
     pull_i          L0, endangle;
 
-    push_i          74, L0;
+    inc_l 			L0;
     pull_i          L0, r_c;
 
-    push_i          75, L0;
+    inc_l 			L0;
     pull_i          L0, g_c;
 
-    push_i          76, L0;
+    inc_l 			L0;
     pull_i          L0, b_c;
 
-    push_i          77, L0;
+    inc_l 			L0;
     pull_i          L0, r_bg;
 
-    push_i          78, L0;
+    inc_l 			L0;
     pull_i          L0, g_bg;
 
-    push_i          79, L0;
+    inc_l 			L0;
     pull_i          L0, b_bg;
 
-    push_i          80, L0;
+    inc_l 			L0;
     pull_i          L0, alpha;
 
-    push_i          81, L0;
+    inc_l 			L0;
     pull_i          L0, fontwidth;
 
-    push_i          82, L0;
+    inc_l 			L0;
     pull_i          L0, fontheight;
 
-    push_i          83, L0;
+    inc_l 			L0;
     pull_i          L0, fontsize;
 
-    push_i          84, L0;
+    inc_l 			L0;
     pull_i          L0, fontstyle;
 
-    push_i          85, L0;
+    inc_l 			L0;
     pull_i          L0, fontstyle_normal;
 
-    push_i          86, L0;
+    inc_l 			L0;
     pull_i          L0, fontstyle_bold;
 
-    push_i          87, L0;
+    inc_l 			L0;
     pull_i          L0, fontstyle_italic;
 
-    push_i          88, L0;
+    inc_l 			L0;
     pull_i          L0, fontstyle_underline;
 
-    push_i          89, L0;
+    inc_l 			L0;
     pull_i          L0, gadget;
 
-    push_i          90, L0;
+    inc_l 			L0;
     pull_i          L0, gadgets;
 
-    push_i          91, L0;
+    inc_l 			L0;
     pull_i          L0, gadget_status;
 
-    push_i          92, L0;
+    inc_l 			L0;
     pull_i          L0, gadget_int_value;
 
-    push_i          93, L0;
+    inc_l 			L0;
     pull_i          L0, gadget_cycle_entries;
 
-    push_i          94, L0;
+    inc_l 			L0;
     pull_i          L0, gadget_string_str_len;
 
-    push_i          95, L0;
+    inc_l 			L0;
     pull_i          L0, gadget_string_vis_len;
 
-    push_i          96, L0;
+    inc_l 			L0;
     pull_i          L0, VX;
 
-    push_i          97, L0;
+    inc_l 			L0;
     pull_i          L0, VY;
 
-    push_i          98, L0;
+    inc_l 			L0;
     pull_i          L0, text;
 
-    push_i          99, L0;
+    inc_l 			L0;
     pull_i          L0, screentitle;
 
-    push_i          100, L0;
+    inc_l 			L0;
     pull_i          L0, screenicon;
 
-    push_i          101, L0;
+    inc_l 			L0;
     pull_i          L0, picturename;
 
-    push_i          102, L0;
+    inc_l 			L0;
     pull_i          L0, fontname;
 
-    push_i          103, L0;
+    inc_l 			L0;
     pull_i          L0, gadget_string_value;
 
-    push_i          104, L0;
+    inc_l 			L0;
     pull_i          L0, gadget_cycle_text;
 
-    push_i          105, L0;
+    inc_l 			L0;
     pull_i          L0, sound_wav_file;
 
-    push_i          106, L0;
+    inc_l 			L0;
     pull_i          L0, sound_channel;
 
-    push_i          107, L0;
+    inc_l 			L0;
     pull_i          L0, sound_loops;
 
-    push_i          108, L0;
+    inc_l 			L0;
     pull_i          L0, sound_music_file;
 
-	push_i			109, L0;
+	inc_l 			L0;
 	pull_i			L0, rs232_comport_number;
 
-	push_i			110, L0;
+	inc_l 			L0;
 	pull_i			L0, rs232_baudrate;
 
-	push_i			111, L0;
+	inc_l 			L0;
 	pull_i			L0, rs232_buf_size;
 
-	push_i			112, L0;
+	inc_l 			L0;
 	pull_i			L0, rs232_byte;
 
-	push_i			113, L0;
+	inc_l 			L0;
 	pull_i			L0, rs232_buf;
 	
-	push_i			114, L0;
+	inc_l 			L0;
+	pull_i			L0, rpi_gpio_pin;
+	
+	inc_l 			L0;
+	pull_i			L0, rpi_gpio_value;
+	
+	inc_l 			L0;
 	pull_i			L0, gadget_progress_bar_value;
 
     rts;
@@ -438,37 +477,37 @@ lab nanogfx_openscreen;
     stpull_l        socket;
 
     push_i          screennum, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, screen;
 
     push_i          screentitle, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_s        socket, _nanogfx_screentitle;
     swrite_n        socket, one;
 
     push_i          screenicon, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_s        socket, _nanogfx_screenicon;
     swrite_n        socket, one;
 
     push_i          width, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _width;
 
     push_i          height, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _height;
 
     push_i          bit, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _bit;
 
     push_i          alpha, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _alpha;
 
     push_i          open_screen, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
 
     sread_b         socket, ret;
     stpush_l        ret;
@@ -501,11 +540,11 @@ lab nanogfx_closescreen;
     stpull_l        socket;
 
     push_i          screennum, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, screen;
 
     push_i          close_screen, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
 
     sread_b         socket, ret;
     stpush_l        ret;
@@ -532,7 +571,7 @@ lab nanogfx_clearscreen;
     stpull_l        socket;
 
     push_i          clear_screen, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
 
     sread_b         socket, ret;
     stpush_l        ret;
@@ -558,7 +597,7 @@ lab nanogfx_updatescreen;
     stpull_l        socket;
 
     push_i          update_screen, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
 
     sread_b         socket, ret;
     stpush_l        ret;
@@ -584,7 +623,7 @@ lab nanogfx_end;
     stpull_l        socket;
 
     push_i          end, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
 
     sread_b         socket, ret;
     stpush_l        ret;
@@ -610,7 +649,7 @@ lab nanogfx_shutdown;
     stpull_l        socket;
 
     push_i          shutdown, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
 
     sread_b         socket, ret;
     stpush_l        ret;
@@ -637,7 +676,7 @@ lab nanogfx_screen;
     stpull_l        socket;
 
     push_i          screennum, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, screen;
     rts;
 #ASSEMB_END
@@ -666,15 +705,15 @@ lab nanogfx_color;
     stpull_l        socket;
 
     push_i          r_c, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, r;
 
     push_i          g_c, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, g;
 
     push_i          b_c, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, b;
     rts;
 #ASSEMB_END
@@ -703,15 +742,15 @@ lab nanogfx_color_bg;
     stpull_l        socket;
 
     push_i          r_bg, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, r;
 
     push_i          g_bg, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, g;
 
     push_i          b_bg, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, b;
     rts;
 #ASSEMB_END
@@ -736,7 +775,7 @@ lab nanogfx_alpha;
     stpull_l        socket;
 
     push_i          alpha, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _alpha;
     rts;
 #ASSEMB_END
@@ -768,23 +807,23 @@ lab nanogfx_line;
     stpull_l        socket;
 
     push_i          X, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, x;
 
     push_i          Y, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, y;
 
     push_i          X2, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, x2;
 
     push_i          Y2, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, y2;
 
     push_i          line, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
 
     sread_b         socket, ret;
     stpush_l        ret;
@@ -814,15 +853,15 @@ lab nanogfx_pixel;
     stpull_l        socket;
 
     push_i          X, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, x;
 
     push_i          Y, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, y;
 
     push_i          pixel, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
 
     sread_b         socket, ret;
     stpush_l        ret;
@@ -869,22 +908,22 @@ lab nanogfx_rectangle_main;
     stpull_l        socket;
 
     push_i          X, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, x;
 
     push_i          Y, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, y;
 
     push_i          X2, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, x2;
 
     push_i          Y2, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, y2;
 
-    swrite_b        socket, gcomm;
+    swrite_i        socket, gcomm;
 
     sread_b         socket, ret;
     stpush_l        ret;
@@ -928,18 +967,18 @@ lab nanogfx_circle_main;
     stpull_l        socket;
 
     push_i          X, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, x;
 
     push_i          Y, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, y;
 
     push_i          radius, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _radius;
 
-    swrite_b        socket, gcomm;
+    swrite_i        socket, gcomm;
 
     sread_b         socket, ret;
     stpush_l        ret;
@@ -985,22 +1024,22 @@ lab nanogfx_ellipse_main;
     stpull_l        socket;
 
     push_i          X, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, x;
 
     push_i          Y, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, y;
 
     push_i          Xradius, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, xradius;
 
     push_i          Yradius, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, yradius;
 
-    swrite_b        socket, gcomm;
+    swrite_i        socket, gcomm;
 
     sread_b         socket, ret;
     stpush_l        ret;
@@ -1048,26 +1087,26 @@ lab nanogfx_pie_main;
     stpull_l        socket;
 
     push_i          X, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, x;
 
     push_i          Y, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, y;
 
     push_i          radius, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _radius;
 
     push_i          startangle, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _startangle;
 
     push_i          endangle, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _endangle;
 
-    swrite_b        socket, gcomm;
+    swrite_i        socket, gcomm;
 
     sread_b         socket, ret;
     stpush_l        ret;
@@ -1117,30 +1156,30 @@ lab nanogfx_trigon_main;
     stpull_l        socket;
 
     push_i          X, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, x;
 
     push_i          Y, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, y;
 
     push_i          X2, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, x2;
 
     push_i          Y2, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, y2;
 
     push_i          X3, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, x3;
 
     push_i          Y3, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, y3;
 
-    swrite_b        socket, gcomm;
+    swrite_i        socket, gcomm;
 
     sread_b         socket, ret;
     stpush_l        ret;
@@ -1199,7 +1238,7 @@ lab nanogfx_polygon_main;
     stpull_l        socket;
 
     push_i          vectors, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _vectors;
 
     move_l          null, i;
@@ -1243,18 +1282,18 @@ lab nanogfx_bezier;
     stpull_l        socket;
 
     push_i          steps, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _steps;
 
     push_i          vectors, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _vectors;
 
     move_l          null, i;
     jsr             nanogfx_send_vector_data;
 
     push_i          bezier, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
 
     sread_b         socket, ret;
     stpush_l        ret;
@@ -1282,11 +1321,11 @@ lab nanogfx_send_vector_data;
     inc_l           i;
 
     push_i          VX, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, x;
 
     push_i          VY, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, y;
 
     ls_jmp_l        i, _vectors, nanogfx_send_vector_data;
@@ -1322,20 +1361,20 @@ lab nanogfx_loadfont_bmap;
     stpull_l        socket;
 
     push_i          fontname, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_s        socket, _nanogfx_fontname;
     swrite_n        socket, one;
 
     push_i          fontwidth, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _fontwidth;
 
     push_i          fontheight, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _fontheight;
 
     push_i          loadfont_bmap, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
 
     sread_b         socket, ret;
     stpush_l        ret;
@@ -1371,20 +1410,20 @@ lab nanogfx_text_bmap;
     stpull_l        socket;
 
     push_i          X, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, x;
 
     push_i          Y, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, y;
 
     push_i          text, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_s        socket, _nanogfx_text;
     swrite_n        socket, one;
 
     push_i          text_bmap, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
 
     sread_b         socket, ret;
     stpush_l        ret;
@@ -1418,16 +1457,16 @@ lab nanogfx_loadfont_ttf;
     stpull_l        socket;
 
     push_i          fontname, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_s        socket, _nanogfx_fontname;
     swrite_n        socket, one;
 
     push_i          fontsize, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _fontsize;
 
     push_i          loadfont_ttf, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
 
     sread_b         socket, ret;
     stpush_l        ret;
@@ -1454,7 +1493,7 @@ lab nanogfx_text_style_ttf;
     stpull_l        socket;
 
     push_i          fontstyle, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, style;
     rts;
 #ASSEMB_END
@@ -1487,20 +1526,20 @@ lab nanogfx_text_ttf;
     stpull_l        socket;
 
     push_i          X, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, x;
 
     push_i          Y, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, y;
 
     push_i          text, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_s        socket, _nanogfx_text;
     swrite_n        socket, one;
 
     push_i          text_ttf, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
 
     sread_b         socket, ret;
     stpush_l        ret;
@@ -1536,20 +1575,20 @@ lab nanogfx_load_picture;
     stpull_l        socket;
 
     push_i          X, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, x;
 
     push_i          Y, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, y;
 
     push_i          picturename, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_s        socket, _nanogfx_picture_name;
     swrite_n        socket, one;
 
     push_i          load_picture, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
 
     sread_b         socket, ret;
     stpush_l        ret;
@@ -1586,15 +1625,15 @@ lab nanogfx_getpixel;
     stpull_l        socket;
 
     push_i          X, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, x;
 
     push_i          Y, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, y;
 
     push_i          getpixel, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
 
     sread_b         socket, ret;
     neq_jmp_l       ret, null, nanogfx_getpixel_end;
@@ -1638,7 +1677,7 @@ lab nanogfx_getmouse;
     stpull_l        socket;
 
     push_i          getmouse, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
 
     sread_b         socket, ret;
     neq_jmp_l       ret, null, nanogfx_getmouse_end;
@@ -1676,7 +1715,7 @@ lab nanogfx_gadgets;
     stpull_l        socket;
 
     push_i          gadgets, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _gadgets;
     rts;
 #ASSEMB_END
@@ -1699,7 +1738,7 @@ lab nanogfx_gadget_color_border_light;
     stpull_l        socket;
 
     push_i          gadget_color_border_light, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     rts;
 #ASSEMB_END
 
@@ -1721,7 +1760,7 @@ lab nanogfx_gadget_color_border_shadow;
     stpull_l        socket;
 
     push_i          gadget_color_border_shadow, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     rts;
 #ASSEMB_END
 
@@ -1743,7 +1782,7 @@ lab nanogfx_gadget_color_background_light;
     stpull_l        socket;
 
     push_i          gadget_color_backgr_light, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     rts;
 #ASSEMB_END
 
@@ -1765,7 +1804,7 @@ lab nanogfx_gadget_color_background_shadow;
     stpull_l        socket;
 
     push_i          gadget_color_backgr_shadow, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     rts;
 #ASSEMB_END
 
@@ -1787,7 +1826,7 @@ lab nanogfx_gadget_color_text_light;
     stpull_l        socket;
 
     push_i          gadget_color_text_light, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     rts;
 #ASSEMB_END
 
@@ -1809,7 +1848,7 @@ lab nanogfx_gadget_color_text_shadow;
     stpull_l        socket;
 
     push_i          gadget_color_text_shadow, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     rts;
 #ASSEMB_END
 
@@ -1846,28 +1885,28 @@ lab nanogfx_set_gadget_button;
     stpull_l        socket;
 
     push_i          gadget, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _gadget;
 
     push_i          X, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, x;
 
     push_i          Y, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, y;
 
     push_i          gadget_status, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _gadget_status;
 
     push_i          text, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_s        socket, _nanogfx_text;
     swrite_n        socket, one;
 
     push_i          gadget_button, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
 
     sread_b         socket, ret;
     stpush_l        ret;
@@ -1909,32 +1948,32 @@ lab nanogfx_set_gadget_progress_bar;
     stpull_l        socket;
 
     push_i          gadget, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _gadget;
 
     push_i          X, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, x;
 
     push_i          Y, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, y;
 
     push_i          gadget_status, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _gadget_status;
 
     push_i          text, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_s        socket, _nanogfx_text;
     swrite_n        socket, one;
 
 	push_i			gadget_progress_bar_value, comm;
-	swrite_b		socket, comm;
+	swrite_i		socket, comm;
 	swrite_i		socket, value;
 
     push_i          gadget_progress_bar, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
 
     sread_b         socket, ret;
     stpush_l        ret;
@@ -1976,32 +2015,32 @@ lab nanogfx_set_gadget_checkbox;
     stpull_l        socket;
 
     push_i          gadget, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _gadget;
 
     push_i          X, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, x;
 
     push_i          Y, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, y;
 
     push_i          gadget_status, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _gadget_status;
 
     push_i          gadget_int_value, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, gadget_value;
 
     push_i          text, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_s        socket, _nanogfx_text;
     swrite_n        socket, one;
 
     push_i          gadget_checkbox, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
 
     sread_b         socket, ret;
     stpush_l        ret;
@@ -2065,19 +2104,19 @@ lab nanogfx_cycle_get_text_data;
     stpull_l        socket;
 
     push_i          gadget, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _gadget;
 
     push_i          X, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, x;
 
     push_i          Y, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, y;
 
     push_i          gadget_cycle_entries, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, gadget_entries;
 
     move_l          null, i;
@@ -2086,7 +2125,7 @@ lab nanogfx_cycle_send_text_data;
     move_a_s        _nanogfx_text_a, i, _nanogfx_text;
 
     push_i          gadget_cycle_text, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_s        socket, _nanogfx_text;
     swrite_n        socket, one;
 
@@ -2094,15 +2133,15 @@ lab nanogfx_cycle_send_text_data;
     ls_jmp_l        i, gadget_entries, nanogfx_cycle_send_text_data;
 
     push_i          gadget_status, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _gadget_status;
 
     push_i          gadget_int_value, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, gadget_value;
 
     push_i          gadget_cycle, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
 
     sread_b         socket, ret;
     stpush_l        ret;
@@ -2149,41 +2188,41 @@ lab nanogfx_set_gadget_string;
     stpull_l        socket;
 
     push_i          gadget, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _gadget;
 
     push_i          X, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, x;
 
     push_i          Y, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, y;
 
     push_i          gadget_status, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _gadget_status;
 
     push_i          text, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_s        socket, _nanogfx_text;
     swrite_n        socket, one;
 
     push_i          gadget_string_value, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_s        socket, _nanogfx_string_value;
     swrite_n        socket, one;
 
     push_i          gadget_string_str_len, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, gadget_string_len;
 
     push_i          gadget_string_vis_len, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, gadget_visible_len;
 
     push_i          gadget_string, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
 
     sread_b         socket, ret;
     stpush_l        ret;
@@ -2223,31 +2262,31 @@ lab nanogfx_set_gadget_box;
     stpull_l        socket;
 
     push_i          gadget, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _gadget;
 
     push_i          X, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, x;
 
     push_i          Y, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, y;
 
     push_i          X2, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, x2;
 
     push_i          Y2, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, y2;
 
     push_i          gadget_status, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _gadget_status;
 
     push_i          gadget_box, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
 
     sread_b         socket, ret;
     stpush_l        ret;
@@ -2279,19 +2318,19 @@ lab nanogfx_change_gadget_checkbox;
     stpull_l        socket;
 
     push_i          gadget, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _gadget;
 
     push_i          gadget_status, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _gadget_status;
 
     push_i          gadget_int_value, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _gadget_value;
 
     push_i          gadget_checkbox_change, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
 
     sread_b         socket, ret;
     stpush_l        ret;
@@ -2300,6 +2339,50 @@ lab nanogfx_change_gadget_checkbox;
 
 //  -------------------------------------------------------
 
+lab nanogfx_change_gadget_cycle;
+#ASSEMB
+//  args: lint socket, gadget, status, value
+//  return: lint error-code
+
+    #unsetreg_all_l;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L4, _gadget;
+    #setreg_l       L5, _gadget_status;
+    #setreg_l       L6, _gadget_value;
+    #setreg_l       L7, ret;
+    #setreg_l       L8, comm;
+
+    stpull_l        _gadget_value;
+    stpull_l        _gadget_status;
+    stpull_l        _gadget;
+    stpull_l        socket;
+
+    push_i          gadget, comm;
+    swrite_i        socket, comm;
+    swrite_i        socket, _gadget;
+
+    push_i          gadget_status, comm;
+    swrite_i        socket, comm;
+    swrite_i        socket, _gadget_status;
+
+    push_i          gadget_int_value, comm;
+    swrite_i        socket, comm;
+    swrite_i        socket, _gadget_value;
+
+    push_i          gadget_cycle_change, comm;
+    swrite_i        socket, comm;
+
+    sread_b         socket, ret;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END
+	
+// --------------------------------------------------------
+	
 lab nanogfx_change_gadget_string;
 #ASSEMB
 //  args: lint socket, gadget, status, string value
@@ -2328,20 +2411,20 @@ lab nanogfx_change_gadget_string;
     stpull_l        socket;
 
     push_i          gadget, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _gadget;
 
     push_i          gadget_status, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _gadget_status;
 
     push_i          gadget_string_value, comm;
-    swrite_b        socket, comm;
-    swrite_s        socket, _nanogfx_text;
+    swrite_i        socket, comm;
+    swrite_s        socket, _nanogfx_string_value;
     swrite_n        socket, one;
 
     push_i          gadget_string_change, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
 
     sread_b         socket, ret;
     stpush_l        ret;
@@ -2376,19 +2459,19 @@ lab nanogfx_change_gadget_progress_bar;
     stpull_l        socket;
 
     push_i          gadget, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _gadget;
 
     push_i          gadget_status, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _gadget_status;
 
     push_i          gadget_progress_bar_value, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i		socket, value;
 
     push_i          gadget_progress_bar_change, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
 
     sread_b         socket, ret;
     stpush_l        ret;
@@ -2422,13 +2505,13 @@ lab nanogfx_get_gadget_x2y2;
     stpull_l        socket;
 
     push_i          gadget, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _gadget;
 
     push_i          gadget_get_x2y2, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
 
-    sread_b         socket, ret;
+    sread_i         socket, ret;
     neq_jmp_l       ret, null, nanogfx_get_gadget_x2y2_end;
 
     sread_i         socket, x2;
@@ -2485,13 +2568,13 @@ lab nanogfx_gadget_event;
     stpull_l        socket;
 
     push_i          gadget_event, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
 
-    sread_b         socket, ret;
+    sread_i         socket, ret;
     neq_jmp_l       ret, null, nanogfx_gadget_event_end;
 
 lab nanogfx_gadget_event_read;
-    sread_b         socket, ret;
+    sread_i         socket, ret;
 
     eq_jsr_l        ret, gadget_type, nanogfx_gadget_event_gadget;
     eq_jsr_l        ret, gadget_int_type, nanogfx_gadget_event_int_value;
@@ -2552,20 +2635,20 @@ lab nanosfx_play_wav;
     stpull_l        socket;
 
     push_i          sound_wav_file, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_s        socket, _nanosfx_wavname;
     swrite_n        socket, one;
 
     push_i          sound_channel, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _channel;
 
     push_i          sound_loops, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _loops;
 
     push_i          sound_play_wav, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     rts;
 #ASSEMB_END
 
@@ -2589,11 +2672,11 @@ lab nanosfx_stop_channel;
     stpull_l        socket;
 
     push_i          sound_channel, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_i        socket, _channel;
 
     push_i          sound_stop_channel, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     rts;
 #ASSEMB_END
 
@@ -2622,12 +2705,12 @@ lab nanosfx_play_music;
     stpull_l        socket;
 
     push_i          sound_music_file, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     swrite_s        socket, _nanosfx_musicname;
     swrite_n        socket, one;
 
     push_i          sound_play_music, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     rts;
 #ASSEMB_END
 
@@ -2650,7 +2733,7 @@ lab nanosfx_stop_music;
     stpull_l        socket;
 
     push_i          sound_stop_music, comm;
-    swrite_b        socket, comm;
+    swrite_i        socket, comm;
     rts;
 #ASSEMB_END
 
@@ -2674,15 +2757,15 @@ lab rs232_open_comport;
 	stpull_l		socket;
 
 	push_i			rs232_baudrate, comm;
-	swrite_b		socket, comm;
+	swrite_i		socket, comm;
 	swrite_i		socket, baudrate;
 
 	push_i			rs232_comport_number, comm;
-	swrite_b		socket, comm;
+	swrite_i		socket, comm;
 	swrite_i		socket, comport;
 
 	push_i			rs232_open_comport, comm;
-	swrite_b		socket, comm;
+	swrite_i		socket, comm;
 
 	sread_b			socket, ret;
 	stpush_l		ret;
@@ -2726,15 +2809,15 @@ lab rs232_poll_comport;
 	pointer			buf_addr, _rs232_buf, rs232_poll_comport_pointer;
 
 	push_i			rs232_comport_number, comm;
-	swrite_b		socket, comm;
+	swrite_i		socket, comm;
 	swrite_i		socket, comport;
 
 	push_i			rs232_buf_size, comm;
-	swrite_b		socket, comm;
+	swrite_i		socket, comm;
 	swrite_i		socket, size;
 
 	push_i			rs232_poll_comport, comm;
-	swrite_b		socket, comm;
+	swrite_i		socket, comm;
 
 	sread_i			socket, readsize;
 
@@ -2778,15 +2861,15 @@ lab rs232_send_byte;
 	stpull_l		socket;
 
 	push_i			rs232_comport_number, comm;
-	swrite_b		socket, comm;
+	swrite_i		socket, comm;
 	swrite_i		socket, comport;
 
 	push_i			rs232_byte, comm;
-	swrite_b		socket, comm;	
-	swrite_b		socket, send_byte;
+	swrite_i		socket, comm;	
+	swrite_i		socket, send_byte;
 
 	push_i			rs232_send_byte, comm;
-	swrite_b		socket, comm;
+	swrite_i		socket, comm;
 
 	sread_b			socket, ret;
 	stpush_l		ret;
@@ -2827,28 +2910,28 @@ lab rs232_send_buf;
 	byte _rs232_buf[buf_size];
 
 	push_i			rs232_comport_number, comm;
-	swrite_b		socket, comm;
+	swrite_i		socket, comm;
 	swrite_i		socket, comport;
 
 	push_i			rs232_buf_size, comm;
-	swrite_b		socket, comm;
+	swrite_i		socket, comm;
 	swrite_i		socket, size;
 
 	push_i			rs232_buf, comm;
-	swrite_b		socket, comm;
+	swrite_i		socket, comm;
 
 	pointer			buf_addr, _rs232_buf, rs232_send_buf_send_data;
 
 lab rs232_send_buf_send_data;
 	move_a_b		_rs232_buf, i, buf;
 
-	swrite_b		socket, buf;
+	swrite_i		socket, buf;
 
 	inc_l			i;
 	ls_jmp_l		i, size, rs232_send_buf_send_data;
 
 	push_i			rs232_send_buf, comm;
-	swrite_b		socket, comm;
+	swrite_i		socket, comm;
 
 	sread_b			socket, ret;
 	stpush_l		ret;
@@ -2872,13 +2955,161 @@ lab rs232_close_comport;
 	stpull_l		socket;
 
 	push_i			rs232_comport_number, comm;
-	swrite_b		socket, comm;
+	swrite_i		socket, comm;
 	swrite_i		socket, comport;
 
 	push_i			rs232_close_comport, comm;
-	swrite_b		socket, comm;
+	swrite_i		socket, comm;
 
 	sread_b			socket, ret;
 	stpush_l		ret;
 	rts;
 #ASSEMB_END
+
+// --------------------------------------------------------
+	
+lab rpi_gpio_start;
+#ASSEMB
+//	args: socket
+// 	return value: error code
+
+	#unsetreg_all_l;
+
+	#setreg_l		L0, socket;
+	#setreg_l		L2, comm;
+	#setreg_l		L3, ret;
+
+	stpull_l		socket;
+	
+	push_i			rpi_gpio_start, comm;
+	swrite_i		socket, comm;
+	
+	sread_b			socket, ret;
+	stpush_l		ret;
+	
+	rts;
+#ASSEMB_END
+	
+lab rpi_gpio_mode;
+#ASSEMB
+//	args: socket, pin, mode 
+
+	#unsetreg_all_l;
+
+	#setreg_l		L0, socket;
+	#setreg_l		L2, comm;
+	#setreg_l		L3, pin;
+	#setreg_l		L4, mode;
+
+	stpull_l		mode;
+	stpull_l		pin;
+	stpull_l		socket;
+	
+	push_i			rpi_gpio_pin, comm;
+	swrite_i		socket, comm;
+	swrite_i		socket, pin;
+	
+	push_i			rpi_gpio_value, comm;
+	swrite_i		socket, comm;
+	swrite_i		socket, mode;
+	
+	push_i			rpi_gpio_mode, comm;
+	swrite_i		socket, comm;
+	
+	rts;
+#ASSEMB_END
+	
+lab rpi_gpio_read;
+#ASSEMB
+//	args: socket, pin 
+//	return: value
+
+	#unsetreg_all_l;
+
+	#setreg_l		L0, socket;
+	#setreg_l		L2, comm;
+	#setreg_l		L3, pin;
+	#setreg_l		L4, ret;
+	
+	stpull_l		pin;
+	stpull_l		socket;
+	
+	push_i			rpi_gpio_pin, comm;
+	swrite_i		socket, comm;
+	swrite_i		socket, pin;
+	
+	push_i			rpi_gpio_read, comm;
+	swrite_i		socket, comm;
+	
+	sread_i			socket, ret;
+	stpush_l		ret;
+	
+	rts;
+#ASSEMB_END
+	
+lab rpi_gpio_write;
+#ASSEMB
+//	args: socket, pin, value
+
+	#unsetreg_all_l;
+
+	#setreg_l		L0, socket;
+	#setreg_l		L2, comm;
+	#setreg_l		L3, pin;
+	#setreg_l		L4, value;
+	
+	stpull_l		value;
+	stpull_l		pin;
+	stpull_l		socket;
+	
+	push_i			rpi_gpio_pin, comm;
+	swrite_i		socket, comm;
+	swrite_i		socket, pin;
+	
+	push_i			rpi_gpio_value, comm;
+	swrite_i		socket, comm;
+	swrite_i		socket, value;		
+	
+	push_i			rpi_gpio_write, comm;
+	swrite_i		socket, comm;
+	
+	rts;
+#ASSEMB_END
+	
+
+lab nanogfx_save_picture;
+#ASSEMB
+//  args: lint socket, x, y, string picture_name
+//  return: lint error-code
+
+    #unsetreg_all_l;
+    #unsetreg_all_s;
+
+    #setreg_l       L0, null;
+    #setreg_l       L1, one;
+    #setreg_l       L2, two;
+    #setreg_l       L3, socket;
+    #setreg_l       L6, ret;
+    #setreg_l       L7, comm;
+
+    #setreg_s       S0, _nanogfx_picture_name;
+
+    push_i          1, one;
+
+    stpull_s        _nanogfx_picture_name;
+    stpull_l        socket;
+
+    push_i          picturename, comm;
+    swrite_i        socket, comm;
+    swrite_s        socket, _nanogfx_picture_name;
+    swrite_n        socket, one;
+
+    push_i          save_picture, comm;
+    swrite_i        socket, comm;
+
+    sread_b         socket, ret;
+    stpush_l        ret;
+    rts;
+#ASSEMB_END
+
+
