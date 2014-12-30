@@ -1566,10 +1566,18 @@ lab nanogfx_load_picture;
     #setreg_l       L7, comm;
 
     #setreg_s       S0, _nanogfx_picture_name;
+	#setreg_s		S1, _home;
+	#setreg_s		S2, _picture_name_new;
 
     push_i          1, one;
-
-    stpull_s        _nanogfx_picture_name;
+	stpull_s        _nanogfx_picture_name;
+	
+//	set path to Nano VM home directory;
+	push_s			"/home/", _home;
+	push_s			_nanopath, _picture_name_new;
+	add_s			_picture_name_new, _home, _picture_name_new;
+	add_s			_picture_name_new, _nanogfx_picture_name, _picture_name_new;	
+	
     stpull_l        y;
     stpull_l        x;
     stpull_l        socket;
@@ -1584,7 +1592,7 @@ lab nanogfx_load_picture;
 
     push_i          picturename, comm;
     swrite_i        socket, comm;
-    swrite_s        socket, _nanogfx_picture_name;
+    swrite_s        socket, _picture_name_new;
     swrite_n        socket, one;
 
     push_i          load_picture, comm;
@@ -3093,15 +3101,23 @@ lab nanogfx_save_picture;
     #setreg_l       L7, comm;
 
     #setreg_s       S0, _nanogfx_picture_name;
+	#setreg_s		S1, _picture_name_new;
+	#setreg_s		S2, _home;
 
     push_i          1, one;
 
     stpull_s        _nanogfx_picture_name;
     stpull_l        socket;
 
+//	set path to Nano VM home directory;
+	push_s			"/home/", _home;
+	push_s			_nanopath, _picture_name_new;
+	add_s			_picture_name_new, _home, _picture_name_new;
+	add_s			_picture_name_new, _nanogfx_picture_name, _picture_name_new;
+	
     push_i          picturename, comm;
     swrite_i        socket, comm;
-    swrite_s        socket, _nanogfx_picture_name;
+    swrite_s        socket, _picture_name_new;
     swrite_n        socket, one;
 
     push_i          save_picture, comm;
