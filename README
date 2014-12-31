@@ -12,6 +12,10 @@ for array variables.
 Execution can be speeded up by the JIT compiler (AsmJit library).
 Currently only X86 CPUs are supported (32 and 64 bit).
 
+Nano VM programs can run on Android, Linux and Windows without the need to change code
+for a OS. All OS dependent stuff is done by the VM. So Nano VM programs are independent
+and can run on all OS which are supported by the VM.
+
 Nano VM features:
 - 64 bit CPU with lots of registers
 - stack for function call arguments
@@ -28,6 +32,31 @@ Nano VM features:
 - expansions with DLL/shared libraries possible
   stack and array variables can be accessed from library
 - N compiler (high level language)
+
+
+Hello world!
+============
+
+This is a simple "Hello world!" program written in N:
+
+func main ()
+    int n = 1; int ret = 0; int x;
+
+    print "Hello world!";
+    printn n;
+
+    x = 2 * 2 << 2; x = ++;
+    print x;
+    printn n;
+
+    exit ret;
+funcend
+
+It prints out:
+
+Hello world!
+65
+
 
 
 Flow
@@ -60,6 +89,11 @@ See AUTHORS!
 
 NEWS
 ====
+
+I changed the protocol in the Flow library, this actual version is not
+backwards compatible with old versions. Don't mix them, or it won't work.
+GUI programs have to be recompiled with the new version of "flow.nah"
+include file!
 
 Now DLL/shared libraries can be loaded. This makes it possible to expand the
 VM. There is a library to access the VM stack and array variables from the
