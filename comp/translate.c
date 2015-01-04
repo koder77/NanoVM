@@ -92,7 +92,7 @@ struct translate translate[] =
     {{ STRING_VAR, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY }, { UCASE, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY }},
     DIRECT, 1 },
     { "lcase", 1, { STRING_VAR, EMPTY, EMPTY },
-    {{ STRING_VAR, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY }, { UCASE, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY }},
+    {{ STRING_VAR, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY }, { LCASE, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY }},
     DIRECT, 1 },
     { "char", 2, { INTEGER_VAR, STRING_VAR, EMPTY },
     {{ INT_VAR, LINT_VAR, EMPTY, EMPTY, EMPTY, EMPTY }, { CHAR, CHAR, EMPTY, EMPTY, EMPTY, EMPTY }},
@@ -729,7 +729,27 @@ S2 translate_code (void)
                     reg[i] = get_vmreg_l ();
                     if (reg[i] != FULL)
                     {
-                        if (i != translate[opcode].target - 1)
+						if (translate[opcode].argnum == 1)
+						{
+							/* always push */
+						
+							if (src_line.arg[i + 1][0] == COMP_PRIVATE_VAR_SB)
+                            {
+                                if (! set2 (PPUSH_I, var, reg[i]))
+                                {
+                                    return (MEMORY);
+                                }
+                            }
+                            else
+                            {
+                                if (! set2 (PUSH_I, var, reg[i]))
+                                {
+                                    return (MEMORY);
+                                }
+                            }
+						}
+							
+						if (i != translate[opcode].target - 1)
                         {
                             if (src_line.arg[i + 1][0] == COMP_PRIVATE_VAR_SB)
                             {
@@ -785,7 +805,27 @@ S2 translate_code (void)
                     reg[i] = get_vmreg_l ();
                     if (reg[i] != FULL)
                     {
-                        if (i != translate[opcode].target - 1)
+                        if (translate[opcode].argnum == 1)
+						{
+							/* always push */
+							
+							if (src_line.arg[i + 1][0] == COMP_PRIVATE_VAR_SB)
+                            {
+                                if (! set2 (PPUSH_L, var, reg[i]))
+                                {
+                                    return (MEMORY);
+                                }
+                            }
+                            else
+                            {
+                                if (! set2 (PUSH_L, var, reg[i]))
+                                {
+                                    return (MEMORY);
+                                }
+                            }
+						}
+						
+						if (i != translate[opcode].target - 1)
                         {
                             if (src_line.arg[i + 1][0] == COMP_PRIVATE_VAR_SB)
                             {
@@ -841,7 +881,27 @@ S2 translate_code (void)
                     reg[i] = get_vmreg_l ();
                     if (reg[i] != FULL)
                     {
-                        if (i != translate[opcode].target - 1)
+                        if (translate[opcode].argnum == 1)
+						{
+							/* always push */
+							
+							if (src_line.arg[i + 1][0] == COMP_PRIVATE_VAR_SB)
+                            {
+                                if (! set2 (PPUSH_Q, var, reg[i]))
+                                {
+                                    return (MEMORY);
+                                }
+                            }
+                            else
+                            {
+                                if (! set2 (PUSH_Q, var, reg[i]))
+                                {
+                                    return (MEMORY);
+                                }
+                            }
+						}
+						
+						if (i != translate[opcode].target - 1)
                         {
                             if (src_line.arg[i + 1][0] == COMP_PRIVATE_VAR_SB)
                             {
@@ -896,7 +956,27 @@ S2 translate_code (void)
                     reg[i] = get_vmreg_d ();
                     if (reg[i] != FULL)
                     {
-                        if (i != translate[opcode].target - 1)
+                        if (translate[opcode].argnum == 1)
+						{
+							/* always push */
+							
+							if (src_line.arg[i + 1][0] == COMP_PRIVATE_VAR_SB)
+                            {
+                                if (! set2 (PPUSH_D, var, reg[i]))
+                                {
+                                    return (MEMORY);
+                                }
+                            }
+                            else
+                            {
+                                if (! set2 (PUSH_D, var, reg[i]))
+                                {
+                                    return (MEMORY);
+                                }
+                            }
+						}
+						
+						if (i != translate[opcode].target - 1)
                         {
                             if (src_line.arg[i + 1][0] == COMP_PRIVATE_VAR_SB)
                             {
@@ -953,7 +1033,27 @@ S2 translate_code (void)
                         reg[i] = get_vmreg_s ();
                         if (reg[i] != FULL)
                         {
-                            if (i != translate[opcode].target - 1)
+							if (translate[opcode].argnum == 1)
+							{
+								/* always push */
+								
+								if (src_line.arg[i + 1][0] == COMP_PRIVATE_VAR_SB)
+                                {
+                                    if (! set2 (PPUSH_S, var, reg[i]))
+                                    {
+                                        return (MEMORY);
+                                    }
+                                }
+                                else
+                                {
+                                    if (! set2 (PUSH_S, var, reg[i]))
+                                    {
+                                        return (MEMORY);
+                                    }
+                                }
+							}
+								
+                            if (i != translate[opcode].target - 1 && translate[opcode].argnum > 1)
                             {
                                 if (src_line.arg[i + 1][0] == COMP_PRIVATE_VAR_SB)
                                 {
@@ -1010,7 +1110,27 @@ S2 translate_code (void)
                     reg[i] = get_vmreg_l ();
                     if (reg[i] != FULL)
                     {
-                        if (i != translate[opcode].target - 1)
+                        if (translate[opcode].argnum == 1)
+						{
+							/* always push */
+								
+							if (src_line.arg[i + 1][0] == COMP_PRIVATE_VAR_SB)
+                            {
+                                if (! set2 (PPUSH_B, var, reg[i]))
+                                {
+                                    return (MEMORY);
+                                }
+                            }
+                            else
+                            {
+                                if (! set2 (PUSH_B, var, reg[i]))
+                                {
+                                    return (MEMORY);
+                                }
+                            }
+						}
+						
+						if (i != translate[opcode].target - 1)
                         {
                             if (src_line.arg[i + 1][0] == COMP_PRIVATE_VAR_SB)
                             {

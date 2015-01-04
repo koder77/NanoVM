@@ -2270,6 +2270,7 @@ U1 compile ()
 									return (MEMORY);
 								}
 							}
+							unset_vmreg_l (var);
 						}
 						else
 						{
@@ -2295,6 +2296,7 @@ U1 compile ()
 									return (MEMORY);
 								}
 							}
+							unset_vmreg_l (var);
 						}
 						else
 						{
@@ -2320,6 +2322,7 @@ U1 compile ()
 									return (MEMORY);
 								}
 							}
+							unset_vmreg_l (var);
 						}
 						else
 						{
@@ -2345,6 +2348,7 @@ U1 compile ()
 									return (MEMORY);
 								}
 							}
+							unset_vmreg_d (var);
 						}
 						else
 						{
@@ -2370,6 +2374,7 @@ U1 compile ()
 									return (MEMORY);
 								}
 							}
+							unset_vmreg_s (var);
 						}
 						else
 						{
@@ -2395,6 +2400,7 @@ U1 compile ()
 									return (MEMORY);
 								}
 							}
+							unset_vmreg_l (var);
 						}
 						else
 						{
