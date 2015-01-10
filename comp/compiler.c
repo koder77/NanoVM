@@ -236,8 +236,8 @@ U1 compile ()
             /* new function: set all registers as EMPTY: */
             init_vmreg ();
 
-            nested_code = FALSE;        /* only set if gotos used */
-            nested_code_global_off = FALSE;
+            nested_code = FALSE;        		/* only set if goto, lab, if and for used */
+            nested_code_global_off = FALSE;		/* reset NESTED_CODE_GLOBAL_OFF */
 
             #if DEBUG
                 printf ("COMP_FUNC: '%s'\n", src_line.arg[0]);
@@ -6237,6 +6237,21 @@ U1 compile ()
                         ok = FALSE;
                     }
                 }
+                
+                /* restore all registers, the same as on getmultiend */
+				if (! set0 (STPULL_ALL_S))
+				{
+					return (MEMORY);
+				}
+				if (! set0 (STPULL_ALL_D))
+				{
+					return (MEMORY);
+				}
+				if (! set0 (STPULL_ALL_L))
+				{
+					return (MEMORY);
+				}
+                
             }
             break;
         

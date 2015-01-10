@@ -16,7 +16,12 @@ nano (3.3.2)
 	bugfix: comp/translate.c push variable always into register if only one argument.
 	Needed to make for example "ucase (string);" work!
 	
--- Stefan Pietzonke <jay-t@gmx.net>  Sun 4 Jan 2014 11:30 +0100
+	bugfix: comp/regspill.c "=" was set in if (), replaced now by right "==" for comparison.
+	
+	comp/compiler.c: now getmulti sets automatically getmultiend at end.
+	So getmultiend is now not needed anymore in N!
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat 10 Jan 2014 11:15 +0100
 
 nano (3.2.9)
 	VM: thread exit code is now a 64 bit return value.

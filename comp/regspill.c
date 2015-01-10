@@ -45,7 +45,7 @@ S2 spill_vmreg_l (void)
     
     for (i = 0; i <= MAXVMREG_L; i++)
     {
-        if (i = 0)
+        if (i == 0)
         {
             spillreg = i;
         }
@@ -154,7 +154,7 @@ S2 spill_vmreg_d (void)
     
     for (i = 0; i <= MAXVMREG; i++)
     {
-        if (i = 0)
+        if (i == 0)
         {
             spillreg = i;
         }
@@ -208,7 +208,7 @@ S2 spill_vmreg_s (void)
     
     for (i = 0; i <= MAXVMREG; i++)
     {
-        if (i = 0)
+        if (i == 0)
         {
             spillreg = i;
         }
