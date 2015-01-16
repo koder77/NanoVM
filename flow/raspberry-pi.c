@@ -34,7 +34,7 @@ S2 rpi_gpio_read (S2 pin)
 {
 	S2 ret;
 	
-	ret = digitalRead (pin)
+	ret = digitalRead (pin);
 	return (ret);
 }
 
