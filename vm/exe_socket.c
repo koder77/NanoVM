@@ -33,5 +33,9 @@
 #endif
 
 #if OS_LINUX || OS_WINDOWS || OS_WINDOWS_CYGWIN
-    #include "exe_socket_ipv6.h"
+	#if OS_LINUX_RPI
+		#include "exe_socket_ipv4_amiga.h"
+	#else
+		#include "exe_socket_ipv6.h"
+	#endif
 #endif

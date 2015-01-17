@@ -2415,7 +2415,7 @@ S2 get_server_ip (U1 *ip)
     socklen_t len = sizeof (client);
 	
 	/* Android start menu */
-	S2 program;
+	S2 program = 0;
 	U1 command_shell[256];
 	pid_t pID;
 	

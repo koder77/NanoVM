@@ -44,6 +44,9 @@
 
 #define ANDROID_DEBUG	0
 
+#define OS_LINUX_RPI	0			/* Raspberry Pi Raspbian: used for exe_socket.c, include IP V 4 sockets if set to 1. */
+
+
 
 /* switch online registering: default on at firstrun ---------------- */
 
