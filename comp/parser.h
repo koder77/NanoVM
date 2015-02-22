@@ -231,6 +231,11 @@
 #define COMP_ATOMIC_END_SB				"#ATOMIC_END"
 #define COMP_ATOMIC_END 				MAXOPCODE + 8
 
+#define COMP_OPTIMIZE_O_SB				"#OPTIMIZE_O"
+#define COMP_OPTIMIZE_O					MAXOPCODE + 9
+
+#define COMP_OPTIMIZE_O2_SB				"#OPTIMIZE_O2"
+#define COMP_OPTIMIZE_O2 				MAXOPCODE + 10
 
 #define COMP_PRIVATE_VAR_SB             'P'
 #define AROPEN_SB                       '['

@@ -63,6 +63,10 @@ extern U1 nested_code_global_off;
 
 extern U1 atomic;
 
+extern U1 optimize_O;
+extern U1 optimize_O2;
+
+
 U1 compile_set_init_var (S2 arg, S4 *var, U1 type)
 {
     U1 create_variable = FALSE, create_variable_private = FALSE, private_variable = FALSE;
@@ -6506,6 +6510,16 @@ U1 compile ()
                 return (MEMORY);
             }
 			printf ("compile: ATOMIC END!\n");
+			break;
+			
+		case COMP_OPTIMIZE_O:
+			optimize_O = TRUE;
+			printf ("compile: OPTIMIZE O\n");
+			break;
+			
+		case COMP_OPTIMIZE_O2:
+			optimize_O2 = TRUE;
+			printf ("compile: OPTIMIZE O2\n");
 			break;
     }
     return (TRUE);

@@ -115,7 +115,16 @@ U1 printmsg_no_msg = FALSE;         /* if true print no messages */
 U1 nested_code = FALSE;             /* no goto used in function (opcode.c) */
 U1 nested_code_global_off = FALSE;	/* nested code global off -> no nested code override automatically */
 
-U1 atomic = FALSE;					/* atomic function call, no st_pull_all set automaitically */
+U1 atomic = FALSE;					/* atomic function call, no st_pull_all set automatically */
+
+/* needed for setting the optimize flags from within code:
+ * #OPTIMIZE_O 
+ * #OPTIMIZE_O2 
+ * 
+ */
+
+U1 optimize_O = FALSE;				/* off */
+U1 optimize_O2 = FALSE;				/* off */
 
 #if DEBUG
     U1 print_debug = FALSE;         /* CLI -d option */
@@ -254,6 +263,18 @@ S2 parse_line (U1 *str)
     if (strcmp (str, COMP_ATOMIC_END_SB) == 0)
 	{
 		src_line.opcode_n = COMP_ATOMIC_END;
+        return (0);
+    }
+    
+    if (strcmp (str, COMP_OPTIMIZE_O_SB) == 0)
+	{
+		src_line.opcode_n = COMP_OPTIMIZE_O;
+        return (0);
+    }
+    
+    if (strcmp (str, COMP_OPTIMIZE_O2_SB) == 0)
+	{
+		src_line.opcode_n = COMP_OPTIMIZE_O2;
         return (0);
     }
     
@@ -1057,7 +1078,7 @@ NINT main (NINT ac, char *av[])
         debug_exelist ();
     #endif
 
-    if (do_optimize)
+    if (do_optimize || optimize_O)
     {
         printf ("optimizing...\n");
 
@@ -1067,7 +1088,7 @@ NINT main (NINT ac, char *av[])
 		}
     }
     
-    if (do_optimize_2)
+    if (do_optimize_2 || optimize_O2)
     {
         printf ("optimizing O2...\n");
         

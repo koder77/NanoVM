@@ -2,7 +2,7 @@ nano (3.3.2)
 	Nanoc: new experimental #ATOMIC / #ATOMIC_END for setting vector array start and end elements.
 	Threading safe!
 
-	vm/exe_elist () added QINT type at pvarlist contstants init. 
+	vm/exe_elist () added QINT type at pvarlist constants init. 
 	
 	exe_files.c alignment bugfix for Android/ARM.
 	
@@ -21,7 +21,9 @@ nano (3.3.2)
 	comp/compiler.c: now getmulti sets automatically getmultiend at end.
 	So getmultiend is now not needed anymore in N!
 	
--- Stefan Pietzonke <jay-t@gmx.net>  Sat 10 Jan 2014 11:15 +0100
+	Compiler: #OPTIMIZE_O and #OPTIMIZE_O2 to set optimization in N source code.
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun 22 Feb 2015 17:16 +0100
 
 nano (3.2.9)
 	VM: thread exit code is now a 64 bit return value.
