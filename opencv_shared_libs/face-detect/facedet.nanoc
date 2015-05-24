@@ -1,0 +1,78 @@
+//	facedet.nanoc face detection 1.0 - use libopencvfacedet.so to detect faces in a webcam live video
+//	faces are marked by green boxes.
+//	use cascade as absolute path.
+//
+//	return variable (array) must be locked while reading!
+// 	return value = 0 no faces
+//	return value = 1 face detected
+//	see C code for more information
+//
+//	Stefan Pietzonke 2015
+
+func main ()
+	lint null = 0; lint one = 1;
+	lint delay = 50;
+	qint ind = 0;
+	lint dll; 
+	
+	lint facedet;
+	lint facedetthread;
+	lint f;
+	
+	string dllname[256] = "libopencvfacedet.so";
+	string facedetn[256] = "opencv_face_detection";
+	
+	string _cascade[256] = "/home/stefan/Seafile/nanovm/home/haarcascade_face.xml";
+	qint _cam = 0;
+	
+//	global array for return value of face detect library
+	qint _retval[1]; 
+	qint ret; qint _retvalptr;
+	
+//	open libopencvfacedet.so library in nanovm/lib directory
+	lopen (dll, dllname);	
+
+//	set function handle
+	lfunc (dll, facedet, facedetn);
+	getaddress (_retval, _retvalptr);
+	
+//	call face detection
+	threadcreate (facedetthread, facedetect);
+	threadsync (facedetthread);
+	threadpush (facedetthread, facedet);
+	threadpush (facedetthread, dll);
+	threadpushsync (facedetthread);
+	
+lab loop;
+	varlock (_retval);
+	array2var (_retval, ind, ret);
+	varunlock (_retval);
+	f = ret == 1;
+	if f;
+		print "faces detected"; printn one;
+	endif;
+	
+	waittick (delay);
+	goto loop;
+	
+	threadjoin ();
+	
+	exit null;
+funcend
+
+func facedetect (#sync, lint Pdll, lint Pfunc)
+	int Pnull = 0;
+	//	call face detection
+	#ATOMIC;
+	pushtostack (_retvalptr, _cam, _cascade);
+	
+	lcall (Pdll, Pfunc);
+	#ATOMIC_END
+	
+	exit Pnull;
+funcend
+
+lab pushtostack;
+#ASSEMB
+	rts;
+#ASSEMB_END

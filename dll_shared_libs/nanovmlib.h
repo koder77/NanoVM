@@ -54,3 +54,9 @@ U1 stpull_s (S4 threadnum, struct pthreads *pthreads, S8 stacksize, U1 *s_reg);
 
 U1 stgettype (S4 threadnum, struct pthreads *pthreads, S8 *reg);
 U1 stelements (S4 threadnum, struct pthreads *pthreads, S8 *reg);
+
+
+/* mutex.c */
+
+void var_lock (struct varlist *varlist, S4 index);
+void var_unlock (struct varlist *varlist, S4 index);

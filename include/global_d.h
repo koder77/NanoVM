@@ -953,8 +953,9 @@ typedef int                     NINT;
 #define SETSEPAR                388
 #define SETSEMICOL              389  /* 389 !!! */
 
-
+#if JIT_CPP == 0
 #define EMPTY               -1
+#endif
 
 #define SETDEFAULT_SB       "default"
 
@@ -1039,6 +1040,8 @@ typedef int                     NINT;
 #define LINE_END_NOTSET_TXT "line end not set"
 #define ERR_POINTER_TXT      "pointer: wrong variable"
 
+#if JIT_CPP == 0
+
 #define OVERFLOW_VAR        0
 #define OVERFLOW_STR        1
 #define OVERFLOW_IND        2
@@ -1076,6 +1079,7 @@ typedef int                     NINT;
 #define LINE_END_NOTSET     34
 #define ERR_POINTER         35
 
+#endif
 
 /* message definitions */
 

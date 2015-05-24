@@ -4037,121 +4037,245 @@ U1 compile ()
 					if (i == TRUE)
 					{
 						op_found = FALSE; i = 3;
-
-						if (strcmp (src_line.arg[i], COMP_OP_ADD_SB) == 0)
+						if (src_line.arg[2][0] == COMP_PRIVATE_VAR_SB)
 						{
-							switch (type)
-							{	
-								case QINT_VAR:
-									if (array_type)
-									{
-										opcode = VADD2_L;
-									}
-									else
-									{
-										opcode = VADD_L;
-									}
-									break;
+							/* vector array math on private variable */
+							
+							if (strcmp (src_line.arg[i], COMP_OP_ADD_SB) == 0)
+							{
+								switch (type)
+								{	
+									case QINT_VAR:
+										if (array_type)
+										{
+											opcode = PVADD2_L;
+										}
+										else
+										{
+											opcode = PVADD_L;
+										}
+										break;
 									
-								case DOUBLE_VAR:
-									if (array_type)
-									{
-										opcode = VADD2_D;
-									}
-									else
-									{
-										opcode = VADD_D;
-									}
-									break;
+									case DOUBLE_VAR:
+										if (array_type)
+										{
+											opcode = PVADD2_D;
+										}
+										else
+										{
+											opcode = PVADD_D;
+										}
+										break;
+								}
+								op_found = TRUE;
 							}
-							op_found = TRUE;
-						}
 						
-						if (strcmp (src_line.arg[i], COMP_OP_SUB_SB) == 0)
-						{
-							switch (type)
-							{	
-								case QINT_VAR:
-									if (array_type)
-									{
-										opcode = VSUB2_L;
-									}
-									else
-									{
-										opcode = VSUB_L;
-									}
-									break;
+							if (strcmp (src_line.arg[i], COMP_OP_SUB_SB) == 0)
+							{
+								switch (type)
+								{	
+									case QINT_VAR:
+										if (array_type)
+										{
+											opcode = PVSUB2_L;
+										}
+										else
+										{
+											opcode = PVSUB_L;
+										}
+										break;
 									
-								case DOUBLE_VAR:
-									if (array_type)
-									{
-										opcode = VSUB2_D;
-									}
-									else
-									{
-										opcode = VSUB_D;
-									}
-									break;
+									case DOUBLE_VAR:
+										if (array_type)
+										{
+											opcode = PVSUB2_D;
+										}
+										else
+										{
+											opcode = PVSUB_D;
+										}
+										break;
+								}
+								op_found = TRUE;
 							}
-							op_found = TRUE;
-						}
 						
-						if (strcmp (src_line.arg[i], COMP_OP_MUL_SB) == 0)
-						{
-							switch (type)
-							{	
-								case QINT_VAR:
-									if (array_type)
-									{
-										opcode = VMUL2_L;
-									}
-									else
-									{
-										opcode = VMUL_L;
-									}
-									break;
+							if (strcmp (src_line.arg[i], COMP_OP_MUL_SB) == 0)
+							{
+								switch (type)
+								{	
+									case QINT_VAR:
+										if (array_type)
+										{
+											opcode = PVMUL2_L;
+										}
+										else
+										{
+											opcode = PVMUL_L;
+										}
+										break;
 									
-								case DOUBLE_VAR:
-									if (array_type)
-									{
-										opcode = VMUL2_D;
-									}
-									else
-									{
-										opcode = VMUL_D;
-									}
-									break;
+									case DOUBLE_VAR:
+										if (array_type)
+										{
+											opcode = PVMUL2_D;
+										}
+										else
+										{
+											opcode = PVMUL_D;
+										}
+										break;
+								}
+								op_found = TRUE;
 							}
-							op_found = TRUE;
-						}
 						
-						if (strcmp (src_line.arg[i], COMP_OP_DIV_SB) == 0)
-						{
-							switch (type)
-							{	
-								case QINT_VAR:
-									if (array_type)
-									{
-										opcode = VDIV2_L;
-									}
-									else
-									{
-										opcode = VDIV_L;
-									}
-									break;
+							if (strcmp (src_line.arg[i], COMP_OP_DIV_SB) == 0)
+							{
+								switch (type)
+								{	
+									case QINT_VAR:
+										if (array_type)
+										{
+											opcode = PVDIV2_L;
+										}
+										else
+										{
+											opcode = PVDIV_L;
+										}
+										break;
 									
-								case DOUBLE_VAR:
-									if (array_type)
-									{
-										opcode = VDIV2_D;
-									}
-									else
-									{
-										opcode = VDIV_D;
-									}
-									break;
+									case DOUBLE_VAR:
+										if (array_type)
+										{
+											opcode = PVDIV2_D;
+										}
+										else
+										{
+											opcode = PVDIV_D;
+										}
+										break;
+								}
+								op_found = TRUE;
 							}
-							op_found = TRUE;
+						}
+						else
+						{
+							/* vector array math on normal array */
+							
+							if (strcmp (src_line.arg[i], COMP_OP_ADD_SB) == 0)
+							{
+								switch (type)
+								{	
+									case QINT_VAR:
+										if (array_type)
+										{
+											opcode = VADD2_L;
+										}
+										else
+										{
+											opcode = VADD_L;
+										}
+										break;
+									
+									case DOUBLE_VAR:
+										if (array_type)
+										{
+											opcode = VADD2_D;
+										}
+										else
+										{
+											opcode = VADD_D;
+										}
+										break;
+								}
+								op_found = TRUE;
+							}
+						
+							if (strcmp (src_line.arg[i], COMP_OP_SUB_SB) == 0)
+							{
+								switch (type)
+								{	
+									case QINT_VAR:
+										if (array_type)
+										{
+											opcode = VSUB2_L;
+										}
+										else
+										{
+											opcode = VSUB_L;
+										}
+										break;
+									
+									case DOUBLE_VAR:
+										if (array_type)
+										{
+											opcode = VSUB2_D;
+										}
+										else
+										{
+											opcode = VSUB_D;
+										}
+										break;
+								}
+								op_found = TRUE;
+							}
+						
+							if (strcmp (src_line.arg[i], COMP_OP_MUL_SB) == 0)
+							{
+								switch (type)
+								{	
+									case QINT_VAR:
+										if (array_type)
+										{
+											opcode = VMUL2_L;
+										}
+										else
+										{
+											opcode = VMUL_L;
+										}
+										break;
+									
+									case DOUBLE_VAR:
+										if (array_type)
+										{
+											opcode = VMUL2_D;
+										}
+										else
+										{
+											opcode = VMUL_D;
+										}
+										break;
+								}
+								op_found = TRUE;
+							}
+						
+							if (strcmp (src_line.arg[i], COMP_OP_DIV_SB) == 0)
+							{
+								switch (type)
+								{	
+									case QINT_VAR:
+										if (array_type)
+										{
+											opcode = VDIV2_L;
+										}
+										else
+										{
+											opcode = VDIV_L;
+										}
+										break;
+									
+									case DOUBLE_VAR:
+										if (array_type)
+										{
+											opcode = VDIV2_D;
+										}
+										else
+										{
+											opcode = VDIV_D;
+										}
+										break;
+								}
+								op_found = TRUE;
+							}
 						}
 						
 						if (op_found == FALSE)

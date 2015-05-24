@@ -23,7 +23,11 @@ nano (3.3.2)
 	
 	Compiler: #OPTIMIZE_O and #OPTIMIZE_O2 to set optimization in N source code.
 	
--- Stefan Pietzonke <jay-t@gmx.net>  Sun 22 Feb 2015 17:16 +0100
+	nanoc: support for private array math opcodes added.
+	
+	DLL/so lib: variable mutex added: var_lock / var_unlock
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Wed 20 May 2015 20:12 +0200
 
 nano (3.2.9)
 	VM: thread exit code is now a 64 bit return value.
