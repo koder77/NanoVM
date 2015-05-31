@@ -1355,7 +1355,6 @@ wait_command:
 					if (change_gadget_cycle (screennum))
 					{
 						send_8 (new_tcpsock, OK);
-					
 					}
                     else
                     {
@@ -1699,7 +1698,7 @@ wait_command:
                         dealloc_array_U1 (screen[screennum].gadget_cycle_text, screen[screennum].gadget_cycle_menu_entries);
                     }
 
-                    screen[screennum].gadget_cycle_text = (U1 **) malloc (buf2 * sizeof (screen[screennum].gadget_cycle_text));
+                    screen[screennum].gadget_cycle_text = (U1 **) malloc (buf2 * sizeof (U1 *));
                     if (screen[screennum].gadget_cycle_text == NULL)
                     {
                         printf ("error: can't allocate cycle gadget text!\n");

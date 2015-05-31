@@ -565,7 +565,7 @@ int copy_surface (SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rec
     return (0);
 }
 
-U1 draw_gadget_cycle (S2 screennum, U2 gadget_index, U1 selected, U1 value)
+U1 draw_gadget_cycle (S2 screennum, U2 gadget_index, U1 selected, S4 value)
 {
     struct gadget_cycle *cycle;
     Uint32 rmask, gmask, bmask, amask;
@@ -1948,7 +1948,7 @@ U1 set_gadget_cycle (S2 screennum)
 
     /* copy menu text list */
 
-    cycle->text = (U1 **) malloc (screen[screennum].gadget_cycle_menu_entries * sizeof (screen[screennum].gadget_cycle_text));
+    cycle->text = (U1 **) malloc (screen[screennum].gadget_cycle_menu_entries * sizeof (U1 *));
     if (cycle->text == NULL)
     {
         printf ("set_gadget_cycle: error can't allocate menu text list!\n");

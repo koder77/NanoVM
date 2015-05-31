@@ -5,7 +5,10 @@ flow (0.6.3)
 	
 	New: save screen as bit map picture (.bmp).
 	
--- Stefan Pietzonke <jay-t@gmx.net>  Mon 29 Dec 2014 20:22 +0100
+	Bugfix: change_gadget_cycle () text entries now allocated right by (U1 *) pointer malloc!
+	Now the blaster level editor does not crash after an enemy was selected.
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat 30 May 2015 15:15 +0200
 
 flow (0.6.2)
 	New: cycle gadget change function, change selected item.
