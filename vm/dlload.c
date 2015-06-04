@@ -221,12 +221,14 @@ U1 exe_lopen (S8 *llist_ind, U1 *lname)
         return (ERR_FILE_OPEN);
     }
 #else
+#if OS_LINUX
     dlls[handle].lptr = dlopen (convname, RTLD_LAZY);
     if (!dlls[handle].lptr) 
 	{
 		printf ("error load dll!\n");
        return (ERR_FILE_OPEN);
     }
+#endif
 #endif
 
 	strcpy (dlls[handle].name, convname);
@@ -239,7 +241,9 @@ U1 exe_lclose (S8 llist_ind)
 #if OS_WINDOWS
 	FreeLibrary	(dlls[llist_ind].lptr);
 #else
+#if OS_LINUX
 	dlclose (dlls[llist_ind].lptr);
+#endif
 #endif
 	
 	strcpy (dlls[llist_ind].name, "");		/* mark as empty handle */	
@@ -269,6 +273,7 @@ U1 exe_lfunc (S8 llist_ind, S8 *flist_ind, U1 *fname)
 		return (ERR_FILE_READ);
     }
 #else
+#if OS_LINUX
     // reset errors
     dlerror ();
 
@@ -280,6 +285,7 @@ U1 exe_lfunc (S8 llist_ind, S8 *flist_ind, U1 *fname)
 		printf ("%s\n", dlsym_error);
         return (ERR_FILE_READ);
     }
+#endif
 #endif
 
 	*flist_ind = handle;

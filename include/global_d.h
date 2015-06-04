@@ -106,8 +106,10 @@
 #include <direct.h>
 #include <windows.h>
 #else
+#if OS_LINUX
 #include <sys/types.h>
 #include <dlfcn.h>
+#endif
 #endif
 
 

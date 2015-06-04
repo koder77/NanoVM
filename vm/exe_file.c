@@ -1394,6 +1394,11 @@ U1 exe_makedir (U1 *name)
         return (ERR_FILE_WRITE);
     }
 #endif
+
+#if OS_AROS
+	printf ("ERROR: exe_makedir not implemented on AROS!\n");
+	return (ERR_FILE_WRITE);
+#endif
 }
 
 /* exe_dobjects () ---------------------------------------- */
@@ -1490,6 +1495,14 @@ U1 exe_dobjects (U1 *directory, S8 *objects)
 U1 exe_dobjects (U1 *directory, S8 *objects)
 {
 	printf ("dobjects ERROR: function not implemented on Windows!\n");
+	return (ERR_FILE_OPEN);
+}
+#endif
+
+#if OS_AROS
+U1 exe_dobjects (U1 *directory, S8 *objects)
+{
+	printf ("dobjects ERROR: function not implemented on AROS!\n");
 	return (ERR_FILE_OPEN);
 }
 #endif
@@ -1597,6 +1610,14 @@ U1 exe_dnames (U1 *directory, struct varlist *varlist, S8 sreg)
 U1 exe_dnames (U1 *directory, struct varlist *varlist, S8 sreg)
 {
 	printf ("dnames ERROR: function not implemented on Windows!\n");
+	return (ERR_FILE_OPEN);
+}
+#endif
+
+#if OS_AROS
+U1 exe_dnames (U1 *directory, struct varlist *varlist, S8 sreg)
+{
+	printf ("dnames ERROR: function not implemented on AROS!\n");
 	return (ERR_FILE_OPEN);
 }
 #endif
