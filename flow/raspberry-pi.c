@@ -20,6 +20,18 @@ S2 rpi_gpio_start (void)
 }
 
 
+/* Pin modes
+
+#define	INPUT			 0
+#define	OUTPUT			 1
+#define	PWM_OUTPUT		 2
+#define	GPIO_CLOCK		 3
+#define	SOFT_PWM_OUTPUT		 4
+#define	SOFT_TONE_OUTPUT	 5
+#define	PWM_TONE_OUTPUT		 6
+
+*/
+
 void rpi_gpio_mode (S2 pin, S2 mode)
 {
 	pinMode (pin, mode);

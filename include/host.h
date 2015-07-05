@@ -55,7 +55,7 @@
 
 /* switch JIT compiler on/off */
 
-#define HAVE_JIT_COMPILER	0
+#define HAVE_JIT_COMPILER	1
 
 #define JIT_X86_64 		TRUE
 #define JIT_X86_32		FALSE

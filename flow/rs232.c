@@ -326,7 +326,9 @@ void RS232_disableRTS(int comport_number)
 }
 
 
-#else         /* windows */
+#endif
+
+#if _WIN32 /* windows */
 
 
 HANDLE Cport[16];
@@ -529,6 +531,39 @@ void RS232_disableRTS(int comport_number)
 
 
 #endif
+
+
+#if __amigaos__ || __AROS__
+
+/* dummy functions, no support */
+
+int RS232_OpenComport(int comport_number, int baudrate)
+{
+	return (1);
+}
+
+int RS232_PollComport(int comport_number, unsigned char *buf, int size)
+{
+	return (1);
+}
+
+int RS232_SendByte(int comport_number, unsigned char byte)
+{
+	return (1);
+}
+
+int RS232_SendBuf(int comport_number, unsigned char *buf, int size)
+{
+	return (1);
+}
+
+void RS232_CloseComport(int comport_number)
+{
+  
+}
+
+#endif 
+
 
 
 void RS232_cputs(int comport_number, const char *text)  /* sends a string to serial port */

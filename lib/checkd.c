@@ -32,7 +32,8 @@ extern struct t_var t_var;
 
 U1 checkdigit (U1 *str)
 {
-    S2 i, j, str_len;
+    U1 binarystr[MAXSTRING_VAR + 1];
+	S2 i, j, b, str_len;
     U1 ok = FALSE, check;
 
     str_len = strlen (str);
@@ -164,5 +165,36 @@ U1 checkdigit (U1 *str)
     }
 
     t_var.digitstr[j] = '\0';
+    
+    
+    if (t_var.base == 2)
+	{
+		/* if base = 2 = binary then cut away leading zeroes */
+		j = 0; b = 0;
+		str_len = strlen (t_var.digitstr);
+		for (i = 0; i < str_len; i++)
+		{
+			if (t_var.digitstr[i] == '0')
+			{
+				if (j == 1)
+				{
+					binarystr[b] = '0';
+					b++;
+				}
+			}
+			
+			if (t_var.digitstr[i] == '1')
+			{
+				j = 1;
+				binarystr[b] = '1';
+				b++;
+			}
+		}
+		binarystr[b] = '\0';
+	
+		strcpy (t_var.digitstr, binarystr);
+	}
+		
+    
     return (check);
 }

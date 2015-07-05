@@ -68,6 +68,13 @@ S2 init_winsock (void)
 
 #endif
 
+#if __amigaos__ || __AROS__
+
+#define MSG_NOSIGNAL 0
+
+#endif
+
+
 U1 exe_gethostbyaddr (U1 *s_reg1, U1 *s_reg2)
 {
     struct hostent *hp;
