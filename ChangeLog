@@ -1,4 +1,4 @@
-nano (3.3.2)
+nano (3.3.3)
 	Nanoc: new experimental #ATOMIC / #ATOMIC_END for setting vector array start and end elements.
 	Threading safe!
 
@@ -27,7 +27,12 @@ nano (3.3.2)
 	
 	DLL/so lib: variable mutex added: var_lock / var_unlock
 	
--- Stefan Pietzonke <jay-t@gmx.net>  Wed 20 May 2015 20:12 +0200
+	added autogen-1.15.sh script for automake 1.15.
+	added asmjit/automake-linux.sh.
+	
+	added m4 and po for intltoolize and working automake scripts.
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Fri 11 Sep 2015 22:36 +0200
 
 nano (3.2.9)
 	VM: thread exit code is now a 64 bit return value.

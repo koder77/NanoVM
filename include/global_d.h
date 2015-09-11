@@ -1085,9 +1085,9 @@ typedef int                     NINT;
 
 /* message definitions */
 
-#define VM_START_TXT        "nano vm 64 bit 3.3.2 (c) 2014 by Stefan Pietzonke jay-t@gmx.net\n-== free software: GPL/MPL ==-\n     -==   blue sky   ==-\n        ==============\n"
-#define A_START_TXT         "nano assembler 64 bit 3.3.2  (c) 2014 by Stefan Pietzonke jay-t@gmx.net\n-== free software: GPL/MPL ==-\n"
-#define VERSION_TXT         "$VER: nano 3.3.2 (18.12.14)"
+#define VM_START_TXT        "nano vm 64 bit 3.3.3 (c) 2015 by Stefan Pietzonke jay-t@gmx.net\n-== free software: GPL/MPL ==-\n     -==   dark red   ==-\n        ==============\n"
+#define A_START_TXT         "nano assembler 64 bit 3.3.3  (c) 2015 by Stefan Pietzonke jay-t@gmx.net\n-== free software: GPL/MPL ==-\n"
+#define VERSION_TXT         "$VER: nano 3.3.3 (05.09.15)"
 
 
 #define STATUS_OK_TXT       "ok"

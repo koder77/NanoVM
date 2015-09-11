@@ -4,7 +4,9 @@
 AC_PREREQ([2.13])
 AC_INIT([nanovm], [3.3.3], [jay-t@gmx.net])
 AM_INIT_AUTOMAKE([1.9.6])
-
+# AM_GNU_GETTEXT_VERSION([0.19.4])
+# AM_GNU_GETTEXT([external])
+IT_PROG_INTLTOOL(0.50.2)
 
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADERS([config.h])
@@ -30,7 +32,7 @@ AC_FUNC_FORK
 AC_FUNC_MALLOC
 AC_CHECK_FUNCS([floor gethostbyaddr gethostbyname gethostname inet_ntoa memchr memset pow socket sqrt strchr])
 
-AC_CONFIG_FILES([Makefile
+AC_CONFIG_FILES([Makefile po/Makefile.in
                  assemb/Makefile
                  comp/Makefile
                  include/Makefile
