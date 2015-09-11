@@ -108,7 +108,7 @@ AUTOMAKE = ${SHELL} /home/stefan/Downloads/NanoVM/missing --run automake-1.9
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g -O2
+CFLAGS = -ffast-math -fomit-frame-pointer -O6
 CPP = gcc -E
 CPPFLAGS = 
 CXX = g++

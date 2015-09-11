@@ -2,7 +2,7 @@
 
 # gettextize --force --copy --no-changelog
 # autopoint --force
-aclocal-1.9 --acdir=/usr/share/aclocal-1.9
+aclocal-1.15 -I m4
 autoheader
-automake-1.9 --add-missing --gnu --copy
+automake-1.15 --add-missing --gnu --copy
 autoconf
