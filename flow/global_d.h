@@ -26,10 +26,10 @@
 ***************************************************************************/
 
 /* use normal type sockets instead of SDL_Net if set to 1 */
-#define SOCKETS_NATIVE	1
+#define SOCKETS_NATIVE	0
 
 /* set this to one if you want to use sound */
-#define WITH_SOUND		0
+#define WITH_SOUND		1
 
 /* Raspberry Pi GPIO support */
 #define RPI_GPIO		0

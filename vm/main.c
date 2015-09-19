@@ -441,10 +441,15 @@ run_prog:
 					exe_retval = pthread_create (&pthreads[threadnum].thread, NULL, exe_elist, (void*) threadnum);
 				#endif
 				#if OS_ANDROID
-					 LOGD("nanovm executing...\n");
+					#if ANDROID_THREADING
+						LOGD("nanovm executing...\n");
+						exe_retval = pthread_create (&pthreads[threadnum].thread, NULL, exe_elist, (void*) threadnum);
+					#else	
+						LOGD("nanovm executing...\n");
 					
-					 exe_retval = exe_elist (threadnum);
-					 printf ("done!\n");
+						exe_retval = exe_elist (threadnum);
+						printf ("done!\n");
+					#endif
 				#endif
 				#if OS_WINDOWS
 					 exe_retval = pthread_create (&pthreads[threadnum].thread, NULL, exe_elist, (void*) threadnum);

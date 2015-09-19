@@ -44,6 +44,9 @@
 
 #define ANDROID_DEBUG	0
 
+/* switch on/off multithreading support on Android */
+#define ANDROID_THREADING 0
+
 #define OS_LINUX_RPI	0			/* Raspberry Pi Raspbian: used for exe_socket.c, include IP V 4 sockets if set to 1. */
 
 
@@ -55,7 +58,7 @@
 
 /* switch JIT compiler on/off */
 
-#define HAVE_JIT_COMPILER	1
+#define HAVE_JIT_COMPILER	0
 
 #define JIT_X86_64 		TRUE
 #define JIT_X86_32		FALSE

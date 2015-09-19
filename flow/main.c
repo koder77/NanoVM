@@ -55,7 +55,8 @@ struct rpi rpi;
 	U1 ip[256], addr[256];
 	S2 new_tcpsock;
 #else
-	IPaddress ip;
+	U1 ip[256];
+	IPaddress ipadd;
 	TCPsocket tcpsock, new_tcpsock;
 #endif
 
@@ -168,7 +169,7 @@ void set_simple_cursor (void)
 /* Android start menu */
 U1 menu[10][80];
 U1 nanovm_path[256];
-
+int show_start_menu = FALSE;
 
 void init_screens (void)
 {
@@ -943,14 +944,16 @@ void get_mouse (S2 screennum)
 {
     Uint8 buttonmask, button = 0;
     Uint16 x, y;
+	int xstate, ystate;
 
     /* check mouse status */
 
     printf ("get_mouse: SDL_GetMouseState ... ");
 
     SDL_PumpEvents ();
-    buttonmask = SDL_GetMouseState (&x, &y);
-
+    buttonmask = SDL_GetMouseState (&xstate, &ystate);
+	x = xstate; y = ystate;
+	
     printf (" ok\n");
 
     if (buttonmask & SDL_BUTTON (1))
@@ -1518,12 +1521,18 @@ wait_command:
                     break;
 
                 case WIDTH:
-                    screen[screennum].width = buf2;
-                    break;
+					if (show_start_menu == FALSE)
+					{
+						screen[screennum].width = buf2;
+					}
+					break;
 
                 case HEIGHT:
-                    screen[screennum].height = buf2;
-                    break;
+					if (show_start_menu == FALSE)
+					{
+						screen[screennum].height = buf2;
+					}
+					break;
 
                 case BIT:
                     screen[screennum].video_bpp = buf2;
@@ -2394,6 +2403,7 @@ S2 get_server_ip (U1 *ip)
  #endif
 
     const SDL_VideoInfo *info;
+	
     Uint8 video_bpp;
     U1 run = TRUE;
     S2 command;
@@ -2402,7 +2412,6 @@ S2 get_server_ip (U1 *ip)
 	U1 wait_for_screen = 0;
 	
 	int x = 10, y = 10;
-	int show_start_menu = FALSE;
 	
 	/* native sockets stuff */
 	int yes = 1;
@@ -2479,8 +2488,7 @@ S2 get_server_ip (U1 *ip)
 #endif
         exit (1);
     }
-#endif
-
+#endif  
 
 #if WITH_SOUND
     if (Mix_OpenAudio (audio_rate, audio_format, audio_channels, audio_buffers))
@@ -2495,9 +2503,6 @@ S2 get_server_ip (U1 *ip)
     
 	if (show_start_menu == TRUE)
 	{
-		screen[0].width = 640;
-		screen[0].height = 480;
-	
 		/* Alpha blending doesn't work well at 8-bit color */
 		info = SDL_GetVideoInfo();
 		if (info->vfmt->BitsPerPixel > 8)
@@ -2510,6 +2515,9 @@ S2 get_server_ip (U1 *ip)
 			video_bpp = 16;
 		}
 
+		screen[0].width = info->current_w;
+		screen[0].height = info->current_h;
+		
 		if (! open_new_screen (0, 16))
 		{
 			printf ("openscreen error!\n");
@@ -2677,7 +2685,7 @@ S2 get_server_ip (U1 *ip)
 
     // --------------------------------------------------------------
 
-    if (SDLNet_ResolveHost (&ip, NULL, port) == -1)
+    if (SDLNet_ResolveHost (&ipadd, NULL, port) == -1)
     {
         printf ("SDLNet_ResolveHost: %s\n", SDLNet_GetError ());
 #if __ANDROID__
@@ -2686,7 +2694,7 @@ S2 get_server_ip (U1 *ip)
         exit (1);
     }
 
-    tcpsock = SDLNet_TCP_Open (&ip);
+    tcpsock = SDLNet_TCP_Open (&ipadd);
     if (!tcpsock)
     {
         printf ("SDLNet_TCP_Open: %s\n", SDLNet_GetError ());
@@ -2778,7 +2786,9 @@ S2 get_server_ip (U1 *ip)
 						else
 						{
 							/* ANDROID or start menu set: screen already opened on program start: */
-							send_8 (new_tcpsock, OK); /* just send ok: screen is open */
+								send_8 (new_tcpsock, OK);
+
+								printf ("sended open screen OK.\n");
 						}
 						break;
 

@@ -2,7 +2,7 @@
 
 #gettextize --force --copy --intl --no-changelog
 #autopoint --force
-aclocal-1.14
+aclocal-1.15
 autoheader
-automake-1.14 --add-missing --gnu --copy
+automake-1.15 --add-missing --gnu --copy
 autoconf

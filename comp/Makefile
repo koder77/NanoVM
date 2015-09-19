@@ -96,7 +96,8 @@ POST_UNINSTALL = :
 bin_PROGRAMS = nanoc$(EXEEXT)
 subdir = comp
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/m4/nls.m4 \
+	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 DIST_COMMON = $(srcdir)/Makefile.am $(noinst_HEADERS) \
@@ -115,32 +116,32 @@ nanoc_OBJECTS = $(am_nanoc_OBJECTS)
 nanoc_LDADD = $(LDADD)
 nanoc_DEPENDENCIES = ../assemb/jumpl.o ../assemb/var.o \
 	../assemb/loadp.o ../lib/libshared.a
-AM_V_P = $(am__v_P_$(V))
-am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))
+AM_V_P = $(am__v_P_@AM_V@)
+am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
 am__v_P_1 = :
-AM_V_GEN = $(am__v_GEN_$(V))
-am__v_GEN_ = $(am__v_GEN_$(AM_DEFAULT_VERBOSITY))
+AM_V_GEN = $(am__v_GEN_@AM_V@)
+am__v_GEN_ = $(am__v_GEN_@AM_DEFAULT_V@)
 am__v_GEN_0 = @echo "  GEN     " $@;
 am__v_GEN_1 = 
-AM_V_at = $(am__v_at_$(V))
-am__v_at_ = $(am__v_at_$(AM_DEFAULT_VERBOSITY))
+AM_V_at = $(am__v_at_@AM_V@)
+am__v_at_ = $(am__v_at_@AM_DEFAULT_V@)
 am__v_at_0 = @
 am__v_at_1 = 
-DEFAULT_INCLUDES = -I. -I$(top_builddir)
+DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-AM_V_CC = $(am__v_CC_$(V))
-am__v_CC_ = $(am__v_CC_$(AM_DEFAULT_VERBOSITY))
+AM_V_CC = $(am__v_CC_@AM_V@)
+am__v_CC_ = $(am__v_CC_@AM_DEFAULT_V@)
 am__v_CC_0 = @echo "  CC      " $@;
 am__v_CC_1 = 
 CCLD = $(CC)
 LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-AM_V_CCLD = $(am__v_CCLD_$(V))
-am__v_CCLD_ = $(am__v_CCLD_$(AM_DEFAULT_VERBOSITY))
+AM_V_CCLD = $(am__v_CCLD_@AM_V@)
+am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
 SOURCES = $(nanoc_SOURCES)
@@ -173,24 +174,24 @@ CTAGS = ctags
 am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/depcomp \
 	$(top_srcdir)/mkinstalldirs
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /home/stefan/Downloads/NanoVM/missing aclocal-1.15
-ALL_LINGUAS = 
-AMTAR = $${TAR-tar}
-AM_DEFAULT_VERBOSITY = 1
-AUTOCONF = ${SHELL} /home/stefan/Downloads/NanoVM/missing autoconf
-AUTOHEADER = ${SHELL} /home/stefan/Downloads/NanoVM/missing autoheader
-AUTOMAKE = ${SHELL} /home/stefan/Downloads/NanoVM/missing automake-1.15
+ACLOCAL = ${SHELL} /home/stefan/Downloads/NanoVM-2015-09-13/missing --run aclocal-1.9
+ALL_LINGUAS = @ALL_LINGUAS@
+AMTAR = ${SHELL} /home/stefan/Downloads/NanoVM-2015-09-13/missing --run tar
+AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
+AUTOCONF = ${SHELL} /home/stefan/Downloads/NanoVM-2015-09-13/missing --run autoconf
+AUTOHEADER = ${SHELL} /home/stefan/Downloads/NanoVM-2015-09-13/missing --run autoheader
+AUTOMAKE = ${SHELL} /home/stefan/Downloads/NanoVM-2015-09-13/missing --run automake-1.9
 AWK = gawk
-CC = gcc
+CC = arm-linux-androideabi-gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -ffast-math -fomit-frame-pointer -O6 -march=native
-CPP = gcc -E
+CFLAGS = -marm -march=armv7-a -mfloat-abi=softfp -Wcast-align -fno-strict-aliasing -O0 -pie -I/home/stefan/build/arm-linux-androideabi-4.8/sysroot/usr/include
+CPP = arm-linux-androideabi-cpp
 CPPFLAGS = 
-CXX = g++
+CXX = arm-linux-androideabi-g++
 CXXDEPMODE = depmode=gcc3
 CXXFLAGS = -g -O2
 CYGPATH_W = echo
-DATADIRNAME = share
+DATADIRNAME = @DATADIRNAME@
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
 ECHO_C = 
@@ -198,56 +199,56 @@ ECHO_N = -n
 ECHO_T = 
 EGREP = /bin/grep -E
 EXEEXT = 
-GMSGFMT = /usr/bin/msgfmt
+GMSGFMT = @GMSGFMT@
 GREP = /bin/grep
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
-INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-INTLTOOL_EXTRACT = /usr/bin/intltool-extract
-INTLTOOL_MERGE = /usr/bin/intltool-merge
-INTLTOOL_PERL = /usr/bin/perl
-INTLTOOL_UPDATE = /usr/bin/intltool-update
-INTLTOOL_V_MERGE = $(INTLTOOL__v_MERGE_$(V))
-INTLTOOL_V_MERGE_OPTIONS = $(intltool__v_merge_options_$(V))
-INTLTOOL__v_MERGE_ = $(INTLTOOL__v_MERGE_$(AM_DEFAULT_VERBOSITY))
-INTLTOOL__v_MERGE_0 = @echo "  ITMRG " $@;
-LDFLAGS = -lrt
-LIBOBJS = 
-LIBS = -lpthread 
-LTLIBOBJS = 
-MAKEINFO = ${SHELL} /home/stefan/Downloads/NanoVM/missing makeinfo
-MKDIR_P = /bin/mkdir -p
-MSGFMT = /usr/bin/msgfmt
-MSGMERGE = /usr/bin/msgmerge
+INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
+INTLTOOL_EXTRACT = @INTLTOOL_EXTRACT@
+INTLTOOL_MERGE = @INTLTOOL_MERGE@
+INTLTOOL_PERL = @INTLTOOL_PERL@
+INTLTOOL_UPDATE = @INTLTOOL_UPDATE@
+INTLTOOL_V_MERGE = @INTLTOOL_V_MERGE@
+INTLTOOL_V_MERGE_OPTIONS = @INTLTOOL_V_MERGE_OPTIONS@
+INTLTOOL__v_MERGE_ = @INTLTOOL__v_MERGE_@
+INTLTOOL__v_MERGE_0 = @INTLTOOL__v_MERGE_0@
+LDFLAGS = -marm -march=armv7-a -Wl,--fix-cortex-a8 -llog -lc -pie -L/home/stefan/build/arm-linux-androideabi-4.8/sysroot/usr/lib
+LIBOBJS =  ${LIBOBJDIR}malloc$U.o
+LIBS = 
+LTLIBOBJS =  ${LIBOBJDIR}malloc$U.lo
+MAKEINFO = ${SHELL} /home/stefan/Downloads/NanoVM-2015-09-13/missing --run makeinfo
+MKDIR_P = @MKDIR_P@
+MSGFMT = @MSGFMT@
+MSGMERGE = @MSGMERGE@
 OBJEXT = o
 PACKAGE = nanovm
 PACKAGE_BUGREPORT = jay-t@gmx.net
 PACKAGE_NAME = nanovm
-PACKAGE_STRING = nanovm 3.3.3
+PACKAGE_STRING = nanovm 3.1.1
 PACKAGE_TARNAME = nanovm
 PACKAGE_URL = 
-PACKAGE_VERSION = 3.3.3
+PACKAGE_VERSION = 3.1.1
 PATH_SEPARATOR = :
-RANLIB = ranlib
+RANLIB = arm-linux-androideabi-ranlib
 SET_MAKE = 
 SHELL = /bin/bash
-STRIP = 
-USE_NLS = yes
-VERSION = 3.3.3
-XGETTEXT = /usr/bin/xgettext
-abs_builddir = /home/stefan/Downloads/NanoVM/comp
-abs_srcdir = /home/stefan/Downloads/NanoVM/comp
-abs_top_builddir = /home/stefan/Downloads/NanoVM
-abs_top_srcdir = /home/stefan/Downloads/NanoVM
-ac_ct_CC = gcc
-ac_ct_CXX = g++
+STRIP = arm-linux-androideabi-strip
+USE_NLS = @USE_NLS@
+VERSION = 3.1.1
+XGETTEXT = @XGETTEXT@
+abs_builddir = /home/stefan/Downloads/NanoVM-2015-09-13/comp
+abs_srcdir = /home/stefan/Downloads/NanoVM-2015-09-13/comp
+abs_top_builddir = /home/stefan/Downloads/NanoVM-2015-09-13
+abs_top_srcdir = /home/stefan/Downloads/NanoVM-2015-09-13
+ac_ct_CC = 
+ac_ct_CXX = 
 am__include = include
 am__leading_dot = .
 am__quote = 
-am__tar = $${TAR-tar} chof - "$$tardir"
-am__untar = $${TAR-tar} xf -
+am__tar = ${AMTAR} chof - "$$tardir"
+am__untar = ${AMTAR} xf -
 bindir = ${exec_prefix}/bin
 build_alias = 
 builddir = .
@@ -256,25 +257,25 @@ datarootdir = ${prefix}/share
 docdir = ${datarootdir}/doc/${PACKAGE_TARNAME}
 dvidir = ${docdir}
 exec_prefix = ${prefix}
-host_alias = 
+host_alias = arm-linux-androideabi
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /home/stefan/Downloads/NanoVM/install-sh
-intltool__v_merge_options_ = $(intltool__v_merge_options_$(AM_DEFAULT_VERBOSITY))
-intltool__v_merge_options_0 = -q
+install_sh = /home/stefan/Downloads/NanoVM-2015-09-13/install-sh
+intltool__v_merge_options_ = @intltool__v_merge_options_@
+intltool__v_merge_options_0 = @intltool__v_merge_options_0@
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
 localstatedir = ${prefix}/var
 mandir = ${datarootdir}/man
-mkdir_p = $(MKDIR_P)
+mkdir_p = mkdir -p --
 oldincludedir = /usr/include
 pdfdir = ${docdir}
-prefix = /usr/local
+prefix = /home/stefan/build/arm-linux-androideabi-4.8/usr
 program_transform_name = s,x,x,
 psdir = ${docdir}
-runstatedir = ${localstatedir}/run
+runstatedir = @runstatedir@
 sbindir = ${exec_prefix}/sbin
 sharedstatedir = ${prefix}/com
 srcdir = .
@@ -409,14 +410,14 @@ include ./$(DEPDIR)/var_comp.Po
 	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
 #	$(AM_V_CC)source='$<' object='$@' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(COMPILE) -c -o $@ $<
+#	$(AM_V_CC@am__nodep@)$(COMPILE) -c -o $@ $<
 
 .c.obj:
 	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
 	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
 #	$(AM_V_CC)source='$<' object='$@' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(COMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+#	$(AM_V_CC@am__nodep@)$(COMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
