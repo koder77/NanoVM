@@ -474,19 +474,12 @@ U1 init_int_var (struct varlist *varlist, struct varlist_state *varlist_state)
 		}
 	#endif
 	
-	t_var.type = QINT_VAR;
+	t_var.type = INT_VAR;
     t_var.dims = NODIMS;
-    strcpy (t_var.varname, VECTOR_START_SB);
+    strcpy (t_var.varname, THREADING_SB);
     ALLOCVAR();
 
-    *varlist[VECTOR_START].q_m = 0;
-	
-	t_var.type = QINT_VAR;
-    t_var.dims = NODIMS;
-    strcpy (t_var.varname, VECTOR_END_SB);
-    ALLOCVAR();
-
-    *varlist[VECTOR_END].q_m = 0;
+    *varlist[THREADING].i_m = HAVE_THREADING;
 
     return (TRUE);
 }
@@ -514,7 +507,7 @@ U1 memblock_gonext (void)
     }
 }
 
-#if OS_ANDROID
+#if OS_ANDROID || OS_LINUX_RPI
 
 void *get_memblock (S2 msize)
 {

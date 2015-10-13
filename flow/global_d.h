@@ -25,6 +25,12 @@
 *
 ***************************************************************************/
 
+/* set Android SD card */
+/* #define ANDROID_SDCARD "/sdcard/" */
+
+#define ANDROID_SDCARD	"/storage/sdcard1/"
+
+
 /* use normal type sockets instead of SDL_Net if set to 1 */
 #define SOCKETS_NATIVE	0
 

@@ -26,11 +26,11 @@
 #define HAVE_INTTYPES_H 1
 
 /* Define to 1 if you have the `pthread' library (-lpthread). */
-/* #undef HAVE_LIBPTHREAD */
+#define HAVE_LIBPTHREAD 1
 
 /* Define to 1 if your system has a GNU libc compatible `malloc' function, and
    to 0 otherwise. */
-#define HAVE_MALLOC 0
+#define HAVE_MALLOC 1
 
 /* Define to 1 if you have the <malloc.h> header file. */
 #define HAVE_MALLOC_H 1
@@ -108,7 +108,7 @@
 #define PACKAGE_NAME "nanovm"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "nanovm 3.1.1"
+#define PACKAGE_STRING "nanovm 3.3.3"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "nanovm"
@@ -117,16 +117,16 @@
 #define PACKAGE_URL ""
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "3.1.1"
+#define PACKAGE_VERSION "3.3.3"
 
 /* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1
 
 /* Version number of package */
-#define VERSION "3.1.1"
+#define VERSION "3.3.3"
 
 /* Define to rpl_malloc if the replacement function should be used. */
-#define malloc rpl_malloc
+/* #undef malloc */
 
 /* Define to `int' if <sys/types.h> does not define. */
 /* #undef pid_t */

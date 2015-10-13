@@ -356,11 +356,8 @@ typedef int                     NINT;
 #define NANOVM_PATH			33
 #define NANOVM_PATH_SB		"_nanopath"
 
-#define VECTOR_START		34
-#define VECTOR_START_SB		"_vectorstart"		/* for vector array functions: set start- and end element */
-
-#define VECTOR_END			35
-#define VECTOR_END_SB		"_vectorend"			
+#define THREADING			34
+#define THREADING_SB		"_threading"
 
 #define VERSION_NUM         3320            /* version number */
 #define VERSION_OBJECT      3101            /* object file version, required */
@@ -382,7 +379,7 @@ typedef int                     NINT;
                                            /* creation (bytes) */
 
 #define VARLIST_START       7              /* first public-var = 6 */
-#define PROG_VARLIST_START  36             /* first var index in program */
+#define PROG_VARLIST_START  35             /* first var index in program */
 
 
 /* virtual machine */

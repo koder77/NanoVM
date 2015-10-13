@@ -905,7 +905,8 @@ NINT main (NINT ac, char *av[])
 		/* /prog access: add nano root path */
 			
 		#if OS_ANDROID
-			strcpy (source, "/sdcard/nanovm");
+			strcpy (source, ANDROID_SDCARD);
+			strcat (source, "nanovm");
 		#else
 			/* check ENV variable */
 		
@@ -949,7 +950,8 @@ NINT main (NINT ac, char *av[])
 	#if	 ANDROID_DEBUG
 		strcpy (source, "/data/local/tmp/nanovm/prog/");
 	#else
-		strcpy (source, "/sdcard/nanovm/prog/");
+		strcpy (source, ANDROID_SDCARD);
+		strcat (source, "nanovm/prog/");
 	#endif
 	
 	strcat (source, av[1]);

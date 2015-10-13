@@ -44,8 +44,10 @@
 
 #define ANDROID_DEBUG	0
 
-/* switch on/off multithreading support on Android */
-#define ANDROID_THREADING 0
+/* set Android SD card */
+/* #define ANDROID_SDCARD "/sdcard/" */
+
+#define ANDROID_SDCARD	"/storage/sdcard1/"
 
 #define OS_LINUX_RPI	0			/* Raspberry Pi Raspbian: used for exe_socket.c, include IP V 4 sockets if set to 1. */
 
@@ -58,7 +60,7 @@
 
 /* switch JIT compiler on/off */
 
-#define HAVE_JIT_COMPILER	0
+#define HAVE_JIT_COMPILER	1
 
 #define JIT_X86_64 		TRUE
 #define JIT_X86_32		FALSE
@@ -240,6 +242,21 @@
 
 #if OS_LINUX || OS_ANDROID
     #define NEWLINE_SB          "\n"
+#endif
+
+
+/* THREADING config ------------------------------------------------- */
+
+#if OS_LINUX
+	#define HAVE_THREADING			1
+#endif
+
+#if OS_WINDOWS
+	#define HAVE_THREADING			1
+#endif
+
+#if OS_ANDROID
+	#define HAVE_THREADING			0
 #endif
 
 

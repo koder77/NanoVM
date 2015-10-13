@@ -312,7 +312,8 @@ run_prog:
 				#if ANDROID_DEBUG
 					strcpy (buf, "/data/local/tmp/nanovm/prog/");
 				#else
-					strcpy (buf, "/sdcard/nanovm/prog/");
+					strcpy (buf, ANDROID_SDCARD);
+					strcat (buf, "nanovm/prog/");
 				#endif
 			}
             
@@ -437,22 +438,10 @@ run_prog:
             #if OS_AROS
                 pthreads[threadnum].thread = CreateThread (exe_elist_trampoline, (void *) threadnum);
             #else
-				#if OS_LINUX
+				#if HAVE_THREADING
 					exe_retval = pthread_create (&pthreads[threadnum].thread, NULL, exe_elist, (void*) threadnum);
-				#endif
-				#if OS_ANDROID
-					#if ANDROID_THREADING
-						LOGD("nanovm executing...\n");
-						exe_retval = pthread_create (&pthreads[threadnum].thread, NULL, exe_elist, (void*) threadnum);
-					#else	
-						LOGD("nanovm executing...\n");
-					
-						exe_retval = exe_elist (threadnum);
-						printf ("done!\n");
-					#endif
-				#endif
-				#if OS_WINDOWS
-					 exe_retval = pthread_create (&pthreads[threadnum].thread, NULL, exe_elist, (void*) threadnum);
+				#else
+					exe_retval = exe_elist (threadnum);
 				#endif
             #endif
         #endif

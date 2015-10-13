@@ -322,7 +322,8 @@ U1 conv_include_name (U1 *str, U1 *file, S2 type)
 					#if ANDROID_DEBUG
 						strcpy (file, "/data/local/tmp/nanovm/include/");
 					#else
-						strcpy (file, "/sdcard/nanovm/include/");
+						strcpy (file, ANDROID_SDCARD);
+						strcat (file, "nanovm/include/");
 					#endif
 				}
 

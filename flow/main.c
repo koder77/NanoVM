@@ -36,6 +36,7 @@
 
 #endif
 
+
 #include "global_d.h"
 
 
@@ -555,7 +556,10 @@ U1 load_font_bitmap (S2 screennum)
     U1 *fontname;
     S2 fontname_len;
 	
-	U1 android_path[] = "/sdcard/nanovm/fonts/";
+	U1 android_path[256];
+	
+	strcpy (android_path, ANDROID_SDCARD);
+	strcat (android_path, "nanovm/fonts/");
 
     /* check for font path env variable */
 
@@ -706,7 +710,10 @@ U1 load_font_ttf (S2 screennum)
     U1 *fontname;
     S2 fontname_len;
 	
-	U1 android_path[] = "/sdcard/nanovm/fonts/";
+	U1 android_path[256];
+	
+	strcpy (android_path, ANDROID_SDCARD);
+	strcat (android_path, "nanovm/fonts/");
 
     if (screen[screennum].font_ttf.font != NULL)
     {
@@ -2123,6 +2130,7 @@ S2 start_menu (void)
 	FILE *fptr;
 	
 	U1 startmenufile[256];
+	U1 splashfile[256];
 	
 	S2 x = 50, y = 10;
 	S2 max_entries = 9;
@@ -2146,7 +2154,10 @@ S2 start_menu (void)
 	
 	
 	/* load 260 x 244 splash screen logo (black/white) */
-	load_scan ("/sdcard/nanovm/nano-android-splash.scn", screen[0].bmap);
+	strcpy (splashfile, ANDROID_SDCARD);
+	strcat (splashfile, "nanovm/nano-android-splash.scn");
+	
+	load_scan (splashfile, screen[0].bmap);
 	update_screen (0);
 	
 	/* wait 5 secs */
@@ -2167,8 +2178,10 @@ S2 start_menu (void)
 	}
 	
 #else
+	strcpy (startmenufile, ANDROID_SDCARD);
+	strcat (startmenufile, "nanovm/home/startmenu.txt");
 
-	if ((fptr = fopen ("/sdcard/nanovm/home/startmenu.txt", "r")) == NULL)
+	if ((fptr = fopen (startmenufile, "r")) == NULL)
 	{
 		/* ERROR can't open file! */
 		return (1);
@@ -2306,7 +2319,7 @@ S2 get_server_ip (U1 *ip)
 	Uint8 ip_str[80];
 	
 	strcpy (ip_str, "192.168.1.1");
-	strcpy (request, "enter client ip: ");
+	strcpy (request, "enter server ip: ");
 	strcat (request, ip_str);
 	ip_len = strlen (ip_str);
 	
@@ -2586,6 +2599,7 @@ S2 get_server_ip (U1 *ip)
 			// user want to connect to remote VM, ask IP of the Nano VM
 			
 			get_server_ip (ip);
+			strcpy (command_shell, "");
 		}
 		else
 		{

@@ -64,7 +64,8 @@ U1 init_vmfile (void)
     exe_time ();
 
 	#if OS_ANDROID
-		strcpy (vm_mem.filename, "/sdcard/nanovm/tmp-");
+		strcpy (vm_mem.filename, ANDROID_SDCARD);
+		strcat (vm_mem.filename, "nanovm/tmp-");
 	#else
 		if (getenv (VM_FILE_SB) == NULL)
 		{

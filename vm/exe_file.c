@@ -208,7 +208,8 @@ U1 expand_pathname (U1 *path, U1 *newpath)
 		}
 		
 		#if OS_ANDROID
-			strcpy (newpath, "/sdcard/nanovm/");
+			strcpy (newpath, ANDROID_SDCARD);
+			strcat (newpath, "nanovm/");
 		#else
 			/* check ENV variable */
 		
@@ -243,7 +244,8 @@ U1 expand_pathname (U1 *path, U1 *newpath)
 		/* /home directory access */
 		
 		#if OS_ANDROID
-			strcpy (newpath, "/sdcard/nanovm/home/");
+			strcpy (newpath, ANDROID_SDCARD);
+			strcat (newpath, "nanovm/home/");
 		#else
 			/* check ENV variable */
 		

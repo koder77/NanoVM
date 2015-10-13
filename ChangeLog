@@ -34,7 +34,13 @@ nano (3.3.3)
 	
 	Flow: use native screen resolution on Android devices.
 	
--- Stefan Pietzonke <jay-t@gmx.net>  Sat 19 Sep 2015 10:24 +0200
+	vm: _threading variable set to 1 if host supports multithreading, else set to 0.
+	See host.h include file and vm/main.c.
+	
+	lib/mem.c/get_memblock() alignment bugfix for 64 bit ints and double numbers on Raspberry Pi.
+	Fixing a bad bus error bug.
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Tue 13 Oct 2015 19:41 +0200
 
 nano (3.2.9)
 	VM: thread exit code is now a 64 bit return value.
