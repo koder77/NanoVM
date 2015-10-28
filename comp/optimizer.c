@@ -360,7 +360,8 @@ U1 optimize_remove_double_pull (void)
     /* optimize for loops even better */
     
     S4 ind, nind = 0, i, j;
-
+	S4 found;
+	
     S4 **newcclist = NULL;
 
     newcclist = alloc_array_lint (cclist_ind + 1, MAXCCOMMARG);
@@ -374,8 +375,11 @@ U1 optimize_remove_double_pull (void)
     
 	for (i = 0; i <= cclist_ind; i++)
     {
+		found = 0;
+		
         if (cclist[i][0] == PULL_I || cclist[i][0] == PULL_L || cclist[i][0] == PULL_Q || cclist[i][0] == PULL_D  || cclist[i][0] == PULL_S || cclist[i][0] == PULL_B || cclist[i][0] == PPULL_I || cclist[i][0] == PPULL_L || cclist[i][0] == PPULL_Q || cclist[i][0] == PPULL_D  || cclist[i][0] == PPULL_S || cclist[i][0] == PPULL_B)
         {
+			found = 1;
             /* found PULL opcode: check for double PULL of same variable */
 			
 			if (cclist[i][0] == cclist[i + 1][0] && cclist[i][1] == cclist[i + 1][1])
@@ -394,8 +398,11 @@ U1 optimize_remove_double_pull (void)
 				nind++;
 			}
 		}
-		else
+		
+		if (found == 0)
 		{
+			/* direct opcode copy */
+			
 			newcclist[nind][0] = cclist[i][0];
             newcclist[nind][1] = cclist[i][1];
             newcclist[nind][2] = cclist[i][2];
@@ -432,3 +439,172 @@ U1 optimize_remove_double_pull (void)
 		
 	return (TRUE);
 }
+
+U1 optimize_stack (void)
+{
+	/* do stack optimization, remove unneeded stack push/pull ALL operations for faster function call! */
+	
+	S4 ind, nind = 0, i, j;
+	S4 found;
+	
+    S4 **newcclist = NULL;
+
+    newcclist = alloc_array_lint (cclist_ind + 1, MAXCCOMMARG);
+    if (newcclist == NULL)
+    {
+        printerr (MEMORY, NOTDEF, ST_PRE, "opcodes optimizing list");
+        return (FALSE);
+    }
+
+    printf ("optimizer: optimize stack START\n");
+    
+	for (i = 0; i <= cclist_ind; i++)
+    {
+		found = 0;
+
+		if (cclist[i][0] == STPULL_ALL_ALL)
+		{
+			if (cclist[i + 1][0] == STPUSH_ALL_ALL)
+			{
+				found = 1;
+				/* skip stack operations */
+				
+				i = i + 1;
+				printf ("optimizer: removing STACK pull/push ALL operation\n");
+			}
+		}
+
+		if (found == 0)
+		{
+			/* direct opcode copy */
+			
+			newcclist[nind][0] = cclist[i][0];
+            newcclist[nind][1] = cclist[i][1];
+            newcclist[nind][2] = cclist[i][2];
+            newcclist[nind][3] = cclist[i][3];
+            newcclist[nind][4] = cclist[i][4];
+            newcclist[nind][5] = cclist[i][5];
+            newcclist[nind][6] = cclist[i][6];
+			nind++;
+		}
+	}
+	
+	/* copy newcclist to cclist */
+
+    for (i = 0; i < nind; i++)
+    {
+        for (j = 0; j < MAXCCOMMARG; j++)
+        {
+            cclist[i][j] = newcclist[i][j];
+        }
+    }
+    cclist_ind = nind - 1;
+    
+    free (newcclist);
+    
+    /* set jumps */
+    
+    for (i = 0; i <= cclist_ind; i++)
+    {
+        if (cclist[i][0] == VM_LAB)
+        {
+            jumplist[cclist[i][1]].pos = i;
+        }
+    }
+		
+	return (TRUE);
+}
+
+U1 optimize_remove_double_opcode (void)
+{
+	/* remove double push with same arguments! 
+	 * 
+	 * BUGFIX for such code
+	 *
+	 */
+	
+	S4 ind, nind = 0, i, j;
+	S4 found;
+	
+    S4 **newcclist = NULL;
+
+    newcclist = alloc_array_lint (cclist_ind + 1, MAXCCOMMARG);
+    if (newcclist == NULL)
+    {
+        printerr (MEMORY, NOTDEF, ST_PRE, "opcodes optimizing list");
+        return (FALSE);
+    }
+
+    printf ("optimizer: optimize remove double opcode START\n");
+    
+	for (i = 0; i <= cclist_ind; i++)
+    {
+		found = 0;
+		if (cclist[i + 1][0] == cclist[i][0])
+		{
+			/* same opcode, compare arguments, if the same then skip second opcode. */
+			found = 1;
+			
+			if (cclist[i + 1][1] != cclist[i][1]) found = 0;
+			if (cclist[i + 1][2] != cclist[i][2]) found = 0;
+			if (cclist[i + 1][3] != cclist[i][3]) found = 0;
+		
+			if (found == 1)
+			{
+				/* skip next opcode becuse it is the same as opcode i!!! */
+				
+				newcclist[nind][0] = cclist[i][0];
+				newcclist[nind][1] = cclist[i][1];
+				newcclist[nind][2] = cclist[i][2];
+				newcclist[nind][3] = cclist[i][3];
+				newcclist[nind][4] = cclist[i][4];
+				newcclist[nind][5] = cclist[i][5];
+				newcclist[nind][6] = cclist[i][6];
+				nind++;
+
+				i = i + 1;
+				printf ("optimizer: removing double opcode, not needed\n");
+			}
+		}
+
+		if (found == 0)
+		{
+			/* direct opcode copy */
+			
+			newcclist[nind][0] = cclist[i][0];
+            newcclist[nind][1] = cclist[i][1];
+            newcclist[nind][2] = cclist[i][2];
+            newcclist[nind][3] = cclist[i][3];
+            newcclist[nind][4] = cclist[i][4];
+            newcclist[nind][5] = cclist[i][5];
+            newcclist[nind][6] = cclist[i][6];
+			nind++;
+		}
+	}
+	
+	/* copy newcclist to cclist */
+
+    for (i = 0; i < nind; i++)
+    {
+        for (j = 0; j < MAXCCOMMARG; j++)
+        {
+            cclist[i][j] = newcclist[i][j];
+        }
+    }
+    cclist_ind = nind - 1;
+    
+    free (newcclist);
+    
+    /* set jumps */
+    
+    for (i = 0; i <= cclist_ind; i++)
+    {
+        if (cclist[i][0] == VM_LAB)
+        {
+            jumplist[cclist[i][1]].pos = i;
+        }
+    }
+		
+	return (TRUE);
+}
+

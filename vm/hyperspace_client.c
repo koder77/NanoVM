@@ -289,10 +289,11 @@ S2 hs_save (struct varlist *varlist, S4 reg1, S8 reg2)
 	S8 ind;
 	S8 qint_var; F8 double_var; U1 string_var[4096];
 	U1 buf[4096];
+	U1 ret;
 	
 	if (varlist[reg1].size < reg2 || reg2 < 0)
     {
-		printf ("hs_load: ERROR!\n");
+		printf ("hs_save: ERROR!\n");
         return (1);
     }
 
@@ -415,5 +416,17 @@ S2 hs_save (struct varlist *varlist, S4 reg1, S8 reg2)
 		    }
 		    break;
 	}
+	
+	if (hs_cread_byte (socket, &ret) != ERR_FILE_OK)
+	{
+		printf ("hyperspace: hs_save get ACK error!\n");
+		return (1);
+	}
+	if (ret != 0) 
+	{
+		printf ("hyperspace: hs_save ACK error!\n");
+		return (1);
+	}
+	
 	return (0);
 }	

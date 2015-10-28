@@ -40,7 +40,25 @@ nano (3.3.3)
 	lib/mem.c/get_memblock() alignment bugfix for 64 bit ints and double numbers on Raspberry Pi.
 	Fixing a bad bus error bug.
 	
--- Stefan Pietzonke <jay-t@gmx.net>  Tue 13 Oct 2015 19:41 +0200
+	comp/optimizer.c: optimize_remove_double_pull() STACK pull/push optimization.
+	Removing unneeded stack operations for function call boost.
+	
+	nanoc: -OS option for optimize stack only.
+	
+	overall: cleanup of DEBUG printfs, now only ERRORS are shown.
+	
+	Hyperspace: code cleanup, proper prototypes for htonq and ntohq.
+	Data sending now works again.
+	
+	comp/emit.c: negative int constants now shown as -x: for ex. as -1.
+	
+	optimizer: remove double push with same arguments. Is default setting, even
+	if no optimization flag was set!
+	
+	array2var() now can be written as "var = array [ index ];".
+	For multi dimensional arrays the index has to be calculated manually!!
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Wed 28 Oct 2015 11:10 +0100
 
 nano (3.2.9)
 	VM: thread exit code is now a 64 bit return value.

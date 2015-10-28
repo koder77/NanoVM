@@ -380,3 +380,7 @@ U1 exe_vdiv2_d (struct varlist *varlist, struct varlist *global, S4 reg1, S4 reg
 /* exe_passw_input */
 
 void get_password (U1 *buffer, S8 size);
+
+/* exe_socket */
+S8 htonq (S8 num);
+S8 ntohq (S8 num);

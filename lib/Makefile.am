@@ -4,7 +4,6 @@
 #
 #
 
-
 noinst_LIBRARIES = libshared.a
 
 libshared_a_SOURCES = checkd.c \

@@ -682,54 +682,62 @@ U1 exe_gethostbyaddr (U1 *s_reg1, U1 *s_reg2)
 }
 
 #if ! OS_ANDROID
-S8 htonq (S8 hostd)
+
+#if BS_LITTLE_ENDIAN
+S8 htonq (S8 num)
 {
-    U1 *netdptr;
-    U1 *hostdptr;
-    S2 i;
-    S8 netd;
+    U1 *num_ptr, *new_ptr;
+    S8 newv;
 
-    netdptr = (U1 *) &netd;
+    num_ptr = (U1 *) &num;
+    new_ptr = (U1 *) &newv;
 
-    hostdptr = (U1 *) &hostd;
-    hostdptr += sizeof (S8) - 1;
+    new_ptr[0] = num_ptr[7];
+    new_ptr[1] = num_ptr[6];
+    new_ptr[2] = num_ptr[5];
+    new_ptr[3] = num_ptr[4];
+    new_ptr[4] = num_ptr[3];
+    new_ptr[5] = num_ptr[2];
+    new_ptr[6] = num_ptr[1];
+    new_ptr[7] = num_ptr[0];
 
-    #if BS_LITTLE_ENDIAN
-        for (i = 0; i <= sizeof (S8) - 1; i++)
-        {
-            *netdptr++ = *hostdptr--;
-        }
-    #else
-        netd = hostd;
-    #endif
-
-    return (netd);
+    return (newv);
 }
 
-S8 ntohq (S8 netd)
+S8 ntohq (S8 num)
 {
-    U1 *netdptr;
-    U1 *hostdptr;
-    S2 i;
-    S8 hostd;
+    U1 *num_ptr, *new_ptr;
+    S8 newv;
 
-    hostdptr = (U1 *) &hostd;
+    num_ptr = (U1 *) &num;
+    new_ptr = (U1 *) &newv;
 
-    netdptr = (U1 *) &netd;
-    netdptr += sizeof (S8) - 1;
+    new_ptr[0] = num_ptr[7];
+    new_ptr[1] = num_ptr[6];
+    new_ptr[2] = num_ptr[5];
+    new_ptr[3] = num_ptr[4];
+    new_ptr[4] = num_ptr[3];
+    new_ptr[5] = num_ptr[2];
+    new_ptr[6] = num_ptr[1];
+    new_ptr[7] = num_ptr[0];
 
-    #if BS_LITTLE_ENDIAN
-        for (i = 0; i <= sizeof (S8) - 1; i++)
-        {
-            *hostdptr++ = *netdptr--;
-        }
-    #else
-        hostd = netd;
-    #endif
+    return (newv);
+}
 
-    return (hostd);
+#else
+S8 htonq (S8 num)
+{
+	return (num);
+}
+
+S8 ntohq (S8 num)
+{
+	return (num);
 }
 #endif
+
+#endif
+
 
 F8 htond (F8 hostd)
 {

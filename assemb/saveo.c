@@ -582,7 +582,9 @@ U1 exe_save_object (U1 *file, S4 obj_size, U1 save_debug)
 			size = sizeof (S4);
 			CHECK_POS ();
 			
-			printf ("saveo: jumplist pos: %li\n", jumplist[i].pos);
+			#if DEBUG
+				printf ("saveo: jumplist pos: %li\n", jumplist[i].pos);
+			#endif
 			
             #if BS_LITTLE_ENDIAN
                 write_lint (obj_buf, conv_lint (jumplist[i].pos), pos);

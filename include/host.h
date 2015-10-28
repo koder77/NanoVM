@@ -195,16 +195,22 @@
 #if M_AMIGA
     #define BS_LITTLE_ENDIAN    FALSE
     #define MACHINE_TYPE        MACHINE_AMIGA
+    
+    #pragma message("BIG ENDIAN")
 #endif
 
 #if M_PC
     #define BS_LITTLE_ENDIAN    TRUE
     #define MACHINE_TYPE        MACHINE_PC
+    
+    #pragma message("LITTLE ENDIAN")
 #endif
 
 #if M_ARM
 	#define BS_LITTLE_ENDIAN	TRUE
 	#define MACHINE_TYPE		MACHINE_ARM
+	
+	#pragma message("LITTLE ENDIAN")
 #endif
 
 /* if os uses slash "/" in paths, then set to FALSE ----------------- */

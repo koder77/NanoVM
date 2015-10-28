@@ -1,7 +1,7 @@
 #!/bin/sh
 
 echo "running configure..."
-./configure CFLAGS="-ffast-math -fomit-frame-pointer -O6"
-#!./configure CFLAGS="-ffast-math -fomit-frame-pointer -O3"
+export CC=clang-3.7 CXX=clang++-3.7 && ./configure CFLAGS="-ffast-math -fomit-frame-pointer -O6"
+#! ./configure CFLAGS="-ffast-math -fomit-frame-pointer -O6"
 echo "running make..."
 make

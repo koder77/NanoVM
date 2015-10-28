@@ -83,11 +83,15 @@ void printerr (S2 errnum, S4 pos, U1 status, U1 *str)
 
 void printcompilermsg (void)
 {
-    /* print out gcc version and compile date */
+    /* print out compiler version and compile date */
 
-    #if __GNUC__ >= 3
-        printf ("compiled by gcc version: %i.%i.%i on %s\n", __GNUC__, __GNUC_MINOR__, __GNUC_PATCHLEVEL__, __DATE__);
-    #else
-        printf ("compiled by gcc version: %i.%i on %s\n", __GNUC__, __GNUC_MINOR__, __DATE__);
-    #endif
+	#if __clang__
+		printf ("compiled by clang version: %i.%i.%i on %s\n", __clang_major__, __clang_minor__, __clang_patchlevel__, __DATE__);
+	#else
+		#if __GNUC__ >= 3
+			printf ("compiled by gcc version: %i.%i.%i on %s\n", __GNUC__, __GNUC_MINOR__, __GNUC_PATCHLEVEL__, __DATE__);
+		#else
+			printf ("compiled by gcc version: %i.%i on %s\n", __GNUC__, __GNUC_MINOR__, __DATE__);
+		#endif
+	#endif
 }

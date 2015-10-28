@@ -555,7 +555,7 @@ U1 compile ()
 					func_call_reverse_args = TRUE;
 				}
 				
-				printf ("src line arg 0: %s\n", src_line.arg[0]);
+				// printf ("src line arg 0: %s\n", src_line.arg[0]);
 				
                 translate = translate_code ();
                 if (translate == TRUE)
@@ -2453,7 +2453,7 @@ U1 compile ()
 					printf ("DEBUG: found list.\n");
 				#endif
 				
-				/* found x = [ 1, 2, 3, 4 ] 0;  expression */
+				/* found x = [ 1 2 3 4 ] 0;  expression */
 				
 				/* get index offset */
 				if (checkdigit (src_line.arg[src_line.args]) == TRUE && src_line.arg[src_line.args][0] != ARCLOSE_SB)
@@ -2836,7 +2836,344 @@ U1 compile ()
 				return (TRUE);
 			}
                             
+            
+            /* check if: var = array [ index ]; => array2var() */
+			/* check for brackets: [ ] */
+			
+			if (src_line.arg[3][0] == AROPEN_SB && src_line.arg[5][0] == ARCLOSE_SB)
+			{
+				// printf ("checking array2var expression...\n");
+				/* parse array2var expression... */
+				
+				/* get array name */
+				var2 = getvarind_comp (src_line.arg[2]);
+				if (var2 == NOTDEF)
+				{
+					printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[2], plist_ind);
+					return (FALSE);
+				}
+				
+				if (src_line.arg[2][0] == COMP_PRIVATE_VAR_SB)
+				{
+					type2 = pvarlist_obj[var2].type;
+					private_variable = TRUE;
+				}
+				else
+				{
+					type2 = varlist[var2].type;
+					private_variable = FALSE;
+				}
+            
+				/* try get array index */
+				var3 = getvarind_comp (src_line.arg[4]);
+				if (var3 == NOTDEF)
+				{
+					if (checkdigit (src_line.arg[4]) == TRUE)
+					{
+						#if DEBUG
+							printf ("checkdigit OK!\n");
+						#endif
+
+						if (! make_val (INT_VAR, varlist, NORMAL_VAR))
+						{
+							printerr (MEMORY, plist_ind, ST_PRE, t_var.varname);
+							return (FALSE);
+						}
+						var3 = t_var.varlist_ind;
+						type3 = t_var.type;
+					}
+				}
+				else
+				{
+					if (src_line.arg[4][0] == COMP_PRIVATE_VAR_SB)
+					{
+						type3 = pvarlist_obj[var3].type;
+						private_variable = TRUE;
+					}
+					else
+					{
+						type3 = varlist[var3].type;
+						private_variable = FALSE;
+					}
+				}
+            
+				switch (type3)
+				{
+					case INT_VAR:
+						/* get free L register */
                             
+                        reg1 = get_vmreg_var_l (var3);
+                        if (reg1 == EMPTY)
+                        {
+                            reg1 = get_vmreg_l ();
+                            if (reg1 != FULL)
+                            {
+                                /* set assign code, using free register */
+
+                                if (private_variable == TRUE)
+                                {
+                                    if (! set2 (PPUSH_I, var3, reg1))
+                                    {
+                                        return (MEMORY);
+                                    }
+                                }
+                                else
+                                {
+                                    if (! set2 (PUSH_I, var3, reg1))
+                                    {
+                                        return (MEMORY);
+                                    }
+                                }
+                            }
+						}
+                        break;
+
+                    case LINT_VAR:
+                        /* get free L register */
+
+                        reg1 = get_vmreg_var_l (var3);
+                        if (reg1 == EMPTY)
+                        {
+                            reg1 = get_vmreg_l ();
+                            if (reg1 != FULL)
+                            {
+                                /* set assign code, using free register */
+
+                                if (private_variable == TRUE)
+                                {
+                                    if (! set2 (PPUSH_L, var3, reg1))
+                                    {
+                                        return (MEMORY);
+                                    }
+                                }
+                                else
+                                {
+                                    if (! set2 (PUSH_L, var3, reg1))
+                                    {
+                                        return (MEMORY);
+                                    }
+                                }
+                            }
+						}
+                        break;
+
+                   case QINT_VAR:
+                        /* get free L register */
+
+                        reg1 = get_vmreg_var_l (var3);
+                        if (reg1 == EMPTY)
+                        {
+                            reg1 = get_vmreg_l ();
+                            if (reg1 != FULL)
+                            {
+                                /* set assign code, using free register */
+
+                                if (private_variable == TRUE)
+                                {
+                                    if (! set2 (PPUSH_Q, var3, reg1))
+                                    {
+                                        return (MEMORY);
+                                    }
+                                }
+                                else
+                                {
+                                    if (! set2 (PUSH_Q, var3, reg1))
+                                    {
+                                        return (MEMORY);
+                                    }
+                                }
+                            }
+						}
+						break;
+				}
+				
+				switch (type)
+				{
+					case INT_VAR:
+					case LINT_VAR:
+					case QINT_VAR:
+					case BYTE_VAR:
+						reg2 = get_vmreg_l ();
+						break;
+						
+					case DOUBLE_VAR:
+						reg2 = get_vmreg_d ();
+						break;
+				}
+				
+				if (private_variable == FALSE)
+				{
+					switch (type)
+					{
+						case INT_VAR:
+							if (! set3 (LETARRAY2_I, var2, reg1, reg2))
+							{
+								return (MEMORY);
+							}
+							break;
+							
+						case LINT_VAR:
+							if (! set3 (LETARRAY2_L, var2, reg1, reg2))
+							{
+								return (MEMORY);
+							}
+							break;
+				
+                        case QINT_VAR:
+							if (! set3 (LETARRAY2_Q, var2, reg1, reg2))
+							{
+								return (MEMORY);
+							}
+							break;   
+                    
+						case DOUBLE_VAR:
+							if (! set3 (LETARRAY2_D, var2, reg1, reg2))
+							{
+								return (MEMORY);
+							}
+							break;
+				
+						case BYTE_VAR:
+							if (! set3 (LETARRAY2_B, var2, reg1, reg2))
+							{
+								return (MEMORY);
+							}
+							break;
+					}
+				}
+				else
+				{
+					switch (type)
+					{
+						case INT_VAR:
+							if (! set3 (PMOVE_A_I, var2, reg1, reg2))
+							{
+								return (MEMORY);
+							}
+							break;
+							
+						case LINT_VAR:
+							if (! set3 (PMOVE_A_L, var2, reg1, reg2))
+							{
+								return (MEMORY);
+							}
+							break;
+				
+                        case QINT_VAR:
+							if (! set3 (PMOVE_A_Q, var2, reg1, reg2))
+							{
+								return (MEMORY);
+							}
+							break;   
+                    
+						case DOUBLE_VAR:
+							if (! set3 (PMOVE_A_D, var2, reg1, reg2))
+							{
+								return (MEMORY);
+							}
+							break;
+				
+						case BYTE_VAR:
+							if (! set3 (PMOVE_A_B, var2, reg1, reg2))
+							{
+								return (MEMORY);
+							}
+							break;
+					}
+				}
+				
+				switch (type)
+                {
+                    case INT_VAR:
+                        if (private_variable == TRUE)
+                        {
+                            if (! set2 (PPULL_I, reg2, var))
+                            {
+                                return (MEMORY);
+                            }
+                        }
+                        else
+                        {
+                            if (! set2 (PULL_I, reg2, var))
+                            {
+                                return (MEMORY);
+                            }
+                        }
+                        break;
+
+                    case LINT_VAR:
+                        if (private_variable == TRUE)
+                        {
+                            if (! set2 (PPULL_L, reg2, var))
+                            {
+                                return (MEMORY);
+                            }
+                        }
+                        else
+                        {
+                            if (! set2 (PULL_L, reg2, var))
+                            {
+                                return (MEMORY);
+                            }
+                        }
+                        break;
+
+                    case QINT_VAR:
+                        if (private_variable == TRUE)
+                        {
+                            if (! set2 (PPULL_Q, reg2, var))
+                            {
+                                return (MEMORY);
+                            }
+                        }
+                        else
+                        {
+                            if (! set2 (PULL_Q, reg2, var))
+                            {
+                                return (MEMORY);
+                            }
+                        }
+                        break;
+
+                    case DOUBLE_VAR:
+                        if (private_variable == TRUE)
+                        {
+                            if (! set2 (PPULL_D, reg2, var))
+                            {
+                                return (MEMORY);
+                            }
+                        }
+                        else
+                        {
+                            if (! set2 (PULL_D, reg2, var))
+                            {
+                                return (MEMORY);
+                            }
+                        }
+                        break;
+
+                    case BYTE_VAR:
+                        if (private_variable == TRUE)
+                        {
+                            if (! set2 (PPULL_B, reg2, var))
+                            {
+                                return (MEMORY);
+                            }
+                        }
+                        else
+                        {
+                            if (! set2 (PULL_B, reg2, var))
+                            {
+                                return (MEMORY);
+                            }
+                        }
+                        break;
+                }
+				
+				return (TRUE);
+			}
+				
+
             /* check if ++ or -- */
             op_found = FALSE;
             if (strcmp (src_line.arg[2], COMP_OP_INC_SB) == 0)

@@ -226,6 +226,8 @@ S2 hyperspace_server (S8 socket)
     {
         /* get hyperspace variable name */
         
+		// printf ("hsserver DEBUG waiting...\n");
+		
         if (exe_sread_line_string (socket, varname) != ERR_FILE_OK)
         {
             printf ("hyperspace: read varname error!\n");
@@ -253,6 +255,9 @@ S2 hyperspace_server (S8 socket)
             return (1);
         }
         
+        // printf ("hsserver DEBUG got request variable: %s\n", varname);
+        // printf ("hsserver DEBUG max_ind: %lli\n", max_ind);
+		
         ret = 0;
 		
         if (access == 1)
@@ -266,6 +271,8 @@ S2 hyperspace_server (S8 socket)
 					
 					for (index = 0; index < max_ind; index++)
 					{
+						// printf ("hyperspace server: DEBUG: hssave int index: %lli ...\n", index);
+						
 						if (hs_sread_qint (socket, &qint_var) != ERR_FILE_OK)
 						{
 							printf ("hyperspace: read int error!\n");
@@ -276,6 +283,8 @@ S2 hyperspace_server (S8 socket)
 						{
 							return (1);
 						}
+						
+						// printf ("data received!\n");
 					}
 					UNLOCK();
 					break;
@@ -390,10 +399,14 @@ S2 hyperspace_server (S8 socket)
             switch (varlist[varind].type)
             {
                 case INT_VAR:
+					// printf ("hyperspace server: DEBUG try to get LOCK for int var...\n");
+					
                     LOCK();
                     
 					for (index = 0; index < max_ind; index ++)
 					{
+						// printf ("hyperspace server: DEBUG: hsload int index: %lli ...\n", index);
+						
 						if (! exe_let_array2_int (varlist, varind, index, &qint_var))
 						{
 							printf ("hyperspace: array error!\n");
@@ -405,6 +418,8 @@ S2 hyperspace_server (S8 socket)
 							printf ("hyperspace: write int error!\n");
 							return (1);
 						}
+						
+						// printf ("data sent!\n");
 					}
                     
                     UNLOCK();

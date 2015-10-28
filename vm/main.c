@@ -246,6 +246,25 @@ NINT main (NINT ac, char *av[])
 
     strcpy (prog, av[1]);
     
+	
+	/* DEBUG */
+	/*
+	S8 datahost = 12345678;
+	S8 datanet, datahost_rec;
+	
+	datanet = htonq (datahost);
+	
+	printf ("datanet: %lli\n", datanet);
+	
+	datahost_rec = ntohq (datanet);
+	
+	printf ("data sent htonq/ntohq: %lli, data received: %lli\n", datahost, datahost_rec);
+	if (datahost_rec != datahost) printf ("ERROR htonq/ntohq!!! data corrupt\n");
+	*/
+	/* DEBUG */
+	
+	
+	
 run_prog:
     PRINTD("memblock_gonext\n");
 

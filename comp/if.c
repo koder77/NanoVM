@@ -87,8 +87,10 @@ U1 set_else_jmp (S4 ind)
     sprintf (labelnum, "%d", ind);
     strcat (label, labelnum);
 
-    printf ("set_else_jmp: label: %s\n", label);
-
+	#if DEBUG
+		printf ("set_else_jmp: label: %s\n", label);
+	#endif
+		
     if (jumplist_gonext () == FALSE)
     {
         return (FALSE);
@@ -111,8 +113,10 @@ U1 set_endif_jmp (S4 ind)
     sprintf (labelnum, "%d", ind);
     strcat (label, labelnum);
 
-    printf ("set_endif_jmp: label: %s\n", label);
-
+	#if DEBUG
+		printf ("set_endif_jmp: label: %s\n", label);
+	#endif
+	
     if (jumplist_gonext () == FALSE)
     {
         return (FALSE);
@@ -136,12 +140,11 @@ U1 set_else_label (S4 ind)
     sprintf (labelnum, "%d", ind);
     strcat (label, labelnum);
 
-    printf ("DEBUG: set_else_label: '%s'\n", label);
-
+	#if DEBUG
+    	printf ("DEBUG: set_else_label: '%s'\n", label);
+	#endif
+	
     ret = compile_set_label (label);
-
-    printf ("ret: %i\n", ret);
-
     return (ret);
 }
 

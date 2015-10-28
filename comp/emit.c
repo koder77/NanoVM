@@ -444,7 +444,7 @@ U1 emit_code (U1 *filename)
 
                                 if (strcmp (varlist[cclist[i][j]].name, "") == 0)
                                 {
-                                    fprintf (fptr, "%li", *varlist[cclist[i][j]].i_m);
+                                    fprintf (fptr, "%i", *varlist[cclist[i][j]].i_m);
                                 }
                                 else
                                 {
@@ -524,9 +524,6 @@ U1 emit_code (U1 *filename)
                             case STRING_A_VAR:
                             case BYTE_A_VAR:
                             case DYNAMIC_A_VAR:
-                                
-                                printf ("DEBUG: ARRAY-VAR\n");
-                                
                                 fprintf (fptr, "%s", varlist[cclist[i][j]].name);
                                 break;
 

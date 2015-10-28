@@ -590,8 +590,10 @@ S2 translate_code (void)
     S4 var, dims, jump;
     S2 reg[3];
 
-    printf ("compile: translate_code ...\n");
-
+	#if DEBUG
+		printf ("compile: translate_code ...\n");
+	#endif
+	
     for (i = 0; i <= TRANSLATE_MAX; i++)
     {
         if (strcmp (src_line.arg[0], translate[i].opcode) == 0)
@@ -601,8 +603,10 @@ S2 translate_code (void)
         }
     }
 
-    printf ("compile: opcode: %li\n", opcode);
-
+	#if DEBUG
+		printf ("compile: opcode: %li\n", opcode);
+	#endif
+		
     if (opcode == -1)
     {
         /* printf ("compile: translate_code: error unknown opcode: %s, line: %li\n", src_line.arg[0], plist_ind); */
@@ -647,9 +651,11 @@ S2 translate_code (void)
             /* found label -> set LABEL as type */
 
             type[i] = LABEL;
-
-            printf ("compile: translate_code: LABEL found!\n");
-        }
+			
+			#if DEBUG
+				printf ("compile: translate_code: LABEL found!\n");
+			#endif 
+		}
         else
         {
             var = getvarind_comp (src_line.arg[i + 1]);
@@ -672,38 +678,41 @@ S2 translate_code (void)
         
         if (type[i] != LABEL)
 		{
-        if (src_line.arg[i + 1][0] == COMP_PRIVATE_VAR_SB)
-        {
-            dims = pvarlist_obj[var].dims;
-        }
-        else
-        {
-            dims = varlist[var].dims;
-        }
+			if (src_line.arg[i + 1][0] == COMP_PRIVATE_VAR_SB)
+			{
+				dims = pvarlist_obj[var].dims;
+			}
+			else
+			{
+				dims = varlist[var].dims;
+			}
 
-        if (translate[opcode].args[i] == ARRAY_VAR)
-        {
-            if (src_line.arg[i + 1][0] == COMP_PRIVATE_VAR_SB)
-            {
-                if (pvarlist_obj[var].dims == NODIMS)
-                {
-                    printf ("compile: translate_code: error: not an array %s, line: %li\n", src_line.arg[i + 1], plist_ind);
-                    return (FALSE);
-                }
-            }
-            else
-            {
-                if (varlist[var].dims == NODIMS)
-                {
-                    printf ("compile: translate_code: error: not an array %s, line: %li\n", src_line.arg[i + 1], plist_ind);
-                    return (FALSE);
-                }
-            }
-        }
+			if (translate[opcode].args[i] == ARRAY_VAR)
+			{
+				if (src_line.arg[i + 1][0] == COMP_PRIVATE_VAR_SB)
+				{
+					if (pvarlist_obj[var].dims == NODIMS)
+					{
+						printf ("compile: translate_code: error: not an array %s, line: %li\n", src_line.arg[i + 1], plist_ind);
+						return (FALSE);
+					}
+				}
+				else
+				{
+					if (varlist[var].dims == NODIMS)
+					{
+						printf ("compile: translate_code: error: not an array %s, line: %li\n", src_line.arg[i + 1], plist_ind);
+						return (FALSE);
+					}
+				}
+			}
 		}
-        printf ("compile: var: %s = %li\n", src_line.arg[i + 1], var);
-        printf ("compile: type %li\n", type[i]);
-
+		
+		#if DEBUG
+			printf ("compile: var: %s = %li\n", src_line.arg[i + 1], var);
+			printf ("compile: type %li\n", type[i]);
+		#endif
+			
         switch (type[i])
         {
             case INT_VAR:
@@ -1195,8 +1204,11 @@ S2 translate_code (void)
                     reg[i] = jumplist_ind;
                 }
                 
-                printf ("compile: [LABEL] found: %s\n", src_line.arg[i + 1]);
-                break;
+				#if DEBUG
+					printf ("compile: [LABEL] found: %s\n", src_line.arg[i + 1]);
+				#endif
+				
+				break;
         }
     }
 
@@ -1204,9 +1216,11 @@ S2 translate_code (void)
     {
         /* only one emit opcode */
 
-        printf ("compile: translate_code: transarg = DIRECT\n");
-
-        switch (translate[opcode].argnum)
+		#if DEBUG
+			printf ("compile: translate_code: transarg = DIRECT\n");
+		#endif
+        
+		switch (translate[opcode].argnum)
         {
             case 0:
                 if (! set0 (translate[opcode].trans[1][0]))
@@ -1355,9 +1369,6 @@ S2 translate_code (void)
                     {
                         return (MEMORY);
                     }
-                    
-                    printf ("translate: PULL_Q: %li\n", var);
-                    
                     set_vmreg_l (reg[translate[opcode].target - 1], var, NORMAL);
                 }
                 break;

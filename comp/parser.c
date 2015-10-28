@@ -513,9 +513,12 @@ S2 parse_line (U1 *str)
             printf ("parse_line: ERROR no function name!\n");
             return (-1);
         }
-        printf ("'%s'\n", buf);
-
-        strcpy (src_line.arg[0], buf);      /* save function name */
+        
+		#if DEBUG
+			printf ("'%s'\n", buf);
+		#endif
+        
+		strcpy (src_line.arg[0], buf);      /* save function name */
         src_line.opcode_n = COMP_FUNC_CALL;
 
         /* check for () => empty arguments */
@@ -826,7 +829,8 @@ NINT main (NINT ac, char *av[])
     U1 source[256], source_suffix[256], object[256], arg[256];
     U1 do_optimize = FALSE;
     U1 do_optimize_2 = FALSE;
-
+	U1 do_optimize_stack_only = FALSE;
+	
     plist_size = MAXLINES;
     varlist_state.varlist_size = MAXVAR;
     pvarlist_state.varlist_size = MAXVAR;       /* thread private varlist */
@@ -897,6 +901,12 @@ NINT main (NINT ac, char *av[])
             printf ("optimizer = ON: O2\n");
             do_optimize = TRUE;
             do_optimize_2 = TRUE;
+        }
+        
+        if (strcmp (av[2], "-OS") == 0)
+        {
+            printf ("optimizer = ON: OS\n");
+            do_optimize_stack_only = TRUE;
         }
     }
 
@@ -1080,11 +1090,31 @@ NINT main (NINT ac, char *av[])
         debug_exelist ();
     #endif
 
+	if (! optimize_remove_double_opcode())
+	{
+		exe_shutdown (WARN);
+	}
+		
+	if (do_optimize_stack_only)
+	{
+		printf ("optimizing stack only...\n");
+		
+		if (! optimize_stack ())
+		{
+			exe_shutdown (WARN);
+		}
+	}
+		
     if (do_optimize || optimize_O)
     {
         printf ("optimizing...\n");
 
         if (! optimize ())
+		{
+			exe_shutdown (WARN);
+		}
+		
+		if (! optimize_stack ())
 		{
 			exe_shutdown (WARN);
 		}

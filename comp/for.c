@@ -88,14 +88,13 @@ U1 set_for_label (S4 ind)
     sprintf (labelnum, "%d", ind);
     strcat (label, labelnum);
 
-    printf ("DEBUG: set_for_label: '%s'\n", label);
-
+	#if DEBUG
+		printf ("DEBUG: set_for_label: '%s'\n", label);
+	#endif
+	
     ret = compile_set_label (label);
 
     for_comp[ind].for_pos = jumplist_ind;
-
-    printf ("ret: %i\n", ret);
-
     return (ret);
 }
 
