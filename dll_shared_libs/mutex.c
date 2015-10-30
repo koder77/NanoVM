@@ -33,9 +33,9 @@ void var_lock (struct varlist *varlist, S4 index)
 {
 	#if OS_AROS
 		LockMutex (varlist[index].mutex);
-    #else
-        pthread_mutex_lock (&varlist[index].mutex);
-    #endif
+	#else
+		pthread_mutex_lock (&varlist[index].mutex);
+	#endif
 }
 	
 void var_unlock (struct varlist *varlist, S4 index)
@@ -44,5 +44,5 @@ void var_unlock (struct varlist *varlist, S4 index)
 		UnlockMutex (varlist[index].mutex);
 	#else
 		pthread_mutex_unlock (&varlist[index].mutex);
-    #endif
+	#endif
 }
