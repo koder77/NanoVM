@@ -5,7 +5,7 @@
 * Author:   Stefan Pietzonke
 * Project:  nano, virtual machine
 *
-* Purpose:  array functions
+* Purpose:  mutex functions
 *
 * (c) Copyright Stefan Pietzonke (jay-t@gmx.net), 2015
 *
