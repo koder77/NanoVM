@@ -142,7 +142,7 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 	logger.setOption(kLoggerOptionBinaryForm, true);
 
 	JitRuntime runtime;
-	Assembler a(&runtime);
+	X86Assembler a(&runtime);
 	
 	/* register bases used for calculating register offset (OFFSET()) */
 	
@@ -1204,13 +1204,15 @@ extern "C" int free_jit_code ()
 	using namespace asmjit;
 	using namespace asmjit::host;
 	
+	JitRuntime runtime;
+	
 	S4 i;
 
 	if (JIT_code_ind > -1)
 	{
 		for (i = 0; i <= JIT_code_ind; i++)
 		{
-			MemoryManager::getGlobal()->release((Func *) JIT_code[i].fn);
+			runtime.release((Func *) JIT_code[i].fn);
 		}
 	}
 

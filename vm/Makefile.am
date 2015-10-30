@@ -43,7 +43,7 @@ noinst_HEADERS = main_d.h \
 		 snprintf.h \
 		 jit_x86.h
 
-LDADD = ../lib/libshared.a ../asmjit/libAsmJit.a -ldl
+LDADD = ../lib/libshared.a ../asmjit/build/libasmjit.a -ldl
 #LDADD = ../lib/libshared.a
 
 AM_CFLAGS = -O0 -g -lm -ldl

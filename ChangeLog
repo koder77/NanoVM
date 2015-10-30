@@ -1,3 +1,8 @@
+Nano VM (3.4)
+	Added latest AsmJit JIT-compiler code from github (original code branch)
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Fri 30 Oct 2015 13:17 +0100
+
 nano (3.3.3)
 	Nanoc: new experimental #ATOMIC / #ATOMIC_END for setting vector array start and end elements.
 	Threading safe!

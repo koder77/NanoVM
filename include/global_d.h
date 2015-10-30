@@ -359,7 +359,7 @@ typedef int                     NINT;
 #define THREADING			34
 #define THREADING_SB		"_threading"
 
-#define VERSION_NUM         3320            /* version number */
+#define VERSION_NUM         3400            /* version number */
 #define VERSION_OBJECT      3101            /* object file version, required */
 
 #define BLOCK_TMP_1         0              /* TMP block handling */
@@ -1082,9 +1082,9 @@ typedef int                     NINT;
 
 /* message definitions */
 
-#define VM_START_TXT        "nano vm 64 bit 3.3.3 (c) 2015 by Stefan Pietzonke jay-t@gmx.net\n-== free software: GPL/MPL ==-\n     -==   dark red   ==-\n        ==============\n"
-#define A_START_TXT         "nano assembler 64 bit 3.3.3  (c) 2015 by Stefan Pietzonke jay-t@gmx.net\n-== free software: GPL/MPL ==-\n"
-#define VERSION_TXT         "$VER: nano 3.3.3 (05.09.15)"
+#define VM_START_TXT        "nano vm 64 bit 3.4 (c) 2015 by Stefan Pietzonke jay-t@gmx.net\n-== free software: GPL/MPL ==-\n     -==   dark red   ==-\n        ==============\n"
+#define A_START_TXT         "nano assembler 64 bit 3.4  (c) 2015 by Stefan Pietzonke jay-t@gmx.net\n-== free software: GPL/MPL ==-\n"
+#define VERSION_TXT         "$VER: nano 3.4 (28.10.15)"
 
 
 #define STATUS_OK_TXT       "ok"

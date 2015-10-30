@@ -1090,11 +1090,6 @@ NINT main (NINT ac, char *av[])
         debug_exelist ();
     #endif
 
-	if (! optimize_remove_double_opcode())
-	{
-		exe_shutdown (WARN);
-	}
-		
 	if (do_optimize_stack_only)
 	{
 		printf ("optimizing stack only...\n");
