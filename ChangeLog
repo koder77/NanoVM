@@ -1,7 +1,9 @@
 Nano VM (3.4)
 	Added latest AsmJit JIT-compiler code from github (original code branch)
 	
--- Stefan Pietzonke <jay-t@gmx.net>  Fri 30 Oct 2015 13:17 +0100
+	JIT-compiler: new: band, bor, bxor opcodes (MMX registers).
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Fri 31 Oct 2015 10:00 +0100
 
 nano (3.3.3)
 	Nanoc: new experimental #ATOMIC / #ATOMIC_END for setting vector array start and end elements.

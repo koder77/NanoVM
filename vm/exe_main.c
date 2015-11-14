@@ -86,8 +86,6 @@ extern S4 hsserver;
 #else
     extern pthread_t hs_thread;
 #endif
-	
-U1 hyperspace_server (S8 socket);
 
 extern struct rights rights;
 

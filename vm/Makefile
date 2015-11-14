@@ -114,7 +114,7 @@ am_nanovm_OBJECTS = main.$(OBJEXT) openo.$(OBJEXT) openend.$(OBJEXT) \
 	exe_process.$(OBJEXT) verifyo.$(OBJEXT) exe_stack.$(OBJEXT) \
 	rinzler.$(OBJEXT) hash32.$(OBJEXT) hash_64a.$(OBJEXT) \
 	pthread.$(OBJEXT) snprintf.$(OBJEXT) dynamic_array.$(OBJEXT) \
-	strtoll.$(OBJEXT) register.$(OBJEXT) exe_vector_arr.$(OBJEXT) \
+	strtoll.$(OBJEXT) exe_vector_arr.$(OBJEXT) \
 	exe_passw_input.$(OBJEXT) hyperspace_server.$(OBJEXT) \
 	hyperspace_client.$(OBJEXT) jit.$(OBJEXT) rights.$(OBJEXT) \
 	dlload.$(OBJEXT)
@@ -192,17 +192,17 @@ CTAGS = ctags
 am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/depcomp \
 	$(top_srcdir)/mkinstalldirs
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /home/stefan/Seafile/sources-sync/git/NanoVM-2015-10-30-new-asmjit/missing aclocal-1.15
+ACLOCAL = ${SHELL} /home/stefan/Seafile/sources-sync/git/NanoVM-2015-10-31/missing aclocal-1.15
 ALL_LINGUAS = 
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
-AUTOCONF = ${SHELL} /home/stefan/Seafile/sources-sync/git/NanoVM-2015-10-30-new-asmjit/missing autoconf
-AUTOHEADER = ${SHELL} /home/stefan/Seafile/sources-sync/git/NanoVM-2015-10-30-new-asmjit/missing autoheader
-AUTOMAKE = ${SHELL} /home/stefan/Seafile/sources-sync/git/NanoVM-2015-10-30-new-asmjit/missing automake-1.15
+AUTOCONF = ${SHELL} /home/stefan/Seafile/sources-sync/git/NanoVM-2015-10-31/missing autoconf
+AUTOHEADER = ${SHELL} /home/stefan/Seafile/sources-sync/git/NanoVM-2015-10-31/missing autoheader
+AUTOMAKE = ${SHELL} /home/stefan/Seafile/sources-sync/git/NanoVM-2015-10-31/missing automake-1.15
 AWK = gawk
 CC = clang-3.7
 CCDEPMODE = depmode=gcc3
-CFLAGS = -ffast-math -fomit-frame-pointer -O6 -march=native
+CFLAGS = -ffast-math -fomit-frame-pointer -O3 -march=native
 CPP = clang-3.7 -E
 CPPFLAGS = 
 CXX = clang++-3.7
@@ -236,7 +236,7 @@ LDFLAGS = -lrt
 LIBOBJS = 
 LIBS = -lpthread 
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /home/stefan/Seafile/sources-sync/git/NanoVM-2015-10-30-new-asmjit/missing makeinfo
+MAKEINFO = ${SHELL} /home/stefan/Seafile/sources-sync/git/NanoVM-2015-10-31/missing makeinfo
 MKDIR_P = /bin/mkdir -p
 MSGFMT = /usr/bin/msgfmt
 MSGMERGE = /usr/bin/msgmerge
@@ -256,10 +256,10 @@ STRIP =
 USE_NLS = yes
 VERSION = 3.3.3
 XGETTEXT = /usr/bin/xgettext
-abs_builddir = /home/stefan/Seafile/sources-sync/git/NanoVM-2015-10-30-new-asmjit/vm
-abs_srcdir = /home/stefan/Seafile/sources-sync/git/NanoVM-2015-10-30-new-asmjit/vm
-abs_top_builddir = /home/stefan/Seafile/sources-sync/git/NanoVM-2015-10-30-new-asmjit
-abs_top_srcdir = /home/stefan/Seafile/sources-sync/git/NanoVM-2015-10-30-new-asmjit
+abs_builddir = /home/stefan/Seafile/sources-sync/git/NanoVM-2015-10-31/vm
+abs_srcdir = /home/stefan/Seafile/sources-sync/git/NanoVM-2015-10-31/vm
+abs_top_builddir = /home/stefan/Seafile/sources-sync/git/NanoVM-2015-10-31
+abs_top_srcdir = /home/stefan/Seafile/sources-sync/git/NanoVM-2015-10-31
 ac_ct_CC = clang-3.7
 ac_ct_CXX = 
 am__include = include
@@ -279,7 +279,7 @@ host_alias =
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /home/stefan/Seafile/sources-sync/git/NanoVM-2015-10-30-new-asmjit/install-sh
+install_sh = ${SHELL} /home/stefan/Seafile/sources-sync/git/NanoVM-2015-10-31/install-sh
 intltool__v_merge_options_ = $(intltool__v_merge_options_$(AM_DEFAULT_VERBOSITY))
 intltool__v_merge_options_0 = -q
 libdir = ${exec_prefix}/lib
@@ -321,7 +321,6 @@ nanovm_SOURCES = main.c \
 	       snprintf.c \
 	       dynamic_array.c \
 	       strtoll.c \
-	       register.c \
 	       exe_vector_arr.c \
 	       exe_passw_input.c \
 	       hyperspace_server.c \
@@ -449,7 +448,6 @@ include ./$(DEPDIR)/mt19937ar.Po
 include ./$(DEPDIR)/openend.Po
 include ./$(DEPDIR)/openo.Po
 include ./$(DEPDIR)/pthread.Po
-include ./$(DEPDIR)/register.Po
 include ./$(DEPDIR)/rights.Po
 include ./$(DEPDIR)/rinzler.Po
 include ./$(DEPDIR)/snprintf.Po

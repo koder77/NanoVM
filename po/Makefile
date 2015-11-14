@@ -36,7 +36,7 @@ libdir = ${exec_prefix}/lib
 DATADIRNAME = share
 itlocaledir = $(prefix)/$(DATADIRNAME)/locale
 subdir = po
-install_sh = ${SHELL} /home/stefan/Seafile/sources-sync/git/NanoVM-2015-10-30-new-asmjit/install-sh
+install_sh = ${SHELL} /home/stefan/Seafile/sources-sync/git/NanoVM-2015-10-31/install-sh
 # Automake >= 1.8 provides $(MKDIR_P).
 # Until it can be supposed, use the safe fallback:
 mkdir_p = $(install_sh) -d

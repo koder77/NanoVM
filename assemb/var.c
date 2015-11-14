@@ -488,7 +488,7 @@ U1 getvarstr (U1 *argstr, S2 pos_start)
     return (TRUE);
 }
 
-U1 make_val (U1 type, struct varlist *varlist, U1 private)
+U1 make_val (U1 type, struct varlist *varlist, U1 fprivate)
 {
     /* check if constant type is set,
     * if not, use variable type
@@ -619,7 +619,7 @@ U1 make_val (U1 type, struct varlist *varlist, U1 private)
     
     if (alloc)
     {
-        if (private == NORMAL_VAR)
+        if (fprivate == NORMAL_VAR)
         {
             if (init_var (varlist, &varlist_state) == FALSE)
             {

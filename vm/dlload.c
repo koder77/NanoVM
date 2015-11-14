@@ -187,10 +187,7 @@ U1 exe_lopen (S8 *llist_ind, U1 *lname)
 	strcpy (new_fname, lname);
 
     #if DEBUG
-        if (print_debug)
-        {
-            printf ("debug: exe_lopen  new filename: '%s'\n", new_fname);
-        }
+        printf ("debug: exe_lopen  new filename: '%s'\n", new_fname);
     #endif
 
     if (expand_dll_pathname (new_fname, path) != 0)

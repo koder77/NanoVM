@@ -99,7 +99,7 @@ S2 get_vmreg_s (void)
     return (ret);
 }
 
-void set_vmreg_l (S2 reg, S4 var, U1 private)
+void set_vmreg_l (S2 reg, S4 var, U1 fprivate)
 {
     S2 i, info = 1;
 
@@ -113,11 +113,11 @@ void set_vmreg_l (S2 reg, S4 var, U1 private)
     }
 
     vmreg_comp.l[reg] = var;
-    vmreg_comp.lp[reg] = private;
+    vmreg_comp.lp[reg] = fprivate;
     vmreg_comp_info.l[reg] = vmreg_comp_info.l[reg] + info;
 }
 
-void set_vmreg_d (S2 reg, S4 var, U1 private)
+void set_vmreg_d (S2 reg, S4 var, U1 fprivate)
 {
     S2 i, info = 1;
 
@@ -131,11 +131,11 @@ void set_vmreg_d (S2 reg, S4 var, U1 private)
     }
 
     vmreg_comp.d[reg] = var;
-    vmreg_comp.dp[reg] = private;
+    vmreg_comp.dp[reg] = fprivate;
     vmreg_comp_info.d[reg] = vmreg_comp_info.d[reg] + info;
 }
 
-void set_vmreg_s (S2 reg, S4 var, U1 private)
+void set_vmreg_s (S2 reg, S4 var, U1 fprivate)
 {
     S2 i, info = 1;
 
@@ -149,7 +149,7 @@ void set_vmreg_s (S2 reg, S4 var, U1 private)
     }
 
     vmreg_comp.s[reg] = var;
-    vmreg_comp.sp[reg] = private;
+    vmreg_comp.sp[reg] = fprivate;
     vmreg_comp_info.s[reg] = vmreg_comp_info.s[reg] + info;
 }
 

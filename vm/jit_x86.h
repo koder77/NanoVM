@@ -133,8 +133,8 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 	
 	#if DEBUG
 		printf ("byte storm - START\n");
-		printf ("start: %li\n", start);
-		printf ("end: %li\n", end);
+		printf ("start: %i\n", start);
+		printf ("end: %i\n", end);
 	#endif				
 	// Create assembler.
 	
@@ -157,8 +157,8 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 		for (i = 0; i <= maxjumplist; i++)
 		{
 			printf ("labelname: %s\n", jumplist[i].lab);
-			printf ("position: %li\n", jumplist[i].pos);
-			printf ("islabel: %li\n", jumplist[i].islabel);
+			printf ("position: %i\n", jumplist[i].pos);
+			printf ("islabel: %i\n", jumplist[i].islabel);
 		}
 		printf ("JUMPLIST END\n\n");
 	#endif	
@@ -172,7 +172,7 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 	for (i = start; i <= end; i++)
 	{
 		#if DEBUG 
-			printf ("opcode: %li\n", (*clist)[i][0]);
+			printf ("opcode: %i\n", (*clist)[i][0]);
 		#endif
 		
 		/* check if current opcode is on label */
@@ -232,8 +232,8 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 				}
 				#if DEBUG	
 					printf ("labelname: %s\n", jumplist[j].lab);
-					printf ("position: %li\n", jumplist[j].pos);
-					printf ("islabel: %li\n", jumplist[j].islabel);
+					printf ("position: %i\n", jumplist[j].pos);
+					printf ("islabel: %i\n", jumplist[j].islabel);
 				#endif
 					
 				if (label_created == 0)
@@ -247,10 +247,11 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 				else
 				{
 					a.bind (JIT_label[label].lab);
-				}
+				
 				#if DEBUG
 					printf ("LABEL binded!\n");
 				#endif
+				}
 			}
 		}
 		
@@ -495,7 +496,52 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 				
 				run_jit = 1;
 				break;	
+			
+			case BAND_L:
+				PRINTD ("BAND_L");
 				
+				r1 = (*clist)[i][1]; r2 = (*clist)[i][2]; r3 = (*clist)[i][3];
+				
+				a.movq (mm0, qword_ptr (RSI, OFFSET(r1))); /* r1v */
+				a.movq (mm1, qword_ptr (RSI, OFFSET(r2))); /* r2v */
+				
+				a.pand (mm0, mm1);
+				
+				a.movq (qword_ptr (RSI, OFFSET(r3)), mm0);
+				
+				run_jit = 1;
+				break;
+			
+			case BOR_L:
+				PRINTD ("BOR_L");
+				
+				r1 = (*clist)[i][1]; r2 = (*clist)[i][2]; r3 = (*clist)[i][3];
+				
+				a.movq (mm0, qword_ptr (RSI, OFFSET(r1))); /* r1v */
+				a.movq (mm1, qword_ptr (RSI, OFFSET(r2))); /* r2v */
+				
+				a.por (mm0, mm1);
+				
+				a.movq (qword_ptr (RSI, OFFSET(r3)), mm0);
+				
+				run_jit = 1;
+				break;	
+				
+			case BXOR_L:
+				PRINTD ("BXOR_L");
+				
+				r1 = (*clist)[i][1]; r2 = (*clist)[i][2]; r3 = (*clist)[i][3];
+				
+				a.movq (mm0, qword_ptr (RSI, OFFSET(r1))); /* r1v */
+				a.movq (mm1, qword_ptr (RSI, OFFSET(r2))); /* r2v */
+				
+				a.pxor (mm0, mm1);
+				
+				a.movq (qword_ptr (RSI, OFFSET(r3)), mm0);
+				
+				run_jit = 1;
+				break;
+			
 			case MOD_L:
 				PRINTD ("MOD_L");
 				
@@ -566,7 +612,7 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 					partstr ((U1 *) jumplist[j].lab, (U1 *) buf, 3, strlen ((const char *) jumplist[j].lab) - 1);
 					JIT_label[JIT_label_ind].if_ = strtoll ((const char *) buf, NULL, 10);
 					
-					printf ("IF: %li\n", JIT_label[JIT_label_ind].if_);
+					printf ("IF: %i\n", JIT_label[JIT_label_ind].if_);
 					
 					JIT_label[JIT_label_ind].endif = -1;
 					
@@ -707,7 +753,7 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 					partstr ((U1 *) jumplist[j].lab, (U1 *) buf, 3, strlen ((const char *) jumplist[j].lab) - 1);
 					JIT_label[JIT_label_ind].if_ = strtoll ((const char *) buf, NULL, 10);
 					
-					printf ("IF: %li\n", JIT_label[JIT_label_ind].if_);
+					printf ("IF: %i\n", JIT_label[JIT_label_ind].if_);
 					
 					JIT_label[JIT_label_ind].endif = -1;
 					
@@ -1063,6 +1109,8 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 				
 			case NOP:
 				a.nop ();		/* just do nothing, really! */
+				
+				run_jit = 1;
 				break;
 				
 			case INC_LESS_OR_EQ_JMP_L:
@@ -1159,7 +1207,7 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 				break;
 				
 			default:
-				printf ("JIT compiler: UNKNOWN opcode: %li - exiting!\n", (*clist)[i][0]);
+				printf ("JIT compiler: UNKNOWN opcode: %i - exiting!\n", (*clist)[i][0]);
 				return (1);
 		}
 	}
@@ -1172,6 +1220,11 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 		{
 			JIT_code_ind++;
 			JIT_code[JIT_code_ind].fn = asmjit_cast<Func>(a.make());		/* create JIT code function */ 
+			
+			#if DEBUG
+				printf ("JIT compiler: function saved.\n");
+			#endif
+			
 			return (0);
 		}
 		else

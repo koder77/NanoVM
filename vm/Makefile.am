@@ -25,7 +25,6 @@ nanovm_SOURCES = main.c \
 	       snprintf.c \
 	       dynamic_array.c \
 	       strtoll.c \
-	       register.c \
 	       exe_vector_arr.c \
 	       exe_passw_input.c \
 	       hyperspace_server.c \

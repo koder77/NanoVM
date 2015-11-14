@@ -2840,11 +2840,15 @@ U1 compile ()
             /* check if: var = array [ index ]; => array2var() */
 			/* check for brackets: [ ] */
 			
-			if (src_line.arg[3][0] == AROPEN_SB && src_line.arg[5][0] == ARCLOSE_SB)
+			if (src_line.args == 5 && src_line.arg[3][0] == AROPEN_SB && src_line.arg[5][0] == ARCLOSE_SB)
 			{
 				// printf ("checking array2var expression...\n");
 				/* parse array2var expression... */
 				
+				#if DEBUG
+					printf ("compile: checking array2var() expression...\n");
+				#endif
+					
 				/* get array name */
 				var2 = getvarind_comp (src_line.arg[2]);
 				if (var2 == NOTDEF)

@@ -142,16 +142,6 @@ NINT main (NINT ac, char *av[])
 	#if OS_ANDROID
 		LOGD("nanovm running...\n");
 	#endif
-		
-    /* check if registered or not */
-    
-    if (register_online () == 2)
-    {
-        /* first run: check for version number */
-
-        strcpy (prog, "checkupdate");
-        goto run_prog;
-    }
     
     /* check for no arguments or '?' */
 

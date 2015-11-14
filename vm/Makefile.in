@@ -114,7 +114,7 @@ am_nanovm_OBJECTS = main.$(OBJEXT) openo.$(OBJEXT) openend.$(OBJEXT) \
 	exe_process.$(OBJEXT) verifyo.$(OBJEXT) exe_stack.$(OBJEXT) \
 	rinzler.$(OBJEXT) hash32.$(OBJEXT) hash_64a.$(OBJEXT) \
 	pthread.$(OBJEXT) snprintf.$(OBJEXT) dynamic_array.$(OBJEXT) \
-	strtoll.$(OBJEXT) register.$(OBJEXT) exe_vector_arr.$(OBJEXT) \
+	strtoll.$(OBJEXT) exe_vector_arr.$(OBJEXT) \
 	exe_passw_input.$(OBJEXT) hyperspace_server.$(OBJEXT) \
 	hyperspace_client.$(OBJEXT) jit.$(OBJEXT) rights.$(OBJEXT) \
 	dlload.$(OBJEXT)
@@ -321,7 +321,6 @@ nanovm_SOURCES = main.c \
 	       snprintf.c \
 	       dynamic_array.c \
 	       strtoll.c \
-	       register.c \
 	       exe_vector_arr.c \
 	       exe_passw_input.c \
 	       hyperspace_server.c \
@@ -449,7 +448,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/openend.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/openo.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pthread.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/register.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rights.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rinzler.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/snprintf.Po@am__quote@
