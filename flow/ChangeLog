@@ -11,7 +11,10 @@ flow (0.6.3)
 	Dummy functions for RS232 on Amiga OS/AROS: no implementation yet!
 	MSG_NOSIGNAL set to 0 on Amiga OS/AROS socket code.
 	
--- Stefan Pietzonke <jay-t@gmx.net>  Sun 5 Jul 2015 12:30 +0200
+	new number typedefs, like on Nano VM
+	start menu: now works on Windows too.
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun 06 Dec 2015 11:52 +0100
 
 flow (0.6.2)
 	New: cycle gadget change function, change selected item.

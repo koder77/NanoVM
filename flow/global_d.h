@@ -415,9 +415,9 @@
 #define NANOVM_ROOT_SB						"NANOVM_ROOT"
 
 typedef unsigned char   U1;     /* UBYTE   */
-typedef signed short    S2;     /* INT     */
-typedef unsigned short  U2;     /* UINT    */
-typedef signed int      S4;     /* LONGINT */
+typedef int16_t    		S2;     /* INT     */
+typedef uint16_t 		U2;     /* UINT    */
+typedef int32_t    		S4;     /* LONGINT */
 typedef double          F8;     /* DOUBLE  */
 typedef int             NINT;
 

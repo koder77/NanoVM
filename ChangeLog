@@ -3,7 +3,9 @@ Nano VM (3.4)
 	
 	JIT-compiler: new: band, bor, bxor opcodes (MMX registers).
 	
--- Stefan Pietzonke <jay-t@gmx.net>  Fri 31 Oct 2015 10:00 +0100
+	Continued work on flow2.
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat 19 Dec 2015 15:30 +0100
 
 nano (3.3.3)
 	Nanoc: new experimental #ATOMIC / #ATOMIC_END for setting vector array start and end elements.

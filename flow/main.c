@@ -2606,7 +2606,13 @@ S2 get_server_ip (U1 *ip)
 			draw_text_ttf (0, "starting Nano VM...", 50, 400, 0, 0, 0);
 	
 			// strcpy (command_shell, "/data/data/jackpal.androidterm/kbox2/bin/nanovm ");
-			strcpy (command_shell, nanovm_path);
+#if _WIN32
+			strcpy (command_shell, "START /MIN ");
+#else
+			strcpy (command_shell, "");
+#endif
+			
+			strcat (command_shell, nanovm_path);
 			strcat (command_shell, " ");
 			strcat (command_shell, menu[program]);
 			strcat (command_shell, " 127.0.0.1 2000 &");

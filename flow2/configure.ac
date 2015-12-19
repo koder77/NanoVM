@@ -3,7 +3,7 @@
 
 AC_PREREQ([2.69])
 AC_INIT([flow2], [2.0.0], [jay-t@gmx.net])
-AM_INIT_AUTOMAKE([1.9.6])
+AM_INIT_AUTOMAKE([1.15])
 
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADERS([config.h])
@@ -19,6 +19,8 @@ AC_CHECK_LIB([SDL2_gfx], [main])
 AC_CHECK_LIB([SD2Lmain], [main])
 
 AC_CHECK_LIB([SDL2_ttf], [main])
+AC_CHECK_LIB([SDL2_net], [main])
+AC_CHECK_LIB([SDL2_image], [main])
 
 # Checks for header files.
 AC_CHECK_HEADERS([arpa/inet.h netdb.h netinet/in.h stdlib.h string.h sys/socket.h])
@@ -30,4 +32,5 @@ AC_TYPE_PID_T
 AC_CHECK_FUNCS([atexit memset socket])
 
 AC_CONFIG_FILES([Makefile po/Makefile.in])
+#AC_CONFIG_FILES([Makefile intl/Makefile])
 AC_OUTPUT

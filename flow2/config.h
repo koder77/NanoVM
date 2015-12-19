@@ -19,6 +19,12 @@
 /* Define to 1 if you have the `SDL2_gfx' library (-lSDL2_gfx). */
 #define HAVE_LIBSDL2_GFX 1
 
+/* Define to 1 if you have the `SDL2_image' library (-lSDL2_image). */
+#define HAVE_LIBSDL2_IMAGE 1
+
+/* Define to 1 if you have the `SDL2_net' library (-lSDL2_net). */
+#define HAVE_LIBSDL2_NET 1
+
 /* Define to 1 if you have the `SDL2_ttf' library (-lSDL2_ttf). */
 #define HAVE_LIBSDL2_TTF 1
 

@@ -25,9 +25,13 @@
 *
 ***************************************************************************/
 
-/* use normal type sockets instead of SDL_Net if set to 1 */
-#define SOCKETS_NATIVE	1
+/* set Android SD card */
+/* #define ANDROID_SDCARD "/sdcard/" */
 
+#define ANDROID_SDCARD	"/storage/sdcard1/"
+
+/* use normal type sockets instead of SDL_Net if set to 1 */
+#define SOCKETS_NATIVE	0
 
 /* set to 1 to show Android start menu on other OS */
 #define START_MENU	0
@@ -43,7 +47,7 @@
 
 /* set to one for one client or zero for MAXAPPS */
 
-#define SINGLE_APP_MODE 0
+#define SINGLE_APP_MODE 1
 
 #if SINGLE_APP_MODE
 	#define MAXAPPS	    1
@@ -81,6 +85,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_net.h>
 
 #if WITH_SOUND
 	#include <SDL2/SDL_mixer.h>
@@ -97,7 +102,6 @@
 
 
 #define BACKLOG             1                       /* number of pending connections */
-
 
 
 
@@ -241,122 +245,138 @@
 #define GADGET_CHECKBOX_CHANGE              44
 #define GADGET_CHECKBOX_CHANGE_SB           "*gadget-checkbox-change"
 
-#define GADGET_STRING_CHANGE                45
+#define GADGET_CYCLE_CHANGE					45
+
+#define GADGET_STRING_CHANGE                46
 #define GADGET_STRING_CHANGE_SB             "*gadget-string-change"
 
-#define GADGET_BOX_CHANGE                   46
-#define GADGET_PROGRESS_BAR_CHANGE			47
+#define GADGET_BOX_CHANGE                   47
+#define GADGET_PROGRESS_BAR_CHANGE			48
 
-#define SOUND_PLAY_WAV                      48
-#define SOUND_STOP_CHANNEL                  49
+#define SOUND_PLAY_WAV                      49
+#define SOUND_STOP_CHANNEL                  50
 
-#define SOUND_PLAY_MUSIC                    50
-#define SOUND_STOP_MUSIC                    51
+#define SOUND_PLAY_MUSIC                    51
+#define SOUND_STOP_MUSIC                    52
 
  
-#define RS232_OPEN_COMPORT					52
-#define RS232_POLL_COMPORT					53
-#define RS232_SEND_BYTE						54
-#define RS232_SEND_BUF						55
-#define RS232_CLOSE_COMPORT					56
+#define RS232_OPEN_COMPORT					53
+#define RS232_POLL_COMPORT					54
+#define RS232_SEND_BYTE						55
+#define RS232_SEND_BUF						56
+#define RS232_CLOSE_COMPORT					57
+
+
+#define RPI_GPIO_START						58
+#define RPI_GPIO_MODE						59
+#define RPI_GPIO_READ						60
+#define RPI_GPIO_WRITE						61
+
+#define SAVE_PICTURE						62						
 
 /* types */
 
-#define SCREENNUM                           57
-#define WIDTH                               58
-#define HEIGHT                              59
-#define BIT                                 60
+#define SCREENNUM                           10001
+#define WIDTH                               10002
+#define HEIGHT                              10003
+#define BIT                                 10004
 
-#define X                                   61
-#define Y                                   62
-#define X2                                  63
-#define Y2                                  64
-#define X3                                  65
-#define Y3                                  66
+#define X                                   10005
+#define Y                                   10006
+#define X2                                  10007
+#define Y2                                  10008
+#define X3                                  10009
+#define Y3                                  10010
 
-#define VECTORS                             67
-#define STEPS                               68
-#define RADIUS                              69
-#define XRADIUS                             70
-#define YRADIUS                             71
-#define STARTANGLE                          72
-#define ENDANGLE                            73
+#define VECTORS                             10011
+#define STEPS                               10012
+#define RADIUS                              10013
+#define XRADIUS                             10014
+#define YRADIUS                             10015
+#define STARTANGLE                          10016
+#define ENDANGLE                            10017
 
 
 /* normal colors */
 
-#define R                                   74
-#define G                                   75
-#define B                                   76
+#define R                                   10018
+#define G                                   10019
+#define B                                   10020
 
 
 /* background colors (unused) */
 
-#define R_BG                                77
-#define G_BG                                78
-#define B_BG                                79
+#define R_BG                                10021
+#define G_BG                                10022
+#define B_BG                                10023
 
 
 /* alpha channel */
 
-#define ALPHA                               80
+#define ALPHA                               10024
 
 
-#define FONTWIDTH                           81
-#define FONTHEIGHT                          82
-#define FONTSIZE                            83
-#define FONTSTYLE                           84
+#define FONTWIDTH                           10025
+#define FONTHEIGHT                          10026
+#define FONTSIZE                            10027
+#define FONTSTYLE                           10028
 
 /* true type font styles */
 
-#define FONTSTYLE_NORMAL                    85
-#define FONTSTYLE_BOLD                      86
-#define FONTSTYLE_ITALIC                    87
-#define FONTSTYLE_UNDERLINE                 88
+#define FONTSTYLE_NORMAL                    10029
+#define FONTSTYLE_BOLD                      10030
+#define FONTSTYLE_ITALIC                    10031
+#define FONTSTYLE_UNDERLINE                 10032
 
 
-#define GADGET                              89
-#define GADGETS                             90
-#define GADGET_STATUS                       91
-#define GADGET_INT_VALUE                    92
-#define GADGET_CYCLE_ENTRIES                93
-#define GADGET_STRING_STR_LEN               94
-#define GADGET_STRING_VIS_LEN               95
+#define GADGET                              10033
+#define GADGETS                             10034
+#define GADGET_STATUS                       10035
+#define GADGET_INT_VALUE                    10036
+#define GADGET_CYCLE_ENTRIES                10037
+#define GADGET_STRING_STR_LEN               10038
+#define GADGET_STRING_VIS_LEN               10039
 
 
 /* vectors (x, y pairs) */
 
-#define VX                                  96
-#define VY                                  97
+#define VX                                  10040
+#define VY                                  10041
 
 /* string data */
 
-#define TEXT                                98
-#define SCREENTITLE                         99
-#define SCREENICON                          100
-#define PICTURENAME                         101
-#define FONTNAME                            102
-#define GADGET_STRING_VALUE                 103
-#define GADGET_CYCLE_TEXT                   104
+#define TEXT                                10042
+#define SCREENTITLE                         10043
+#define SCREENICON                          10044
+#define PICTURENAME                         10045
+#define FONTNAME                            10046
+#define GADGET_STRING_VALUE                 10047
+#define GADGET_CYCLE_TEXT                   10048
 
 /* sound data */
 
-#define SOUND_WAV_FILE                      105
-#define SOUND_CHANNEL                       106
-#define SOUND_LOOPS                         107
-#define SOUND_MUSIC_FILE                    108
+#define SOUND_WAV_FILE                      10049
+#define SOUND_CHANNEL                       10050
+#define SOUND_LOOPS                         10051
+#define SOUND_MUSIC_FILE                    10052
 
 /* RS232 data */
 
-#define RS232_COMPORT_NUMBER				109
-#define RS232_BAUDRATE						110
-#define RS232_BUF_SIZE						111
-#define RS232_BYTE							112
-#define RS232_BUF							113
+#define RS232_COMPORT_NUMBER				10053
+#define RS232_BAUDRATE						10054
+#define RS232_BUF_SIZE						10055
+#define RS232_BYTE							10056
+#define RS232_BUF							10057
+
+/* RPI GPIO data */
+
+#define RPI_GPIO_PIN						10058
+#define RPI_GPIO_VALUE						10059
+
 
 /* progress bar */
 
-#define GADGET_PROGRESS_BAR_VALUE			114
+#define GADGET_PROGRESS_BAR_VALUE			10060
 
 
 #define OK                                  0
@@ -388,10 +408,11 @@
 
 #define NANOVM_ROOT_SB						"NANOVM_ROOT"
 
+
 typedef unsigned char   U1;     /* UBYTE   */
-typedef signed short    S2;     /* INT     */
-typedef unsigned short  U2;     /* UINT    */
-typedef signed int      S4;     /* LONGINT */
+typedef int16_t    		S2;     /* INT     */
+typedef uint16_t 		U2;     /* UINT    */
+typedef int32_t    		S4;     /* LONGINT */
 typedef double          F8;     /* DOUBLE  */
 typedef int             NINT;
 
@@ -624,7 +645,12 @@ struct rs232
 	S4 bufsize;
 };
 
-
+struct rpi 
+{
+	S4 mode;
+	S4 value;
+	S4 pin;
+};
 
 /* application data, for handling more than one client at a time */
 
@@ -632,7 +658,12 @@ struct app
 {
 	U1 in_use;
 	pthread_t thread;
+	
+#if SOCKETS_NATIVE
 	S2 tcpsock;
+#else
+	TCPsocket tcpsock;
+#endif
 	
 	struct screen screen[MAXSCREEN];
 	

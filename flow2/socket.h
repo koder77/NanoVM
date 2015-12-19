@@ -28,9 +28,35 @@
 /* socket protos --------------------------------------------------------- */
 
 #define PACKET_SIZE  257
-
+/*
 int code_packet (unsigned char *data, unsigned char *packet, int len);
 int send_packet (int socket, unsigned char *buf, int len);
 int decode_packet (unsigned char *packet, unsigned char *data, int len);
 int receive_packet (int socket, unsigned char *buf);
+*/
 
+#if SOCKETS_NATIVE
+
+U1 read_8 (int fd, U1 *num);
+U1 send_8 (int fd, U1 num);
+
+U1 read_16 (int fd, U2 *num);
+U1 send_16 (int fd, U2 num);
+
+
+U1 read_line_string (int fd, U1 *string, S4 len);
+U1 send_line_string (int fd, U1 *string);
+
+#else
+
+U1 read_8 (TCPsocket fd, U1 *num);
+U1 send_8 (TCPsocket fd, U1 num);
+
+U1 read_16 (TCPsocket fd, U2 *num);
+U1 send_16 (TCPsocket fd, U2 num);
+
+
+U1 read_line_string (TCPsocket fd, U1 *string, S4 len);
+U1 send_line_string (TCPsocket fd, U1 *string);
+
+#endif

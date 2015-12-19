@@ -37,7 +37,7 @@
 #endif
 
 #include "global_d.h"
-
+#include "socket.h"
 
 /* SDL stuff */
 
@@ -45,11 +45,17 @@
 	U1 ip[256], addr[256];
 	S2 new_tcpsock;
 #else
-	IPaddress ip;
+	U1 ip[256];
+	IPaddress ipadd;
 	TCPsocket tcpsock, new_tcpsock;
 #endif
 	
 
+/* Raspberry Pi struct */
+struct rpi rpi;
+
+
+	
 struct app app[MAXAPPS];
 S4 app_index = -1;
 
@@ -67,43 +73,41 @@ U1 menu[10][80];
 U1 nanovm_path[256];
 
 
-U1 load_font_ttf (S2 appnum, S2 screennum)
+
+U1 load_font_bitmap (S2 appnum, S2 screennum)
 {
+    FILE *font;
+    U2 filesize;
     U1 *fontname;
     S2 fontname_len;
 	
-	U1 android_path[] = "/sdcard/nanovm/fonts/";
+	U1 android_path[256];
+	
+	strcpy (android_path, ANDROID_SDCARD);
+	strcat (android_path, "nanovm/fonts/");
 
-    if (app[appnum].screen[screennum].font_ttf.font != NULL)
-    {
-        /* close old font */
-
-        TTF_CloseFont (app[appnum].screen[screennum].font_ttf.font);
-    }
+    /* check for font path env variable */
 
     
 #if __ANDROID__
-	fontname_len = strlen (android_path);
-    fontname_len = fontname_len + strlen (app[appnum].screen[screennum].fontname) + 1;
+		fontname_len = strlen (android_path);
+        fontname_len = fontname_len + strlen (app[appnum].screen[screennum].fontname) + 1;
 
-    /* allocate buffer for fontname */
+        /* allocate buffer for fontname */
 
-	fontname = (U1 *) malloc (fontname_len * sizeof (U1));
-    if (fontname == NULL)
-    {
-        printf ("load_font_ttf: can't allocate %i bytes for fontname!\n", fontname_len);
-        return (FALSE);
-    }
+        fontname = (U1 *) malloc (fontname_len * sizeof (U1));
+        if (fontname == NULL)
+        {
+            printf ("load_font_bitmap: can't allocate %i bytes for fontname!\n", fontname_len);
+            return (FALSE);
+        }
 
-    strcpy (fontname, android_path);
-    strcat (fontname, app[appnum].screen[screennum].fontname);
+        strcpy (fontname, android_path);
+        strcat (fontname, app[appnum].screen[screennum].fontname);
 		
 #else
-	
-    /* check for font path env variable */
-
-    if (getenv (FONT_DIR_SB) != NULL)
-    {
+	if (getenv (FONT_DIR_SB) != NULL)
+    {	
         /* env variable set */
 
         fontname_len = strlen (getenv (FONT_DIR_SB));
@@ -114,7 +118,7 @@ U1 load_font_ttf (S2 appnum, S2 screennum)
         fontname = (U1 *) malloc (fontname_len * sizeof (U1));
         if (fontname == NULL)
         {
-            printf ("load_font_ttf: can't allocate %i bytes for fontname!\n", fontname_len);
+            printf ("load_font_bitmap: can't allocate %i bytes for fontname!\n", fontname_len);
             return (FALSE);
         }
 
@@ -125,6 +129,8 @@ U1 load_font_ttf (S2 appnum, S2 screennum)
     {
         /* env variable not set */
 
+        printf ("load_font_bitmap: env variable NANOGFXFONT not set!\n");
+
         fontname_len = strlen (app[appnum].screen[screennum].fontname) + 1;
 
         /* allocate buffer for fontname */
@@ -132,13 +138,131 @@ U1 load_font_ttf (S2 appnum, S2 screennum)
         fontname = (U1 *) malloc (fontname_len * sizeof (U1));
         if (fontname == NULL)
         {
-            printf ("load_font_ttf: can't allocate %i bytes for fontname!\n", fontname_len);
+            printf ("load_font_bitmap: can't allocate %i bytes for fontname!\n", fontname_len);
             return (FALSE);
         }
 
         strcpy (fontname, app[appnum].screen[screennum].fontname);
     }
+#endif
 
+    if (! (font = fopen (fontname, "rb")))
+    {
+        /* can't open font */
+        printf ("load_font_bitmap: can't open font %s !\n", app[appnum].screen[screennum].fontname);
+        printf ("load_font_bitmap: %s\n\n", fontname);
+        return (FALSE);
+    }
+
+     /* get filesize */
+
+    fseek (font, (long) NULL, SEEK_END);
+    filesize = ftell (font);
+    fseek (font, (long) NULL, SEEK_SET);
+
+    /* allocate buffer for font data */
+
+    if (app[appnum].screen[screennum].font_bitmap.buf != NULL)
+    {
+        /* free old font data */
+
+        free (app[appnum].screen[screennum].font_bitmap.buf);
+    }
+
+    app[appnum].screen[screennum].font_bitmap.buf = (U1 *) malloc (filesize * sizeof (U1));
+    if (app[appnum].screen[screennum].font_bitmap.buf == NULL)
+    {
+        printf ("load_font_bitmap: can't allocate %i bytes for font!\n", filesize);
+        return (FALSE);
+    }
+
+    printf ("font size: %i\n", filesize);
+
+    if (fread (app[appnum].screen[screennum].font_bitmap.buf, sizeof (U1), filesize, font) != filesize)
+    {
+        printf ("load_font_bitmap: can't load font %s !\n", fontname);
+        return (FALSE);
+    }
+
+    gfxPrimitivesSetFont (app[appnum].screen[screennum].font_bitmap.buf, app[appnum].screen[screennum].font_bitmap.width, app[appnum].screen[screennum].font_bitmap.height);
+    fclose (font);
+    free (fontname);
+
+    return (TRUE);
+}
+
+U1 load_font_ttf (S2 appnum, S2 screennum)
+{
+    U1 *fontname;
+    S2 fontname_len;
+	
+	U1 android_path[256];
+	
+	strcpy (android_path, ANDROID_SDCARD);
+	strcat (android_path, "nanovm/fonts/");
+
+    if (app[appnum].screen[screennum].font_ttf.font != NULL)
+    {
+        /* close old font */
+
+        TTF_CloseFont (app[appnum].screen[screennum].font_ttf.font);
+    }
+
+#if __ANDROID__
+		fontname_len = strlen (android_path);
+        fontname_len = fontname_len + strlen (app[appnum].screen[screennum].fontname) + 1;
+
+        /* allocate buffer for fontname */
+
+        fontname = (U1 *) malloc (fontname_len * sizeof (U1));
+        if (fontname == NULL)
+        {
+            printf ("load_font_bitmap: can't allocate %i bytes for fontname!\n", fontname_len);
+            return (FALSE);
+        }
+
+        strcpy (fontname, android_path);
+        strcat (fontname, app[appnum].screen[screennum].fontname);
+		
+#else
+	if (getenv (FONT_DIR_SB) != NULL)
+	{	
+        /* env variable set */
+
+        fontname_len = strlen (getenv (FONT_DIR_SB));
+        fontname_len = fontname_len + strlen (app[appnum].screen[screennum].fontname) + 1;
+
+        /* allocate buffer for fontname */
+
+        fontname = (U1 *) malloc (fontname_len * sizeof (U1));
+        if (fontname == NULL)
+        {
+            printf ("load_font_bitmap: can't allocate %i bytes for fontname!\n", fontname_len);
+            return (FALSE);
+        }
+
+        strcpy (fontname, getenv (FONT_DIR_SB));
+        strcat (fontname, app[appnum].screen[screennum].fontname);
+    }
+    else
+    {
+        /* env variable not set */
+
+        printf ("load_font_bitmap: env variable NANOGFXFONT not set!\n");
+
+        fontname_len = strlen (app[appnum].screen[screennum].fontname) + 1;
+
+        /* allocate buffer for fontname */
+
+        fontname = (U1 *) malloc (fontname_len * sizeof (U1));
+        if (fontname == NULL)
+        {
+            printf ("load_font_bitmap: can't allocate %i bytes for fontname!\n", fontname_len);
+            return (FALSE);
+        }
+
+        strcpy (fontname, app[appnum].screen[screennum].fontname);
+    }
 #endif
     
     app[appnum].screen[screennum].font_ttf.font = TTF_OpenFont (fontname, app[appnum].screen[screennum].font_ttf.size);
@@ -228,6 +352,140 @@ U1 draw_text_ttf (SDL_Surface *surface, S2 appnum, S2 screennum, U1 *textstr, Si
     return (TRUE);
 }
 
+U1 load_picture (S2 appnum, S2 screennum)
+{
+    SDL_Surface *picture;
+    SDL_Rect dstrect;
+
+    dstrect.x = app[appnum].screen[screennum].x;
+    dstrect.y = app[appnum].screen[screennum].y;
+    dstrect.w = 0;
+    dstrect.h = 0;
+
+    picture = IMG_Load (app[appnum].screen[screennum].picture_name);
+    if (picture == NULL)
+    {
+        printf ("load_picture: can't load picture %s !\n", app[appnum].screen[screennum].picture_name);
+        return (FALSE);
+    }
+
+    SDL_BlitSurface (picture, NULL, app[appnum].screen[screennum].surface, &dstrect);
+    SDL_FreeSurface (picture);
+
+    return (TRUE);
+}
+
+U1 save_picture (S2 appnum, S2 screennum)
+{
+	SDL_Surface *output_surf;
+	Uint32 rmask, gmask, bmask, amask;
+
+	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+	rmask = 0xff000000; gmask = 0x00ff0000; bmask = 0x0000ff00; amask = 0x000000ff;
+	#else
+	rmask = 0x000000ff; gmask = 0x0000ff00; bmask = 0x00ff0000; amask = 0xff000000;
+	#endif
+	
+	update_screen (appnum, screennum);
+	
+	/* Creating the output surface to save */
+//	output_surf = SDL_CreateRGBSurface (screen[screennum].bmap->flags, screen[screennum].bmap->w, screen[screennum].bmap->h, screen[screennum].bmap->format->BitsPerPixel, rmask, gmask, bmask, amask);
+	output_surf = SDL_CreateRGBSurface (app[appnum].screen[screennum].surface->flags, app[appnum].screen[screennum].surface->w, app[appnum].screen[screennum].surface->h, app[appnum].screen[screennum].surface->format->BitsPerPixel, 0, 0, 0, 0);
+	copy_surface (app[appnum].screen[screennum].surface, NULL, output_surf, NULL);
+
+	if (SDL_SaveBMP (output_surf, app[appnum].screen[screennum].picture_name) < 0)
+	{
+		SDL_FreeSurface (output_surf);
+		return (FALSE);
+	}
+	else
+	{
+		SDL_FreeSurface (output_surf);
+		return (TRUE);
+	}
+}
+
+void get_pixel_color (S2 appnum, S2 screennum)
+{
+    Uint32 pixel;
+    Uint8 r, g, b;
+
+    if (SDL_LockSurface (app[appnum].screen[screennum].surface) < 0)
+    {
+        printf ("get_pixelcolor: can't lock surface!\n");
+    }
+
+    pixel = getpixel (app[appnum].screen[screennum].surface, app[appnum].screen[screennum].x, app[appnum].screen[screennum].y);
+	if (pixel == 0)
+	{
+		printf ("get_pixel_color: ERROR GETTING PIXEL COLOR!\n");
+	}
+	
+    SDL_UnlockSurface (app[appnum].screen[screennum].surface);
+    SDL_GetRGB (pixel, app[appnum].screen[screennum].surface->format, &r, &g, &b);
+
+    /* send data */
+    send_8 (app[appnum].tcpsock, OK);
+    send_16 (app[appnum].tcpsock, r);
+    send_16 (app[appnum].tcpsock, g);
+    send_16 (app[appnum].tcpsock, b);
+	
+	printf ("get_pixel_color: %i, %i, %i\n", r, g, b);
+}
+
+void get_mouse (S2 appnum, S2 screennum)
+{
+    Uint8 buttonmask, button = 0, window_selected = 0;
+    Uint16 x, y;
+	int xstate, ystate;
+	SDL_Event *event;
+	
+	Uint32 window_id = SDL_GetWindowID (app[appnum].screen[screennum].window);
+	
+    /* check mouse status */
+
+    printf ("get_mouse: SDL_GetMouseState ... ");
+
+    SDL_PumpEvents ();
+	if (event->type == SDL_WINDOWEVENT)
+	{
+		if (event->window.event == SDL_WINDOWEVENT_ENTER)
+		{
+			if (window_id == event->window.windowID)
+			{
+				window_selected = 1;
+			}
+		}
+	}
+			
+			
+    buttonmask = SDL_GetMouseState (&xstate, &ystate);
+	x = xstate; y = ystate;
+	
+    printf (" ok\n");
+
+    if (buttonmask & SDL_BUTTON (1))
+    {
+        button = 1;
+    }
+
+    if (buttonmask & SDL_BUTTON (2))
+    {
+        button = 2;
+    }
+
+    if (buttonmask & SDL_BUTTON (3))
+    {
+        button = 3;
+    }
+
+    /* send data */
+    send_8 (app[appnum].tcpsock, OK);
+    send_16 (app[appnum].tcpsock, x);
+    send_16 (app[appnum].tcpsock, y);
+    send_16 (app[appnum].tcpsock, button);
+}
+
 U1 open_new_screen (S2 appnum, S2 screennum)
 {
 	SDL_Window *window;
@@ -268,14 +526,27 @@ U1 open_new_screen (S2 appnum, S2 screennum)
 	return (TRUE);
 }
 
+void update_screen (S2 appnum, S2 screennum)
+{
+	SDL_UpdateWindowSurface (app[appnum].screen[screennum].window);
+}
+
 void *handle_client (S4 number)
 {
-	U1 command;
+	S2 command;
 	U1 arg[256];
 	S2 i, endconn = FALSE;
+	
+#if SOCKETS_NATIVE
 	S2 sock;
+#else
+	TCPsocket sock;
+#endif
+	
 	S2 buf2;
 	S4 screennum = 0;
+	
+	U2 ret;
 	
 	sock = app[number].tcpsock;
 	
@@ -315,7 +586,7 @@ wait_command:
 			}
 		}
 		
-		if (! read_8 (sock, &command))
+		if (! read_16 (sock, &command))
         {
             printf ("error: can't read command!\n");
 			
@@ -331,7 +602,7 @@ wait_command:
 #if __ANDROID__
 		LOGD("read-command: %i\n", command);
 #endif
-		if (command >= END && command <= RS232_CLOSE_COMPORT)
+		if (command >= END && command <= SAVE_PICTURE)
 		{
 			printf ("command: %i\n", command);
 			
@@ -383,7 +654,7 @@ wait_command:
 					break;
 
 				case UPDATE_SCREEN:
-					SDL_UpdateWindowSurface (app[number].screen[screennum].window);
+					update_screen (number, screennum);
 					send_8 (sock, OK);
 					break;
 
@@ -391,6 +662,7 @@ wait_command:
 					break;
 					
 				case PIXEL:
+					printf ("pixel\n");
 					pixelRGBA (app[number].screen[screennum].renderer, app[number].screen[screennum].x, app[number].screen[screennum].y, app[number].screen[screennum].r, app[number].screen[screennum].g, app[number].screen[screennum].b, app[number].screen[screennum].alpha);
 					send_8 (sock, OK);
 					break;
@@ -489,7 +761,15 @@ wait_command:
 					break;
 					
 				case LOADFONT_BMAP:
-					break;
+					if (load_font_bitmap (number, screennum))
+                    {
+                        send_8 (app[number].tcpsock, OK);
+                    }
+                    else
+                    {
+                        send_8 (app[number].tcpsock, ERROR);
+                    }
+                    break;
 					
 				case TEXT_TTF:
 					if (draw_text_ttf (app[number].screen[screennum].surface, number, screennum, app[number].screen[screennum].text, app[number].screen[screennum].x, app[number].screen[screennum].y, app[number].screen[screennum].r, app[number].screen[screennum].g, app[number].screen[screennum].b))
@@ -514,10 +794,22 @@ wait_command:
                     break;
 					
 				case LOAD_PICTURE:
+					if (load_picture (number, screennum))
+                    {
+                        send_8 (app[number].tcpsock, OK);
+                    }
+                    else
+                    {
+                        send_8 (app[number].tcpsock, ERROR);
+                    }
+                    break;
 					
 				case GETPIXEL:
+					get_pixel_color (number, screennum);
+                    break;
 					
 				case GETMOUSE:
+					get_mouse (number, screennum);
 					break;
 				
 				
@@ -664,11 +956,41 @@ wait_command:
                        send_8 (app[number].tcpsock, ERROR);
                     }
                     break;
+					
+				
+				case RPI_GPIO_START:
+					send_8 (app[number].tcpsock, rpi_gpio_start ());
+                    break;
+					
+				case RPI_GPIO_MODE:
+					rpi_gpio_mode (rpi.pin, rpi.value);
+					break;
+					
+				case RPI_GPIO_READ:
+					ret = rpi_gpio_read ();
+					send_16 (app[number].tcpsock, ret);
+					break;
+					
+				case RPI_GPIO_WRITE:
+					rpi_gpio_write (rpi.value);
+					break;
+					
+				case SAVE_PICTURE:
+					if (save_picture (number, screennum))
+                    {
+                        send_8 (app[number].tcpsock, OK);
+                    }
+                    else
+                    {
+                        send_8 (app[number].tcpsock, ERROR);
+                    }
+                    break;
 
 			}
 		}
 				
-			
+		printf ("reading data: %i\n", command);
+		
 		if (command >= SCREENNUM && command < TEXT)
 		{
 			if (! read_16 (sock, &buf2))
@@ -676,7 +998,7 @@ wait_command:
 				printf ("error: can't read data!\n");
 				break;
 			}
-			printf ("reading data...\n");
+			
 			
 			switch (command)
 			{
@@ -1046,9 +1368,7 @@ wait_command:
 	
 	close (app[number].tcpsock);
 	
-#if SINGLE_APP_MODE
-	return ();
-#else
+#if ! SINGLE_APP_MODE
 	pthread_exit (0);
 #endif
 }
@@ -1419,9 +1739,21 @@ S2 start_menu (void)
 
     
 #if __ANDROID__ || START_MENU
-    app[0].screen[0].width = 640;
-	app[0].screen[0].height = 480;
-	strcpy (app[0].screen[0].title, "test");
+    /* Alpha blending doesn't work well at 8-bit color */
+		info = SDL_GetVideoInfo();
+		if (info->vfmt->BitsPerPixel > 8)
+		{
+			video_bpp = info->vfmt->BitsPerPixel;
+		
+		}
+		else
+		{
+			video_bpp = 16;
+		}
+		
+    app[0].screen[0].width = info->current_w;
+	app[0].screen[0].height = info->current_h;
+	strcpy (app[0].screen[0].title, "");
 
     if (! open_new_screen (0, 0))
     {
@@ -1565,7 +1897,7 @@ S2 start_menu (void)
 
     // --------------------------------------------------------------
 
-    if (SDLNet_ResolveHost (&ip, NULL, port) == -1)
+    if (SDLNet_ResolveHost (&ipadd, NULL, port) == -1)
     {
         printf ("SDLNet_ResolveHost: %s\n", SDLNet_GetError ());
 #if __ANDROID__
@@ -1574,7 +1906,7 @@ S2 start_menu (void)
         exit (1);
     }
 
-    tcpsock = SDLNet_TCP_Open (&ip);
+    tcpsock = SDLNet_TCP_Open (&ipadd);
     if (!tcpsock)
     {
         printf ("SDLNet_TCP_Open: %s\n", SDLNet_GetError ());
@@ -1603,7 +1935,7 @@ S2 start_menu (void)
 	
     while (run)
     {
-        printf ("waiting...........\n");
+        // printf ("waiting...........\n");
 
 #if SOCKETS_NATIVE
 		new_tcpsock = accept (server, (struct sockaddr *) &client, &len);

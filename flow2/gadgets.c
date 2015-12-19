@@ -1052,14 +1052,14 @@ U1 event_gadget_string (S2 appnum, S2 screennum, U2 gadget_index)
     free (string_buf);
     return (TRUE);
 }
-
+/*
 void get_finger_position (float tfinger_x, float tfinger_y, int *x, int *y)
 {
-	x = app[0].screen[0].width * tfinger_x;
-	y = app[0].screen[0].height * tfinger_y;
+	x = (int *) app[0].screen[0].width * tfinger_x;
+	y = (int *) app[0].screen[0].height * tfinger_y;
 }
-
-void get_user_position (int *x, int *y, *button)
+*/
+void get_user_position (int *x, int *y, int *button)
 {
 	Uint8 buttonmask;
 	SDL_Event event;
@@ -1142,7 +1142,6 @@ void gadget_event (S2 appnum, S2 screennum)
 
             switch (event.type)
             {
-				/*
 				case SDL_WINDOWEVENT:
 					if (event.window.windowID == window_id)
 					{
@@ -1163,7 +1162,6 @@ void gadget_event (S2 appnum, S2 screennum)
 								break;
 						}
 					}
-					*/
 				
 #if __ANDROID__
 				case SDL_FINGERDOWN:

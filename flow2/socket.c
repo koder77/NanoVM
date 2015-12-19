@@ -36,7 +36,7 @@
 
 /* #include <winsock.h> */
 #include "global_d.h"
-#include "socket.h"
+// #include "socket.h"
 
 
 
@@ -72,8 +72,11 @@ U1 read_8 (int fd, U1 *num)
 
 U1 send_8 (int fd, U1 num)
 {
+	printf ("send_8: sending: %i\n",  num);
+	
 	if (send (fd, &num, 1, MSG_NOSIGNAL) == -1)
 	{
+		printf ("send_8 ERROR!\n");
 		return (FALSE);
 	}
 	else
@@ -100,6 +103,8 @@ U1 read_16 (int fd, U2 *num)
 U1 send_16 (int fd, U2 num)
 {
 	U2 conv;
+	
+	printf ("send_16: sending: %i\n", num);
 	
 	conv = htons (num);
 	
@@ -232,7 +237,7 @@ U1 send_8 (TCPsocket fd, U1 num)
 
 U1 read_16 (TCPsocket fd, U2 *num)
 {
-    U2 buf[2];
+    U1 buf[2];
 
     if (SDLNet_TCP_Recv (fd, buf, 2) <= 0)
     {
@@ -245,10 +250,12 @@ U1 read_16 (TCPsocket fd, U2 *num)
 
 U1 send_16 (TCPsocket fd, U2 num)
 {
-    U2 buf[2];
+    U1 buf[2];
 
     SDLNet_Write16 (num, buf);
 
+	printf ("send_16: 0: %i 1: %i\n", buf[0], buf[1]);
+	
     if (SDLNet_TCP_Send (fd, buf, 2) != 2)
     {
         return (FALSE);
