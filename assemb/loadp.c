@@ -422,7 +422,7 @@ U1 conv_include_name (U1 *str, U1 *file, S2 type)
         case 5:
             // portable install: includes
             
-            strcpy (file, "include/");
+            strcpy (file, "../../include/");
             
             size = strlen (file) + strlen (buf);
             if (size > MAXLINELEN)
@@ -440,7 +440,7 @@ U1 conv_include_name (U1 *str, U1 *file, S2 type)
         case 6:
             // portable install: prog
             
-            strcpy (file, "prog/");
+            strcpy (file, "../../prog/");
             
             size = strlen (file) + strlen (buf);
             if (size > MAXLINELEN)

@@ -132,6 +132,8 @@ U1 optimize_O2 = FALSE;				/* off */
 
 struct Library *ThreadBase = NULL;         /* thread.library descriptor */
 
+U1 portable_install = FALSE;				/* dummy, used in VM */
+
 U1 *errstr[] =
 {
     OVERFLOW_VAR_TXT,
@@ -831,6 +833,8 @@ NINT main (NINT ac, char *av[])
     U1 do_optimize_2 = FALSE;
 	U1 do_optimize_stack_only = FALSE;
 	
+	S2 vmname_start = 0, i;
+	
     plist_size = MAXLINES;
     varlist_state.varlist_size = MAXVAR;
     pvarlist_state.varlist_size = MAXVAR;       /* thread private varlist */
@@ -882,6 +886,21 @@ NINT main (NINT ac, char *av[])
         exit (WARN);
     }
 
+    
+    if (av[0][0] == '.') vmname_start = 2;	/* Linux: ./portnanoa */
+	i = vmname_start;
+    if (av[0][i] == 'p' && av[0][i + 1] == 'o' && av[0][i + 2] == 'r' && av[0][i + 3] == 't')
+	{
+		/* programname starts with "port" -> portable install on USB stick 
+		 * 
+		 * portnanovm or portnanovm.exe
+		 * 
+		 */
+		
+		portable_install = TRUE;
+	}
+    
+    
     if (strlen (av[1]) > 255 - 3)
     {
         printf ("error: filename to long!\n");
@@ -970,9 +989,20 @@ NINT main (NINT ac, char *av[])
 	
 	#else
 	
-    strcpy (source, av[1]);
-    strcpy (object, source);
-    strcat (object, ".na");
+    if (portable_install)
+	{
+		strcpy (source, "../../prog/");
+		strcat (source, av[1]);
+		
+		strcpy (object, source);
+		strcat (object, ".na");
+	}
+	else
+	{
+		strcpy (source, av[1]);
+		strcpy (object, source);
+		strcat (object, ".na");
+	}
 	
 	#endif
 	

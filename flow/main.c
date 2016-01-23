@@ -605,8 +605,9 @@ U1 load_font_bitmap (S2 screennum)
         /* env variable not set */
 
         printf ("load_font_bitmap: env variable NANOGFXFONT not set!\n");
-
-        fontname_len = strlen (screen[screennum].fontname) + 1;
+		
+		fontname_len = strlen ("../../fonts/");
+        fontname_len = fontname_len + strlen (screen[screennum].fontname) + 1;
 
         /* allocate buffer for fontname */
 
@@ -617,7 +618,8 @@ U1 load_font_bitmap (S2 screennum)
             return (FALSE);
         }
 
-        strcpy (fontname, screen[screennum].fontname);
+        strcpy (fontname, "../../fonts/");
+        strcat (fontname, screen[screennum].fontname);
     }
 #endif
 
@@ -767,7 +769,10 @@ U1 load_font_ttf (S2 screennum)
     {
         /* env variable not set */
 
-        fontname_len = strlen (screen[screennum].fontname) + 1;
+		printf ("load_font_ttf: portable install run...\n");
+		
+        fontname_len = strlen ("../../fonts/");
+        fontname_len = fontname_len + strlen (screen[screennum].fontname) + 1;
 
         /* allocate buffer for fontname */
 
@@ -778,7 +783,8 @@ U1 load_font_ttf (S2 screennum)
             return (FALSE);
         }
 
-        strcpy (fontname, screen[screennum].fontname);
+        strcpy (fontname, "../../fonts/");
+        strcat (fontname, screen[screennum].fontname);
     }
 
 #endif
@@ -792,6 +798,8 @@ U1 load_font_ttf (S2 screennum)
     }
     else
     {
+		printf ("load_font_ttf: font loaded: %s size %i\n", fontname, screen[screennum].font_ttf.size);
+		
         free (fontname);
         return (TRUE);
     }
@@ -1506,9 +1514,9 @@ wait_command:
                     }
                     break;
             }
+            if (! endconn) goto wait_command;
         }
-
-        if (command >= SCREENNUM && command < TEXT)
+        else if (command >= SCREENNUM && command < TEXT)
         {
             if (! read_16 (new_tcpsock, &buf2))
             {
@@ -1777,9 +1785,9 @@ wait_command:
                     }
                     break;
             }
+            goto wait_command;
         }
-
-        if (command >= TEXT && command <= GADGET_CYCLE_TEXT)
+        else if (command >= TEXT && command <= GADGET_CYCLE_TEXT)
         {
             if (! read_line_string (new_tcpsock, arg, 255))
             {
@@ -1843,9 +1851,9 @@ wait_command:
                     }
                     break;
             }
+            goto wait_command;
         }
-
-        if (command >= SOUND_WAV_FILE && command <= SOUND_MUSIC_FILE)
+        else if (command >= SOUND_WAV_FILE && command <= SOUND_MUSIC_FILE)
         {
             switch (command)
             {
@@ -1891,9 +1899,9 @@ wait_command:
                     strcpy (screen[screennum].sound.music_filename, arg);
                     break;
 			}
+			goto wait_command;
 		}
-		
-		if (command >= RS232_COMPORT_NUMBER && command <= GADGET_PROGRESS_BAR_VALUE)
+		else if (command >= RS232_COMPORT_NUMBER && command <= GADGET_PROGRESS_BAR_VALUE)
 		{
 			switch (command)
 			{		
@@ -2125,7 +2133,7 @@ S2 start_menu_event (void)
 }
 
 
-S2 start_menu (void)
+S2 start_menu (U1 portable)
 {
 	FILE *fptr;
 	
@@ -2168,8 +2176,15 @@ S2 start_menu (void)
 	/* read startmenu.txt */
 	
 #if ! (__ANDROID__)
-	strcpy (startmenufile, getenv (NANOVM_ROOT_SB));
-	strcat (startmenufile, "/home/startmenu.txt");
+	if (getenv (NANOVM_ROOT_SB) != NULL)
+	{
+		strcpy (startmenufile, getenv (NANOVM_ROOT_SB));
+		strcat (startmenufile, "/home/startmenu.txt");
+	}
+	else
+	{
+		strcpy (startmenufile, "../../home/startmenu.txt");
+	}
 
 	if ((fptr = fopen (startmenufile, "r")) == NULL)
 	{
@@ -2224,6 +2239,8 @@ S2 start_menu (void)
 	strcpy (screen[0].fontname, "truetype/freefont/FreeMono.ttf");
 	screen[0].font_ttf.size = 25;
 	
+	printf ("startmenu: loading font...\n");
+	
 	if (load_font_ttf (0) == FALSE)
 	{
 		printf ("ERROR: can't load font!\n");
@@ -2253,6 +2270,21 @@ S2 start_menu (void)
 		nanovm_path[j] = rbuf[j];
 	}
 	nanovm_path[j] = '\0';
+	
+	if (portable)
+	{
+		printf ("PORTABLE INSTALL.\n");
+		
+		#ifdef __linux__
+			strcpy (nanovm_path, "./portnanovm");
+			printf ("Linux portable install.\n");
+		#endif
+			
+		#ifdef _WIN32
+			strcpy (nanovm_path, "portnanovm.exe");
+			printf ("Windows portable install.\n");
+		#endif
+	}	
 	
 	
 	strcpy (menu[i], "EXIT"); i++;
@@ -2440,8 +2472,27 @@ S2 get_server_ip (U1 *ip)
 	U1 command_shell[256];
 	pid_t pID;
 	
-    printf ("flow 0.6.3\n");
+	U1 portable_install = FALSE;
+	S2 name_start;
+	
+    printf ("flow 0.6.4\n");
 
+	
+	if (av[0][0] == '.') name_start = 2;	/* Linux: ./portflow */
+	i = name_start;
+    if (av[0][i] == 'p' && av[0][i + 1] == 'o' && av[0][i + 2] == 'r' && av[0][i + 3] == 't')
+	{
+		/* programname starts with "port" -> portable install on USB stick 
+		 * 
+		 * portnanovm or portnanovm.exe
+		 * 
+		 */
+		
+		portable_install = TRUE;
+		
+		printf ("portable install\n");
+	}
+	
 	
     if (ac < 2)
     {
@@ -2586,7 +2637,7 @@ S2 get_server_ip (U1 *ip)
 	{
 		/* run the program menu: launch Nano VM */
 	
-		program = start_menu ();
+		program = start_menu (portable_install);
 
 		/* check for EXIT gadget selected */
 		if (program == 0)
@@ -2604,7 +2655,7 @@ S2 get_server_ip (U1 *ip)
 		else
 		{
 			draw_text_ttf (0, "starting Nano VM...", 50, 400, 0, 0, 0);
-	
+			
 			// strcpy (command_shell, "/data/data/jackpal.androidterm/kbox2/bin/nanovm ");
 #if _WIN32
 			strcpy (command_shell, "START /MIN ");

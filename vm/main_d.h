@@ -142,6 +142,8 @@ S4 plist_size = -1;
 U1 printmsg_no_msg = FALSE;     /* if true print no messages */
 /* CLI -q option */
 
+U1 portable_install = FALSE;	/* set to true if programname starts with "port" */
+
 #if DEBUG
     U1 print_debug = FALSE;     /* CLI -d option */
 #endif
@@ -203,6 +205,9 @@ struct rights rights =
 };
 
 struct dlls dlls[MAXDLLS];
+
+
+
 
 /* END */
 

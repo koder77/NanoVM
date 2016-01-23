@@ -48,6 +48,8 @@ extern struct vm_mem vm_mem;
     extern U1 print_debug;
 #endif
 
+extern U1 portable_install;
+	
 U1 init_vmfile (void)
 {
 	// create swapfile
@@ -69,17 +71,26 @@ U1 init_vmfile (void)
 	#else
 		if (getenv (VM_FILE_SB) == NULL)
 		{
-			printerr (ENV_NOT_SET, NOTDEF, ST_EXE, VM_FILE_SB);
-			return (FALSE);
+			if (portable_install)
+			{
+				strcpy (vm_mem.filename, "../tmp-");
+			}
+			else
+			{
+				printerr (ENV_NOT_SET, NOTDEF, ST_EXE, VM_FILE_SB);
+				return (FALSE);
+			}
 		}
-
-		if (strlen (getenv (VM_FILE_SB)) > 255 - 6)
+		else
 		{
-			printerr (OVERFLOW_STR, NOTDEF, ST_EXE, VM_FILE_SB);
-			return (FALSE);
-		}
+			if (strlen (getenv (VM_FILE_SB)) > 255 - 6)
+			{
+				printerr (OVERFLOW_STR, NOTDEF, ST_EXE, VM_FILE_SB);
+				return (FALSE);
+			}
 		
-		strcpy (vm_mem.filename, getenv (VM_FILE_SB));
+			strcpy (vm_mem.filename, getenv (VM_FILE_SB));
+		}
 	#endif
 	
     i = *varlist[TIME_HOUR].i_m;

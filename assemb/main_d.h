@@ -173,5 +173,7 @@ struct pthreads pthreads[MAXPTHREADS];
     struct Library *ThreadBase = NULL;         /* thread.library descriptor */
 #endif
 
+U1 portable_install = FALSE;			/* set to true if programname starts with "port" */
+
 /* END */
 

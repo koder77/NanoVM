@@ -286,6 +286,8 @@ NINT main (NINT ac, char *av[])
     S4 i, j, obj_size = OBJBUFSIZE * 1024;
     U1 source[256], object[256], arg[256];
 
+	S2 vmname_start = 0;
+	
     plist_size = MAXLINES;
     varlist_state.varlist_size = MAXVAR;
     pvarlist_state.varlist_size = MAXVAR;       /* thread private varlist */
@@ -339,6 +341,20 @@ NINT main (NINT ac, char *av[])
         exit (WARN);
     }
 
+    if (av[0][0] == '.') vmname_start = 2;	/* Linux: ./portnanoa */
+	i = vmname_start;
+    if (av[0][i] == 'p' && av[0][i + 1] == 'o' && av[0][i + 2] == 'r' && av[0][i + 3] == 't')
+	{
+		/* programname starts with "port" -> portable install on USB stick 
+		 * 
+		 * portnanovm or portnanovm.exe
+		 * 
+		 */
+		
+		portable_install = TRUE;
+	}
+	
+    
     /* source / object filename */
 
     if (strlen (av[1]) > 255 - 3)
@@ -409,11 +425,22 @@ NINT main (NINT ac, char *av[])
 	
 	#else
 	
-    strcpy (source, av[1]);
-    strcpy (object, source);
-    strcat (source, ".na");
-    strcat (object, ".no");
-	
+	if (portable_install)
+	{
+		strcpy (source, "../../prog/");
+		strcat (source, av[1]);
+		
+		strcpy (object, source);
+		strcat (source, ".na");
+		strcat (object, ".no");
+	}
+	else
+	{
+		strcpy (source, av[1]);
+		strcpy (object, source);
+		strcat (source, ".na");
+		strcat (object, ".no");
+	}
 	#endif
 	
 	}

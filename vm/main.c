@@ -101,6 +101,8 @@ NINT main (NINT ac, char *av[])
 	U1 rightspath[MAXLINELEN + 1];
     S4 threadnum, startpos;
 
+	S2 vmname_start = 0;
+	
     jumplist = NULL;
     includes = NULL;
 
@@ -160,7 +162,21 @@ NINT main (NINT ac, char *av[])
     }
 
 
-    /* save arguments */
+    if (av[0][0] == '.') vmname_start = 2;	/* Linux: ./portnanovm */
+	i = vmname_start;
+    if (av[0][i] == 'p' && av[0][i + 1] == 'o' && av[0][i + 2] == 'r' && av[0][i + 3] == 't')
+	{
+		/* programname starts with "port" -> portable install on USB stick 
+		 * 
+		 * portnanovm or portnanovm.exe
+		 * 
+		 */
+		
+		portable_install = TRUE;
+	}
+	
+	
+	/* save arguments */
 
     if (ac > 2)
     {
@@ -303,9 +319,12 @@ run_prog:
         
         if (getenv (NANOVM_ROOT_SB) == NULL)
         {
-            printerr (ENV_NOT_SET, NOTDEF, ST_PRE, NANOVM_ROOT_SB);
-            printf ("using default program path!\n");
-
+			if (! portable_install)
+			{
+				printerr (ENV_NOT_SET, NOTDEF, ST_PRE, NANOVM_ROOT_SB);
+				printf ("using default program path!\n");
+			}
+			
             if (OS_AMIGA || OS_AROS)
             {
                 strcpy (buf, "Work:nanovm/prog/");
@@ -330,6 +349,11 @@ run_prog:
             {
                 strcpy (buf, "C:/nanovm/prog/");
             }
+            
+            if (portable_install)
+			{
+				strcpy (buf, "../../prog/");
+			}
         }
         else
         {

@@ -34,6 +34,8 @@ extern struct vmreg vmreg_vm;
 
 extern struct rights rights;
 
+extern U1 portable_install;
+
 U1 expand_dll_pathname (U1 *path, U1 *newpath)
 {
 	if (path[0] == '/')
@@ -69,6 +71,11 @@ U1 expand_dll_pathname (U1 *path, U1 *newpath)
 				{
 					strcpy (newpath, "C:/nanovm/");
 				}
+				
+				if (portable_install)
+				{
+					strcpy (newpath, "../");
+				}
 			}
 			else
 			{
@@ -103,6 +110,11 @@ U1 expand_dll_pathname (U1 *path, U1 *newpath)
 				if (OS_WINDOWS)
 				{
 					strcpy (newpath, "C:/nanovm/lib/");
+				}
+				
+				if (portable_install)
+				{
+					strcpy (newpath, "../lib/");
 				}
 			}
 			else
