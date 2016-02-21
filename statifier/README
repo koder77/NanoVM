@@ -1,0 +1,19 @@
+statifier - collects dynamically linked libraries for an elf binary
+
+1) Usage
+2) Authors
+
+
+------------------------------------------------------------------------
+Usage
+
+statifier copies all libraries which are used by the specified binary into
+a specified output directory.
+
+$ python statifiery.py [elf binary] [output directory]
+
+
+------------------------------------------------------------------------
+Authors
+
+* Markus Pielmeier
