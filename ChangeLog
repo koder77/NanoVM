@@ -1,3 +1,28 @@
+Nano VM (3.4.2)
+	Nano is now "portable" and runs from an USB stick.
+	The executables begin then with "port" in the name:
+	
+	portnanovm, portnanoc...
+	
+	So no installation is needed.
+	
+	Added: vm/rs232.c vm/rs232.h
+	rs232_shared_lib
+	
+	vm/Makefile.am: AM_LDFLAGS = -Wl,--export-dynamic
+	
+	This is the RS232 port serial library.
+	I had to put the RS232 functions into the nanovm executable
+	and make it export dynamic. So the library can access the functions.
+	
+	The RS232 functions are from Teunis van Beelen.
+	
+	Added: statifier/
+	The tool for collecting all shared libraries needed by a program.
+	(Linux)
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat 21 Feb 2016 07:15 +0100
+
 Nano VM (3.4)
 	Added latest AsmJit JIT-compiler code from github (original code branch)
 	

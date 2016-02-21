@@ -1,0 +1,88 @@
+//	rs232lib.nanoc
+//
+//	reads serial port with shared library
+//	Stefan Pietzonke 2016
+
+func main ()
+	lint null = 0; lint one = 1;
+	lint port = 16;
+	lint baud =  57600;
+	
+	lint dll;
+	lint openport;
+	lint pollport;
+	lint closeport;
+	
+	string dllname[256] = "librs232.so";
+	string rs232openport[256] = "rs232_OpenComport";
+	string rs232pollport[256] = "rs232_PollComport";
+	string rs232closeport[256] = "rs232_CloseComport";
+	
+	string mode[256] = "8N1";
+	
+	lint bufsize = 255;
+	byte _buf[256];
+	lint _bufptr;
+	qint buflen;
+	lint i;
+	string ch[2]; byte b;
+	int f;
+	qint ret;
+	
+	getaddress (_buf, _bufptr);
+	
+//	return value from shared library
+	qint _retval[1]; qint _retvalptr;
+	
+	getaddress (_retval, _retvalptr);
+	
+//	open librs232.so library in nanovm/lib directory
+	lopen (dll, dllname);	
+
+//	set function handles
+	lfunc (dll, openport, rs232openport);
+	lfunc (dll, pollport, rs232pollport);
+	lfunc (dll, closeport, rs232closeport);
+	
+//	open serial port
+	#ATOMIC;
+	pushtostack (_retvalptr, mode, baud, port);
+	
+	lcall (dll, openport);
+	#ATOMIC_END;
+	
+	ret = _retval [ null ];
+	print ret; printn one;
+	
+lab loop;
+
+//	read serial port
+	#ATOMIC;
+	pushtostack (_retvalptr, bufsize, _bufptr, port);
+	
+	lcall (dll, pollport);
+	#ATOMIC_END;
+	
+	buflen = _retval [ null ];
+	f = buflen > null;
+	if f;
+		i = 0;
+		for;
+			array2var (_buf, i, b);
+			char (b, ch);
+			print ch;
+		
+			i = ++;
+			f = i < buflen;
+		next f;
+	endif;
+	
+	goto loop;
+	
+	exit null;
+funcend
+
+lab pushtostack;
+#ASSEMB
+	rts;
+#ASSEMB_END

@@ -117,7 +117,7 @@ am_nanovm_OBJECTS = main.$(OBJEXT) openo.$(OBJEXT) openend.$(OBJEXT) \
 	strtoll.$(OBJEXT) exe_vector_arr.$(OBJEXT) \
 	exe_passw_input.$(OBJEXT) hyperspace_server.$(OBJEXT) \
 	hyperspace_client.$(OBJEXT) jit.$(OBJEXT) rights.$(OBJEXT) \
-	dlload.$(OBJEXT)
+	dlload.$(OBJEXT) rs232.$(OBJEXT)
 nanovm_OBJECTS = $(am_nanovm_OBJECTS)
 nanovm_LDADD = $(LDADD)
 nanovm_DEPENDENCIES = ../lib/libshared.a ../asmjit/build/libasmjit.a
@@ -327,7 +327,8 @@ nanovm_SOURCES = main.c \
 	       hyperspace_client.c \
 	       jit.cpp \
 	       rights.c \
-	       dlload.c
+	       dlload.c \
+	       rs232.c
 
 noinst_HEADERS = main_d.h \
 		 arch.h \
@@ -342,6 +343,7 @@ LDADD = ../lib/libshared.a ../asmjit/build/libasmjit.a -ldl
 #LDADD = ../lib/libshared.a
 AM_CFLAGS = -O0 -g -lm -ldl
 AM_CPPFLAGS = -I../include
+AM_LDFLAGS = -Wl,--export-dynamic
 all: all-am
 
 .SUFFIXES:
@@ -450,6 +452,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pthread.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rights.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rinzler.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rs232.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/snprintf.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stringf.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/strtoll.Po@am__quote@

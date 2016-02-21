@@ -31,7 +31,8 @@ nanovm_SOURCES = main.c \
 	       hyperspace_client.c \
 	       jit.cpp \
 	       rights.c \
-	       dlload.c
+	       dlload.c \
+	       rs232.c
 
 noinst_HEADERS = main_d.h \
 		 arch.h \
@@ -48,3 +49,5 @@ LDADD = ../lib/libshared.a ../asmjit/build/libasmjit.a -ldl
 AM_CFLAGS = -O0 -g -lm -ldl
 
 AM_CPPFLAGS = -I../include
+
+AM_LDFLAGS = -Wl,--export-dynamic

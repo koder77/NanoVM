@@ -12,3 +12,6 @@ Thanks goes to:
 Takuji Nishimura and Makoto Matsumoto			for the MT19937 random number generator
 VideoLAN project					for the strtoll.c - strtoll () function replacement
 Petr Kobalicek						for the AsmJit library
+Teunis van Beelen					for the RS232 port library
+SDL project							for their libraries, I use them in lots of my software
+Markus Pielmeier					for statifier, the nice tool which collects all shared libraries used by a program
