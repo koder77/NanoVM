@@ -13,26 +13,35 @@
 #if !defined(ASMJIT_API_SCOPE)
 # define ASMJIT_API_SCOPE
 #else
-# error "AsmJit - Api-Scope is already active, previous scope not closed by apiend.h?"
+# error "[asmjit] Api-Scope is already active, previous scope not closed by apiend.h?"
 #endif // ASMJIT_API_SCOPE
-
-// ============================================================================
-// [Override]
-// ============================================================================
-
-#if !defined(ASMJIT_CC_HAS_OVERRIDE) && !defined(override)
-# define override
-# define ASMJIT_UNDEF_OVERRIDE
-#endif // !ASMJIT_CC_HAS_OVERRIDE && !override
 
 // ============================================================================
 // [NoExcept]
 // ============================================================================
 
-#if !defined(ASMJIT_CC_HAS_NOEXCEPT) && !defined(noexcept)
+#if !ASMJIT_CC_HAS_NOEXCEPT && !defined(noexcept)
 # define noexcept ASMJIT_NOEXCEPT
 # define ASMJIT_UNDEF_NOEXCEPT
 #endif // !ASMJIT_CC_HAS_NOEXCEPT && !noexcept
+
+// ============================================================================
+// [NullPtr]
+// ============================================================================
+
+#if !ASMJIT_CC_HAS_NULLPTR && !defined(nullptr)
+# define nullptr NULL
+# define ASMJIT_UNDEF_NULLPTR
+#endif // !ASMJIT_CC_HAS_NULLPTR && !nullptr
+
+// ============================================================================
+// [Override]
+// ============================================================================
+
+#if !ASMJIT_CC_HAS_OVERRIDE && !defined(override)
+# define override
+# define ASMJIT_UNDEF_OVERRIDE
+#endif // !ASMJIT_CC_HAS_OVERRIDE && !override
 
 // ============================================================================
 // [MSC]
@@ -53,7 +62,7 @@
 # pragma warning(disable: 4480) // specifying underlying type for enum
 # pragma warning(disable: 4800) // forcing value to bool 'true' or 'false'
 
-// TODO: Check if these defins are needed and for which version of MSC. There are
+// TODO: Check if these defines are needed and for which version of MSC. There are
 // news about these as they are part of C99.
 # if !defined(vsnprintf)
 #  define ASMJIT_UNDEF_VSNPRINTF

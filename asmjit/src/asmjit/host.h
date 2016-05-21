@@ -15,7 +15,7 @@
 // [asmjit::host - X86 / X64]
 // ============================================================================
 
-#if defined(ASMJIT_ARCH_X86) || defined(ASMJIT_ARCH_X64)
+#if ASMJIT_ARCH_X86 || ASMJIT_ARCH_X64
 #include "./x86.h"
 
 namespace asmjit {
@@ -34,9 +34,6 @@ typedef X86XmmReg XmmReg;
 typedef X86YmmReg YmmReg;
 typedef X86SegReg SegReg;
 typedef X86Mem Mem;
-
-// Define host utilities.
-typedef X86CpuInfo HostCpuInfo;
 
 // Define host compiler and related.
 #if !defined(ASMJIT_DISABLE_COMPILER)

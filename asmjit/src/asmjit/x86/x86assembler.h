@@ -18,7 +18,7 @@
 
 namespace asmjit {
 
-//! \addtogroup asmjit_x86_general
+//! \addtogroup asmjit_x86
 //! \{
 
 // ============================================================================
@@ -26,93 +26,93 @@ namespace asmjit {
 // ============================================================================
 
 // \internal
-#define ASMJIT_X86_EMIT_OPTIONS(_Class_) \
+#define ASMJIT_X86_EMIT_OPTIONS(T) \
   /*! Force short form of jmp/jcc instruction. */ \
-  ASMJIT_INLINE _Class_& short_() { \
+  ASMJIT_INLINE T& short_() noexcept { \
     _instOptions |= kInstOptionShortForm; \
     return *this; \
   } \
   \
   /*! Force long form of jmp/jcc instruction. */ \
-  ASMJIT_INLINE _Class_& long_() { \
+  ASMJIT_INLINE T& long_() noexcept { \
     _instOptions |= kInstOptionLongForm; \
     return *this; \
   } \
   \
   /*! Condition is likely to be taken (has only benefit on P4). */ \
-  ASMJIT_INLINE _Class_& taken() { \
+  ASMJIT_INLINE T& taken() noexcept { \
     _instOptions |= kInstOptionTaken; \
     return *this; \
   } \
   \
   /*! Condition is unlikely to be taken (has only benefit on P4). */ \
-  ASMJIT_INLINE _Class_& notTaken() { \
+  ASMJIT_INLINE T& notTaken() noexcept { \
     _instOptions |= kInstOptionNotTaken; \
     return *this; \
   } \
   \
   /*! Use LOCK prefix. */ \
-  ASMJIT_INLINE _Class_& lock() { \
+  ASMJIT_INLINE T& lock() noexcept { \
     _instOptions |= kX86InstOptionLock; \
     return *this; \
   } \
   \
   /*! Force REX prefix (X64). */ \
-  ASMJIT_INLINE _Class_& rex() { \
+  ASMJIT_INLINE T& rex() noexcept { \
     _instOptions |= kX86InstOptionRex; \
     return *this; \
   } \
   \
   /*! Force 3-byte VEX prefix (AVX+). */ \
-  ASMJIT_INLINE _Class_& vex3() { \
+  ASMJIT_INLINE T& vex3() noexcept { \
     _instOptions |= kX86InstOptionVex3; \
     return *this; \
   } \
   \
   /*! Force 4-byte EVEX prefix (AVX512+). */ \
-  ASMJIT_INLINE _Class_& evex() { \
+  ASMJIT_INLINE T& evex() noexcept { \
     _instOptions |= kX86InstOptionEvex; \
     return *this; \
   } \
   \
   /*! Use zeroing instead of merging (AVX512+). */ \
-  ASMJIT_INLINE _Class_& z() { \
+  ASMJIT_INLINE T& z() noexcept { \
     _instOptions |= kX86InstOptionEvexZero; \
     return *this; \
   } \
   \
   /*! Broadcast one element to all other elements (AVX512+). */ \
-  ASMJIT_INLINE _Class_& _1ToN() { \
+  ASMJIT_INLINE T& _1ToN() noexcept { \
     _instOptions |= kX86InstOptionEvexOneN; \
     return *this; \
   } \
   \
   /*! Suppress all exceptions (AVX512+). */ \
-  ASMJIT_INLINE _Class_& sae() { \
+  ASMJIT_INLINE T& sae() noexcept { \
     _instOptions |= kX86InstOptionEvexSae; \
     return *this; \
   } \
   \
   /*! Static rounding mode `round-to-nearest` (even) and `SAE` (AVX512+). */ \
-  ASMJIT_INLINE _Class_& rn_sae() { \
+  ASMJIT_INLINE T& rn_sae() noexcept { \
     _instOptions |= kX86InstOptionEvexRnSae; \
     return *this; \
   } \
   \
   /*! Static rounding mode `round-down` (toward -inf) and `SAE` (AVX512+). */ \
-  ASMJIT_INLINE _Class_& rd_sae() { \
+  ASMJIT_INLINE T& rd_sae() noexcept { \
     _instOptions |= kX86InstOptionEvexRdSae; \
     return *this; \
   } \
   \
   /*! Static rounding mode `round-up` (toward +inf) and `SAE` (AVX512+). */ \
-  ASMJIT_INLINE _Class_& ru_sae() { \
+  ASMJIT_INLINE T& ru_sae() noexcept { \
     _instOptions |= kX86InstOptionEvexRuSae; \
     return *this; \
   } \
   \
   /*! Static rounding mode `round-toward-zero` (truncate) and `SAE` (AVX512+). */ \
-  ASMJIT_INLINE _Class_& rz_sae() { \
+  ASMJIT_INLINE T& rz_sae() noexcept { \
     _instOptions |= kX86InstOptionEvexRzSae; \
     return *this; \
   }
@@ -162,10 +162,10 @@ namespace asmjit {
 //! a.ret();
 //! ~~~
 //!
-//! You can see that syntax is very close to Intel one. Only difference is that
-//! you are calling functions that emit binary code for you. All registers are
-//! in `asmjit::x86` namespace, so it's very comfortable to use it (look at the
-//! `use namespace` section). Without importing `asmjit::x86` registers would
+//! You can see that syntax is very close to the Intel one. Only difference is
+//! that you are calling functions that emit binary code for you. All registers
+//! are in `asmjit::x86` namespace, so it's very comfortable to use it (look at
+//! the `use namespace` section). Without importing `asmjit::x86` registers would
 //! have to be written as `x86::eax`, `x86::esp`, and so on.
 //!
 //! There is also possibility to use memory addresses and immediates. Use
@@ -278,7 +278,7 @@ namespace asmjit {
 //! code with labels. Labels are fully supported and you can call `jmp` or
 //! `je` (and similar) instructions to initialized or yet uninitialized label.
 //! Each label expects to be bound into offset. To bind label to specific
-//! offset, use `CodeGen::bind()` method.
+//! offset, use `Assembler::bind()` function.
 //!
 //! See next example that contains complete code that creates simple memory
 //! copy function (in DWord entities).
@@ -292,14 +292,14 @@ namespace asmjit {
 //!
 //! // Assembler instance.
 //! JitRuntime runtime;
-//! Assembler a(&runtime);
+//! X86Assembler a(&runtime);
 //!
 //! // Constants.
 //! const int arg_offset = 8; // Arguments offset (STDCALL EBP).
 //! const int arg_size = 12;  // Arguments size.
 //!
 //! // Labels.
-//! Label L_Loop(a);
+//! Label L_Loop = a.newLabel();
 //!
 //! // Prolog.
 //! a.push(ebp);
@@ -379,13 +379,13 @@ namespace asmjit {
 //! functions available that return a new register operand.
 //!
 //! \sa X86Compiler.
-struct ASMJIT_VCLASS X86Assembler : public Assembler {
+struct ASMJIT_VIRTAPI X86Assembler : public Assembler {
   // --------------------------------------------------------------------------
   // [Construction / Destruction]
   // --------------------------------------------------------------------------
 
   ASMJIT_API X86Assembler(Runtime* runtime, uint32_t arch
-#if defined(ASMJIT_ARCH_X86) || defined(ASMJIT_ARCH_X64)
+#if ASMJIT_ARCH_X86 || ASMJIT_ARCH_X64
     = kArchHost
 #endif // ASMJIT_ARCH_X86 || ASMJIT_ARCH_X64
   );
@@ -395,17 +395,18 @@ struct ASMJIT_VCLASS X86Assembler : public Assembler {
   // [Arch]
   // --------------------------------------------------------------------------
 
+  //! \internal
+  //!
+  //! Set the assembler architecture to `kArchX86` or `kArchX64`.
+  ASMJIT_API Error _setArch(uint32_t arch);
+
   //! Get count of registers of the current architecture and mode.
-  ASMJIT_INLINE const X86RegCount& getRegCount() const {
-    return _regCount;
-  }
+  ASMJIT_INLINE const X86RegCount& getRegCount() const { return _regCount; }
 
-  //! Get Gpd or Gpq register depending on the current architecture.
-  ASMJIT_INLINE X86GpReg gpz(uint32_t index) const {
-    return X86GpReg(zax, index);
-  }
+  //! Get DWORD or QWORD register depending on the current architecture.
+  ASMJIT_INLINE X86GpReg gpz(uint32_t index) const { return X86GpReg(zax, index); }
 
-  //! Create an architecture dependent intptr_t memory operand.
+  //! Create an `intptr_t` memory operand depending on the current architecture.
   ASMJIT_INLINE X86Mem intptr_ptr(const X86GpReg& base, int32_t disp = 0) const {
     return x86::ptr(base, disp, _regSize);
   }
@@ -433,8 +434,6 @@ struct ASMJIT_VCLASS X86Assembler : public Assembler {
   ASMJIT_INLINE X86Mem intptr_ptr_abs(Ptr pAbs, const X86GpReg& index, uint32_t shift, int32_t disp = 0) const {
     return x86::ptr_abs(pAbs, index, shift, disp, _regSize);
   }
-
-  ASMJIT_API Error setArch(uint32_t arch);
 
   // --------------------------------------------------------------------------
   // [Embed]
@@ -492,13 +491,13 @@ struct ASMJIT_VCLASS X86Assembler : public Assembler {
   // [Align]
   // --------------------------------------------------------------------------
 
-  ASMJIT_API virtual Error align(uint32_t mode, uint32_t offset);
+  ASMJIT_API virtual Error align(uint32_t alignMode, uint32_t offset) noexcept;
 
   // --------------------------------------------------------------------------
   // [Reloc]
   // --------------------------------------------------------------------------
 
-  ASMJIT_API virtual size_t _relocCode(void* dst, Ptr baseAddress) const;
+  ASMJIT_API virtual size_t _relocCode(void* dst, Ptr baseAddress) const noexcept;
 
   // --------------------------------------------------------------------------
   // [Emit]
@@ -540,176 +539,164 @@ struct ASMJIT_VCLASS X86Assembler : public Assembler {
   // [Emit]
   // --------------------------------------------------------------------------
 
-#define INST_0x(_Inst_, _Code_) \
-  ASMJIT_INLINE Error _Inst_() { \
-    return emit(_Code_); \
+#define INST_0x(inst, code) \
+  ASMJIT_INLINE Error inst() { \
+    return emit(code); \
   }
 
-#define INST_1x(_Inst_, _Code_, _Op0_) \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0) { \
-    return emit(_Code_, o0); \
+#define INST_1x(inst, code, T0) \
+  ASMJIT_INLINE Error inst(const T0& o0) { \
+    return emit(code, o0); \
   }
 
-#define INST_1x_(_Inst_, _Code_, _Op0_, _Cond_) \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0) { \
-    ASMJIT_ASSERT(_Cond_); \
-    return emit(_Code_, o0); \
-  }
+#define INST_1i(inst, code, T0) \
+  ASMJIT_INLINE Error inst(const T0& o0) { return emit(code, o0); } \
+  /*! \overload */ \
+  ASMJIT_INLINE Error inst(int o0) { return emit(code, Utils::asInt(o0)); } \
+  /*! \overload */ \
+  ASMJIT_INLINE Error inst(unsigned int o0) { return emit(code, Utils::asInt(o0)); } \
+  /*! \overload */ \
+  ASMJIT_INLINE Error inst(int64_t o0) { return emit(code, Utils::asInt(o0)); } \
+  /*! \overload */ \
+  ASMJIT_INLINE Error inst(uint64_t o0) { return emit(code, Utils::asInt(o0)); }
 
-#define INST_1i(_Inst_, _Code_, _Op0_) \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0) { return emit(_Code_, o0); } \
-  /*! \overload */ \
-  ASMJIT_INLINE Error _Inst_(int o0) { return emit(_Code_, asInt(o0)); } \
-  /*! \overload */ \
-  ASMJIT_INLINE Error _Inst_(unsigned int o0) { return emit(_Code_, asInt(o0)); } \
-  /*! \overload */ \
-  ASMJIT_INLINE Error _Inst_(int64_t o0) { return emit(_Code_, asInt(o0)); } \
-  /*! \overload */ \
-  ASMJIT_INLINE Error _Inst_(uint64_t o0) { return emit(_Code_, asInt(o0)); }
-
-#define INST_1cc(_Inst_, _Code_, _Translate_, _Op0_) \
-  ASMJIT_INLINE Error _Inst_(uint32_t cc, const _Op0_& o0) { \
+#define INST_1cc(inst, code, _Translate_, T0) \
+  ASMJIT_INLINE Error inst(uint32_t cc, const T0& o0) { \
     return emit(_Translate_(cc), o0); \
   } \
   \
-  ASMJIT_INLINE Error _Inst_##a(const _Op0_& o0) { return emit(_Code_##a, o0); } \
-  ASMJIT_INLINE Error _Inst_##ae(const _Op0_& o0) { return emit(_Code_##ae, o0); } \
-  ASMJIT_INLINE Error _Inst_##b(const _Op0_& o0) { return emit(_Code_##b, o0); } \
-  ASMJIT_INLINE Error _Inst_##be(const _Op0_& o0) { return emit(_Code_##be, o0); } \
-  ASMJIT_INLINE Error _Inst_##c(const _Op0_& o0) { return emit(_Code_##c, o0); } \
-  ASMJIT_INLINE Error _Inst_##e(const _Op0_& o0) { return emit(_Code_##e, o0); } \
-  ASMJIT_INLINE Error _Inst_##g(const _Op0_& o0) { return emit(_Code_##g, o0); } \
-  ASMJIT_INLINE Error _Inst_##ge(const _Op0_& o0) { return emit(_Code_##ge, o0); } \
-  ASMJIT_INLINE Error _Inst_##l(const _Op0_& o0) { return emit(_Code_##l, o0); } \
-  ASMJIT_INLINE Error _Inst_##le(const _Op0_& o0) { return emit(_Code_##le, o0); } \
-  ASMJIT_INLINE Error _Inst_##na(const _Op0_& o0) { return emit(_Code_##na, o0); } \
-  ASMJIT_INLINE Error _Inst_##nae(const _Op0_& o0) { return emit(_Code_##nae, o0); } \
-  ASMJIT_INLINE Error _Inst_##nb(const _Op0_& o0) { return emit(_Code_##nb, o0); } \
-  ASMJIT_INLINE Error _Inst_##nbe(const _Op0_& o0) { return emit(_Code_##nbe, o0); } \
-  ASMJIT_INLINE Error _Inst_##nc(const _Op0_& o0) { return emit(_Code_##nc, o0); } \
-  ASMJIT_INLINE Error _Inst_##ne(const _Op0_& o0) { return emit(_Code_##ne, o0); } \
-  ASMJIT_INLINE Error _Inst_##ng(const _Op0_& o0) { return emit(_Code_##ng, o0); } \
-  ASMJIT_INLINE Error _Inst_##nge(const _Op0_& o0) { return emit(_Code_##nge, o0); } \
-  ASMJIT_INLINE Error _Inst_##nl(const _Op0_& o0) { return emit(_Code_##nl, o0); } \
-  ASMJIT_INLINE Error _Inst_##nle(const _Op0_& o0) { return emit(_Code_##nle, o0); } \
-  ASMJIT_INLINE Error _Inst_##no(const _Op0_& o0) { return emit(_Code_##no, o0); } \
-  ASMJIT_INLINE Error _Inst_##np(const _Op0_& o0) { return emit(_Code_##np, o0); } \
-  ASMJIT_INLINE Error _Inst_##ns(const _Op0_& o0) { return emit(_Code_##ns, o0); } \
-  ASMJIT_INLINE Error _Inst_##nz(const _Op0_& o0) { return emit(_Code_##nz, o0); } \
-  ASMJIT_INLINE Error _Inst_##o(const _Op0_& o0) { return emit(_Code_##o, o0); } \
-  ASMJIT_INLINE Error _Inst_##p(const _Op0_& o0) { return emit(_Code_##p, o0); } \
-  ASMJIT_INLINE Error _Inst_##pe(const _Op0_& o0) { return emit(_Code_##pe, o0); } \
-  ASMJIT_INLINE Error _Inst_##po(const _Op0_& o0) { return emit(_Code_##po, o0); } \
-  ASMJIT_INLINE Error _Inst_##s(const _Op0_& o0) { return emit(_Code_##s, o0); } \
-  ASMJIT_INLINE Error _Inst_##z(const _Op0_& o0) { return emit(_Code_##z, o0); }
+  ASMJIT_INLINE Error inst##a(const T0& o0) { return emit(code##a, o0); } \
+  ASMJIT_INLINE Error inst##ae(const T0& o0) { return emit(code##ae, o0); } \
+  ASMJIT_INLINE Error inst##b(const T0& o0) { return emit(code##b, o0); } \
+  ASMJIT_INLINE Error inst##be(const T0& o0) { return emit(code##be, o0); } \
+  ASMJIT_INLINE Error inst##c(const T0& o0) { return emit(code##c, o0); } \
+  ASMJIT_INLINE Error inst##e(const T0& o0) { return emit(code##e, o0); } \
+  ASMJIT_INLINE Error inst##g(const T0& o0) { return emit(code##g, o0); } \
+  ASMJIT_INLINE Error inst##ge(const T0& o0) { return emit(code##ge, o0); } \
+  ASMJIT_INLINE Error inst##l(const T0& o0) { return emit(code##l, o0); } \
+  ASMJIT_INLINE Error inst##le(const T0& o0) { return emit(code##le, o0); } \
+  ASMJIT_INLINE Error inst##na(const T0& o0) { return emit(code##na, o0); } \
+  ASMJIT_INLINE Error inst##nae(const T0& o0) { return emit(code##nae, o0); } \
+  ASMJIT_INLINE Error inst##nb(const T0& o0) { return emit(code##nb, o0); } \
+  ASMJIT_INLINE Error inst##nbe(const T0& o0) { return emit(code##nbe, o0); } \
+  ASMJIT_INLINE Error inst##nc(const T0& o0) { return emit(code##nc, o0); } \
+  ASMJIT_INLINE Error inst##ne(const T0& o0) { return emit(code##ne, o0); } \
+  ASMJIT_INLINE Error inst##ng(const T0& o0) { return emit(code##ng, o0); } \
+  ASMJIT_INLINE Error inst##nge(const T0& o0) { return emit(code##nge, o0); } \
+  ASMJIT_INLINE Error inst##nl(const T0& o0) { return emit(code##nl, o0); } \
+  ASMJIT_INLINE Error inst##nle(const T0& o0) { return emit(code##nle, o0); } \
+  ASMJIT_INLINE Error inst##no(const T0& o0) { return emit(code##no, o0); } \
+  ASMJIT_INLINE Error inst##np(const T0& o0) { return emit(code##np, o0); } \
+  ASMJIT_INLINE Error inst##ns(const T0& o0) { return emit(code##ns, o0); } \
+  ASMJIT_INLINE Error inst##nz(const T0& o0) { return emit(code##nz, o0); } \
+  ASMJIT_INLINE Error inst##o(const T0& o0) { return emit(code##o, o0); } \
+  ASMJIT_INLINE Error inst##p(const T0& o0) { return emit(code##p, o0); } \
+  ASMJIT_INLINE Error inst##pe(const T0& o0) { return emit(code##pe, o0); } \
+  ASMJIT_INLINE Error inst##po(const T0& o0) { return emit(code##po, o0); } \
+  ASMJIT_INLINE Error inst##s(const T0& o0) { return emit(code##s, o0); } \
+  ASMJIT_INLINE Error inst##z(const T0& o0) { return emit(code##z, o0); }
 
-#define INST_2x(_Inst_, _Code_, _Op0_, _Op1_) \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0, const _Op1_& o1) { \
-    return emit(_Code_, o0, o1); \
+#define INST_2x(inst, code, T0, T1) \
+  ASMJIT_INLINE Error inst(const T0& o0, const T1& o1) { \
+    return emit(code, o0, o1); \
   }
 
-#define INST_2x_(_Inst_, _Code_, _Op0_, _Op1_, _Cond_) \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0, const _Op1_& o1) { \
-    ASMJIT_ASSERT(_Cond_); \
-    return emit(_Code_, o0, o1); \
-  }
+#define INST_2i(inst, code, T0, T1) \
+  ASMJIT_INLINE Error inst(const T0& o0, const T1& o1) { return emit(code, o0, o1); } \
+  /*! \overload */ \
+  ASMJIT_INLINE Error inst(const T0& o0, int o1) { return emit(code, o0, Utils::asInt(o1)); } \
+  /*! \overload */ \
+  ASMJIT_INLINE Error inst(const T0& o0, unsigned int o1) { return emit(code, o0, Utils::asInt(o1)); } \
+  /*! \overload */ \
+  ASMJIT_INLINE Error inst(const T0& o0, int64_t o1) { return emit(code, o0, Utils::asInt(o1)); } \
+  /*! \overload */ \
+  ASMJIT_INLINE Error inst(const T0& o0, uint64_t o1) { return emit(code, o0, Utils::asInt(o1)); }
 
-#define INST_2i(_Inst_, _Code_, _Op0_, _Op1_) \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0, const _Op1_& o1) { return emit(_Code_, o0, o1); } \
-  /*! \overload */ \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0, int o1) { return emit(_Code_, o0, asInt(o1)); } \
-  /*! \overload */ \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0, unsigned int o1) { return emit(_Code_, o0, asInt(o1)); } \
-  /*! \overload */ \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0, int64_t o1) { return emit(_Code_, o0, asInt(o1)); } \
-  /*! \overload */ \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0, uint64_t o1) { return emit(_Code_, o0, asInt(o1)); }
-
-#define INST_2cc(_Inst_, _Code_, _Translate_, _Op0_, _Op1_) \
-  ASMJIT_INLINE Error _Inst_(uint32_t cc, const _Op0_& o0, const _Op1_& o1) { \
+#define INST_2cc(inst, code, _Translate_, T0, T1) \
+  ASMJIT_INLINE Error inst(uint32_t cc, const T0& o0, const T1& o1) { \
     return emit(_Translate_(cc), o0, o1); \
   } \
   \
-  ASMJIT_INLINE Error _Inst_##a(const _Op0_& o0, const _Op1_& o1) { return emit(_Code_##a, o0, o1); } \
-  ASMJIT_INLINE Error _Inst_##ae(const _Op0_& o0, const _Op1_& o1) { return emit(_Code_##ae, o0, o1); } \
-  ASMJIT_INLINE Error _Inst_##b(const _Op0_& o0, const _Op1_& o1) { return emit(_Code_##b, o0, o1); } \
-  ASMJIT_INLINE Error _Inst_##be(const _Op0_& o0, const _Op1_& o1) { return emit(_Code_##be, o0, o1); } \
-  ASMJIT_INLINE Error _Inst_##c(const _Op0_& o0, const _Op1_& o1) { return emit(_Code_##c, o0, o1); } \
-  ASMJIT_INLINE Error _Inst_##e(const _Op0_& o0, const _Op1_& o1) { return emit(_Code_##e, o0, o1); } \
-  ASMJIT_INLINE Error _Inst_##g(const _Op0_& o0, const _Op1_& o1) { return emit(_Code_##g, o0, o1); } \
-  ASMJIT_INLINE Error _Inst_##ge(const _Op0_& o0, const _Op1_& o1) { return emit(_Code_##ge, o0, o1); } \
-  ASMJIT_INLINE Error _Inst_##l(const _Op0_& o0, const _Op1_& o1) { return emit(_Code_##l, o0, o1); } \
-  ASMJIT_INLINE Error _Inst_##le(const _Op0_& o0, const _Op1_& o1) { return emit(_Code_##le, o0, o1); } \
-  ASMJIT_INLINE Error _Inst_##na(const _Op0_& o0, const _Op1_& o1) { return emit(_Code_##na, o0, o1); } \
-  ASMJIT_INLINE Error _Inst_##nae(const _Op0_& o0, const _Op1_& o1) { return emit(_Code_##nae, o0, o1); } \
-  ASMJIT_INLINE Error _Inst_##nb(const _Op0_& o0, const _Op1_& o1) { return emit(_Code_##nb, o0, o1); } \
-  ASMJIT_INLINE Error _Inst_##nbe(const _Op0_& o0, const _Op1_& o1) { return emit(_Code_##nbe, o0, o1); } \
-  ASMJIT_INLINE Error _Inst_##nc(const _Op0_& o0, const _Op1_& o1) { return emit(_Code_##nc, o0, o1); } \
-  ASMJIT_INLINE Error _Inst_##ne(const _Op0_& o0, const _Op1_& o1) { return emit(_Code_##ne, o0, o1); } \
-  ASMJIT_INLINE Error _Inst_##ng(const _Op0_& o0, const _Op1_& o1) { return emit(_Code_##ng, o0, o1); } \
-  ASMJIT_INLINE Error _Inst_##nge(const _Op0_& o0, const _Op1_& o1) { return emit(_Code_##nge, o0, o1); } \
-  ASMJIT_INLINE Error _Inst_##nl(const _Op0_& o0, const _Op1_& o1) { return emit(_Code_##nl, o0, o1); } \
-  ASMJIT_INLINE Error _Inst_##nle(const _Op0_& o0, const _Op1_& o1) { return emit(_Code_##nle, o0, o1); } \
-  ASMJIT_INLINE Error _Inst_##no(const _Op0_& o0, const _Op1_& o1) { return emit(_Code_##no, o0, o1); } \
-  ASMJIT_INLINE Error _Inst_##np(const _Op0_& o0, const _Op1_& o1) { return emit(_Code_##np, o0, o1); } \
-  ASMJIT_INLINE Error _Inst_##ns(const _Op0_& o0, const _Op1_& o1) { return emit(_Code_##ns, o0, o1); } \
-  ASMJIT_INLINE Error _Inst_##nz(const _Op0_& o0, const _Op1_& o1) { return emit(_Code_##nz, o0, o1); } \
-  ASMJIT_INLINE Error _Inst_##o(const _Op0_& o0, const _Op1_& o1) { return emit(_Code_##o, o0, o1); } \
-  ASMJIT_INLINE Error _Inst_##p(const _Op0_& o0, const _Op1_& o1) { return emit(_Code_##p, o0, o1); } \
-  ASMJIT_INLINE Error _Inst_##pe(const _Op0_& o0, const _Op1_& o1) { return emit(_Code_##pe, o0, o1); } \
-  ASMJIT_INLINE Error _Inst_##po(const _Op0_& o0, const _Op1_& o1) { return emit(_Code_##po, o0, o1); } \
-  ASMJIT_INLINE Error _Inst_##s(const _Op0_& o0, const _Op1_& o1) { return emit(_Code_##s, o0, o1); } \
-  ASMJIT_INLINE Error _Inst_##z(const _Op0_& o0, const _Op1_& o1) { return emit(_Code_##z, o0, o1); }
+  ASMJIT_INLINE Error inst##a(const T0& o0, const T1& o1) { return emit(code##a, o0, o1); } \
+  ASMJIT_INLINE Error inst##ae(const T0& o0, const T1& o1) { return emit(code##ae, o0, o1); } \
+  ASMJIT_INLINE Error inst##b(const T0& o0, const T1& o1) { return emit(code##b, o0, o1); } \
+  ASMJIT_INLINE Error inst##be(const T0& o0, const T1& o1) { return emit(code##be, o0, o1); } \
+  ASMJIT_INLINE Error inst##c(const T0& o0, const T1& o1) { return emit(code##c, o0, o1); } \
+  ASMJIT_INLINE Error inst##e(const T0& o0, const T1& o1) { return emit(code##e, o0, o1); } \
+  ASMJIT_INLINE Error inst##g(const T0& o0, const T1& o1) { return emit(code##g, o0, o1); } \
+  ASMJIT_INLINE Error inst##ge(const T0& o0, const T1& o1) { return emit(code##ge, o0, o1); } \
+  ASMJIT_INLINE Error inst##l(const T0& o0, const T1& o1) { return emit(code##l, o0, o1); } \
+  ASMJIT_INLINE Error inst##le(const T0& o0, const T1& o1) { return emit(code##le, o0, o1); } \
+  ASMJIT_INLINE Error inst##na(const T0& o0, const T1& o1) { return emit(code##na, o0, o1); } \
+  ASMJIT_INLINE Error inst##nae(const T0& o0, const T1& o1) { return emit(code##nae, o0, o1); } \
+  ASMJIT_INLINE Error inst##nb(const T0& o0, const T1& o1) { return emit(code##nb, o0, o1); } \
+  ASMJIT_INLINE Error inst##nbe(const T0& o0, const T1& o1) { return emit(code##nbe, o0, o1); } \
+  ASMJIT_INLINE Error inst##nc(const T0& o0, const T1& o1) { return emit(code##nc, o0, o1); } \
+  ASMJIT_INLINE Error inst##ne(const T0& o0, const T1& o1) { return emit(code##ne, o0, o1); } \
+  ASMJIT_INLINE Error inst##ng(const T0& o0, const T1& o1) { return emit(code##ng, o0, o1); } \
+  ASMJIT_INLINE Error inst##nge(const T0& o0, const T1& o1) { return emit(code##nge, o0, o1); } \
+  ASMJIT_INLINE Error inst##nl(const T0& o0, const T1& o1) { return emit(code##nl, o0, o1); } \
+  ASMJIT_INLINE Error inst##nle(const T0& o0, const T1& o1) { return emit(code##nle, o0, o1); } \
+  ASMJIT_INLINE Error inst##no(const T0& o0, const T1& o1) { return emit(code##no, o0, o1); } \
+  ASMJIT_INLINE Error inst##np(const T0& o0, const T1& o1) { return emit(code##np, o0, o1); } \
+  ASMJIT_INLINE Error inst##ns(const T0& o0, const T1& o1) { return emit(code##ns, o0, o1); } \
+  ASMJIT_INLINE Error inst##nz(const T0& o0, const T1& o1) { return emit(code##nz, o0, o1); } \
+  ASMJIT_INLINE Error inst##o(const T0& o0, const T1& o1) { return emit(code##o, o0, o1); } \
+  ASMJIT_INLINE Error inst##p(const T0& o0, const T1& o1) { return emit(code##p, o0, o1); } \
+  ASMJIT_INLINE Error inst##pe(const T0& o0, const T1& o1) { return emit(code##pe, o0, o1); } \
+  ASMJIT_INLINE Error inst##po(const T0& o0, const T1& o1) { return emit(code##po, o0, o1); } \
+  ASMJIT_INLINE Error inst##s(const T0& o0, const T1& o1) { return emit(code##s, o0, o1); } \
+  ASMJIT_INLINE Error inst##z(const T0& o0, const T1& o1) { return emit(code##z, o0, o1); }
 
-#define INST_3x(_Inst_, _Code_, _Op0_, _Op1_, _Op2_) \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0, const _Op1_& o1, const _Op2_& o2) { return emit(_Code_, o0, o1, o2); }
+#define INST_3x(inst, code, T0, T1, T2) \
+  ASMJIT_INLINE Error inst(const T0& o0, const T1& o1, const T2& o2) { return emit(code, o0, o1, o2); }
 
-#define INST_3i(_Inst_, _Code_, _Op0_, _Op1_, _Op2_) \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0, const _Op1_& o1, const _Op2_& o2) { return emit(_Code_, o0, o1, o2); } \
+#define INST_3i(inst, code, T0, T1, T2) \
+  ASMJIT_INLINE Error inst(const T0& o0, const T1& o1, const T2& o2) { return emit(code, o0, o1, o2); } \
   /*! \overload */ \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0, const _Op1_& o1, int o2) { return emit(_Code_, o0, o1, asInt(o2)); } \
+  ASMJIT_INLINE Error inst(const T0& o0, const T1& o1, int o2) { return emit(code, o0, o1, Utils::asInt(o2)); } \
   /*! \overload */ \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0, const _Op1_& o1, unsigned int o2) { return emit(_Code_, o0, o1, asInt(o2)); } \
+  ASMJIT_INLINE Error inst(const T0& o0, const T1& o1, unsigned int o2) { return emit(code, o0, o1, Utils::asInt(o2)); } \
   /*! \overload */ \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0, const _Op1_& o1, int64_t o2) { return emit(_Code_, o0, o1, asInt(o2)); } \
+  ASMJIT_INLINE Error inst(const T0& o0, const T1& o1, int64_t o2) { return emit(code, o0, o1, Utils::asInt(o2)); } \
   /*! \overload */ \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0, const _Op1_& o1, uint64_t o2) { return emit(_Code_, o0, o1, asInt(o2)); }
+  ASMJIT_INLINE Error inst(const T0& o0, const T1& o1, uint64_t o2) { return emit(code, o0, o1, Utils::asInt(o2)); }
 
-#define INST_3ii(_Inst_, _Code_, _Op0_, _Op1_, _Op2_) \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0, const _Op1_& o1, const _Op2_& o2) { return emit(_Code_, o0, o1, o2); } \
+#define INST_3ii(inst, code, T0, T1, T2) \
+  ASMJIT_INLINE Error inst(const T0& o0, const T1& o1, const T2& o2) { return emit(code, o0, o1, o2); } \
   /*! \overload */ \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0, int o1, int o2) { return emit(_Code_, o0, Imm(o1), asInt(o2)); } \
+  ASMJIT_INLINE Error inst(const T0& o0, int o1, int o2) { return emit(code, o0, Imm(o1), Utils::asInt(o2)); } \
   /*! \overload */ \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0, unsigned int o1, unsigned int o2) { return emit(_Code_, o0, Imm(o1), asInt(o2)); } \
+  ASMJIT_INLINE Error inst(const T0& o0, unsigned int o1, unsigned int o2) { return emit(code, o0, Imm(o1), Utils::asInt(o2)); } \
   /*! \overload */ \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0, int64_t o1, int64_t o2) { return emit(_Code_, o0, Imm(o1), asInt(o2)); } \
+  ASMJIT_INLINE Error inst(const T0& o0, int64_t o1, int64_t o2) { return emit(code, o0, Imm(o1), Utils::asInt(o2)); } \
   /*! \overload */ \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0, uint64_t o1, uint64_t o2) { return emit(_Code_, o0, Imm(o1), asInt(o2)); }
+  ASMJIT_INLINE Error inst(const T0& o0, uint64_t o1, uint64_t o2) { return emit(code, o0, Imm(o1), Utils::asInt(o2)); }
 
-#define INST_4x(_Inst_, _Code_, _Op0_, _Op1_, _Op2_, _Op3_) \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0, const _Op1_& o1, const _Op2_& o2, const _Op3_& o3) { return emit(_Code_, o0, o1, o2, o3); }
+#define INST_4x(inst, code, T0, T1, T2, T3) \
+  ASMJIT_INLINE Error inst(const T0& o0, const T1& o1, const T2& o2, const T3& o3) { return emit(code, o0, o1, o2, o3); }
 
-#define INST_4i(_Inst_, _Code_, _Op0_, _Op1_, _Op2_, _Op3_) \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0, const _Op1_& o1, const _Op2_& o2, const _Op3_& o3) { return emit(_Code_, o0, o1, o2, o3); } \
+#define INST_4i(inst, code, T0, T1, T2, T3) \
+  ASMJIT_INLINE Error inst(const T0& o0, const T1& o1, const T2& o2, const T3& o3) { return emit(code, o0, o1, o2, o3); } \
   /*! \overload */ \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0, const _Op1_& o1, const _Op2_& o2, int o3) { return emit(_Code_, o0, o1, o2, asInt(o3)); } \
+  ASMJIT_INLINE Error inst(const T0& o0, const T1& o1, const T2& o2, int o3) { return emit(code, o0, o1, o2, Utils::asInt(o3)); } \
   /*! \overload */ \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0, const _Op1_& o1, const _Op2_& o2, unsigned int o3) { return emit(_Code_, o0, o1, o2, asInt(o3)); } \
+  ASMJIT_INLINE Error inst(const T0& o0, const T1& o1, const T2& o2, unsigned int o3) { return emit(code, o0, o1, o2, Utils::asInt(o3)); } \
   /*! \overload */ \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0, const _Op1_& o1, const _Op2_& o2, int64_t o3) { return emit(_Code_, o0, o1, o2, asInt(o3)); } \
+  ASMJIT_INLINE Error inst(const T0& o0, const T1& o1, const T2& o2, int64_t o3) { return emit(code, o0, o1, o2, Utils::asInt(o3)); } \
   /*! \overload */ \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0, const _Op1_& o1, const _Op2_& o2, uint64_t o3) { return emit(_Code_, o0, o1, o2, asInt(o3)); }
+  ASMJIT_INLINE Error inst(const T0& o0, const T1& o1, const T2& o2, uint64_t o3) { return emit(code, o0, o1, o2, Utils::asInt(o3)); }
 
-#define INST_4ii(_Inst_, _Code_, _Op0_, _Op1_, _Op2_, _Op3_) \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0, const _Op1_& o1, const _Op2_& o2, const _Op3_& o3) { return emit(_Code_, o0, o1, o2, o3); } \
+#define INST_4ii(inst, code, T0, T1, T2, T3) \
+  ASMJIT_INLINE Error inst(const T0& o0, const T1& o1, const T2& o2, const T3& o3) { return emit(code, o0, o1, o2, o3); } \
   /*! \overload */ \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0, const _Op1_& o1, int o2, int o3) { return emit(_Code_, o0, o1, Imm(o2), asInt(o3)); } \
+  ASMJIT_INLINE Error inst(const T0& o0, const T1& o1, int o2, int o3) { return emit(code, o0, o1, Imm(o2), Utils::asInt(o3)); } \
   /*! \overload */ \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0, const _Op1_& o1, unsigned int o2, unsigned int o3) { return emit(_Code_, o0, o1, Imm(o2), asInt(o3)); } \
+  ASMJIT_INLINE Error inst(const T0& o0, const T1& o1, unsigned int o2, unsigned int o3) { return emit(code, o0, o1, Imm(o2), Utils::asInt(o3)); } \
   /*! \overload */ \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0, const _Op1_& o1, int64_t o2, int64_t o3) { return emit(_Code_, o0, o1, Imm(o2), asInt(o3)); } \
+  ASMJIT_INLINE Error inst(const T0& o0, const T1& o1, int64_t o2, int64_t o3) { return emit(code, o0, o1, Imm(o2), Utils::asInt(o3)); } \
   /*! \overload */ \
-  ASMJIT_INLINE Error _Inst_(const _Op0_& o0, const _Op1_& o1, uint64_t o2, uint64_t o3) { return emit(_Code_, o0, o1, Imm(o2), asInt(o3)); }
+  ASMJIT_INLINE Error inst(const T0& o0, const T1& o1, uint64_t o2, uint64_t o3) { return emit(code, o0, o1, Imm(o2), Utils::asInt(o3)); }
 
   // --------------------------------------------------------------------------
   // [X86/X64]
@@ -749,17 +736,17 @@ struct ASMJIT_VCLASS X86Assembler : public Assembler {
   INST_2i(and_, kX86InstIdAnd, X86Mem, Imm)
 
   //! Bit scan forward.
-  INST_2x_(bsf, kX86InstIdBsf, X86GpReg, X86GpReg, !o0.isGpb())
+  INST_2x(bsf, kX86InstIdBsf, X86GpReg, X86GpReg)
   //! \overload
-  INST_2x_(bsf, kX86InstIdBsf, X86GpReg, X86Mem, !o0.isGpb())
+  INST_2x(bsf, kX86InstIdBsf, X86GpReg, X86Mem)
 
   //! Bit scan reverse.
-  INST_2x_(bsr, kX86InstIdBsr, X86GpReg, X86GpReg, !o0.isGpb())
+  INST_2x(bsr, kX86InstIdBsr, X86GpReg, X86GpReg)
   //! \overload
-  INST_2x_(bsr, kX86InstIdBsr, X86GpReg, X86Mem, !o0.isGpb())
+  INST_2x(bsr, kX86InstIdBsr, X86GpReg, X86Mem)
 
   //! Byte swap (32-bit or 64-bit registers only) (i486).
-  INST_1x_(bswap, kX86InstIdBswap, X86GpReg, o0.getSize() >= 4)
+  INST_1x(bswap, kX86InstIdBswap, X86GpReg)
 
   //! Bit test.
   INST_2x(bt, kX86InstIdBt, X86GpReg, X86GpReg)
@@ -920,7 +907,7 @@ struct ASMJIT_VCLASS X86Assembler : public Assembler {
   INST_1cc(j, kX86InstIdJ, X86Util::condToJcc, Label)
 
   //! Short jump if CX/ECX/RCX is zero.
-  INST_2x_(jecxz, kX86InstIdJecxz, X86GpReg, Label, o0.getRegIndex() == kX86RegIndexCx)
+  INST_2x(jecxz, kX86InstIdJecxz, X86GpReg, Label)
 
   //! Jump.
   INST_1x(jmp, kX86InstIdJmp, X86GpReg)
@@ -972,25 +959,23 @@ struct ASMJIT_VCLASS X86Assembler : public Assembler {
   INST_2x(mov, kX86InstIdMov, X86SegReg, X86Mem)
 
   //! Move (AL|AX|EAX|RAX <- absolute address in immediate).
-  INST_2x_(mov_ptr, kX86InstIdMovPtr, X86GpReg, Imm, o0.getRegIndex() == 0);
+  INST_2x(mov_ptr, kX86InstIdMovPtr, X86GpReg, Imm);
   //! \overload
   ASMJIT_INLINE Error mov_ptr(const X86GpReg& o0, Ptr o1) {
-    ASMJIT_ASSERT(o0.getRegIndex() == 0);
     return emit(kX86InstIdMovPtr, o0, Imm(o1));
   }
 
   //! Move (absolute address in immediate <- AL|AX|EAX|RAX).
-  INST_2x_(mov_ptr, kX86InstIdMovPtr, Imm, X86GpReg, o1.getRegIndex() == 0);
+  INST_2x(mov_ptr, kX86InstIdMovPtr, Imm, X86GpReg);
   //! \overload
   ASMJIT_INLINE Error mov_ptr(Ptr o0, const X86GpReg& o1) {
-    ASMJIT_ASSERT(o1.getRegIndex() == 0);
     return emit(kX86InstIdMovPtr, Imm(o0), o1);
   }
 
   //! Move data after dwapping bytes (SSE3 - Atom).
-  INST_2x_(movbe, kX86InstIdMovbe, X86GpReg, X86Mem, !o0.isGpb());
+  INST_2x(movbe, kX86InstIdMovbe, X86GpReg, X86Mem);
   //! \overload
-  INST_2x_(movbe, kX86InstIdMovbe, X86Mem, X86GpReg, !o1.isGpb());
+  INST_2x(movbe, kX86InstIdMovbe, X86Mem, X86GpReg);
 
   //! Move BYTE from DS:[ESI/RSI] to ES:[EDI/RDI].
   INST_0x(movsb, kX86InstIdMovsB)
@@ -1046,14 +1031,14 @@ struct ASMJIT_VCLASS X86Assembler : public Assembler {
   INST_2i(or_, kX86InstIdOr, X86Mem, Imm)
 
   //! Pop a value from the stack.
-  INST_1x_(pop, kX86InstIdPop, X86GpReg, o0.getSize() == 2 || o0.getSize() == _regSize)
+  INST_1x(pop, kX86InstIdPop, X86GpReg)
   //! \overload
-  INST_1x_(pop, kX86InstIdPop, X86Mem, o0.getSize() == 2 || o0.getSize() == _regSize)
+  INST_1x(pop, kX86InstIdPop, X86Mem)
 
   //! Pop a segment register from the stack.
   //!
   //! \note There is no instruction to pop a cs segment register.
-  INST_1x_(pop, kX86InstIdPop, X86SegReg, o0.getRegIndex() != kX86SegCs);
+  INST_1x(pop, kX86InstIdPop, X86SegReg);
 
   //! Pop all Gp registers - EDI|ESI|EBP|Ign|EBX|EDX|ECX|EAX (X86 Only).
   INST_0x(popa, kX86InstIdPopa)
@@ -1062,9 +1047,9 @@ struct ASMJIT_VCLASS X86Assembler : public Assembler {
   INST_0x(popf, kX86InstIdPopf)
 
   //! Push WORD or DWORD/QWORD on the stack.
-  INST_1x_(push, kX86InstIdPush, X86GpReg, o0.getSize() == 2 || o0.getSize() == _regSize)
+  INST_1x(push, kX86InstIdPush, X86GpReg)
   //! Push WORD or DWORD/QWORD on the stack.
-  INST_1x_(push, kX86InstIdPush, X86Mem, o0.getSize() == 2 || o0.getSize() == _regSize)
+  INST_1x(push, kX86InstIdPush, X86Mem)
   //! Push segment register on the stack.
   INST_1x(push, kX86InstIdPush, X86SegReg)
   //! Push WORD or DWORD/QWORD on the stack.
@@ -1357,7 +1342,7 @@ struct ASMJIT_VCLASS X86Assembler : public Assembler {
   INST_0x(fabs, kX86InstIdFabs)
 
   //! Add `o0 = o0 + o1` (one operand has to be `fp0`) (FPU).
-  INST_2x_(fadd, kX86InstIdFadd, X86FpReg, X86FpReg, o0.getRegIndex() == 0 || o1.getRegIndex() == 0)
+  INST_2x(fadd, kX86InstIdFadd, X86FpReg, X86FpReg)
   //! Add `fp0 = fp0 + float_or_double[o0]` (FPU).
   INST_1x(fadd, kX86InstIdFadd, X86Mem)
   //! Add `o0 = o0 + fp0` and POP (FPU).
@@ -1419,7 +1404,7 @@ struct ASMJIT_VCLASS X86Assembler : public Assembler {
   INST_0x(fdecstp, kX86InstIdFdecstp)
 
   //! Divide `o0 = o0 / o1` (one has to be `fp0`) (FPU).
-  INST_2x_(fdiv, kX86InstIdFdiv, X86FpReg, X86FpReg, o0.getRegIndex() == 0 || o1.getRegIndex() == 0)
+  INST_2x(fdiv, kX86InstIdFdiv, X86FpReg, X86FpReg)
   //! Divide `fp0 = fp0 / float_or_double[o0]` (FPU).
   INST_1x(fdiv, kX86InstIdFdiv, X86Mem)
   //! Divide `o0 = o0 / fp0` and POP (FPU).
@@ -1428,7 +1413,7 @@ struct ASMJIT_VCLASS X86Assembler : public Assembler {
   INST_0x(fdivp, kX86InstIdFdivp)
 
   //! Reverse divide `o0 = o1 / o0` (one has to be `fp0`) (FPU).
-  INST_2x_(fdivr, kX86InstIdFdivr, X86FpReg, X86FpReg, o0.getRegIndex() == 0 || o1.getRegIndex() == 0)
+  INST_2x(fdivr, kX86InstIdFdivr, X86FpReg, X86FpReg)
   //! Reverse divide `fp0 = float_or_double[o0] / fp0` (FPU).
   INST_1x(fdivr, kX86InstIdFdivr, X86Mem)
   //! Reverse divide `o0 = fp0 / o0` and POP (FPU).
@@ -1440,20 +1425,20 @@ struct ASMJIT_VCLASS X86Assembler : public Assembler {
   INST_1x(ffree, kX86InstIdFfree, X86FpReg)
 
   //! Add `fp0 = fp0 + short_or_int[o0]` (FPU).
-  INST_1x_(fiadd, kX86InstIdFiadd, X86Mem, o0.getSize() == 2 || o0.getSize() == 4)
+  INST_1x(fiadd, kX86InstIdFiadd, X86Mem)
   //! Compare `fp0` with `short_or_int[o0]` (FPU).
-  INST_1x_(ficom, kX86InstIdFicom, X86Mem, o0.getSize() == 2 || o0.getSize() == 4)
+  INST_1x(ficom, kX86InstIdFicom, X86Mem)
   //! Compare `fp0` with `short_or_int[o0]` and POP (FPU).
-  INST_1x_(ficomp, kX86InstIdFicomp, X86Mem, o0.getSize() == 2 || o0.getSize() == 4)
+  INST_1x(ficomp, kX86InstIdFicomp, X86Mem)
   //! Divide `fp0 = fp0 / short_or_int[o0]` (FPU).
-  INST_1x_(fidiv, kX86InstIdFidiv, X86Mem, o0.getSize() == 2 || o0.getSize() == 4)
+  INST_1x(fidiv, kX86InstIdFidiv, X86Mem)
   //! Reverse divide `fp0 = short_or_int[o0] / fp0` (FPU).
-  INST_1x_(fidivr, kX86InstIdFidivr, X86Mem, o0.getSize() == 2 || o0.getSize() == 4)
+  INST_1x(fidivr, kX86InstIdFidivr, X86Mem)
 
   //! Load `short_or_int_or_long[o0]` and PUSH (FPU).
-  INST_1x_(fild, kX86InstIdFild, X86Mem, o0.getSize() == 2 || o0.getSize() == 4 || o0.getSize() == 8)
+  INST_1x(fild, kX86InstIdFild, X86Mem)
   //! Multiply `fp0 *= short_or_int[o0]` (FPU).
-  INST_1x_(fimul, kX86InstIdFimul, X86Mem, o0.getSize() == 2 || o0.getSize() == 4)
+  INST_1x(fimul, kX86InstIdFimul, X86Mem)
 
   //! Increment FPU stack pointer (FPU).
   INST_0x(fincstp, kX86InstIdFincstp)
@@ -1461,20 +1446,20 @@ struct ASMJIT_VCLASS X86Assembler : public Assembler {
   INST_0x(finit, kX86InstIdFinit)
 
   //! Subtract `fp0 = fp0 - short_or_int[o0]` (FPU).
-  INST_1x_(fisub, kX86InstIdFisub, X86Mem, o0.getSize() == 2 || o0.getSize() == 4)
+  INST_1x(fisub, kX86InstIdFisub, X86Mem)
   //! Reverse subtract `fp0 = short_or_int[o0] - fp0` (FPU).
-  INST_1x_(fisubr, kX86InstIdFisubr, X86Mem, o0.getSize() == 2 || o0.getSize() == 4)
+  INST_1x(fisubr, kX86InstIdFisubr, X86Mem)
 
   //! Initialize FPU without checking for pending unmasked exceptions (FPU).
   INST_0x(fninit, kX86InstIdFninit)
 
   //! Store `fp0` as `short_or_int[o0]` (FPU).
-  INST_1x_(fist, kX86InstIdFist, X86Mem, o0.getSize() == 2 || o0.getSize() == 4)
+  INST_1x(fist, kX86InstIdFist, X86Mem)
   //! Store `fp0` as `short_or_int_or_long[o0]` and POP (FPU).
-  INST_1x_(fistp, kX86InstIdFistp, X86Mem, o0.getSize() == 2 || o0.getSize() == 4 || o0.getSize() == 8)
+  INST_1x(fistp, kX86InstIdFistp, X86Mem)
 
   //! Load `float_or_double_or_extended[o0]` and PUSH (FPU).
-  INST_1x_(fld, kX86InstIdFld, X86Mem, o0.getSize() == 4 || o0.getSize() == 8 || o0.getSize() == 10)
+  INST_1x(fld, kX86InstIdFld, X86Mem)
   //! PUSH `o0` (FPU).
   INST_1x(fld, kX86InstIdFld, X86FpReg)
 
@@ -1499,7 +1484,7 @@ struct ASMJIT_VCLASS X86Assembler : public Assembler {
   INST_1x(fldenv, kX86InstIdFldenv, X86Mem)
 
   //! Multiply `o0 = o0  * o1` (one has to be `fp0`) (FPU).
-  INST_2x_(fmul, kX86InstIdFmul, X86FpReg, X86FpReg, o0.getRegIndex() == 0 || o1.getRegIndex() == 0)
+  INST_2x(fmul, kX86InstIdFmul, X86FpReg, X86FpReg)
   //! Multiply `fp0 = fp0 * float_or_double[o0]` (FPU).
   INST_1x(fmul, kX86InstIdFmul, X86Mem)
   //! Multiply `o0 = o0 * fp0` and POP (FPU).
@@ -1519,7 +1504,7 @@ struct ASMJIT_VCLASS X86Assembler : public Assembler {
   INST_1x(fnstcw, kX86InstIdFnstcw, X86Mem)
 
   //! Store x87 FPU status word to `o0` (AX) (FPU).
-  INST_1x_(fnstsw, kX86InstIdFnstsw, X86GpReg, o0.isRegCode(kX86RegTypeGpw, kX86RegIndexAx))
+  INST_1x(fnstsw, kX86InstIdFnstsw, X86GpReg)
   //! Store x87 FPU status word to `word_ptr[o0]` (FPU).
   INST_1x(fnstsw, kX86InstIdFnstsw, X86Mem)
 
@@ -1549,11 +1534,11 @@ struct ASMJIT_VCLASS X86Assembler : public Assembler {
   INST_0x(fsqrt, kX86InstIdFsqrt)
 
   //! Store floating point value to `float_or_double[o0]` (FPU).
-  INST_1x_(fst, kX86InstIdFst, X86Mem, o0.getSize() == 4 || o0.getSize() == 8)
+  INST_1x(fst, kX86InstIdFst, X86Mem)
   //! Copy `o0 = fp0` (FPU).
   INST_1x(fst, kX86InstIdFst, X86FpReg)
   //! Store floating point value to `float_or_double_or_extended[o0]` and POP (FPU).
-  INST_1x_(fstp, kX86InstIdFstp, X86Mem, o0.getSize() == 4 || o0.getSize() == 8 || o0.getSize() == 10)
+  INST_1x(fstp, kX86InstIdFstp, X86Mem)
   //! Copy `o0 = fp0` and POP (FPU).
   INST_1x(fstp, kX86InstIdFstp, X86FpReg)
 
@@ -1562,23 +1547,23 @@ struct ASMJIT_VCLASS X86Assembler : public Assembler {
   //! Store x87 FPU environment to `[o0]` (14 or 28 bytes) (FPU).
   INST_1x(fstenv, kX86InstIdFstenv, X86Mem)
   //! Store x87 FPU status word to `o0` (AX) (FPU).
-  INST_1x_(fstsw, kX86InstIdFstsw, X86GpReg, o0.getRegIndex() == kX86RegIndexAx)
+  INST_1x(fstsw, kX86InstIdFstsw, X86GpReg)
   //! Store x87 FPU status word to `word_ptr[o0]` (FPU).
   INST_1x(fstsw, kX86InstIdFstsw, X86Mem)
 
   //! Subtract `o0 = o0 - o1` (one has to be `fp0`) (FPU).
-  INST_2x_(fsub, kX86InstIdFsub, X86FpReg, X86FpReg, o0.getRegIndex() == 0 || o1.getRegIndex() == 0)
+  INST_2x(fsub, kX86InstIdFsub, X86FpReg, X86FpReg)
   //! Subtract `fp0 = fp0 - float_or_double[o0]` (FPU).
-  INST_1x_(fsub, kX86InstIdFsub, X86Mem, o0.getSize() == 4 || o0.getSize() == 8)
+  INST_1x(fsub, kX86InstIdFsub, X86Mem)
   //! Subtract `o0 = o0 - fp0` and POP (FPU).
   INST_1x(fsubp, kX86InstIdFsubp, X86FpReg)
   //! Subtract `fp1 = fp1 - fp0` and POP (FPU).
   INST_0x(fsubp, kX86InstIdFsubp)
 
   //! Reverse subtract `o0 = o1 - o0` (one has to be `fp0`) (FPU).
-  INST_2x_(fsubr, kX86InstIdFsubr, X86FpReg, X86FpReg, o0.getRegIndex() == 0 || o1.getRegIndex() == 0)
+  INST_2x(fsubr, kX86InstIdFsubr, X86FpReg, X86FpReg)
   //! Reverse subtract `fp0 = fp0 - float_or_double[o0]` (FPU).
-  INST_1x_(fsubr, kX86InstIdFsubr, X86Mem, o0.getSize() == 4 || o0.getSize() == 8)
+  INST_1x(fsubr, kX86InstIdFsubr, X86Mem)
   //! Reverse subtract `o0 = o0 - fp0` and POP (FPU).
   INST_1x(fsubrp, kX86InstIdFsubrp, X86FpReg)
   //! Reverse subtract `fp1 = fp1 - fp0` and POP (FPU).
@@ -3308,7 +3293,7 @@ struct ASMJIT_VCLASS X86Assembler : public Assembler {
   //! Packed DWORD unsigned maximum (SSE4.1).
   INST_2x(pmaxud, kX86InstIdPmaxud, X86XmmReg, X86XmmReg)
   //! \overload
-  INST_2x(pmaxud,kX86InstIdPmaxud , X86XmmReg, X86Mem)
+  INST_2x(pmaxud, kX86InstIdPmaxud, X86XmmReg, X86Mem)
 
   //! Packed WORD unsigned maximum (SSE4.1).
   INST_2x(pmaxuw, kX86InstIdPmaxuw, X86XmmReg, X86XmmReg)
@@ -3435,9 +3420,9 @@ struct ASMJIT_VCLASS X86Assembler : public Assembler {
   // --------------------------------------------------------------------------
 
   //! Accumulate crc32 value (polynomial 0x11EDC6F41) (SSE4.2).
-  INST_2x_(crc32, kX86InstIdCrc32, X86GpReg, X86GpReg, o0.isRegType(kX86RegTypeGpd) || o0.isRegType(kX86RegTypeGpq))
+  INST_2x(crc32, kX86InstIdCrc32, X86GpReg, X86GpReg)
   //! \overload
-  INST_2x_(crc32, kX86InstIdCrc32, X86GpReg, X86Mem, o0.isRegType(kX86RegTypeGpd) || o0.isRegType(kX86RegTypeGpq))
+  INST_2x(crc32, kX86InstIdCrc32, X86GpReg, X86Mem)
 
   //! Packed compare explicit length strings, return index (SSE4.2).
   INST_3i(pcmpestri, kX86InstIdPcmpestri, X86XmmReg, X86XmmReg, Imm)
@@ -3488,9 +3473,9 @@ struct ASMJIT_VCLASS X86Assembler : public Assembler {
   // --------------------------------------------------------------------------
 
   //! Return the count of number of bits set to 1 (POPCNT).
-  INST_2x_(popcnt, kX86InstIdPopcnt, X86GpReg, X86GpReg, !o0.isGpb() && o0.getRegType() == o1.getRegType())
+  INST_2x(popcnt, kX86InstIdPopcnt, X86GpReg, X86GpReg)
   //! \overload
-  INST_2x_(popcnt, kX86InstIdPopcnt, X86GpReg, X86Mem, !o0.isGpb())
+  INST_2x(popcnt, kX86InstIdPopcnt, X86GpReg, X86Mem)
 
   // --------------------------------------------------------------------------
   // [LZCNT]
@@ -3559,9 +3544,9 @@ struct ASMJIT_VCLASS X86Assembler : public Assembler {
   INST_1x(xsave64, kX86InstIdXsave64, X86Mem)
 
   //! Save Processor Extended States specified by `EDX:EAX` (Optimized) (XSAVEOPT).
-  INST_1x(xsaveopt, kX86InstIdXsave, X86Mem)
+  INST_1x(xsaveopt, kX86InstIdXsaveopt, X86Mem)
   //! Save Processor Extended States specified by `EDX:EAX` (Optimized) (XSAVEOPT&X64).
-  INST_1x(xsaveopt64, kX86InstIdXsave64, X86Mem)
+  INST_1x(xsaveopt64, kX86InstIdXsaveopt64, X86Mem)
 
   //! Get XCR - `EDX:EAX <- XCR[ECX]` (XSAVE).
   INST_0x(xgetbv, kX86InstIdXgetbv)
@@ -6570,12 +6555,10 @@ struct ASMJIT_VCLASS X86Assembler : public Assembler {
 #undef INST_0x
 
 #undef INST_1x
-#undef INST_1x_
 #undef INST_1i
 #undef INST_1cc
 
 #undef INST_2x
-#undef INST_2x_
 #undef INST_2i
 #undef INST_2cc
 

@@ -9,15 +9,14 @@
 #define _ASMJIT_BASE_VMEM_H
 
 // [Dependencies - AsmJit]
-#include "../base/error.h"
-#include "../base/lock.h"
+#include "../base/utils.h"
 
 // [Api-Begin]
 #include "../apibegin.h"
 
 namespace asmjit {
 
-//! \addtogroup asmjit_base_util
+//! \addtogroup asmjit_base
 //! \{
 
 // ============================================================================
@@ -61,33 +60,26 @@ ASMJIT_ENUM(VMemFlags) {
 //! overview on how to use a platform specific APIs.
 struct VMemUtil {
   //! Get a size/alignment of a single virtual memory page.
-  static ASMJIT_API size_t getPageSize();
+  static ASMJIT_API size_t getPageSize() noexcept;
 
   //! Get a recommended granularity for a single `alloc` call.
-  static ASMJIT_API size_t getPageGranularity();
+  static ASMJIT_API size_t getPageGranularity() noexcept;
 
   //! Allocate virtual memory.
   //!
   //! Pages are readable/writeable, but they are not guaranteed to be
   //! executable unless 'canExecute' is true. Returns the address of
-  //! allocated memory, or NULL on failure.
-  static ASMJIT_API void* alloc(size_t length, size_t* allocated, uint32_t flags);
-
-#if defined(ASMJIT_OS_WINDOWS)
-  //! Allocate virtual memory of `hProcess`.
-  //!
-  //! \note This function is Windows specific.
-  static ASMJIT_API void* allocProcessMemory(HANDLE hProcess, size_t length, size_t* allocated, uint32_t flags);
-#endif // ASMJIT_OS_WINDOWS
-
+  //! allocated memory, or `nullptr` on failure.
+  static ASMJIT_API void* alloc(size_t length, size_t* allocated, uint32_t flags) noexcept;
   //! Free memory allocated by `alloc()`.
-  static ASMJIT_API Error release(void* addr, size_t length);
+  static ASMJIT_API Error release(void* addr, size_t length) noexcept;
 
-#if defined(ASMJIT_OS_WINDOWS)
-  //! Release virtual memory of `hProcess`.
-  //!
-  //! \note This function is Windows specific.
-  static ASMJIT_API Error releaseProcessMemory(HANDLE hProcess, void* addr, size_t length);
+#if ASMJIT_OS_WINDOWS
+  //! Allocate virtual memory of `hProcess` (Windows only).
+  static ASMJIT_API void* allocProcessMemory(HANDLE hProcess, size_t length, size_t* allocated, uint32_t flags) noexcept;
+
+  //! Release virtual memory of `hProcess` (Windows only).
+  static ASMJIT_API Error releaseProcessMemory(HANDLE hProcess, void* addr, size_t length) noexcept;
 #endif // ASMJIT_OS_WINDOWS
 };
 
@@ -102,53 +94,53 @@ struct VMemMgr {
   // [Construction / Destruction]
   // --------------------------------------------------------------------------
 
-#if !defined(ASMJIT_OS_WINDOWS)
+#if !ASMJIT_OS_WINDOWS
   //! Create a `VMemMgr` instance.
-  ASMJIT_API VMemMgr();
+  ASMJIT_API VMemMgr() noexcept;
 #else
   //! Create a `VMemMgr` instance.
   //!
   //! \note When running on Windows it's possible to specify a `hProcess` to
   //! be used for memory allocation. This allows to allocate memory of remote
   //! process.
-  ASMJIT_API VMemMgr(HANDLE hProcess = static_cast<HANDLE>(0));
+  ASMJIT_API VMemMgr(HANDLE hProcess = static_cast<HANDLE>(0)) noexcept;
 #endif // ASMJIT_OS_WINDOWS
 
   //! Destroy the `VMemMgr` instance and free all blocks.
-  ASMJIT_API ~VMemMgr();
+  ASMJIT_API ~VMemMgr() noexcept;
 
   // --------------------------------------------------------------------------
   // [Reset]
   // --------------------------------------------------------------------------
 
   //! Free all allocated memory.
-  ASMJIT_API void reset();
+  ASMJIT_API void reset() noexcept;
 
   // --------------------------------------------------------------------------
   // [Accessors]
   // --------------------------------------------------------------------------
 
-#if defined(ASMJIT_OS_WINDOWS)
+#if ASMJIT_OS_WINDOWS
   //! Get the handle of the process memory manager is bound to.
-  ASMJIT_INLINE HANDLE getProcessHandle() const {
+  ASMJIT_INLINE HANDLE getProcessHandle() const noexcept {
     return _hProcess;
   }
 #endif // ASMJIT_OS_WINDOWS
 
   //! Get how many bytes are currently allocated.
-  ASMJIT_INLINE size_t getAllocatedBytes() const {
+  ASMJIT_INLINE size_t getAllocatedBytes() const noexcept {
     return _allocatedBytes;
   }
 
   //! Get how many bytes are currently used.
-  ASMJIT_INLINE size_t getUsedBytes() const {
+  ASMJIT_INLINE size_t getUsedBytes() const noexcept {
     return _usedBytes;
   }
 
   //! Get whether to keep allocated memory after the `VMemMgr` is destroyed.
   //!
   //! \sa \ref setKeepVirtualMemory.
-  ASMJIT_INLINE bool getKeepVirtualMemory() const {
+  ASMJIT_INLINE bool getKeepVirtualMemory() const noexcept {
     return _keepVirtualMemory;
   }
 
@@ -164,7 +156,7 @@ struct VMemMgr {
   //! \note Memory allocated with kVMemAllocPermanent is always kept.
   //!
   //! \sa \ref getKeepVirtualMemory.
-  ASMJIT_INLINE void setKeepVirtualMemory(bool keepVirtualMemory) {
+  ASMJIT_INLINE void setKeepVirtualMemory(bool keepVirtualMemory) noexcept {
     _keepVirtualMemory = keepVirtualMemory;
   }
 
@@ -177,19 +169,19 @@ struct VMemMgr {
   //! Note that if you are implementing your own virtual memory manager then you
   //! can quitly ignore type of allocation. This is mainly for AsmJit to memory
   //! manager that allocated memory will be never freed.
-  ASMJIT_API void* alloc(size_t size, uint32_t type = kVMemAllocFreeable);
+  ASMJIT_API void* alloc(size_t size, uint32_t type = kVMemAllocFreeable) noexcept;
 
   //! Free previously allocated memory at a given `address`.
-  ASMJIT_API Error release(void* p);
+  ASMJIT_API Error release(void* p) noexcept;
 
   //! Free extra memory allocated with `p`.
-  ASMJIT_API Error shrink(void* p, size_t used);
+  ASMJIT_API Error shrink(void* p, size_t used) noexcept;
 
   // --------------------------------------------------------------------------
   // [Members]
   // --------------------------------------------------------------------------
 
-#if defined(ASMJIT_OS_WINDOWS)
+#if ASMJIT_OS_WINDOWS
   //! Process passed to `VirtualAllocEx` and `VirtualFree`.
   HANDLE _hProcess;
 #endif // ASMJIT_OS_WINDOWS
