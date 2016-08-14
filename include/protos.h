@@ -257,8 +257,12 @@ U1 exe_getclientaddr(S8 slist_ind, U1 *s_reg);
 U1 exe_gethostname(U1 *s_reg);
 U1 exe_gethostbyname(U1 *s_reg1, U1 *s_reg2);
 U1 exe_gethostbyaddr(U1 *s_reg1, U1 *s_reg2);
+
+#if ! __ANDROID__
 S8 htonq(S8 num);
 S8 ntohq(S8 num);
+#endif
+
 F8 htond(F8 hostd);
 F8 ntohd(F8 netd);
 U1 exe_sread(S4 slist_ind, S4 len);

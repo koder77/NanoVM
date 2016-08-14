@@ -138,11 +138,13 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 	#endif				
 	// Create assembler.
 	
-	FileLogger logger(stdout);
-	logger.setOption(kLoggerOptionBinaryForm, true);
+	StringLogger logger;
 
 	JitRuntime runtime;
 	X86Assembler a(&runtime);
+	a.setLogger(&logger);
+	
+	// logger.setOption(kLoggerOptionBinaryForm, true);
 	
 	/* register bases used for calculating register offset (OFFSET()) */
 	

@@ -1,3 +1,17 @@
+Nano VM (3.4.3-2)
+	Now using latest libasmjit.
+	Building libasmjit.so this time.
+	
+	Edit /etc/ld.so.conf config file and add the directory in which the libasmjit.so is in.
+	In my case: /home/stefan/Seafile/nanovm/bin/linux-x86-64.
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Mon 2 May 2016 20:42 +0200	
+	
+Nano VM (3.4.3)
+	Fixed portable install path for libraries: "../../lib/".
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Thu 24 Mar 2016 21:00 +0200
+
 Nano VM (3.4.2)
 	Nano is now "portable" and runs from an USB stick.
 	The executables begin then with "port" in the name:

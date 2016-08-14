@@ -550,6 +550,7 @@ U1 exe_fwrite (S4 flist_ind, S4 len, U1 binary_write)
     }
     else
     {
+		fflush (file[flist_ind].fptr);
         return (ERR_FILE_OK);
     }
 }

@@ -114,7 +114,7 @@ U1 expand_dll_pathname (U1 *path, U1 *newpath)
 				
 				if (portable_install)
 				{
-					strcpy (newpath, "../lib/");
+					strcpy (newpath, "../../lib/");
 				}
 			}
 			else

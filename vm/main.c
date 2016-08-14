@@ -44,7 +44,19 @@
     #define PRINTD(s);
 #endif
 
+/* wait_sec -------------------------------------------------------------- */
 
+#if OS_AMIGA || OS_AROS
+    #define WAIT_SEC();  Delay (15 * NANO_TIMER_TICKS);
+#endif
+
+#if OS_WINDOWS
+    #define WAIT_SEC();  Sleep (15 * CLOCKS_PER_SEC);
+#endif
+
+#if OS_LINUX || OS_WINDOWS_CYGWIN || OS_ANDROID
+    #define WAIT_SEC();  sleep (15);
+#endif
 
 extern struct shell_args shell_args;
 
@@ -93,6 +105,7 @@ void showinfo (void)
     printf ("-q      no messages\n");
     printf ("-stacks=stacksize[KB]\n\n");
 }
+
 
 NINT main (NINT ac, char *av[])
 {
@@ -251,8 +264,8 @@ NINT main (NINT ac, char *av[])
     }
 
     strcpy (prog, av[1]);
-    
-	
+   
+
 	/* DEBUG */
 	/*
 	S8 datahost = 12345678;
