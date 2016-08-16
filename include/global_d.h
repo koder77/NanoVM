@@ -1195,7 +1195,8 @@ struct vm_pages
 	S8 page_pos_file[MAXVMPAGES];			/* real position in swapfile */
 	U1 page_mod[MAXVMPAGES];				/* cache modify flag: (0 = not modified, 1 = modified) */
 	S8 page_hits[MAXVMPAGES];				/* cache hit counter */
-	S8 vm_ind ALIGN;								/* real position in swapfile */
+	S8 vm_ind ALIGN;						/* real position in swapfile */
+	S8 last_hit ALIGN;						/* last hit was in this page */
 };
 
 struct varlist

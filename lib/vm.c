@@ -227,6 +227,7 @@ U1 vm_alloc_pages (struct varlist *varlist, S4 vind, S8 vmcachesize, U1 type)
 	
 	
 	varlist[vind].vm_pages.size = pagesize;
+	varlist[vind].vm_pages.last_hit = 0;		/* last hit in page zero, init */
 	
 	for (i = 0; i < MAXVMPAGES; i++)
 	{
@@ -235,6 +236,7 @@ U1 vm_alloc_pages (struct varlist *varlist, S4 vind, S8 vmcachesize, U1 type)
 		varlist[vind].vm_pages.page_hits[i] = 0;
 		varlist[vind].vm_pages.page_start_addr[i] = 0;
 		varlist[vind].vm_pages.page_end_addr[i] = 0;
+	
 		if (varlist[vind].vm_pages.pages[i] == NULL)
 		{
 			/* ERROR can't allocate VM page!
@@ -319,6 +321,8 @@ U1 save_page (struct varlist *varlist, S4 vind, S8 page)
 	printf ("page mem address = %lli\n", &(varlist[vind].vm_pages.pages[page]));
 	printf ("page start index: %lli\n\n", varlist[vind].vm_pages.page_start_addr[page]);
 	*/
+	
+	varlist[vind].vm_pages.page_mod[page] = PAGE_READ;	/* reset */
 	
 	if (fwrite (varlist[vind].vm_pages.pages[page], sizeof (U1), varlist[vind].vm_pages.size, vm_mem.file) != varlist[vind].vm_pages.size * sizeof (U1))
 	{
@@ -459,22 +463,30 @@ void *get_vmvar (struct varlist *varlist, S4 vind, S8 ind, U1 access)
     {
 		/* variable is in virtual memory */
 		
-		for (i = 0; i < MAXVMPAGES; i++)
+		/* check if actual index is in last hit page */
+		/*
+		printf ("ARRAY INDEX: %lli\n", ind);
+		*/
+		i = varlist[vind].vm_pages.last_hit;
+		
+		if ((varlist[vind].vm_pages.page_end_addr[i] != 0) && (ind >= varlist[vind].vm_pages.page_start_addr[i] && ind <= varlist[vind].vm_pages.page_end_addr[i]))
 		{
 			/*
+			printf ("HIT IN LAST PAGE!\n");
+			printf ("PAGE: %i\n", i);
 			printf ("get_vmvar: page_hits: %lli\n", varlist[vind].vm_pages.page_hits[i]);
 			printf ("get_vmvar: page_start_addr: %lli\n", varlist[vind].vm_pages.page_start_addr[i]);
-			printf ("get_vmvar: page_end_addr: %lli\n", varlist[vind].vm_pages.page_end_addr[i]);
+			printf ("get_vmvar: page_end_addr: %lli\n\n", varlist[vind].vm_pages.page_end_addr[i]);
 			*/
-			if ((varlist[vind].vm_pages.page_end_addr[i] != 0) && (ind >= varlist[vind].vm_pages.page_start_addr[i] && ind <= varlist[vind].vm_pages.page_end_addr[i]))
-			{
-				// found page
 			
-				cache_hit = 1;
+			// found page
+			
+			cache_hit = 1;
+			/* varlist[vind].vm_pages.last_hit = i; */
 				
-				/* correct index */
+			/* correct index */
 					
-				new_ind = ind - varlist[vind].vm_pages.page_start_addr[i];
+			new_ind = ind - varlist[vind].vm_pages.page_start_addr[i];
 				
 				/* DEBUG */
 				/*
@@ -487,40 +499,109 @@ void *get_vmvar (struct varlist *varlist, S4 vind, S8 ind, U1 access)
 				}
 				*/
 				
-				switch (type)
-				{
-					case INT_VAR:
-						new_i_memptr = (S2 *) (varlist[vind].vm_pages.pages[i] + (new_ind * sizeof (S2)));
-						ret_memptr = (S2 *) new_i_memptr;
-						break;
+			switch (type)
+			{
+				case INT_VAR:
+					new_i_memptr = (S2 *) (varlist[vind].vm_pages.pages[i] + (new_ind * sizeof (S2)));
+					ret_memptr = (S2 *) new_i_memptr;
+					break;
 
-					case LINT_VAR:
-						new_li_memptr = (S4 *) (varlist[vind].vm_pages.pages[i] + (new_ind * sizeof (S4)));
-						ret_memptr = (S4 *) new_li_memptr;
-						break;
+				case LINT_VAR:
+					new_li_memptr = (S4 *) (varlist[vind].vm_pages.pages[i] + (new_ind * sizeof (S4)));
+					ret_memptr = (S4 *) new_li_memptr;
+					break;
 
-					case QINT_VAR:
-						new_q_memptr = (S8 *) (varlist[vind].vm_pages.pages[i] + (new_ind * sizeof (S8)));
-						ret_memptr = (S8 *) new_q_memptr;
-						break;
+				case QINT_VAR:
+					new_q_memptr = (S8 *) (varlist[vind].vm_pages.pages[i] + (new_ind * sizeof (S8)));
+					ret_memptr = (S8 *) new_q_memptr;
+					break;
 
-					case DOUBLE_VAR:
-						new_d_memptr = (F8 *) (varlist[vind].vm_pages.pages[i] + (new_ind * sizeof (F8)));
-						ret_memptr = (F8 *) new_d_memptr;
-						break;
+				case DOUBLE_VAR:
+					new_d_memptr = (F8 *) (varlist[vind].vm_pages.pages[i] + (new_ind * sizeof (F8)));
+					ret_memptr = (F8 *) new_d_memptr;
+					break;
 			
-					case BYTE_VAR:
-						new_s_memptr = (U1 *) (varlist[vind].vm_pages.pages[i] + (new_ind * sizeof (U1)));
-						ret_memptr = (U1 *) new_s_memptr;
-						break;
-				}
-				varlist[vind].vm_pages.page_hits[i]++;
-				if (access == VM_WRITE)
+				case BYTE_VAR:
+					new_s_memptr = (U1 *) (varlist[vind].vm_pages.pages[i] + (new_ind * sizeof (U1)));
+					ret_memptr = (U1 *) new_s_memptr;
+					break;
+			}
+			varlist[vind].vm_pages.page_hits[i]++;
+			if (access == VM_WRITE)
+			{
+				varlist[vind].vm_pages.page_mod[i] = PAGE_MODIFIED;		// set page modified flag
+			}
+		}
+		else
+		{
+			/* search all pages for index */
+			
+			for (i = 0; i < MAXVMPAGES; i++)
+			{
+				/*
+				printf ("PAGE: %i\n", i);
+				printf ("get_vmvar: page_hits: %lli\n", varlist[vind].vm_pages.page_hits[i]);
+				printf ("get_vmvar: page_start_addr: %lli\n", varlist[vind].vm_pages.page_start_addr[i]);
+				printf ("get_vmvar: page_end_addr: %lli\n\n", varlist[vind].vm_pages.page_end_addr[i]);
+				*/
+			
+				if ((varlist[vind].vm_pages.page_end_addr[i] != 0) && (ind >= varlist[vind].vm_pages.page_start_addr[i] && ind <= varlist[vind].vm_pages.page_end_addr[i]))
 				{
-					varlist[vind].vm_pages.page_mod[i] = PAGE_MODIFIED;		// set page modified flag
-				}
+					// found page
+			
+					cache_hit = 1;
+					varlist[vind].vm_pages.last_hit = i;
 				
-				break;		/* BREAK for  and continue */
+					/* correct index */
+					
+					new_ind = ind - varlist[vind].vm_pages.page_start_addr[i];
+				
+					/* DEBUG */
+					/*
+					if (new_ind > varlist[vind].vmcachesize - 1)
+					{
+						vm_mem.error = TRUE;
+				
+						printf ("get_vmvar: FATAL ERROR: page index out of range! [cache hit]\n");
+						return (NULL);
+					}
+					*/
+				
+					switch (type)
+					{
+						case INT_VAR:
+							new_i_memptr = (S2 *) (varlist[vind].vm_pages.pages[i] + (new_ind * sizeof (S2)));
+							ret_memptr = (S2 *) new_i_memptr;
+							break;
+
+						case LINT_VAR:
+							new_li_memptr = (S4 *) (varlist[vind].vm_pages.pages[i] + (new_ind * sizeof (S4)));
+							ret_memptr = (S4 *) new_li_memptr;
+							break;
+
+						case QINT_VAR:
+							new_q_memptr = (S8 *) (varlist[vind].vm_pages.pages[i] + (new_ind * sizeof (S8)));
+							ret_memptr = (S8 *) new_q_memptr;
+							break;
+
+						case DOUBLE_VAR:
+							new_d_memptr = (F8 *) (varlist[vind].vm_pages.pages[i] + (new_ind * sizeof (F8)));
+							ret_memptr = (F8 *) new_d_memptr;
+							break;
+			
+						case BYTE_VAR:
+							new_s_memptr = (U1 *) (varlist[vind].vm_pages.pages[i] + (new_ind * sizeof (U1)));
+							ret_memptr = (U1 *) new_s_memptr;
+							break;
+					}
+					varlist[vind].vm_pages.page_hits[i]++;
+					if (access == VM_WRITE)
+					{
+						varlist[vind].vm_pages.page_mod[i] = PAGE_MODIFIED;		// set page modified flag
+					}
+					
+					break;		/* BREAK for  and continue */
+				}
 			}
 		}
 	
@@ -528,6 +609,10 @@ void *get_vmvar (struct varlist *varlist, S4 vind, S8 ind, U1 access)
 		{
 			/* no cache hit, search page memory to load */
 		
+			/*
+			printf ("LOADING NEW PAGE...\n");
+			*/
+			
 			hits = varlist[vind].vm_pages.page_hits[0]; page = 0;
 		
 			for (i = 1; i < MAXVMPAGES; i++)
@@ -539,6 +624,9 @@ void *get_vmvar (struct varlist *varlist, S4 vind, S8 ind, U1 access)
 					hits = varlist[vind].vm_pages.page_hits[i]; page = i;
 				}
 			}
+			/*
+			printf ("page loaded in %i\n\n", page);
+			*/
 		
 			if (varlist[vind].vm_pages.page_mod[page] == PAGE_MODIFIED)
 			{
@@ -546,6 +634,8 @@ void *get_vmvar (struct varlist *varlist, S4 vind, S8 ind, U1 access)
 				{
 					vm_mem.error = TRUE;
 
+					printf ("VM ERROR save page: %i\n", page);
+					
 					return (NULL);
 				}
 			}
@@ -560,6 +650,8 @@ void *get_vmvar (struct varlist *varlist, S4 vind, S8 ind, U1 access)
 				{
 					vm_mem.error = TRUE;
 
+					printf ("VM ERROR load page: %i\n", page);
+					
 					return (NULL);
 				}
 			}
@@ -569,6 +661,8 @@ void *get_vmvar (struct varlist *varlist, S4 vind, S8 ind, U1 access)
 				{
 					vm_mem.error = TRUE;
 
+					printf ("VM ERROR load page: %i\n", page);
+					
 					return (NULL);
 				}
 			}
@@ -619,6 +713,8 @@ void *get_vmvar (struct varlist *varlist, S4 vind, S8 ind, U1 access)
 			{
 				varlist[vind].vm_pages.page_mod[page] = PAGE_MODIFIED;		// set page modified flag
 			}
+			
+			varlist[vind].vm_pages.last_hit = page;
 		}
 	}
 	return (ret_memptr);

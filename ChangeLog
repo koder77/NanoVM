@@ -1,3 +1,9 @@
+Nano VM (3.4.3-3)
+	Experimental last cache hit variable in VM code
+	Maybe speedup it a bit???
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Mon 15 Aug 2016 22:00 +0200	
+
 Nano VM (3.4.3-2)
 	Now using latest libasmjit.
 	Building libasmjit.so this time.
