@@ -7,7 +7,7 @@
 *
 * Purpose:  virtual memory
 *
-* (c) Copyright Stefan Pietzonke (jay-t@gmx.net), 2014
+* (c) Copyright Stefan Pietzonke (jay-t@gmx.net), 2016
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -36,6 +36,16 @@
  * You have been warned...
  * 
  */
+
+/* ========================================================================
+ * For R.
+ * She is the reason why I am still here. 
+ * I couldn't imagine a world without her.
+ * I like the way she laughs and smiles.
+ * And she showed me how to believe in myself.
+ * Thank you!
+ * ======================================================================== */
+
 
 #include "host.h"
 #include "global_d.h"
