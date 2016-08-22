@@ -37,16 +37,6 @@
  * 
  */
 
-/* ========================================================================
- * For R.
- * She is the reason why I am still here. 
- * I couldn't imagine a world without her.
- * I like the way she laughs and smiles.
- * And she showed me how to believe in myself.
- * Thank you!
- * ======================================================================== */
-
-
 #include "host.h"
 #include "global_d.h"
 
