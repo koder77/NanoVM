@@ -1,6 +1,8 @@
 // $VER: host.nch 3.2.6 (23.02.14)
+// machine types
+int machine_68k = 1; int machine_x86 = 2; int machine_arm = 3;
 
-int machine_68k = 1; int machine_x86 = 2;
+// OS types
 int os_amiga = 1; int os_aros = 2; int os_linux = 3; int os_windows = 4; int os_android = 5;
 
 // EOF

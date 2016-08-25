@@ -31,3 +31,11 @@ func array3d (qint xmax, qint ymax, qint x, qint y, qint z)
 	index = index + y - 1 * xmax + x;
 	return (index);
 funcend
+
+func array4d (qint xmax, qint ymax, qint zmax, qint x, qint y, qint z, qint a)
+	qint index;
+	
+	index = a * xmax * ymax * zmax;
+	index = index + z - 1 * ymax + xmax + x;
+	return (index);
+funcend
