@@ -152,7 +152,7 @@ lab ciphersaber_mem_p2;
     next Pf;
     
     
- // setup state array (don't remove nested code flag, it's needed there!!!)
+// setup state array (don't remove nested code flag, it's needed there!!!)
       
     Pv = 0;
     for;

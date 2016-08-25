@@ -1,12 +1,9 @@
 // $VER: socket.nch 2.0.5 (04.02.12)
 // network - argument errors
 
-// Linux: usr/include/asm-generic/ errno.h & errno-base.h
-
 int err_sock_ok = 0;
 int err_no_such_process = 3;
 int err_io_error = 5;
-int err_bad_filenumber = 9;
 int err_notsock = 88;
 int err_destaddrreq = 89;
 int err_msgsize = 90;

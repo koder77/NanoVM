@@ -32,7 +32,7 @@ func main ()
     
     int next_move; int check;
     
-    int _win_x = 440; int _win_y = 440;
+    int _win_x = 340; int _win_y = 300;
     
     int _server_mode = 0; int _client_mode = 0; int _singleplayer_mode = 1;
     string _game_ip[256] = ""; int _game_port = 2010; string _playername[10] = "player"; string _second_playername[10];
@@ -72,7 +72,7 @@ lab gadget_event;
 
     getmulti (s_value, d_value, l_value, gadgetnum, _ret);
 //    getmulti (_ret, gadgetnum, l_value, d_value, s_value);
-    getmultiend ();
+//    getmultiend ();
     
     f = _game_over == null;
     if f;
@@ -311,7 +311,7 @@ func draw_gui ()
 	int null = 0; int one = 1; int two = 2; int three = 3;
 	int gadgets = 16;
 
-	int x; int y = 10; int x2; int y2; int width = 120;
+	int x; int y = 10; int x2; int y2; int width = 100;
 	int i; int j = 0;
 	int gadgetnum = 0;
 	int f;
@@ -353,7 +353,7 @@ func draw_gui ()
 	next f;
 	
 // set button gadgets
-    x = 400; y = 10;
+    x = 340; y = 10;
     i = 9;
     s = "Start";
     
@@ -375,7 +375,7 @@ func draw_gui ()
     get (_ret);
     check_answer ();
     
-    y = 400;
+    y = 340;
     
 	s = "my move";
 	i = 12;
@@ -394,13 +394,13 @@ func draw_gui ()
     check_answer ();
 	
 	x = 10;
-	y = 400;
+	y = 340;
 	i = 14;
 	@nanogfx_set_gadget_string (ipval_len, ipval_len, _game_ip, ip, one, y, x, i, _client);
     get (_ret);
     check_answer ();
 	
-	x = 400;
+	x = 340;
 	y = 250;
 	i = 15;
 	
@@ -408,7 +408,7 @@ func draw_gui ()
     get (_ret);
     check_answer ();
     
-	x = 10; y = 440;
+	x = 10; y = 380;
     
     color_black ();
     @nanogfx_text_ttf (copyright, y, x, _client);
@@ -641,7 +641,7 @@ lab gadget_0_end;
 funcend;
 
 func gadget_1 (int player)
-    int x = 130; int y = 10;
+    int x = 110; int y = 10;
     int one = 1; int f; int null = 0;
     int ret;
 
@@ -676,7 +676,7 @@ lab gadget_1_end;
 funcend;
 
 func gadget_2 (int player)
-    int x = 250; int y = 10;
+    int x = 210; int y = 10;
     int one = 1; int f; int null = 0;
     int ret;
 
@@ -710,7 +710,7 @@ lab gadget_2_end;
 funcend;
     
 func gadget_3 (int player)
-    int x = 10; int y = 130;
+    int x = 10; int y = 110;
     int one = 1; int f; int null = 0;
     int ret;
 
@@ -744,7 +744,7 @@ lab gadget_3_end;
 funcend;
 
 func gadget_4 (int player)
-    int x = 130; int y = 130;
+    int x = 110; int y = 110;
     int one = 1; int f; int null = 0;
     int ret;
 
@@ -778,7 +778,7 @@ lab gadget_4_end;
 funcend;
 
 func gadget_5 (int player)
-    int x = 250; int y = 130;
+    int x = 210; int y = 110;
     int one = 1; int f; int null = 0;
     int ret;
 
@@ -812,7 +812,7 @@ lab gadget_5_end;
 funcend;
 
 func gadget_6 (int player)
-    int x = 10; int y = 250;
+    int x = 10; int y = 210;
     int one = 1; int f; int null = 0;
     int ret;
 
@@ -846,7 +846,7 @@ lab gadget_6_end;
 funcend;
 
 func gadget_7 (int player)
-    int x = 130; int y = 250;
+    int x = 110; int y = 210;
     int one = 1; int f; int null = 0;
     int ret;
 
@@ -880,7 +880,7 @@ lab gadget_7_end;
 funcend;
 
 func gadget_8 (int player)
-    int x = 250; int y = 250;
+    int x = 210; int y = 210;
     int one = 1; int f; int null = 0;
     int ret;
 
@@ -914,14 +914,16 @@ lab gadget_8_end;
 funcend;
 
 func draw_circle (int x, int y)
-    int i = 60;
+    #NESTED_CODE_ON;
+    
+    int i = 50;
     
     color_black ();
     
     x = x + i;
     y = y + i;
 
-    i = 55;
+    i = 45;
 
     @nanogfx_circle (i, y, x, _client);
     
@@ -932,7 +934,7 @@ func draw_circle (int x, int y)
 funcend;
 
 func init_field ();
-    int y = 10; int width = 120; int height;
+    int y = 10; int width = 100; int height;
     int i = 0; int j; int f; int two = 2;
     
     int x; int y; int x1; int y1; int x2; int y2;
@@ -990,7 +992,7 @@ func draw_cross (int x, int y)
     
     x1 = x + i; y1 = y + i;
 
-    i = 115;
+    i = 95;
     x2 = x + i; y2 = y + i;
     
     @nanogfx_line (y2, x2, y1, x1, _client);
@@ -998,7 +1000,7 @@ func draw_cross (int x, int y)
     get (_ret);
     check_answer ();
         
-    i = 115;
+    i = 95;
     x1 = x + i;
     
     i = 5;
@@ -1007,7 +1009,7 @@ func draw_cross (int x, int y)
     i = 5;
     x2 = x + i;
 
-    i = 115;
+    i = 95;
     y2 = y + i;
 
     @nanogfx_line (y2, x2, y1, x1, _client);
@@ -1649,7 +1651,7 @@ lab move_0;
 lab move_1;
      _f1 = 4;
     
-    x = 130; y = 10;
+    x = 110; y = 10;
     draw_circle (x, y);
     
     check_winner ();
@@ -1660,7 +1662,7 @@ lab move_1;
 lab move_2;
      _f2 = 4;
     
-    x = 250; y = 10;
+    x = 210; y = 10;
     draw_circle (x, y);
     
     check_winner ();
@@ -1671,7 +1673,7 @@ lab move_2;
 lab move_3;
      _f3 = 4;
     
-    x = 10; y = 130;
+    x = 10; y = 110;
     draw_circle (x, y);
     
     check_winner ();
@@ -1682,7 +1684,7 @@ lab move_3;
 lab move_4;
      _f4 = 4;
     
-    x = 130; y = 130;
+    x = 110; y = 110;
     draw_circle (x, y);
     
     check_winner ();
@@ -1693,7 +1695,7 @@ lab move_4;
 lab move_5;
      _f5 = 4;
     
-    x = 250; y = 130;
+    x = 210; y = 110;
     draw_circle (x, y);
     
     check_winner ();
@@ -1704,7 +1706,7 @@ lab move_5;
 lab move_6;
      _f6 = 4;
     
-    x = 10; y = 250;
+    x = 10; y = 210;
     draw_circle (x, y);
     
     check_winner ();
@@ -1715,7 +1717,7 @@ lab move_6;
 lab move_7;
     _f7 = 4;
     
-    x = 130; y = 250;
+    x = 110; y = 210;
     draw_circle (x, y);
     
     check_winner ();
@@ -1726,7 +1728,7 @@ lab move_7;
 lab move_8;
     _f8 = 4;
     
-    x = 250; y = 250;
+    x = 210; y = 210;
     draw_circle (x, y);
     
     check_winner ();
@@ -2065,7 +2067,7 @@ lab multiplayer_event_get;
     @nanogfx_gadget_event (_client);
 
     getmulti (s_value, d_value, l_value, gadgetnum, _ret);
-    getmultiend ();
+//    getmultiend ();
     
     print "gadget: "; print gadgetnum; printn one;
     

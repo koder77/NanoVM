@@ -1,0 +1,1400 @@
+// blaster level editor V 1.0
+
+func main ()
+	int null = 0; int one = 1; int two = 2; int five = 5;
+	int width = 1024; int height = 600;
+	lint _client; lint _client_open; lint _ret;
+	
+//	gadget event
+	string s_value[10]; double d_value; lint l_value; int gadgetnum;
+	
+	
+	int f; int level = 1;
+	int x; int y; int mousebutton;
+	int enemy_x; int enemy_y; int enemy_type; int enemy_x_vel; int enemy_y_vel;
+	int enemy_live; int enemy_fire_offset; int enemy_fire; int enemy_fire;
+	int enemy_upgrade; int time_bonus;
+
+//	globals
+	int _max_enemys = 100;
+	
+	int _max_levels = 0;
+	int _enemys = -1; 
+	int _enemy_type[_max_enemys];
+	int _enemy_x[_max_enemys];
+	int _enemy_y[_max_enemys];
+	int _enemy_x_vel[_max_enemys];
+	int _enemy_y_vel[_max_enemys];
+	int _enemy_live[_max_enemys];
+	int _enemy_fire_offset[_max_enemys];
+	int _enemy_fire[_max_enemys];
+	int _enemy_upgrade[_max_enemys];
+	int _time_bonus;
+	int _sel_enemy = -1;
+	
+	#NESTED_CODE_ON;
+	waitsec (two);
+	
+    screen (width, height);
+    init_gui_font ();
+    init_gui_colors ();
+    draw_gui ();
+    update_screen ();
+    
+lab show_level;
+	color_background ();
+	draw_rectangle_filled (0, 0, 800, 600);
+    draw_edit_box ();
+    
+    read_level (level);
+
+    update_screen ();
+
+    
+    
+// main loop 
+lab loop;
+	enemy_x = -1; enemy_y = -1;
+
+	@nanogfx_gadget_event (_client);
+
+    getmulti (s_value, d_value, l_value, gadgetnum, _ret);
+    getmultiend ();
+
+	f = gadgetnum == null;
+	if f;
+		val (s_value, level);
+		
+		f = level <= 42;
+		if f;
+			print "loading level..."; printn one;
+			goto show_level;
+		endif;
+	endif;
+	
+	f = gadgetnum == 3;
+	if f;
+		select_enemy ();
+	endif;
+	
+	f = gadgetnum == 1;
+	if f;
+		val (s_value, enemy_x);
+		var2array (enemy_x, _enemy_x, _sel_enemy);
+	endif;
+	
+	f = gadgetnum == 2;
+	if f;
+		val (s_value, enemy_y);
+		var2array (enemy_y, _enemy_y, _sel_enemy);
+	endif;
+	
+	f = gadgetnum == 4;
+	if f;
+		set_enemy ();
+	endif;	
+		
+	f = gadgetnum == 5;
+	if f;
+		enemy_type = l_value;
+		var2array (enemy_type, _enemy_type, _sel_enemy);
+	endif;
+	
+	f = gadgetnum == 6;
+	if f;
+		val (s_value, enemy_x_vel);
+		var2array (enemy_x_vel, _enemy_x_vel, _sel_enemy);
+	endif;
+	
+	f = gadgetnum == 7;
+	if f;
+		val (s_value, enemy_y_vel);
+		var2array (enemy_y_vel, _enemy_y_vel, _sel_enemy);
+	endif;
+	
+	f = gadgetnum == 8;
+	if f;
+		val (s_value, enemy_live);
+		var2array (enemy_live, _enemy_live, _sel_enemy);
+	endif;
+	
+	f = gadgetnum == 9;
+	if f;
+		val (s_value, enemy_fire_offset);
+		var2array (enemy_fire_offset, _enemy_fire_offset, _sel_enemy);
+	endif;
+	
+	f = gadgetnum == 10;
+	if f;
+		enemy_fire =  l_value;
+		var2array (enemy_fire, _enemy_fire, _sel_enemy);
+	endif;
+	
+	f = gadgetnum == 11;
+	if f;
+		val (s_value, enemy_upgrade);
+		var2array (enemy_upgrade, _enemy_upgrade, _sel_enemy);
+	endif;
+	
+	f = gadgetnum == 12;
+	if f;
+		val (s_value, _time_bonus);
+	endif;
+	
+	f = gadgetnum == 13;
+	if f;
+		new_enemy ();
+	endif;
+	
+	f = gadgetnum == 14;
+	if f;
+		delete_enemy ();
+	endif;
+	
+	f = gadgetnum == 15;
+	if f;
+		write_level (level);
+	endif;
+	
+	f = gadgetnum == 16;
+	if f;
+//	QUIT selected end program
+		end ();
+	endif;
+	
+	goto loop;
+		
+	exit null;
+funcend
+
+func draw_gui ()
+	int one = 1;
+	int gadgets = 17;
+	string level[80] = "level";
+	
+//  set number of gadgets
+    #NESTED_CODE_ON;
+    
+    nanogfx_gadgets> (_client, gadgets);
+    
+//  args: lint socket, gadget, x, y, status, string text, value, lint string-len, visible-len
+	@nanogfx_set_gadget_string> (_client, 0, 850, 20, 1, level, "1", 3, 3);
+    get (_ret);
+    check_answer ();
+    
+    @nanogfx_set_gadget_string> (_client, 1, 810, 80, 1, "x", "0", 3, 3);
+    get (_ret);
+    check_answer ();
+    
+    @nanogfx_set_gadget_string> (_client, 2, 810, 120, 1, "y", "0", 3, 3);
+    get (_ret);
+    check_answer ();
+    
+    @nanogfx_set_gadget_button> (_client, 3, 925, 80, 1, "sel");
+    get (_ret);
+    check_answer ();
+    
+    @nanogfx_set_gadget_button> (_client, 4, 925, 120, 1, "set");
+    get (_ret);
+    check_answer ();
+    
+//  args: lint socket, gadget, x, y, status, value, string text, lint entries
+    @nanogfx_set_gadget_cycle> (_client, 5, 810, 160, 1, 0, "ufo", "battleship", "fighter", "bomber", 4);
+    get (_ret);
+    check_answer ();
+    
+//    int _enemy_x_vel[_max_enemys];
+//	int _enemy_y_vel[_max_enemys];
+//	int _enemy_live[_max_enemys];
+//	int _enemy_fire_offset[_max_enemys];
+//	int _enemy_fire[_max_enemys];
+//	int _enemy_upgrade[_max_enemys];
+//	int _time_bonus;
+
+	@nanogfx_set_gadget_string> (_client, 6, 810, 200, 1, "x vel", "0", 3, 3);
+	get (_ret);
+    check_answer ();
+    
+    @nanogfx_set_gadget_string> (_client, 7, 810, 240, 1, "y vel", "0", 3, 3);
+	get (_ret);
+    check_answer ();
+    
+    @nanogfx_set_gadget_string> (_client, 8, 810, 280, 1, "live ", "10", 3, 3);
+	get (_ret);
+    check_answer ();
+    
+    @nanogfx_set_gadget_string> (_client, 9, 900, 320, 1, " ", "0", 3, 3);
+	get (_ret);
+    check_answer ();
+    
+    @nanogfx_set_gadget_checkbox> (_client, 10, 810, 320, 1, 0, "fire");
+    get (_ret);
+    check_answer ();
+
+    @nanogfx_set_gadget_cycle> (_client, 11, 810, 360, 1, 0, "none", "shield", "fire", "ship", "rockets", "nuke", 6);
+    get (_ret);
+    check_answer ();
+    
+    @nanogfx_set_gadget_string> (_client, 12, 810, 420, 1, "bonus", "360", 4, 4);
+	get (_ret);
+    check_answer ();
+    
+    @nanogfx_set_gadget_button> (_client, 13, 810, 480, 1, "new");
+    get (_ret);
+    check_answer ();
+    
+    @nanogfx_set_gadget_button> (_client, 14, 900, 480, 1, "del");
+    get (_ret);
+    check_answer ();
+    
+    @nanogfx_set_gadget_button> (_client, 15, 810, 520, 1, "save");
+    get (_ret);
+    check_answer ();
+    
+    @nanogfx_set_gadget_button> (_client, 16, 810, 560, 1, " QUIT ");
+    get (_ret);
+    check_answer ();
+funcend
+
+
+//  max enemies (0 - x)
+//  enemy type, x, y, x vel, y vel, live, fire offset, fire, upgrade
+//  time bonus (if finished in this time (seconds))
+
+func read_level (int level)
+	int _sel_x1 = -1; int _sel_y1 = -1; int _sel_x2 = -1; int _sel_y2 = -1;
+	
+	int type;
+	int x;
+	int y;
+	int x_vel;
+	int y_vel;
+	int live;
+	int fire_offset;
+	int fire;
+	int upgrade;
+	
+	int null = 0; int one = 1; int two = 2;
+	int file;
+	string line[256]; int linelen;
+	string buf[256];
+	string filename[256] = "levels.txt"; string read[2] = "r";
+	int f; int comment;
+	int e = -1;
+	
+	int load_level = 1; int line_len;
+	
+	string dslash[3] = "//";
+	string time_bonus_str[5];
+	
+	#NESTED_CODE_ON;
+	
+	_max_levels = 0;
+	_enemys = -1;
+	_sel_enemy = -1;
+	
+	fopen (file, filename, read);
+lab read_level_loop;
+	
+	freadls (file, line);
+	
+	print "'"; print line; print "'"; printn one;
+	
+	strlen (line, line_len);
+	f = line_len == 0;
+	if f; goto read_level_loop; endif;
+	
+	f = _max_levels == 0;
+	if f;
+		val (line, _max_levels);
+	
+		print "levels: "; print _max_levels; printn one;
+		goto read_level_loop;
+	endif;
+	
+	strlen (line, linelen);
+	
+//	check comment
+	comment = 0;
+
+	f = linelen >= 2;
+	if f;
+		strleft (line, two, buf);
+		f = buf == dslash;
+		if f;
+			comment = 1;
+		endif;
+	endif;
+	
+	f = comment == 0;
+	if f;
+		f = _enemys == -1;
+		if f;
+//			print line; printn one;
+			val (line, _enemys);
+			print "enemies: "; print _enemys; printn one;
+		else;
+			e = ++;
+			
+			f = load_level == level;
+			if f;
+//  enemy type, x, y, x vel, y vel, live, fire offset, fire, upgrade			
+				@parse_line (line);
+				getmulti (type, x, y, x_vel, y_vel, live, fire_offset, fire, upgrade);
+				getmultiend ();
+				
+// 	store data
+				var2array (type, _enemy_type, e);
+				var2array (x, _enemy_x, e);
+				var2array (y, _enemy_y, e);
+				var2array (x_vel, _enemy_x_vel, e);
+				var2array (y_vel, _enemy_y_vel, e);
+				var2array (live, _enemy_live, e);
+				var2array (fire_offset, _enemy_fire_offset, e);
+				var2array (fire, _enemy_fire, e);
+				var2array (upgrade, _enemy_upgrade, e);
+
+				f = type == 0;
+				if f;
+					draw_ufo (x, y);
+				endif;
+			
+				f = type == 1;
+				if f;
+					draw_battleship (x, y);
+				endif;
+			
+				f = type == 2;
+				if f;
+					draw_fighter (x, y);
+				endif;
+			
+				f = type == 3;
+				if f;
+					draw_bomber (x, y);
+				endif;
+			endif;
+		endif;
+	endif;
+	
+	f = _enemys == -1;
+	if f;
+		goto read_level_loop;
+	else;
+		f = e < _enemys;
+		if f;
+			goto read_level_loop;
+		else;
+//	get time bonus
+			freadls (file, line);
+			
+			val (line, _time_bonus);
+		endif;
+	endif;
+	
+	f = load_level < level;
+	if f;
+		_enemys = -1; e = -1;
+		load_level = ++;
+		goto read_level_loop;
+	endif;
+	
+//	set time bonus gadget
+
+	str (_time_bonus, time_bonus_str);
+	@nanogfx_change_gadget_string> (_client, 12, 1, time_bonus_str);
+	get (_ret);
+	check_answer ();
+	
+	fclose (file);
+funcend
+
+func write_level (int level)
+	int enemy_type;
+	int enemy_x;
+	int enemy_y;
+	int enemy_x_vel;
+	int enemy_y_vel;
+	int enemy_live;
+	int enemy_fire_offset;
+	int enemy_fire;
+	int enemy_upgrade;
+	int time_bonus;
+	
+	int null = 0; int one = 1; int two = 2;
+	int file; int savefile;
+	string line[256]; int linelen;
+	string buf[256];
+	string filename[256] = "levels.txt"; string read[2] = "r";
+	string savefilename[256] = "levels-save.txt"; string write[2] = "w";
+	int f; int comment;
+	int enemy = 0;
+	
+	int load_level = 1; int load_max; int line_len;
+	
+	string level_comment[256] = "// level ";
+	string dslash[3] = "//";
+	string comma[3] = "";
+	int commacode = 44;
+	int skip_level = 0; int i;
+	
+	#NESTED_CODE_ON;
+	
+	char (commacode, comma);
+	comma = comma + " ";
+	
+	_max_levels = 0;
+	
+	fopen (file, filename, read);
+	fopen (savefile, savefilename, write);
+	
+lab read_level_num;
+	freadls (file, line);
+	
+	print "'"; print line; print "'"; printn one;
+	
+	strlen (line, line_len);
+	f = line_len == 0;
+	if f; goto read_level_num; endif;
+	
+	f = _max_levels == 0;
+	if f;
+		val (line, _max_levels);
+		load_max = _max_levels + 1;
+		fwritesl (savefile, _max_levels); fwriten (savefile, one);
+		print "levels: "; print _max_levels; printn one;
+		goto read_level_num;
+	endif;
+	
+lab write_level_save;
+	f = load_level == level;
+	if f;
+//	save level data
+		skip_level = 1; enemy = 0;
+		fwrite (savefile, level_comment); fwritesl (savefile, level); fwriten (savefile, one);
+		fwritesl (savefile, _enemys); fwriten (savefile, one);
+		
+lab write_level_loop;
+		array2var (_enemy_x, enemy, enemy_x);
+		array2var (_enemy_y, enemy, enemy_y);
+		array2var (_enemy_type, enemy, enemy_type);
+		array2var (_enemy_x_vel, enemy, enemy_x_vel);
+		array2var (_enemy_y_vel, enemy, enemy_y_vel);
+		array2var (_enemy_live, enemy, enemy_live);
+		array2var (_enemy_fire_offset, enemy, enemy_fire_offset);
+		array2var (_enemy_fire, enemy, enemy_fire);
+		array2var (_enemy_upgrade, enemy, enemy_upgrade);
+	
+		f = enemy_type >= 0;
+		if f;
+			fwritesl (savefile, enemy_type);
+			fwrite (savefile, comma);
+			
+			fwritesl (savefile, enemy_x);
+			fwrite (savefile, comma);
+			
+			fwritesl (savefile, enemy_y);
+			fwrite (savefile, comma);
+			
+			fwritesl (savefile, enemy_x_vel);
+			fwrite (savefile, comma);
+			
+			fwritesl (savefile, enemy_y_vel);
+			fwrite (savefile, comma);
+
+			fwritesl (savefile, enemy_live);
+			fwrite (savefile, comma);
+			
+			fwritesl (savefile, enemy_fire_offset);
+			fwrite (savefile, comma);
+			
+			fwritesl (savefile, enemy_fire);
+			fwrite (savefile, comma);
+
+			fwritesl (savefile, enemy_upgrade);
+			fwriten (savefile, one);
+		endif;
+		
+		f = enemy < _enemys;
+		if f;
+			enemy = ++;
+			goto write_level_loop;
+		endif;
+		
+		fwritesl (savefile, _time_bonus);
+		fwriten (savefile, one);
+		
+		load_level = ++;
+	else;
+// copy level data
+		_enemys = -1; enemy = 0;
+
+lab write_level_copy;
+		freadls (file, line);
+		
+		print "'"; print line; print "'"; printn one;
+	
+		strlen (line, line_len);
+		f = line_len == 0;
+		if f; goto write_level_copy; endif;
+		
+		strlen (line, linelen);
+	
+//	check comment
+		comment = 0;
+
+		f = linelen >= 2;
+		if f;
+			strleft (line, two, buf);
+			f = buf == dslash;
+			if f;
+//	copy comment
+				fwrite (savefile, line); fwriten (savefile, one);
+				comment = 1;
+			endif;
+		endif;
+	
+		print "skip_level: "; print skip_level; printn one;
+	
+			f = comment == 0;
+			if f;
+				f = _enemys == -1;
+				if f;
+//					print line; printn one;
+					val (line, _enemys);
+					print "enemies: "; print _enemys; printn one;
+				
+					f = skip_level == 0;
+					if f;
+						fwritesl (savefile, _enemys); fwriten (savefile, one);
+					endif;
+				else;
+					enemy = 0;
+				
+lab write_level_enemy;
+					f = skip_level == 0;
+					if f;
+						fwrite (savefile, line); fwriten (savefile, one);
+					endif;
+					
+					enemy = ++;
+					f = enemy <= _enemys;
+					if f;
+						freadls (file, line);
+						goto write_level_enemy;
+					endif;
+
+// save bonus;
+					freadls (file, line);
+					
+					f = skip_level == 0;
+					if f;
+						fwrite (savefile, line); fwriten (savefile, one);
+					endif;
+					
+					load_level = ++;
+					goto write_level_next;
+				endif;
+			endif;
+			goto write_level_copy;
+	endif;
+
+lab write_level_next;
+	i = level + 2;
+	f = load_level == i;
+	if f;
+		f = skip_level == 1; if f; skip_level = 0; endif;
+	endif;
+		
+	f = load_level <= load_max;
+	if f;
+		goto write_level_save;
+	endif;
+	
+	fclose (file);
+	fclose (savefile);
+	
+	fremove (filename);
+	frename (savefilename, filename);
+funcend
+
+func draw_enemys ()
+	int x; int y; int type;
+	int f; int e = 0;
+	
+	color_background ();
+	draw_rectangle_filled (0, 0, 800, 600);
+	draw_edit_box ();
+	
+	for;
+		array2var (_enemy_type, e, type);
+		array2var (_enemy_x, e, x);
+		array2var (_enemy_y, e, y);
+		
+		f = type == 0;
+		if f;
+			draw_ufo (x, y);
+		endif;
+			
+		f = type == 1;
+		if f;
+			draw_battleship (x, y);
+		endif;
+			
+		f = type == 2;
+		if f;
+			draw_fighter (x, y);
+		endif;
+			
+		f = type == 3;
+		if f;
+			draw_bomber (x, y);
+		endif;
+	
+		e = ++;
+		f = e <= _enemys;
+	next f;
+	
+	update_screen ();
+funcend
+
+func select_enemy ()
+	int one = 1;
+
+//	gadget event
+	string s_value[10]; double d_value; lint l_value; int gadgetnum;
+	
+	int f; lint x; lint y; lint button;
+	int enemy_x; int enemy_y; int enemy_type; int enemy = 0;
+	int enemy_x_vel; int enemy_y_vel;
+	int enemy_live; int enemy_fire_offset; int enemy_fire;
+	int enemy_upgrade;
+	
+	int sel_x1; int sel_y1; int sel_x2; int sel_y2;
+	int select;
+
+	string x_str[4]; string y_str[4];
+	string x_vel_str[4]; string y_vel_str[4];
+	string live_str[4];
+	string fire_offset_str[4];
+			
+	#NESTED_CODE_ON;
+	
+lab select_enemy_loop;
+//  return: lint error-code, lint x, y, mousebutton
+
+	@nanogfx_getmouse (_client);
+	getmulti (button, y, x, _ret);
+	getmultiend ();
+	
+	enemy = 0;
+	
+lab select_enemy_search_enemy;
+	array2var (_enemy_x, enemy, enemy_x);
+	array2var (_enemy_y, enemy, enemy_y);
+	array2var (_enemy_type, enemy, enemy_type);
+	array2var (_enemy_x_vel, enemy, enemy_x_vel);
+	array2var (_enemy_y_vel, enemy, enemy_y_vel);
+	array2var (_enemy_live, enemy, enemy_live);
+	array2var (_enemy_fire_offset, enemy, enemy_fire_offset);
+	array2var (_enemy_fire, enemy, enemy_fire);
+	array2var (_enemy_upgrade, enemy, enemy_upgrade);
+	
+	
+	sel_x1 = enemy_x - 20; sel_x2 = enemy_x + 20;
+	sel_y1 = enemy_y - 20; sel_y2 = enemy_y + 20;
+	
+	select = 0;
+	
+	f = x > sel_x1;
+	if f;
+		f = x < sel_x2;
+		if f;
+			select = ++;
+		endif;
+	endif;
+	
+	f = y > sel_y1;
+	if f;
+		f = y < sel_y2;
+		if f;
+			select = ++;
+		endif;
+	endif;
+
+	f = select == 2;
+	if f;
+		@nanogfx_getmouse (_client);
+		getmulti (button, y, x, _ret);
+		getmultiend ();
+	
+		f = button == 1;
+		if f;
+			print "enemy selected"; printn one;
+		
+			f = _sel_x1 >= 0;
+			if f;
+//	clear old selection
+				color_background ();
+				draw_rectangle (_sel_x1, _sel_y1, _sel_x2, _sel_y2);
+				update_screen ();
+			endif;
+		
+			color_black ();
+			draw_rectangle (sel_x1, sel_y1, sel_x2, sel_y2);
+			update_screen ();
+		
+			_sel_x1 = sel_x1; _sel_y1 = sel_y1; _sel_x2 = sel_x2; _sel_y2 = sel_y2;
+			_sel_enemy = enemy;
+			
+			str (enemy_x, x_str);
+			str (enemy_y, y_str);
+			str (enemy_x_vel, x_vel_str);
+			str (enemy_y_vel, y_vel_str);
+			str (enemy_live, live_str);
+			str (enemy_fire_offset, fire_offset_str);
+			
+			print "enemy_live: "; print enemy_live; printn one;
+			print x_vel_str; printn one;
+			
+			
+			@nanogfx_change_gadget_string> (_client, 1, 1, x_str);
+			get (_ret);
+			check_answer ();
+		
+			@nanogfx_change_gadget_string> (_client, 2, 1, y_str);
+			get (_ret);
+			check_answer ();
+			
+			@nanogfx_change_gadget_cycle> (_client, 5, 1, enemy_type);
+			get (_ret);
+			check_answer ();
+			
+			print x_vel_str; printn one;
+			@nanogfx_change_gadget_string> (_client, 6, 1, x_vel_str);
+			get (_ret);
+			check_answer ();
+			
+			@nanogfx_change_gadget_string> (_client, 7, 1, y_vel_str);
+			get (_ret);
+			check_answer ();
+			
+			@nanogfx_change_gadget_string> (_client, 8, 1, live_str);
+			get (_ret);
+			check_answer ();
+			
+			@nanogfx_change_gadget_string> (_client, 9, 1, fire_offset_str);
+			get (_ret);
+			check_answer ();
+			
+			@nanogfx_change_gadget_checkbox> (_client, 10, 1, enemy_fire);
+			get (_ret);
+			check_answer ();
+			
+			@nanogfx_change_gadget_cycle> (_client, 11, 1, enemy_upgrade);
+			get (_ret);
+			check_answer ();
+			
+			goto select_enemy_end;
+		endif;
+	endif;
+
+	f = enemy < _enemys;
+	if f;
+		enemy = ++;
+		goto select_enemy_search_enemy;
+	endif;
+	
+	goto select_enemy_loop;
+	
+lab select_enemy_end;
+funcend
+
+func set_enemy ()
+	draw_enemys ();
+funcend
+
+func new_enemy ()
+	int f;
+	int i = 0;
+	int del = -1;
+	int type;
+	
+	int one = 1;
+	
+lab new_enemy_search_empty;
+	array2var (_enemy_type, i, type);
+	
+	f = type == del;
+	if f;
+	
+//	found deleted enemy, get index
+		_sel_enemy = i;
+		goto new_enemy_end;
+	endif;
+	
+	f = i < _enemys;
+	if f;
+		i = ++;
+		goto new_enemy_search_empty;
+	endif;
+	
+	f = _enemys < _max_enemys;
+	if f;
+		_enemys = ++;
+		_sel_enemy = _enemys;
+	endif;
+	
+lab new_enemy_end;
+	print "enemy: "; print _sel_enemy; printn one;
+
+funcend
+
+func delete_enemy ()
+	int del = -1;
+	
+	var2array (del, _enemy_type, _sel_enemy);
+	
+	draw_enemys ();
+funcend
+
+func parse_line (string line[256])
+	int linelen;
+	int i;
+	int start = 0; int end;
+	int pos;
+	int f;
+	
+	int one = 1; int negone = -1;
+	string buf[256];
+	string comma[2];
+	int commacode = 44;
+	
+	int type; int x; int y; int x_vel; int y_vel; int live; int fire_offset; int fire; int upgrade;
+	
+	char (commacode, comma);
+	strlen (line, linelen);
+	
+//	parse comma separated data
+//	func string_search (string str[4000], int startpos, string searchstr[4000])
+	
+	@string_search (line, start, comma);
+	get (pos);
+	
+	f = pos > negone;
+	if f;
+		pos = --;
+		@string_part (line, start, pos);
+		get (buf);
+		val (buf, type);
+		
+		print "type: "; print type; printn one;
+	endif;
+	
+	start = pos + 3;
+	@string_search (line, start, comma);
+	get (pos);
+	
+	f = pos > negone;
+	if f;
+		pos = --;
+		@string_part (line, start, pos);
+		get (buf);
+		val (buf, x);
+		
+		print "x: "; print x; printn one;
+	endif;
+	
+	start = pos + 3;
+	@string_search (line, start, comma);
+	get (pos);
+	
+	f = pos > negone;
+	if f;
+		pos = --;
+		@string_part (line, start, pos);
+		get (buf);
+		val (buf, y);
+		
+		print "y: "; print y; printn one;
+	endif;
+	
+	start = pos + 3;
+	@string_search (line, start, comma);
+	get (pos);
+	
+	f = pos > negone;
+	if f;
+		pos = --;
+		@string_part (line, start, pos);
+		get (buf);
+		val (buf, x_vel);
+		
+		print "x_vel: "; print x_vel; printn one;
+	endif;
+	
+	start = pos + 3;
+	@string_search (line, start, comma);
+	get (pos);
+	
+	f = pos > negone;
+	if f;
+		pos = --;
+		@string_part (line, start, pos);
+		get (buf);
+		val (buf, y_vel);
+		
+		print "y_vel: "; print y_vel; printn one;
+	endif;
+	
+	start = pos + 3;
+	@string_search (line, start, comma);
+	get (pos);
+	
+	f = pos > negone;
+	if f;
+		pos = --;
+		@string_part (line, start, pos);
+		get (buf);
+		val (buf, live);
+		
+		print "live: "; print live; printn one;
+	endif;
+	
+	start = pos + 3;
+	@string_search (line, start, comma);
+	get (pos);
+	
+	f = pos > negone;
+	if f;
+		pos = --;
+		@string_part (line, start, pos);
+		get (buf);
+		val (buf, fire_offset);
+		
+		print "fire_offset: "; print fire_offset; printn one;
+	endif;
+	
+	start = pos + 3;
+	@string_search (line, start, comma);
+	get (pos);
+	
+	f = pos > negone;
+	if f;
+		pos = --;
+		@string_part (line, start, pos);
+		get (buf);
+		val (buf, fire);
+		
+		print "fire: "; print fire; printn one;
+	endif;
+	
+	start = pos + 3;
+	strlen (line, pos);
+	pos = --;
+	@string_part (line, start, pos);
+	get (buf);
+	val (buf, upgrade);
+		
+	print "upgrade: "; print upgrade; printn one;
+	
+	returnmulti (type, x, y, x_vel, y_vel, live, fire_offset, fire, upgrade);
+funcend
+	
+func draw_edit_box ()
+	color_black ();
+	draw_rectangle (0, 0, 800, 600);
+funcend
+
+func draw_ufo (int x, int y)
+	#NESTED_CODE_ON;
+	set_color (244, 40, 12);
+	draw_circle (x, y, 15);
+	draw_circle (x, y, 12);
+funcend
+
+func draw_battleship (int x, int y)
+	int x1; int y1; int x2; int y2;
+	
+	#NESTED_CODE_ON;
+	set_color (234, 248, 8);
+	
+	x1 = x - 15; y1 = y + 5; y2 = y + 15;
+	draw_line (x1, y1, x, y2);
+	
+	x1 = x + 15; 
+	draw_line (x1, y1, x, y2);
+	
+	x1 = x - 15; y1 = y + 15; y2 = y - 5;
+	draw_line (x1, y1, x1, y2);
+	
+	x1 = x + 15;
+	draw_line (x1, y1, x1, y2);
+	
+	x1 = x - 15; y1 = y - 5; x2 = x + 15; y2 = y - 5;
+	draw_line (x1, y1, x2, y2);
+funcend
+
+func draw_fighter (int x, int y)
+	int x1; int y1; int x2; int y2;
+	
+	#NESTED_CODE_ON;
+	set_color (19, 176, 7);
+	
+	x1 = x - 15; y1 = y + 10; y2 = y + 15;
+	draw_line (x1, y1, x, y2);
+	
+	x1 = x + 15;
+	draw_line (x1, y1, x, y2);
+	
+	x1 = x - 15; y1 = y + 10; y2 = y - 15;
+	draw_line (x1, y1, x, y2);
+	
+	x1 = x + 15;
+	draw_line (x1, y1, x, y2);
+	
+	x1 = x - 15; y1 = y + 10; x2 = x - 15; y2 = y + 15;
+	draw_line (x1, y1, x2, y2);
+	
+	x1 = x + 15; y1 = y + 10; x2 = x + 15; y2 = y + 15;
+	draw_line (x1, y1, x2, y2);
+funcend
+
+func draw_bomber (int x, int y)
+	int x1; int y1; int x2; int y2;
+	
+	#NESTED_CODE_ON;
+	set_color (0, 0, 179);
+	
+	x1 = x - 5; y1 = y + 3; y2 = y + 8;
+	draw_line (x1, y1, x, y2);
+	
+	x1 = x + 5;
+	draw_line (x1, y1, x, y2);
+	
+	x1 = x - 5; y1 = y - 5; x2 = x - 5; y2 = y + 7;
+	draw_line (x1, y1, x2, y2);
+	
+	x1 = x + 5; x2 = x + 5;
+	draw_line (x1, y1, x2, y2);
+	
+	x1 = x - 5; y1 = y - 5; y2 = y - 3;
+	draw_line (x1, y1, x, y2);
+	
+	x1 = x + 5;
+	draw_line (x1, y1, x, y2);
+	
+	x1 = x - 5; y1 = y - 5; x2 = x - 15;
+	draw_line (x1, y1, x2, y);
+	
+	x1 = x + 5; x2 = x + 15;
+	draw_line (x1, y1, x2, y);
+	
+	x1 = x - 15; x2 = x - 15; y2 = y + 5;
+	draw_line (x1, y, x2, y2);
+	
+	x1 = x + 15; x2 = x + 15;
+	draw_line (x1, y, x2, y2);
+	
+	x1 = x - 15; x2 = x - 5; y2 = y + 3;
+	draw_line (x1, y, x2, y2);
+	
+	x1 = x + 15; x2 = x + 5;
+	draw_line (x1, y, x2, y2);
+funcend
+
+func init_gui_font ()
+	int one = 1;
+	
+	string font[256];
+	int size;
+
+//  load font
+    print "loading font...";
+    printn one;
+
+    size = 20;
+    font = "truetype/freefont/FreeMono.ttf";
+    
+    @nanogfx_loadfont_ttf> (_client, font, size);
+    get (_ret);
+    check_answer ();
+    
+    print "font loaded!";
+    printn one;
+funcend
+
+func init_gui_colors ()
+	int one = 1;
+	int r; int g; int b;
+
+	#NESTED_CODE_ON;
+	
+//  colors
+    print "setting colors...";
+    printn one;
+
+    r = 232; g = 239; b = 247;
+
+    nanogfx_color> (_client, r, g, b);
+    nanogfx_gadget_color_background_light (_client);
+
+    r = 194; g = 201; b = 209;
+
+    nanogfx_color> (_client, r, g, b);
+    nanogfx_gadget_color_background_shadow (_client);
+
+    r = 143; g = 147; b = 151;
+
+    nanogfx_color> (_client, r, g, b);
+    nanogfx_gadget_color_border_light (_client);
+    
+    r = 85; g = 87; b = 90;
+
+    nanogfx_color> (_client, r, g, b);
+    nanogfx_gadget_color_border_shadow (_client);
+
+    r = 0; g = 0; b = 0;
+
+    nanogfx_color> (_client, r, g, b);
+    nanogfx_gadget_color_text_light (_client);
+   
+    r = 255; g = 255; b = 255;
+
+    nanogfx_color> (_client, r, g, b);
+    nanogfx_gadget_color_text_shadow (_client);
+    
+    print "colors set!";
+    printn one;
+    
+    clear_screen ();
+    
+    print "clear_screen ok";
+    printn one;
+funcend
+
+func update_screen ()
+    @nanogfx_updatescreen (_client);
+
+    get (_ret);
+    check_answer ();
+funcend
+
+func screen (int width, int height)
+    #include <socket.nch>
+    
+    lint nlf; lint ncr;
+    string cr[2]; string lf[2];
+    string fnewline[3];
+    
+    int args; int null = 0; int one = 1; int two = 2;
+    string ip[256]; string portstr[256]; string buf[256];
+    int port;
+    
+    int f;
+    
+    string s[256];
+    int alpha = 255; int bit = 24;
+    int error;
+    
+//  nl = CRLF
+	_fnewline = "";
+    ncr = 13L;
+    char (ncr, cr);
+    _fnewline = cr;
+    nlf = 10L;
+    char (nlf, lf);
+    _fnewline = _fnewline + lf;
+   
+//  check arguments
+    argnum (args);
+    f = args != one;
+    if f;
+        show_args ();
+    endif;
+    
+    argstr (null, ip);
+    argstr (one, portstr);
+    val (portstr, port);
+
+    nanogfx_init ();
+
+    scopen (_client, ip, port);
+
+	@socket_error ();
+    get (error);
+
+    f = error == err_sock_ok;
+    if f;
+        goto ip_ok;
+    endif;
+
+    buf = ip;
+    hostbyname (buf, ip);
+    scopen (_client, ip, port);
+    check_err ();
+    
+ lab ip_ok;
+    _client_open = 1;
+    s = "Nano VM blaster edit 1.0";
+
+    @nanogfx_openscreen> (_client, null, s, s, width, height, bit, alpha);
+    get (_ret);
+    f = _ret != null;
+    if f;
+        print "no screen!";
+        printn one;
+        end ();
+    endif;
+
+    scclose (_client);
+
+    waitsec (two);
+    
+    scopen (_client, ip, port);
+    check_err ();
+funcend
+
+func clear_screen ()
+    int null = 0; int alpha = 255;
+
+    color_background ();
+
+    @nanogfx_clearscreen (_client);
+
+    get (_ret);
+//    check_answer ();
+
+    nanogfx_alpha> (_client, alpha);
+funcend
+
+func color_background ()
+    int r = 232; int g = 239; int b = 247;
+   
+    nanogfx_color> (_client, r, g, b);
+funcend
+
+func color_white ()
+    int r = 255; int g = 255; int b = 255;
+
+    nanogfx_color> (_client, r, g, b);
+funcend
+
+func color_black ()
+    int null = 0;
+    
+    nanogfx_color> (_client, null, null, null);
+funcend
+
+func set_color (int r, int g, int b)
+	nanogfx_color> (_client, r, g, b);
+funcend
+
+func draw_line (int x1, int y1, int x2, int y2)
+	#NESTED_CODE_ON;
+	@nanogfx_line> (_client, x1, y1, x2, y2);
+	get (_ret);
+	check_answer ();
+funcend
+
+func draw_rectangle (int x1, int y1, int x2, int y2)
+	@nanogfx_rectangle> (_client, x1, y1, x2, y2);
+	get (_ret);
+	check_answer ();
+funcend
+
+func draw_rectangle_filled (int x1, int y1, int x2, int y2)
+	@nanogfx_rectangle_filled> (_client, x1, y1, x2, y2);
+	get (_ret);
+	check_answer ();
+funcend
+
+func draw_circle (int x1, int y1, int radius)
+	@nanogfx_circle> (_client, x1, y1, radius);
+	get (_ret);
+	check_answer ();
+funcend
+
+func check_answer ()
+    int f; int null = 0; int one = 1;
+    
+//    print _ret; printn one;
+    
+    f = _ret != null;
+    if f;
+        print "ERROR: server error!";
+        printn one;
+        end ();
+    endif;
+
+//    print "OK!";
+//    printn one;
+funcend
+
+func show_args ()
+    int n = 1;
+    print "blaster-edit <ip> <port>";
+    printn n;
+
+    end ();
+funcend
+
+func end ()
+    int ret = 0;
+    int f; int one = 1;
+    f = _client_open == one;
+    if f;
+        close_client ();
+    endif;
+
+    exit ret;
+funcend
+
+func close_client ()
+	int error;
+
+	@nanogfx_shutdown (_client);
+	get (error);
+
+    scclose (_client);
+funcend
+
+func check_err ()
+	#include <socket.nch>
+
+    int f; int n = 1;
+	int error;
+    
+    @socket_error ();
+    get (error);
+
+    f = error != err_sock_ok;
+    if f;
+        goto error;
+    endif;
+    goto check_err_end;
+
+lab error;
+    print "socket error: ";
+    print error;
+    printn n;
+
+    f = error == err_connrefused;
+    if f;
+        print "server not found!";
+        printn n;
+    endif;
+
+    f = error == err_nosys;
+    if f;
+        print "tcp stack not running!";
+        printn n;
+    endif;
+
+    end ();
+lab check_err_end;
+funcend
+
+#include <string.nch>
+#include <error.nch>
+#include <flow.nah>

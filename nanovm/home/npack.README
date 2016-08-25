@@ -1,0 +1,61 @@
+npack V 1.0 - create Nano VM packetman packages
+===============================================
+
+usage:
+nanovm npack <packetname>
+
+where packetname is the name of the packet to create.
+
+Dependencies:
+tar, bzip2, cd, cp, rm, gpg
+
+Own gpg key for signing the archive.
+
+
+Packet foobar needs a foobar.npack file which would
+look like this for example:
+
+foobar.npack ----------------------------------
+1.0
+:mkdir
+home
+:files
+home/foobar.cfg
+home/foobar.README
+:end
+
+:mkdir
+prog
+:files
+prog/foobar.nanoc
+prog/foobar.nr
+:end
+
+:fend
+EOF -------------------------------------------
+
+The first line is the version number: 1.0
+
+:mkdir
+home
+
+Creates a home directory in temp/.
+
+:files
+Start a file copy with "cp" to created directory in temp/home/	.
+
+:end
+End of file list.
+
+:fend
+End of file, all following lines are ignored.
+
+
+At the end in the home/repo/ directory three new files
+are created:
+
+foobar.np               contains packet version, *.tar.bz2 name, *.tar.bz2.asc name
+foobar.tar.bz2          package
+foobar.tar.bz2.asc      package signature
+
+:fend

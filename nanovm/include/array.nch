@@ -1,0 +1,33 @@
+//  $VER: array.nch 1.0 (02.05.14)
+//  array index calculation library
+//
+//	calculate array index for two and three dimensional arrays
+//  xmax, ymax: the maximum dimensions of array
+//  x, y, z: the indexes
+//
+//  code:
+//	int a[10][10];
+//	int v = 23;
+//  
+//	int x = 5; int y = 4;
+//	int index;
+//	
+//	@array2d (10, x, y);
+//	get (index);
+//	var2array (v, a, index);
+
+
+func array2d (qint xmax, qint x, qint y)
+	qint index;
+	
+	index = y - 1 * xmax + x;
+	return (index);
+funcend
+
+func array3d (qint xmax, qint ymax, qint x, qint y, qint z)
+	qint index;
+	
+	index = z * xmax * ymax;
+	index = index + y - 1 * xmax + x;
+	return (index);
+funcend

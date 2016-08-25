@@ -1,7 +1,7 @@
-// $VER: host.nch 2.0.5 (02.02.12)
+// $VER: host.nch 3.2.6 (23.02.14)
 
 int machine_68k = 1; int machine_x86 = 2;
-int os_amiga = 1; int os_aros = 2; int os_linux = 3; int os_windows = 4;
+int os_amiga = 1; int os_aros = 2; int os_linux = 3; int os_windows = 4; int os_android = 5;
 
 // EOF
 

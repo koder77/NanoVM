@@ -45,6 +45,11 @@ func main ()
         print "Windows";
     endif;
 
+    x = _os == os_android;
+    if x;
+        print "Android";
+    endif;
+    
     printn two;
     exit null;
 funcend;

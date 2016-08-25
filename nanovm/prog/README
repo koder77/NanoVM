@@ -12,19 +12,9 @@ first shell:
 $ flow 2000
 
 second shell:
-$ nano tic_tac_toe localhost 2000
+$ nano tic_tac_toe localhost 2000 -stacks=200000
 
 And now enjoy the game :)
 
 The other programs can be compiled/assembled the same way as
 the game above.
-
-The fractal program can be launched like the game too.
-On Windows it can be runned with the nanovmjit with JIT compiler.
-
-
-WINDOWS
-=======
-
-Now I build nanovmjit with JIT compiler enabled.
-Run the fractal program to see it drawing the fractal with 8 threads and JIT compiler.

@@ -21,6 +21,7 @@ func main ()
     string read[2] = "r";
     string dotna[4] = ".na";
     string dotnc[4] = ".nc";
+    string dotnanoc[7] = ".nanoc";
     
     string packets_installed[4] = "np/";
     
@@ -44,7 +45,7 @@ func main ()
     int packetfile;
     int ret = 0;
     int pret;
-    int suffixlen = 3;
+    int suffixlen = 3; int nanoclen = 6;
     int len;
     
     int compile; int assemble; int make; 
@@ -129,19 +130,35 @@ lab loop;
         goto main_end_ok;
     endif;
     
+    strlen (packetname, len);
+    
+    f = len > nanoclen;
+    if f;
+		strright (packetname, nanoclen, buf);
+    
+		f = buf == dotnanoc;
+		if f;
+			compile = 1; assemble = 1; make = 1;
+			goto check;
+		endif;
+	endif;
+    
     strright (packetname, suffixlen, buf);
     
     f = buf == dotnc;
     if f;
         compile = 1; assemble = 1; make = 1;
+        goto check;
     endif;
+    
     f = buf == dotna;
     if f;
         assemble = 1; make = 1;
     endif;
     
 // check if compile and assemmble
-    
+lab check;
+
     f = make == null;
     if f;
 //  nothing to do ?
@@ -234,7 +251,7 @@ lab main_end_ok;
     fclose (packetfile);
     ret = 0;
     
-    print "all files maked: all OK!";
+    print "all files made: all OK!";
     printn one;
 
 lab main_end;

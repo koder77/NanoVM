@@ -40,7 +40,10 @@ lab http_send_request;
 
 //	compress;q=0, gzip;q=0, chunked;q=0
 
-    push_s          "Accept-Encoding: "| s;
+	#setsemicol		@;
+    push_s          "Accept-Encoding: identity;q=1.0"| s@
+    
+    #setsemicol		;@
     swrite_s        client| s;
     swrite_n        client| one;
     push_s          "Accept-Charset: ISO-8859-1"| s;
@@ -200,7 +203,7 @@ lab download_file_chunked_loop;
 	print "'";
 	printn one;
 	
-	buf = buf + "X";
+	buf = buf + "&";
 	val (buf, chunksize);
 	bytesize = chunksize + two;
 	

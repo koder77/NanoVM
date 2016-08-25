@@ -1,0 +1,510 @@
+//	turmite.nanoc - 2 dimensional turmite demo
+
+func main ()
+	#OPTIMIZE_O2;
+
+	int null = 0; int one = 1; int two = 2;
+	int _width = 320; int _height = 240;
+    int startx; int starty;
+    startx = _width / 2 - 1; starty = _height / 2 - 1;
+    
+	int x; int y; int color_ind; int phase_ind;
+	int r; int g; int b;
+	int color_r; int color_g; int color_b;
+	int next_r; int next_g; int next_b;
+	int phase_color; int write_color; int next_direction; int next_phase;
+	int i; int j;
+	int f; int c;
+	
+	int _client = 0; int _client_open = 0; int _ret;
+	
+//	for anim recording
+	int record_anim = 0;
+	
+	qint frame = 1; qint frame_len = 7;
+	string animname[256] = "turmite-anim/frame-";
+
+	
+//	directions
+	int left = 1; int up = 2; int right = 3; int down = 4;
+	int go_left = 3; int go_right = 1; int go_forward = 0; int go_back = 2;
+
+//	colors
+	int black = 0;
+	int red = 1;
+	int orange = 2;
+	int yellow = 3;
+	int green = 4;
+	int bluegreen = 5;
+	int blue = 6;
+	int violet = 7;
+	
+	int halt = 255;
+	
+	#NESTED_CODE_ON;
+	
+	int colors[8][3];
+	
+	colors = [ 0 0 0 ] 0;
+	colors = [ 255 0 0 ] 3;
+	colors = [ 255 200 0 ] 6;
+	colors = [ 255 255 0 ] 9;
+	colors = [ 0 255 0 ] 12;
+	colors = [ 0 255 255 ] 15;
+	colors = [ 0 0 255 ] 18;
+	colors = [ 255 0 255 ] 21;
+	
+//	turing phases
+	int phase0[5][4];
+	
+	phase0 = [ green blue go_right 1 ] 0;
+	phase0 = [ black red go_forward 1 ] 4;
+	phase0 = [ blue green go_forward 1 ] 8;
+	phase0 = [ red yellow go_back 0 ] 12;
+	phase0 = [ yellow black go_back 1 ] 16;
+	
+	int phase1[5][4];
+	
+	phase1 = [ green black go_forward 0 ] 0;
+	phase1 = [ black blue go_forward 0 ] 4;
+	phase1 = [ blue black go_back 1 ] 8;
+	phase1 = [ red green go_right 1 ] 12;
+	phase1 = [ yellow red go_forward 0 ] 16;
+	
+	int phase = 0; int direction = down;
+	
+	screen (_width, _height);
+	clear_screen ();
+	update_screen ();
+	
+	x = startx; y = starty;
+lab draw;
+//	get color under turmite
+
+//	exit on mouse click
+	check_mousebutton ();
+
+	@get_pixel (x, y);
+	getmulti (r, g, b);
+	
+//	bugfix for black
+//	f = g == 1; if f; g = 0; endif;
+//	f = b == 2; if f; b = 0; endif;
+	
+//	printn two;
+//	print "r: ", r; printn one;
+//	print "g: ", g; printn one;
+//	print "b: ", b; printn two;
+	
+	
+//	search color index
+	color_ind = 0;
+	
+lab get_color_ind;
+	i = color_ind * 3;
+	array2var (colors, i, color_r); i = ++;
+	
+//	print "col r ", color_r; printn one;
+//	print "col g ", color_g; printn one;
+//	print "col b ", color_b; printn one;
+	
+	c = 0;
+	f = color_r == r; if f; c = ++; else; goto get_color_ind_continue; endif;
+	
+	array2var (colors, i, color_g); i = ++;
+	array2var (colors, i, color_b);
+	
+	f = color_g == g; if f; c = ++; endif;
+	f = color_b == b; if f; c = ++; endif;
+
+lab get_color_ind_continue;
+	
+//	print "color ind: "; print color_ind; print " c: "; print c; printn one;
+	
+	f = c != 3;
+	if f;
+//	colors don't match, check next color:
+		color_ind = ++;
+		goto get_color_ind;
+	endif;
+	
+//	print "found color"; printn one;
+	
+
+//	get color from phase
+	
+	phase_ind = 0;
+		
+	for;
+		f = phase == 0;
+		if f;
+			array2var (phase0, phase_ind, phase_color);
+		else;
+			array2var (phase1, phase_ind, phase_color);
+		endif;
+		
+		f = phase_color == color_ind;
+		if f;
+			j = phase_ind + 1;
+				
+			f = phase == 0;
+			if f;
+				array2var (phase0, j, write_color);
+			else;
+				array2var (phase1, j, write_color);
+			endif;
+			
+			i = write_color * 3;
+			
+			array2var (colors, i, next_r); i = ++;
+			array2var (colors, i, next_g); i = ++;
+			array2var (colors, i, next_b);
+	
+//				print "drawing pixel"; printn one;
+	
+			set_color (next_r, next_g, next_b);
+			draw_pixel (x, y);
+			update_screen ();
+			
+			f = record_anim == 1;
+			if f;
+				save_frame (animname, frame, frame_len);
+				frame = ++;
+			endif;
+			
+			j = phase_ind + 2;
+				
+			f = phase == 0;
+			if f;
+				array2var (phase0, j, next_direction);
+			else;
+				array2var (phase1, j, next_direction);
+			endif;
+				
+			j = phase_ind + 3;
+				
+			f = phase == 0;
+			if f;
+				array2var (phase0, j, next_phase);
+			else;
+				array2var (phase1, j, next_phase);
+			endif;
+				
+			phase = next_phase;
+			
+			goto set_next_pos;
+		else;
+			phase_ind = phase_ind + 4;
+		endif;
+			
+		f = phase_ind <= 16;
+	next f;
+		
+			
+lab set_next_pos;
+	direction = direction + next_direction;
+	f = direction > 4;
+	if f;
+		direction = direction - 4;
+	endif;
+
+//	like a switch statement in C ;-)
+	f = direction == up;
+	if f;
+		y = --;
+		f = y < 0;
+		if f;
+			y = _height - 1;
+		endif;
+		
+		goto draw;
+	endif;
+			
+	f = direction == down;
+	if f;
+		y = ++;
+		i = _height - 1;
+		f = y > i;
+		if f;
+			y = 0;
+		endif;
+		
+		goto draw;
+	endif;
+			
+	f = direction == left;
+	if f;
+		x = --;
+		f = x < 0;
+		if f;
+			x = _width - 1;
+		endif;
+		
+		goto draw;
+	endif;
+			
+	f = direction == right;
+	if f;
+		x = ++;
+		i = _width - 1;
+		f = x > i;
+		if f;
+			x = 0;
+		endif;
+		
+		goto draw;
+	endif;
+funcend
+
+func update_screen ()
+    @nanogfx_updatescreen (_client);
+
+    get (_ret);
+    check_answer ();
+funcend
+
+func screen (int width, int height)
+    #include <socket.nch>
+    
+    lint nlf; lint ncr;
+    string cr[2]; string lf[2];
+    string fnewline[3];
+    
+    int args; int null = 0; int one = 1; int two = 2;
+    string ip[256]; string portstr[256]; string buf[256];
+    int port;
+    
+    int f;
+    
+    string s[256];
+    int alpha = 255; int bit = 24;
+    int error;
+    
+//  nl = CRLF
+	_fnewline = "";
+    ncr = 13L;
+    char (ncr, cr);
+    _fnewline = cr;
+    nlf = 10L;
+    char (nlf, lf);
+    _fnewline = _fnewline + lf;
+   
+//  check arguments
+    argnum (args);
+    f = args != one;
+    if f;
+        show_args ();
+    endif;
+    
+    argstr (null, ip);
+    argstr (one, portstr);
+    val (portstr, port);
+
+    nanogfx_init ();
+
+    scopen (_client, ip, port);
+
+	@socket_error ();
+    get (error);
+
+    f = error == err_sock_ok;
+    if f;
+        goto ip_ok;
+    endif;
+
+    buf = ip;
+    hostbyname (buf, ip);
+    scopen (_client, ip, port);
+    check_err ();
+    
+ lab ip_ok;
+    _client_open = 1;
+    s = "Nano VM turmite 1.0";
+
+    @nanogfx_openscreen> (_client, null, s, s, width, height, bit, alpha);
+    get (_ret);
+    f = _ret != null;
+    if f;
+        print "no screen!";
+        printn one;
+        end ();
+    endif;
+
+    scclose (_client);
+
+    waitsec (two);
+    
+    scopen (_client, ip, port);
+    check_err ();
+funcend
+
+func clear_screen ()
+    int null = 0; int alpha = 255;
+
+    color_blue ();
+
+    @nanogfx_clearscreen (_client);
+
+    get (_ret);
+//    check_answer ();
+
+    nanogfx_alpha> (_client, alpha);
+funcend
+
+func color_blue ()
+    int null = 0;
+    int b = 255;
+    
+    nanogfx_color> (_client, null, null, b);
+funcend
+
+func set_color (int r, int g, int b)
+	nanogfx_color> (_client, r, g, b);
+funcend
+
+func draw_pixel (int x, int y)
+	@nanogfx_pixel> (_client, x, y);
+	get (_ret);
+	check_answer ();
+funcend
+
+func get_pixel (int x, int y)
+	int r; int g; int b;
+
+	@nanogfx_getpixel> (_client, x, y);
+	getmulti (b, g, r, _ret);
+	
+	returnmulti (r, g, b);
+funcend
+
+func save_frame (string basename[256], qint frame, qint max_len)
+	string framename[256];
+	string framenum[256];
+	string zero[2] = "0";
+	string num[256];
+	lint num_len; qint zeroes;
+	
+	qint f; qint i;
+	int one = 1;
+	
+	str (frame, num);
+	strlen (num, num_len);
+
+	zeroes = max_len - num_len;
+	
+	framenum = "";
+	i = 1;
+	for;
+		framenum = framenum + zero;
+		
+		i = ++;
+		f = i <= zeroes;
+	next f;
+	
+	framenum = framenum + num;
+	framename = basename + framenum + ".bmp";
+
+	print "saving frame: ", framename; printn one;
+	
+	@nanogfx_save_picture> (_client, framename);
+	
+	get (_ret);
+    check_answer ();
+funcend
+
+func check_answer ()
+    int f; int null = 0; int one = 1;
+    
+//    print _ret; printn one;
+    
+    f = _ret != null;
+    if f;
+        print "ERROR: server error!";
+        printn one;
+        end ();
+    endif;
+
+//    print "OK!";
+//    printn one;
+funcend
+
+func show_args ()
+    int n = 1;
+    print "turmite <ip> <port>";
+    printn n;
+
+    end ();
+funcend
+
+func end ()
+    int ret = 0;
+    int f; int one = 1;
+    f = _client_open == one;
+    if f;
+        close_client ();
+    endif;
+
+    exit ret;
+funcend
+
+func close_client ()
+	int error;
+
+	@nanogfx_shutdown (_client);
+	get (error);
+
+    scclose (_client);
+funcend
+
+func check_err ()
+	#include <socket.nch>
+
+    int f; int n = 1;
+	int error;
+    
+    @socket_error ();
+    get (error);
+
+    f = error != err_sock_ok;
+    if f;
+        goto error;
+    endif;
+    goto check_err_end;
+
+lab error;
+    print "socket error: ";
+    print error;
+    printn n;
+
+    f = error == err_connrefused;
+    if f;
+        print "server not found!";
+        printn n;
+    endif;
+
+    f = error == err_nosys;
+    if f;
+        print "tcp stack not running!";
+        printn n;
+    endif;
+
+    end ();
+lab check_err_end;
+funcend
+
+func check_mousebutton ()
+	int ret; int x;	int y;	int button;
+	int f;
+	
+	@nanogfx_getmouse (_client);
+	getmulti (button, y, x, ret);
+	
+	f = button != 0;
+	if f;
+		end ();
+	endif;
+funcend
+
+#include <error.nch>
+#include <flow.nah>
+

@@ -1,4 +1,4 @@
-// $VER: host.nah 00.98 (06.04.06)
+// $VER: host.nah 1.00 (23.02.14)
 
 int machine_68k; int machine_x86;
 int os_amiga; int os_aros; int os_linux; int os_windows;
@@ -21,5 +21,7 @@ pull_i          L0, os_linux;
 push_i          4, L0;
 pull_i          L0, os_windows;
 
+push_i			5, L0;
+pull_i			L0, os_android;
 // EOF
 

@@ -19,6 +19,8 @@ func main ()
     int null = 0; int one = 1; int two = 2; int three = 3; int four = 4;
     int five = 5; int six = 6; int seven = 7; int eight = 8;
     int _r[192]; int _g[192]; int _b[192];
+    int loopcount = 0; int loopmax = 60;
+    int f;
     
     int _client;
     int _client_open = null;
@@ -161,7 +163,12 @@ lab loop;
     waitsec (one);
 
     update_screen ();
-    goto loop;
+    loopcount = ++;
+    
+    f = loopcount <= loopmax;
+    if f;
+		goto loop;
+    endif;
     
     exit null;
 funcend
@@ -715,6 +722,11 @@ func end ()
 funcend
 
 func close_client ()
+	int error;
+
+	@nanogfx_shutdown (_client);
+	get (error);
+
     scclose (_client);
 funcend
 

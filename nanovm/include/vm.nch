@@ -1,0 +1,23 @@
+// $VER: vm.nch 1.0 (12.08.16)
+
+// virtual memory init function
+
+lab init_virtual_memory;
+// call with: vmbsize (virtual memory size in bytes), vmcachesize (number of array elements to be cached)
+
+	#include <vm.nah>
+	
+	#ASSEMB
+
+	stpull_l	vmbsize;
+	stpull_l	vmcachesize;
+	
+// switch virtual memory on
+	push_i		1, vmuse;
+	
+	stack_set;
+	
+	rts;
+	#ASSEMB_END
+	
+// EOF

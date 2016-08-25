@@ -1,6 +1,28 @@
 //  $VER: string.nch 0.1 (21.02.13)
 //  string library
 
+func string_part (string str[4000], int startpos, int endpos)
+//	return value: string of str from startpos to endpos
+
+	string dest[4000];
+	string ch[2];
+	
+	dest = "";
+	int i; int f;
+	
+	i = startpos;
+	for;
+		part2string (str, i, ch);
+		dest = dest + ch;
+		
+		i = ++;
+		f = i <= endpos;
+	next f;
+	
+	return (dest);
+funcend
+		
+
 func string_search (string str[4000], int startpos, string searchstr[4000])
     int null = 0; int one = 1;
 
