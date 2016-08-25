@@ -1,0 +1,65 @@
+//  $VER: svoxpico.nch 1.0 (17.02.15)
+//  TTS (text to speech) functions library
+//  for SVOX pico TTS
+
+func speakpico (string text[4000], string language[256])
+//  needs SVOX pico TTS and aplay installed to work!
+//
+//  language is the pico setting like: en-US, de-DE
+//  see the pico TTS manual
+
+	int one = 1;
+	int delay = 100;
+	
+	string speak[4000];
+	string wave[256];
+	string play[256];
+	
+	int quote = 34; string quotech[2];
+	int equal = 61; string equalch[2];
+	
+	int ret;
+	int f;
+	
+	wave = _nanopath + "/home/speakpico.wav";
+	play = "aplay " + wave + " >/dev/null 2>&1";
+	
+	char (quote, quotech);
+	char (equal, equalch);
+	
+	speak = "pico2wave -l" + equalch + language + " -w" + equalch + wave + " " + quotech + text + quotech;
+	runpr (speak, ret);
+	waittick (delay);
+	runpr (play, ret);
+funcend
+
+func speakpicowait (string text[4000], string language[256])
+//  needs SVOX pico TTS and aplay installed to work!
+//
+//  language is the pico setting like: en-US, de-DE
+//  see the pico TTS manual
+
+	int one = 1;
+	int delay = 100;
+	
+	string speak[4000];
+	string wave[256];
+	string play[256];
+	
+	int quote = 34; string quotech[2];
+	int equal = 61; string equalch[2];
+	
+	int ret;
+	int f;
+	
+	wave = _nanopath + "/home/speakpico.wav";
+	play = "aplay " + wave;
+	
+	char (quote, quotech);
+	char (equal, equalch);
+	
+	speak = "pico2wave -l" + equalch + language + " -w" + equalch + wave + " " + quotech + text + quotech;
+	runsh (speak, ret);
+	waittick (delay);
+	runsh (play, ret);
+funcend
