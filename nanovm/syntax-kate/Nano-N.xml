@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE language SYSTEM "language.dtd">
+<language name="Nano-N" version="1.01" kateversion="2.4" section="Sources" extensions="*.nc;*.nch;*.nanoc" mimetype="text/x-N" author="Stefan Pietzonke (jay-t@gmx.net)">
+	<highlighting>
+		<list name="keywords">
+			<item> endif </item>
+			<item> else </item>
+			<item> if </item>
+			<item> for </item>
+			<item> next </item>
+			<item> goto </item>
+			<item> lab </item>
+			
+			<item> printn </item>
+			<item> print </item>
+			<item> exit </item>
+			
+			<item> getmultiend </item>
+			<item> getmulti </item>
+			<item> get </item>
+			<item> returnmulti </item>
+			<item> return </item>
+			<item> #sync </item>
+			
+			<item> funcend </item>
+			<item> func </item>
+			<item> main </item>
+			
+<item> array2var </item>
+<item> var2array </item>
+<item> locate </item>
+<item> input </item>
+<item> inputchar </item>
+<item> part2string </item>
+<item> string2part </item>
+<item> strlen </item>
+<item> strleft </item>
+<item> strright </item>
+<item> ucase </item>
+<item> lcase </item>
+<item> char </item>
+<item> asc </item>
+<item> printsp </item>
+<item> curson </item>
+<item> cursoff </item>
+<item> cursleft </item>
+<item> cursright </item>
+<item> cursup </item>
+<item> cursdown </item>
+<item> timeron </item>
+<item> timeroff </item>
+<item> time </item>
+<item> waitsec </item>
+<item> waittick </item>
+<item> fopen </item>
+<item> fclose </item>
+<item> fread </item>
+<item> freadab </item>
+<item> freadls </item>
+<item> fwrite </item>
+<item> fwriteab </item>
+<item> fwritesl </item>
+<item> fwritesd </item>
+<item> fwriten </item>
+<item> fwritesp </item>
+<item> fsetpos </item>
+<item> fgetpos </item>
+<item> frewind </item>
+<item> fsize </item>
+<item> fremove </item>
+<item> frename </item>
+<item> ssopen </item>
+<item> ssopenact </item>
+<item> scopen </item>
+<item> ssclose </item>
+<item> sscloseact </item>
+<item> scclose </item>
+<item> clientaddr </item>
+<item> hostname </item>
+<item> hostbyname </item>
+<item> hostbyaddr </item>
+<item> sread </item>
+<item> sreads </item>
+<item> sreadab </item>
+<item> sreadls </item>
+<item> swrite </item>
+<item> swriteab </item>
+<item> swritesl </item>
+<item> swritesd </item>
+<item> swriten </item>
+<item> swritesp </item>
+<item> sizeof </item>
+<item> vmvar </item>
+<item> val </item>
+<item> str </item>
+<item> 2int </item>
+<item> 2double </item>
+<item> srand </item>
+<item> rand </item>
+<item> abs </item>
+<item> ceil </item>
+<item> floor </item>
+<item> exp </item>
+<item> log </item>
+<item> log10 </item>
+<item> pow </item>
+<item> sqrt </item>
+<item> cos </item>
+<item> sin </item>
+<item> tan </item>
+<item> acos </item>
+<item> asin </item>
+<item> atan </item>
+<item> atan2 </item>
+<item> cosh </item>
+<item> sinh </item>
+<item> tanh </item>
+<item> runpr </item>
+<item> runsh </item>
+<item> waitpr </item>
+<item> argnum </item>
+<item> argstr </item>
+<item> showstack </item>
+<item> stgettype </item>
+<item> stelements </item>
+<item> gettype </item>
+<item> pgettype </item>
+<item> dealloc </item>
+<item> getaddress </item>
+<item> pgetaddress </item>
+<item> ppointer </item>
+<item> pointer </item>
+<item> nop </item>
+<item> hash32ab </item>
+<item> phash32ab </item>
+<item> not </item>
+<item> varlock </item>
+<item> varunlock </item>
+<item> threadcreate </item>
+<item> threadjoin </item>
+<item> threadstate </item>
+<item> threadnum </item>
+<item> threadsync </item>
+<item> threadpush </item>
+<item> threadpushsync </item>
+<item> threadexitcode </item>
+<item> pdealloc </item>
+<item> pfreadab </item>
+<item> pfwriteab </item>
+<item> psreadab </item>
+<item> pswriteab </item>
+<item> parray2var </item>
+<item> pvar2array </item>
+<item> hex </item>
+<item> hash64ab </item>
+<item> phash64ab </item>
+<item> stpull </item>
+<item> dynarray2var </item>
+<item> var2dynarray </item>
+<item> pdynarray2var </item>
+<item> pvar2dynarray </item>
+<item> dyngettype </item>
+<item> pdyngettype </item>
+<item> vadd </item>
+<item> vsub </item>
+<item> vmul </item>
+<item> vdiv </item>
+<item> vadd2 </item>
+<item> vsub2 </item>
+<item> vmul2 </item>
+<item> vdiv2 </item>
+<item> pvadd </item>
+<item> pvsub </item>
+<item> pvmul </item>
+<item> pvdiv </item>
+<item> pvadd2 </item>
+<item> pvsub2 </item>
+<item> pvmul2 </item>
+<item> pvdiv2 </item>
+<item> password </item>
+<item> makedir </item>
+<item> hsvar </item>
+<item> hsserver </item>
+<item> hsload </item>
+<item> hssave </item>
+<item> jit </item>
+<item> pull </item>
+<item> lopen </item>
+<item> lclose </item>
+<item> lfunc </item>
+<item> lcall </item>
+<item> pdnames </item>
+<item> dnames </item>
+<item> dobjects </item>
+</list>
+        <contexts>
+            <context name = "Base" attribute = "Normal Text" lineEndContext = "#stay">
+            <keyword attribute="Keyword" context="#stay" String="keywords"/>
+            <RangeDetect char = "&quot;" char1 = "&quot;" attribute = "String" context = "#stay"/>
+
+            <RegExpr String= "#include" attribute = "Preprocessor" context="#stay"/>
+            <RegExpr String= "#unsetreg_all_l" attribute = "Preprocessor" context="#stay"/>
+            <RegExpr String= "#unsetreg_all_d" attribute = "Preprocessor" context="#stay"/>
+            <RegExpr String= "#unsetreg_all_s" attribute = "Preprocessor" context="#stay"/>
+            <RegExpr String= "#setreg_l" attribute = "Preprocessor" context="#stay"/>
+            <RegExpr String= "#setreg_d" attribute = "Preprocessor" context="#stay"/>
+            <RegExpr String= "#setreg_s" attribute = "Preprocessor" context="#stay"/>
+            <RegExpr String= "#setquote" attribute = "Preprocessor" context="#stay"/>
+            <RegExpr String= "#setsepar" attribute = "Preprocessor" context="#stay"/>
+            <RegExpr String= "#setsemicol" attribute = "Preprocessor" context="#stay"/>
+            
+            <RegExpr String= "#NESTED_CODE_ON" attribute = "Preprocessor" context="#stay"/>
+            <RegExpr String= "#NESTED_CODE_OFF" attribute = "Preprocessor" context="#stay"/>
+            <RegExpr String= "#NESTED_CODE_GLOBAL_OFF" attribute = "Preprocessor" context="#stay"/>
+            <RegExpr String= "#ASSEMB_END" attribute = "Preprocessor" context="#stay"/>
+            <RegExpr String= "#ASSEMB" attribute = "Preprocessor" context="#stay"/>
+            <RegExpr String= "#ATOMIC_END" attribute = "Preprocessor" context="#stay"/>
+            <RegExpr String= "#ATOMIC" attribute = "Preprocessor" context="#stay"/>
+
+            <RegExpr String= "#OPTIMIZE_O2" attribute = "Preprocessor" context="#stay"/>
+            <RegExpr String= "#OPTIMIZE_O" attribute = "Preprocessor" context="#stay"/>
+
+            <RegExpr String= "int" attribute = "Data Type" context="#stay"/>
+            <RegExpr String= "lint" attribute = "Data Type" context="#stay"/>
+            <RegExpr String= "qint" attribute = "Data Type" context="#stay"/>
+            <RegExpr String= "double" attribute = "Data Type" context="#stay"/>
+            <RegExpr String= "string" attribute = "Data Type" context="#stay"/>
+            <RegExpr String= "byte" attribute = "Data Type" context="#stay"/>
+            <RegExpr String= "dynamic" attribute = "Data Type" context="#stay"/>
+
+            <RegExpr String= "L[0-9]*" attribute = "Data Type" context="#stay"/>
+            <RegExpr String= "D[0-9]*" attribute = "Data Type" context="#stay"/>
+            <RegExpr String= "S[0-9]*" attribute = "Data Type" context="#stay"/>
+
+            <RegExpr String= "[0-9.]*" attribute = "Decimal" context="#stay"/>
+			</context>
+        </contexts>
+
+        <itemDatas>
+            <itemData name = "Normal Text" defStyleNum = "dsNormal"/>
+            <itemData name = "Keyword" defStyleNum = "dsKeyword"/>
+            <itemData name = "Decimal" defStyleNum="dsDecVal"/>
+            <itemData name = "Data Type"  defStyleNum="dsDataType"/>
+            <itemData name = "String" defStyleNum = "dsString"/>
+            <itemData name = "Comment" defStyleNum = "dsComment"/>
+            <itemData name = "Substitution" defStyleNum = "dsOthers"/>
+            <itemData name = "Preprocessor"  defStyleNum="dsOthers"/>
+            <itemData name = "Parameter" defStyleNum = "dsOthers"/>
+            <itemData name = "Operator" defStyleNum = "dsOthers"/>
+            <itemData name = "Command" defStyleNum = "dsNormal"/>
+        </itemDatas>
+    </highlighting>
+    <general>
+        <comments>
+        <comment name="singleLine" start="//"/>
+        </comments>
+        <keywords casesensitive="1"/>
+    </general>
+</language>
+
