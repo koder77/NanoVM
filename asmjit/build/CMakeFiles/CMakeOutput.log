@@ -1,4 +1,4 @@
-The system is: Linux - 4.5.0-1-amd64 - x86_64
+The system is: Linux - 4.6.0-1-amd64 - x86_64
 Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
 Compiler: /usr/bin/clang-3.7 
 Build flags: 
@@ -10,7 +10,7 @@ The output was:
 
 Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
 
-The C compiler identification is Clang, found in "/home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/3.5.2/CompilerIdC/a.out"
+The C compiler identification is Clang, found in "/home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/3.6.1/CompilerIdC/a.out"
 
 Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
 Compiler: /usr/bin/clang++-3.7 
@@ -23,93 +23,101 @@ The output was:
 
 Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
 
-The CXX compiler identification is Clang, found in "/home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/3.5.2/CompilerIdCXX/a.out"
+The CXX compiler identification is Clang, found in "/home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/3.6.1/CompilerIdCXX/a.out"
 
 Determining if the C compiler works passed with the following output:
-Change Dir: /home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp
+Change Dir: /home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_4e59d/fast"
-/usr/bin/make -f CMakeFiles/cmTC_4e59d.dir/build.make CMakeFiles/cmTC_4e59d.dir/build
-make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten
-Building C object CMakeFiles/cmTC_4e59d.dir/testCCompiler.c.o
-/usr/bin/clang-3.7     -o CMakeFiles/cmTC_4e59d.dir/testCCompiler.c.o   -c /home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp/testCCompiler.c
-Linking C executable cmTC_4e59d
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4e59d.dir/link.txt --verbose=1
-/usr/bin/clang-3.7       CMakeFiles/cmTC_4e59d.dir/testCCompiler.c.o  -o cmTC_4e59d -rdynamic 
-make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp“ wird verlassen
+Run Build Command:"/usr/bin/make" "cmTC_ea0e3/fast"
+/usr/bin/make -f CMakeFiles/cmTC_ea0e3.dir/build.make CMakeFiles/cmTC_ea0e3.dir/build
+make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten
+Building C object CMakeFiles/cmTC_ea0e3.dir/testCCompiler.c.o
+/usr/bin/clang-3.7     -o CMakeFiles/cmTC_ea0e3.dir/testCCompiler.c.o   -c /home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp/testCCompiler.c
+Linking C executable cmTC_ea0e3
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ea0e3.dir/link.txt --verbose=1
+/usr/bin/clang-3.7       CMakeFiles/cmTC_ea0e3.dir/testCCompiler.c.o  -o cmTC_ea0e3 -rdynamic 
+make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp“ wird verlassen
 
 
 Detecting C compiler ABI info compiled with the following output:
-Change Dir: /home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp
+Change Dir: /home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_7b878/fast"
-/usr/bin/make -f CMakeFiles/cmTC_7b878.dir/build.make CMakeFiles/cmTC_7b878.dir/build
-make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten
-Building C object CMakeFiles/cmTC_7b878.dir/CMakeCCompilerABI.c.o
-/usr/bin/clang-3.7     -o CMakeFiles/cmTC_7b878.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.5/Modules/CMakeCCompilerABI.c
-Linking C executable cmTC_7b878
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7b878.dir/link.txt --verbose=1
-/usr/bin/clang-3.7      -v CMakeFiles/cmTC_7b878.dir/CMakeCCompilerABI.c.o  -o cmTC_7b878 -rdynamic  
+Run Build Command:"/usr/bin/make" "cmTC_24f25/fast"
+/usr/bin/make -f CMakeFiles/cmTC_24f25.dir/build.make CMakeFiles/cmTC_24f25.dir/build
+make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten
+Building C object CMakeFiles/cmTC_24f25.dir/CMakeCCompilerABI.c.o
+/usr/bin/clang-3.7     -o CMakeFiles/cmTC_24f25.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.6/Modules/CMakeCCompilerABI.c
+Linking C executable cmTC_24f25
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_24f25.dir/link.txt --verbose=1
+/usr/bin/clang-3.7      -v CMakeFiles/cmTC_24f25.dir/CMakeCCompilerABI.c.o  -o cmTC_24f25 -rdynamic  
 Debian clang version 3.7.1-2 (tags/RELEASE_371/final) (based on LLVM 3.7.1)
 Target: x86_64-pc-linux-gnu
 Thread model: posix
 Found candidate GCC installation: /usr/bin/../lib/gcc/i586-linux-gnu/4.9
 Found candidate GCC installation: /usr/bin/../lib/gcc/i586-linux-gnu/4.9.3
-Found candidate GCC installation: /usr/bin/../lib/gcc/i586-linux-gnu/5.3.1
+Found candidate GCC installation: /usr/bin/../lib/gcc/i686-linux-gnu/5.4.1
+Found candidate GCC installation: /usr/bin/../lib/gcc/i686-linux-gnu/6.1.1
 Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.8
 Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.8.5
 Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.9
 Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.9.3
-Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1
+Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/5.4.1
+Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1
 Found candidate GCC installation: /usr/lib/gcc/i586-linux-gnu/4.9
 Found candidate GCC installation: /usr/lib/gcc/i586-linux-gnu/4.9.3
-Found candidate GCC installation: /usr/lib/gcc/i586-linux-gnu/5.3.1
+Found candidate GCC installation: /usr/lib/gcc/i686-linux-gnu/5.4.1
+Found candidate GCC installation: /usr/lib/gcc/i686-linux-gnu/6.1.1
 Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.8
 Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.8.5
 Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.9
 Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.9.3
-Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/5.3.1
-Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1
+Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/5.4.1
+Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/6.1.1
+Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1
 Candidate multilib: .;@m64
 Candidate multilib: 32;@m32
 Candidate multilib: x32;@mx32
 Selected multilib: .;@m64
- "/usr/bin/ld" -export-dynamic --hash-style=both --build-id --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_7b878 /usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../../x86_64-linux-gnu/crt1.o /usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../../x86_64-linux-gnu/crti.o /usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/crtbegin.o -L/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1 -L/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../../x86_64-linux-gnu -L/lib/x86_64-linux-gnu -L/lib/../lib64 -L/usr/lib/x86_64-linux-gnu -L/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../.. -L/usr/lib/llvm-3.7/bin/../lib -L/lib -L/usr/lib CMakeFiles/cmTC_7b878.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/crtend.o /usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../../x86_64-linux-gnu/crtn.o
-make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp“ wird verlassen
+ "/usr/bin/ld" -export-dynamic --hash-style=both --build-id --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_24f25 /usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../../x86_64-linux-gnu/crt1.o /usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../../x86_64-linux-gnu/crti.o /usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/crtbegin.o -L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1 -L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../../x86_64-linux-gnu -L/lib/x86_64-linux-gnu -L/lib/../lib64 -L/usr/lib/x86_64-linux-gnu -L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../.. -L/usr/lib/llvm-3.7/bin/../lib -L/lib -L/usr/lib CMakeFiles/cmTC_24f25.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/crtend.o /usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../../x86_64-linux-gnu/crtn.o
+make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp“ wird verlassen
 
 
 Parsed C implicit link information from above output:
   link line regex: [^( *|.*[/\])(ld|([^/\]+-)?ld|collect2)[^/\]*( |$)]
-  ignore line: [Change Dir: /home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp]
+  ignore line: [Change Dir: /home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp]
   ignore line: []
-  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_7b878/fast"]
-  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_7b878.dir/build.make CMakeFiles/cmTC_7b878.dir/build]
-  ignore line: [make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten]
-  ignore line: [Building C object CMakeFiles/cmTC_7b878.dir/CMakeCCompilerABI.c.o]
-  ignore line: [/usr/bin/clang-3.7     -o CMakeFiles/cmTC_7b878.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.5/Modules/CMakeCCompilerABI.c]
-  ignore line: [Linking C executable cmTC_7b878]
-  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7b878.dir/link.txt --verbose=1]
-  ignore line: [/usr/bin/clang-3.7      -v CMakeFiles/cmTC_7b878.dir/CMakeCCompilerABI.c.o  -o cmTC_7b878 -rdynamic  ]
+  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_24f25/fast"]
+  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_24f25.dir/build.make CMakeFiles/cmTC_24f25.dir/build]
+  ignore line: [make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten]
+  ignore line: [Building C object CMakeFiles/cmTC_24f25.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/usr/bin/clang-3.7     -o CMakeFiles/cmTC_24f25.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.6/Modules/CMakeCCompilerABI.c]
+  ignore line: [Linking C executable cmTC_24f25]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_24f25.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/clang-3.7      -v CMakeFiles/cmTC_24f25.dir/CMakeCCompilerABI.c.o  -o cmTC_24f25 -rdynamic  ]
   ignore line: [Debian clang version 3.7.1-2 (tags/RELEASE_371/final) (based on LLVM 3.7.1)]
   ignore line: [Target: x86_64-pc-linux-gnu]
   ignore line: [Thread model: posix]
   ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/i586-linux-gnu/4.9]
   ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/i586-linux-gnu/4.9.3]
-  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/i586-linux-gnu/5.3.1]
+  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/i686-linux-gnu/5.4.1]
+  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/i686-linux-gnu/6.1.1]
   ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.8]
   ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.8.5]
   ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.9]
   ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.9.3]
-  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1]
+  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/5.4.1]
+  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1]
   ignore line: [Found candidate GCC installation: /usr/lib/gcc/i586-linux-gnu/4.9]
   ignore line: [Found candidate GCC installation: /usr/lib/gcc/i586-linux-gnu/4.9.3]
-  ignore line: [Found candidate GCC installation: /usr/lib/gcc/i586-linux-gnu/5.3.1]
+  ignore line: [Found candidate GCC installation: /usr/lib/gcc/i686-linux-gnu/5.4.1]
+  ignore line: [Found candidate GCC installation: /usr/lib/gcc/i686-linux-gnu/6.1.1]
   ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.8]
   ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.8.5]
   ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.9]
   ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.9.3]
-  ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/5.3.1]
-  ignore line: [Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1]
+  ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/5.4.1]
+  ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/6.1.1]
+  ignore line: [Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1]
   ignore line: [Candidate multilib: .]
   ignore line: [@m64]
   ignore line: [Candidate multilib: 32]
@@ -118,7 +126,7 @@ Parsed C implicit link information from above output:
   ignore line: [@mx32]
   ignore line: [Selected multilib: .]
   ignore line: [@m64]
-  link line: [ "/usr/bin/ld" -export-dynamic --hash-style=both --build-id --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_7b878 /usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../../x86_64-linux-gnu/crt1.o /usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../../x86_64-linux-gnu/crti.o /usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/crtbegin.o -L/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1 -L/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../../x86_64-linux-gnu -L/lib/x86_64-linux-gnu -L/lib/../lib64 -L/usr/lib/x86_64-linux-gnu -L/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../.. -L/usr/lib/llvm-3.7/bin/../lib -L/lib -L/usr/lib CMakeFiles/cmTC_7b878.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/crtend.o /usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../../x86_64-linux-gnu/crtn.o]
+  link line: [ "/usr/bin/ld" -export-dynamic --hash-style=both --build-id --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_24f25 /usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../../x86_64-linux-gnu/crt1.o /usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../../x86_64-linux-gnu/crti.o /usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/crtbegin.o -L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1 -L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../../x86_64-linux-gnu -L/lib/x86_64-linux-gnu -L/lib/../lib64 -L/usr/lib/x86_64-linux-gnu -L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../.. -L/usr/lib/llvm-3.7/bin/../lib -L/lib -L/usr/lib CMakeFiles/cmTC_24f25.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/crtend.o /usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../../x86_64-linux-gnu/crtn.o]
     arg [/usr/bin/ld] ==> ignore
     arg [-export-dynamic] ==> ignore
     arg [--hash-style=both] ==> ignore
@@ -129,20 +137,20 @@ Parsed C implicit link information from above output:
     arg [-dynamic-linker] ==> ignore
     arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
     arg [-o] ==> ignore
-    arg [cmTC_7b878] ==> ignore
-    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../../x86_64-linux-gnu/crt1.o] ==> ignore
-    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../../x86_64-linux-gnu/crti.o] ==> ignore
-    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/crtbegin.o] ==> ignore
-    arg [-L/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1] ==> dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1]
-    arg [-L/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../../x86_64-linux-gnu] ==> dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../../x86_64-linux-gnu]
+    arg [cmTC_24f25] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../../x86_64-linux-gnu/crt1.o] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../../x86_64-linux-gnu/crti.o] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/crtbegin.o] ==> ignore
+    arg [-L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1] ==> dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1]
+    arg [-L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../../x86_64-linux-gnu] ==> dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../../x86_64-linux-gnu]
     arg [-L/lib/x86_64-linux-gnu] ==> dir [/lib/x86_64-linux-gnu]
     arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
     arg [-L/usr/lib/x86_64-linux-gnu] ==> dir [/usr/lib/x86_64-linux-gnu]
-    arg [-L/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../..] ==> dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../..]
+    arg [-L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../..] ==> dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../..]
     arg [-L/usr/lib/llvm-3.7/bin/../lib] ==> dir [/usr/lib/llvm-3.7/bin/../lib]
     arg [-L/lib] ==> dir [/lib]
     arg [-L/usr/lib] ==> dir [/usr/lib]
-    arg [CMakeFiles/cmTC_7b878.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [CMakeFiles/cmTC_24f25.dir/CMakeCCompilerABI.c.o] ==> ignore
     arg [-lgcc] ==> lib [gcc]
     arg [--as-needed] ==> ignore
     arg [-lgcc_s] ==> lib [gcc_s]
@@ -152,40 +160,40 @@ Parsed C implicit link information from above output:
     arg [--as-needed] ==> ignore
     arg [-lgcc_s] ==> lib [gcc_s]
     arg [--no-as-needed] ==> ignore
-    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/crtend.o] ==> ignore
-    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../../x86_64-linux-gnu/crtn.o] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/crtend.o] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../../x86_64-linux-gnu/crtn.o] ==> ignore
   remove lib [gcc]
   remove lib [gcc_s]
   remove lib [gcc]
   remove lib [gcc_s]
-  collapse library dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1] ==> [/usr/lib/gcc/x86_64-linux-gnu/5.3.1]
-  collapse library dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../../x86_64-linux-gnu] ==> [/usr/lib/x86_64-linux-gnu]
+  collapse library dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1] ==> [/usr/lib/gcc/x86_64-linux-gnu/6.1.1]
+  collapse library dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../../x86_64-linux-gnu] ==> [/usr/lib/x86_64-linux-gnu]
   collapse library dir [/lib/x86_64-linux-gnu] ==> [/lib/x86_64-linux-gnu]
   collapse library dir [/lib/../lib64] ==> [/lib64]
   collapse library dir [/usr/lib/x86_64-linux-gnu] ==> [/usr/lib/x86_64-linux-gnu]
-  collapse library dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../..] ==> [/usr/lib]
+  collapse library dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../..] ==> [/usr/lib]
   collapse library dir [/usr/lib/llvm-3.7/bin/../lib] ==> [/usr/lib/llvm-3.7/lib]
   collapse library dir [/lib] ==> [/lib]
   collapse library dir [/usr/lib] ==> [/usr/lib]
   implicit libs: [c]
-  implicit dirs: [/usr/lib/gcc/x86_64-linux-gnu/5.3.1;/usr/lib/x86_64-linux-gnu;/lib/x86_64-linux-gnu;/lib64;/usr/lib;/usr/lib/llvm-3.7/lib;/lib]
+  implicit dirs: [/usr/lib/gcc/x86_64-linux-gnu/6.1.1;/usr/lib/x86_64-linux-gnu;/lib/x86_64-linux-gnu;/lib64;/usr/lib;/usr/lib/llvm-3.7/lib;/lib]
   implicit fwks: []
 
 
 
 
 Detecting C [-std=c11] compiler features compiled with the following output:
-Change Dir: /home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp
+Change Dir: /home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_e5faa/fast"
-/usr/bin/make -f CMakeFiles/cmTC_e5faa.dir/build.make CMakeFiles/cmTC_e5faa.dir/build
-make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten
-Building C object CMakeFiles/cmTC_e5faa.dir/feature_tests.c.o
-/usr/bin/clang-3.7    -std=c11 -o CMakeFiles/cmTC_e5faa.dir/feature_tests.c.o   -c /home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/feature_tests.c
-Linking C executable cmTC_e5faa
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e5faa.dir/link.txt --verbose=1
-/usr/bin/clang-3.7       CMakeFiles/cmTC_e5faa.dir/feature_tests.c.o  -o cmTC_e5faa -rdynamic 
-make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp“ wird verlassen
+Run Build Command:"/usr/bin/make" "cmTC_b40da/fast"
+/usr/bin/make -f CMakeFiles/cmTC_b40da.dir/build.make CMakeFiles/cmTC_b40da.dir/build
+make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten
+Building C object CMakeFiles/cmTC_b40da.dir/feature_tests.c.o
+/usr/bin/clang-3.7    -std=c11 -o CMakeFiles/cmTC_b40da.dir/feature_tests.c.o   -c /home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/feature_tests.c
+Linking C executable cmTC_b40da
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_b40da.dir/link.txt --verbose=1
+/usr/bin/clang-3.7       CMakeFiles/cmTC_b40da.dir/feature_tests.c.o  -o cmTC_b40da -rdynamic 
+make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp“ wird verlassen
 
 
     Feature record: C_FEATURE:1c_function_prototypes
@@ -195,17 +203,17 @@ make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-wor
 
 
 Detecting C [-std=c99] compiler features compiled with the following output:
-Change Dir: /home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp
+Change Dir: /home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_a0e5f/fast"
-/usr/bin/make -f CMakeFiles/cmTC_a0e5f.dir/build.make CMakeFiles/cmTC_a0e5f.dir/build
-make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten
-Building C object CMakeFiles/cmTC_a0e5f.dir/feature_tests.c.o
-/usr/bin/clang-3.7    -std=c99 -o CMakeFiles/cmTC_a0e5f.dir/feature_tests.c.o   -c /home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/feature_tests.c
-Linking C executable cmTC_a0e5f
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a0e5f.dir/link.txt --verbose=1
-/usr/bin/clang-3.7       CMakeFiles/cmTC_a0e5f.dir/feature_tests.c.o  -o cmTC_a0e5f -rdynamic 
-make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp“ wird verlassen
+Run Build Command:"/usr/bin/make" "cmTC_0d72d/fast"
+/usr/bin/make -f CMakeFiles/cmTC_0d72d.dir/build.make CMakeFiles/cmTC_0d72d.dir/build
+make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten
+Building C object CMakeFiles/cmTC_0d72d.dir/feature_tests.c.o
+/usr/bin/clang-3.7    -std=c99 -o CMakeFiles/cmTC_0d72d.dir/feature_tests.c.o   -c /home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/feature_tests.c
+Linking C executable cmTC_0d72d
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0d72d.dir/link.txt --verbose=1
+/usr/bin/clang-3.7       CMakeFiles/cmTC_0d72d.dir/feature_tests.c.o  -o cmTC_0d72d -rdynamic 
+make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp“ wird verlassen
 
 
     Feature record: C_FEATURE:1c_function_prototypes
@@ -215,17 +223,17 @@ make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-wor
 
 
 Detecting C [-std=c90] compiler features compiled with the following output:
-Change Dir: /home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp
+Change Dir: /home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_cf211/fast"
-/usr/bin/make -f CMakeFiles/cmTC_cf211.dir/build.make CMakeFiles/cmTC_cf211.dir/build
-make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten
-Building C object CMakeFiles/cmTC_cf211.dir/feature_tests.c.o
-/usr/bin/clang-3.7    -std=c90 -o CMakeFiles/cmTC_cf211.dir/feature_tests.c.o   -c /home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/feature_tests.c
-Linking C executable cmTC_cf211
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_cf211.dir/link.txt --verbose=1
-/usr/bin/clang-3.7       CMakeFiles/cmTC_cf211.dir/feature_tests.c.o  -o cmTC_cf211 -rdynamic 
-make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp“ wird verlassen
+Run Build Command:"/usr/bin/make" "cmTC_8813e/fast"
+/usr/bin/make -f CMakeFiles/cmTC_8813e.dir/build.make CMakeFiles/cmTC_8813e.dir/build
+make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten
+Building C object CMakeFiles/cmTC_8813e.dir/feature_tests.c.o
+/usr/bin/clang-3.7    -std=c90 -o CMakeFiles/cmTC_8813e.dir/feature_tests.c.o   -c /home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/feature_tests.c
+Linking C executable cmTC_8813e
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8813e.dir/link.txt --verbose=1
+/usr/bin/clang-3.7       CMakeFiles/cmTC_8813e.dir/feature_tests.c.o  -o cmTC_8813e -rdynamic 
+make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp“ wird verlassen
 
 
     Feature record: C_FEATURE:1c_function_prototypes
@@ -233,90 +241,98 @@ make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-wor
     Feature record: C_FEATURE:0c_static_assert
     Feature record: C_FEATURE:0c_variadic_macros
 Determining if the CXX compiler works passed with the following output:
-Change Dir: /home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp
+Change Dir: /home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_9f9d3/fast"
-/usr/bin/make -f CMakeFiles/cmTC_9f9d3.dir/build.make CMakeFiles/cmTC_9f9d3.dir/build
-make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten
-Building CXX object CMakeFiles/cmTC_9f9d3.dir/testCXXCompiler.cxx.o
-/usr/bin/clang++-3.7      -o CMakeFiles/cmTC_9f9d3.dir/testCXXCompiler.cxx.o -c /home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
-Linking CXX executable cmTC_9f9d3
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9f9d3.dir/link.txt --verbose=1
-/usr/bin/clang++-3.7        CMakeFiles/cmTC_9f9d3.dir/testCXXCompiler.cxx.o  -o cmTC_9f9d3 -rdynamic 
-make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp“ wird verlassen
+Run Build Command:"/usr/bin/make" "cmTC_ec0ac/fast"
+/usr/bin/make -f CMakeFiles/cmTC_ec0ac.dir/build.make CMakeFiles/cmTC_ec0ac.dir/build
+make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten
+Building CXX object CMakeFiles/cmTC_ec0ac.dir/testCXXCompiler.cxx.o
+/usr/bin/clang++-3.7      -o CMakeFiles/cmTC_ec0ac.dir/testCXXCompiler.cxx.o -c /home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
+Linking CXX executable cmTC_ec0ac
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ec0ac.dir/link.txt --verbose=1
+/usr/bin/clang++-3.7        CMakeFiles/cmTC_ec0ac.dir/testCXXCompiler.cxx.o  -o cmTC_ec0ac -rdynamic 
+make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp“ wird verlassen
 
 
 Detecting CXX compiler ABI info compiled with the following output:
-Change Dir: /home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp
+Change Dir: /home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_1dbf9/fast"
-/usr/bin/make -f CMakeFiles/cmTC_1dbf9.dir/build.make CMakeFiles/cmTC_1dbf9.dir/build
-make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten
-Building CXX object CMakeFiles/cmTC_1dbf9.dir/CMakeCXXCompilerABI.cpp.o
-/usr/bin/clang++-3.7      -o CMakeFiles/cmTC_1dbf9.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.5/Modules/CMakeCXXCompilerABI.cpp
-Linking CXX executable cmTC_1dbf9
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1dbf9.dir/link.txt --verbose=1
-/usr/bin/clang++-3.7       -v CMakeFiles/cmTC_1dbf9.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_1dbf9 -rdynamic  
+Run Build Command:"/usr/bin/make" "cmTC_22db4/fast"
+/usr/bin/make -f CMakeFiles/cmTC_22db4.dir/build.make CMakeFiles/cmTC_22db4.dir/build
+make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten
+Building CXX object CMakeFiles/cmTC_22db4.dir/CMakeCXXCompilerABI.cpp.o
+/usr/bin/clang++-3.7      -o CMakeFiles/cmTC_22db4.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.6/Modules/CMakeCXXCompilerABI.cpp
+Linking CXX executable cmTC_22db4
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_22db4.dir/link.txt --verbose=1
+/usr/bin/clang++-3.7       -v CMakeFiles/cmTC_22db4.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_22db4 -rdynamic  
 Debian clang version 3.7.1-2 (tags/RELEASE_371/final) (based on LLVM 3.7.1)
 Target: x86_64-pc-linux-gnu
 Thread model: posix
 Found candidate GCC installation: /usr/bin/../lib/gcc/i586-linux-gnu/4.9
 Found candidate GCC installation: /usr/bin/../lib/gcc/i586-linux-gnu/4.9.3
-Found candidate GCC installation: /usr/bin/../lib/gcc/i586-linux-gnu/5.3.1
+Found candidate GCC installation: /usr/bin/../lib/gcc/i686-linux-gnu/5.4.1
+Found candidate GCC installation: /usr/bin/../lib/gcc/i686-linux-gnu/6.1.1
 Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.8
 Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.8.5
 Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.9
 Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.9.3
-Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1
+Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/5.4.1
+Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1
 Found candidate GCC installation: /usr/lib/gcc/i586-linux-gnu/4.9
 Found candidate GCC installation: /usr/lib/gcc/i586-linux-gnu/4.9.3
-Found candidate GCC installation: /usr/lib/gcc/i586-linux-gnu/5.3.1
+Found candidate GCC installation: /usr/lib/gcc/i686-linux-gnu/5.4.1
+Found candidate GCC installation: /usr/lib/gcc/i686-linux-gnu/6.1.1
 Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.8
 Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.8.5
 Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.9
 Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.9.3
-Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/5.3.1
-Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1
+Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/5.4.1
+Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/6.1.1
+Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1
 Candidate multilib: .;@m64
 Candidate multilib: 32;@m32
 Candidate multilib: x32;@mx32
 Selected multilib: .;@m64
- "/usr/bin/ld" -export-dynamic --hash-style=both --build-id --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_1dbf9 /usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../../x86_64-linux-gnu/crt1.o /usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../../x86_64-linux-gnu/crti.o /usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/crtbegin.o -L/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1 -L/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../../x86_64-linux-gnu -L/lib/x86_64-linux-gnu -L/lib/../lib64 -L/usr/lib/x86_64-linux-gnu -L/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../.. -L/usr/lib/llvm-3.7/bin/../lib -L/lib -L/usr/lib CMakeFiles/cmTC_1dbf9.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/crtend.o /usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../../x86_64-linux-gnu/crtn.o
-make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp“ wird verlassen
+ "/usr/bin/ld" -export-dynamic --hash-style=both --build-id --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_22db4 /usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../../x86_64-linux-gnu/crt1.o /usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../../x86_64-linux-gnu/crti.o /usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/crtbegin.o -L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1 -L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../../x86_64-linux-gnu -L/lib/x86_64-linux-gnu -L/lib/../lib64 -L/usr/lib/x86_64-linux-gnu -L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../.. -L/usr/lib/llvm-3.7/bin/../lib -L/lib -L/usr/lib CMakeFiles/cmTC_22db4.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/crtend.o /usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../../x86_64-linux-gnu/crtn.o
+make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp“ wird verlassen
 
 
 Parsed CXX implicit link information from above output:
   link line regex: [^( *|.*[/\])(ld|([^/\]+-)?ld|collect2)[^/\]*( |$)]
-  ignore line: [Change Dir: /home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp]
+  ignore line: [Change Dir: /home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp]
   ignore line: []
-  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_1dbf9/fast"]
-  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_1dbf9.dir/build.make CMakeFiles/cmTC_1dbf9.dir/build]
-  ignore line: [make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten]
-  ignore line: [Building CXX object CMakeFiles/cmTC_1dbf9.dir/CMakeCXXCompilerABI.cpp.o]
-  ignore line: [/usr/bin/clang++-3.7      -o CMakeFiles/cmTC_1dbf9.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.5/Modules/CMakeCXXCompilerABI.cpp]
-  ignore line: [Linking CXX executable cmTC_1dbf9]
-  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1dbf9.dir/link.txt --verbose=1]
-  ignore line: [/usr/bin/clang++-3.7       -v CMakeFiles/cmTC_1dbf9.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_1dbf9 -rdynamic  ]
+  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_22db4/fast"]
+  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_22db4.dir/build.make CMakeFiles/cmTC_22db4.dir/build]
+  ignore line: [make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten]
+  ignore line: [Building CXX object CMakeFiles/cmTC_22db4.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [/usr/bin/clang++-3.7      -o CMakeFiles/cmTC_22db4.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.6/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [Linking CXX executable cmTC_22db4]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_22db4.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/clang++-3.7       -v CMakeFiles/cmTC_22db4.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_22db4 -rdynamic  ]
   ignore line: [Debian clang version 3.7.1-2 (tags/RELEASE_371/final) (based on LLVM 3.7.1)]
   ignore line: [Target: x86_64-pc-linux-gnu]
   ignore line: [Thread model: posix]
   ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/i586-linux-gnu/4.9]
   ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/i586-linux-gnu/4.9.3]
-  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/i586-linux-gnu/5.3.1]
+  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/i686-linux-gnu/5.4.1]
+  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/i686-linux-gnu/6.1.1]
   ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.8]
   ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.8.5]
   ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.9]
   ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.9.3]
-  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1]
+  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/5.4.1]
+  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1]
   ignore line: [Found candidate GCC installation: /usr/lib/gcc/i586-linux-gnu/4.9]
   ignore line: [Found candidate GCC installation: /usr/lib/gcc/i586-linux-gnu/4.9.3]
-  ignore line: [Found candidate GCC installation: /usr/lib/gcc/i586-linux-gnu/5.3.1]
+  ignore line: [Found candidate GCC installation: /usr/lib/gcc/i686-linux-gnu/5.4.1]
+  ignore line: [Found candidate GCC installation: /usr/lib/gcc/i686-linux-gnu/6.1.1]
   ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.8]
   ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.8.5]
   ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.9]
   ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.9.3]
-  ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/5.3.1]
-  ignore line: [Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1]
+  ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/5.4.1]
+  ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/6.1.1]
+  ignore line: [Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1]
   ignore line: [Candidate multilib: .]
   ignore line: [@m64]
   ignore line: [Candidate multilib: 32]
@@ -325,7 +341,7 @@ Parsed CXX implicit link information from above output:
   ignore line: [@mx32]
   ignore line: [Selected multilib: .]
   ignore line: [@m64]
-  link line: [ "/usr/bin/ld" -export-dynamic --hash-style=both --build-id --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_1dbf9 /usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../../x86_64-linux-gnu/crt1.o /usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../../x86_64-linux-gnu/crti.o /usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/crtbegin.o -L/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1 -L/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../../x86_64-linux-gnu -L/lib/x86_64-linux-gnu -L/lib/../lib64 -L/usr/lib/x86_64-linux-gnu -L/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../.. -L/usr/lib/llvm-3.7/bin/../lib -L/lib -L/usr/lib CMakeFiles/cmTC_1dbf9.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/crtend.o /usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../../x86_64-linux-gnu/crtn.o]
+  link line: [ "/usr/bin/ld" -export-dynamic --hash-style=both --build-id --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_22db4 /usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../../x86_64-linux-gnu/crt1.o /usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../../x86_64-linux-gnu/crti.o /usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/crtbegin.o -L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1 -L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../../x86_64-linux-gnu -L/lib/x86_64-linux-gnu -L/lib/../lib64 -L/usr/lib/x86_64-linux-gnu -L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../.. -L/usr/lib/llvm-3.7/bin/../lib -L/lib -L/usr/lib CMakeFiles/cmTC_22db4.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/crtend.o /usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../../x86_64-linux-gnu/crtn.o]
     arg [/usr/bin/ld] ==> ignore
     arg [-export-dynamic] ==> ignore
     arg [--hash-style=both] ==> ignore
@@ -336,20 +352,20 @@ Parsed CXX implicit link information from above output:
     arg [-dynamic-linker] ==> ignore
     arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
     arg [-o] ==> ignore
-    arg [cmTC_1dbf9] ==> ignore
-    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../../x86_64-linux-gnu/crt1.o] ==> ignore
-    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../../x86_64-linux-gnu/crti.o] ==> ignore
-    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/crtbegin.o] ==> ignore
-    arg [-L/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1] ==> dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1]
-    arg [-L/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../../x86_64-linux-gnu] ==> dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../../x86_64-linux-gnu]
+    arg [cmTC_22db4] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../../x86_64-linux-gnu/crt1.o] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../../x86_64-linux-gnu/crti.o] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/crtbegin.o] ==> ignore
+    arg [-L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1] ==> dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1]
+    arg [-L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../../x86_64-linux-gnu] ==> dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../../x86_64-linux-gnu]
     arg [-L/lib/x86_64-linux-gnu] ==> dir [/lib/x86_64-linux-gnu]
     arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
     arg [-L/usr/lib/x86_64-linux-gnu] ==> dir [/usr/lib/x86_64-linux-gnu]
-    arg [-L/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../..] ==> dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../..]
+    arg [-L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../..] ==> dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../..]
     arg [-L/usr/lib/llvm-3.7/bin/../lib] ==> dir [/usr/lib/llvm-3.7/bin/../lib]
     arg [-L/lib] ==> dir [/lib]
     arg [-L/usr/lib] ==> dir [/usr/lib]
-    arg [CMakeFiles/cmTC_1dbf9.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+    arg [CMakeFiles/cmTC_22db4.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
     arg [-lstdc++] ==> lib [stdc++]
     arg [-lm] ==> lib [m]
     arg [-lgcc_s] ==> lib [gcc_s]
@@ -357,40 +373,40 @@ Parsed CXX implicit link information from above output:
     arg [-lc] ==> lib [c]
     arg [-lgcc_s] ==> lib [gcc_s]
     arg [-lgcc] ==> lib [gcc]
-    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/crtend.o] ==> ignore
-    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../../x86_64-linux-gnu/crtn.o] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/crtend.o] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../../x86_64-linux-gnu/crtn.o] ==> ignore
   remove lib [gcc_s]
   remove lib [gcc]
   remove lib [gcc_s]
   remove lib [gcc]
-  collapse library dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1] ==> [/usr/lib/gcc/x86_64-linux-gnu/5.3.1]
-  collapse library dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../../x86_64-linux-gnu] ==> [/usr/lib/x86_64-linux-gnu]
+  collapse library dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1] ==> [/usr/lib/gcc/x86_64-linux-gnu/6.1.1]
+  collapse library dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../../x86_64-linux-gnu] ==> [/usr/lib/x86_64-linux-gnu]
   collapse library dir [/lib/x86_64-linux-gnu] ==> [/lib/x86_64-linux-gnu]
   collapse library dir [/lib/../lib64] ==> [/lib64]
   collapse library dir [/usr/lib/x86_64-linux-gnu] ==> [/usr/lib/x86_64-linux-gnu]
-  collapse library dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/5.3.1/../../..] ==> [/usr/lib]
+  collapse library dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.1.1/../../..] ==> [/usr/lib]
   collapse library dir [/usr/lib/llvm-3.7/bin/../lib] ==> [/usr/lib/llvm-3.7/lib]
   collapse library dir [/lib] ==> [/lib]
   collapse library dir [/usr/lib] ==> [/usr/lib]
   implicit libs: [stdc++;m;c]
-  implicit dirs: [/usr/lib/gcc/x86_64-linux-gnu/5.3.1;/usr/lib/x86_64-linux-gnu;/lib/x86_64-linux-gnu;/lib64;/usr/lib;/usr/lib/llvm-3.7/lib;/lib]
+  implicit dirs: [/usr/lib/gcc/x86_64-linux-gnu/6.1.1;/usr/lib/x86_64-linux-gnu;/lib/x86_64-linux-gnu;/lib64;/usr/lib;/usr/lib/llvm-3.7/lib;/lib]
   implicit fwks: []
 
 
 
 
 Detecting CXX [-std=c++14] compiler features compiled with the following output:
-Change Dir: /home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp
+Change Dir: /home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_ebe46/fast"
-/usr/bin/make -f CMakeFiles/cmTC_ebe46.dir/build.make CMakeFiles/cmTC_ebe46.dir/build
-make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten
-Building CXX object CMakeFiles/cmTC_ebe46.dir/feature_tests.cxx.o
-/usr/bin/clang++-3.7     -std=c++14 -o CMakeFiles/cmTC_ebe46.dir/feature_tests.cxx.o -c /home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_ebe46
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ebe46.dir/link.txt --verbose=1
-/usr/bin/clang++-3.7        CMakeFiles/cmTC_ebe46.dir/feature_tests.cxx.o  -o cmTC_ebe46 -rdynamic 
-make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp“ wird verlassen
+Run Build Command:"/usr/bin/make" "cmTC_5e909/fast"
+/usr/bin/make -f CMakeFiles/cmTC_5e909.dir/build.make CMakeFiles/cmTC_5e909.dir/build
+make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten
+Building CXX object CMakeFiles/cmTC_5e909.dir/feature_tests.cxx.o
+/usr/bin/clang++-3.7     -std=c++14 -o CMakeFiles/cmTC_5e909.dir/feature_tests.cxx.o -c /home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_5e909
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5e909.dir/link.txt --verbose=1
+/usr/bin/clang++-3.7        CMakeFiles/cmTC_5e909.dir/feature_tests.cxx.o  -o cmTC_5e909 -rdynamic 
+make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp“ wird verlassen
 
 
     Feature record: CXX_FEATURE:1cxx_aggregate_default_initializers
@@ -453,17 +469,17 @@ make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-wor
 
 
 Detecting CXX [-std=c++11] compiler features compiled with the following output:
-Change Dir: /home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp
+Change Dir: /home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_054a2/fast"
-/usr/bin/make -f CMakeFiles/cmTC_054a2.dir/build.make CMakeFiles/cmTC_054a2.dir/build
-make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten
-Building CXX object CMakeFiles/cmTC_054a2.dir/feature_tests.cxx.o
-/usr/bin/clang++-3.7     -std=c++11 -o CMakeFiles/cmTC_054a2.dir/feature_tests.cxx.o -c /home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_054a2
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_054a2.dir/link.txt --verbose=1
-/usr/bin/clang++-3.7        CMakeFiles/cmTC_054a2.dir/feature_tests.cxx.o  -o cmTC_054a2 -rdynamic 
-make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp“ wird verlassen
+Run Build Command:"/usr/bin/make" "cmTC_ddd91/fast"
+/usr/bin/make -f CMakeFiles/cmTC_ddd91.dir/build.make CMakeFiles/cmTC_ddd91.dir/build
+make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten
+Building CXX object CMakeFiles/cmTC_ddd91.dir/feature_tests.cxx.o
+/usr/bin/clang++-3.7     -std=c++11 -o CMakeFiles/cmTC_ddd91.dir/feature_tests.cxx.o -c /home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_ddd91
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ddd91.dir/link.txt --verbose=1
+/usr/bin/clang++-3.7        CMakeFiles/cmTC_ddd91.dir/feature_tests.cxx.o  -o cmTC_ddd91 -rdynamic 
+make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp“ wird verlassen
 
 
     Feature record: CXX_FEATURE:0cxx_aggregate_default_initializers
@@ -526,17 +542,17 @@ make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-wor
 
 
 Detecting CXX [-std=c++98] compiler features compiled with the following output:
-Change Dir: /home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp
+Change Dir: /home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_4f483/fast"
-/usr/bin/make -f CMakeFiles/cmTC_4f483.dir/build.make CMakeFiles/cmTC_4f483.dir/build
-make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten
-Building CXX object CMakeFiles/cmTC_4f483.dir/feature_tests.cxx.o
-/usr/bin/clang++-3.7     -std=c++98 -o CMakeFiles/cmTC_4f483.dir/feature_tests.cxx.o -c /home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_4f483
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4f483.dir/link.txt --verbose=1
-/usr/bin/clang++-3.7        CMakeFiles/cmTC_4f483.dir/feature_tests.cxx.o  -o cmTC_4f483 -rdynamic 
-make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM-2016-05-02-work-asmjit/asmjit/build/CMakeFiles/CMakeTmp“ wird verlassen
+Run Build Command:"/usr/bin/make" "cmTC_f1c6b/fast"
+/usr/bin/make -f CMakeFiles/cmTC_f1c6b.dir/build.make CMakeFiles/cmTC_f1c6b.dir/build
+make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten
+Building CXX object CMakeFiles/cmTC_f1c6b.dir/feature_tests.cxx.o
+/usr/bin/clang++-3.7     -std=c++98 -o CMakeFiles/cmTC_f1c6b.dir/feature_tests.cxx.o -c /home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_f1c6b
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f1c6b.dir/link.txt --verbose=1
+/usr/bin/clang++-3.7        CMakeFiles/cmTC_f1c6b.dir/feature_tests.cxx.o  -o cmTC_f1c6b -rdynamic 
+make[1]: Verzeichnis „/home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/CMakeTmp“ wird verlassen
 
 
     Feature record: CXX_FEATURE:0cxx_aggregate_default_initializers

@@ -203,6 +203,11 @@ NINT main (NINT ac, char *av[])
                     printmsg_no_msg = TRUE;
                 }
 
+                if (av[i][1] == CLI_JIT_ON_SB)
+				{
+					jit_on = TRUE;
+				}
+                
                 #if DEBUG
                     if (av[i][1] == CLI_DEBUG_SB)
                     {
@@ -455,6 +460,11 @@ run_prog:
         }
     #endif
 
+    #if HAVE_JIT_COMPILER
+		PRINTD("init JIT code...\n");
+		jit_init_code ();
+	#endif
+    
     if (init_pthreads () != 0)
     {
         printf ("can't init pthreads!\n");

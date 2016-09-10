@@ -2468,8 +2468,23 @@ U1 compile ()
 				}
 				else
 				{
-					printf ("compile: error index offset not defined: %s, line: %li\n", src_line.arg[0], plist_ind);
-					return (FALSE);
+					var3 = getvarind_comp (src_line.arg[src_line.args]);
+					if (var3 == NOTDEF)
+					{
+						printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[src_line.args], plist_ind);
+						return (FALSE);
+					}
+					
+					if (src_line.arg[src_line.args][0] == COMP_PRIVATE_VAR_SB)
+					{
+						type3 = pvarlist_obj[var3].type;
+						private_variable = TRUE;
+					}
+					else
+					{
+						type3 = varlist[var3].type;
+						private_variable = FALSE;
+					}
 				}
 				
 				/* do sane check... */

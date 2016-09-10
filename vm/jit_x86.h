@@ -31,6 +31,12 @@
  * JIT compiler is usable now, should be stable.
  * 
  * Now for use with new AsmJit 1.1 on github.
+ * 
+ * NOTE: jit (startlab, endlab);
+ * Must be direct before the code section to JIT compile!
+ * The JIT compiler can't save the binary for later use in the VM run.
+ * This means that every time program flow reaches the jit () command the JIT compiler RUNS!
+ * 
  */
 
 #define OFFSET(x) x * 8
@@ -95,7 +101,7 @@ struct JIT_label
 struct JIT_label JIT_label[MAXJUMPLEN];
 
 extern S4 JIT_label_ind;
-
+extern U1 JIT_error;
 
 void partstr (U1 *str, U1 *retstr, S2 start, S2 end)
 {
@@ -108,6 +114,15 @@ void partstr (U1 *str, U1 *retstr, S2 start, S2 end)
     retstr[j] = BINUL;
 }
 
+extern "C" void jit_init_code (void)
+{
+	S8 i;
+	
+	for (i = 0; i < MAXJITCODE; i++)
+	{
+		JIT_code[i].fn = NULL;
+	}
+}
 
 extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 {
@@ -839,7 +854,7 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 				a.mov (RBX, qword_ptr (RSI, OFFSET(r1)));
 				a.mov (RCX, 1);
 				
-				if (r1 < i)
+				if (r2 < i)
 				{
 					/* label was created, check */
 					
@@ -1220,22 +1235,37 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 		
 		if (JIT_code_ind < MAXJITCODE)
 		{
+			/* create JIT code function */ 
+			
+			/*
+			
 			JIT_code_ind++;
-			JIT_code[JIT_code_ind].fn = asmjit_cast<Func>(a.make());		/* create JIT code function */ 
+			JIT_code[JIT_code_ind].fn = asmjit_cast<Func>(a.make());		
 			
 			#if DEBUG
 				printf ("JIT compiler: function saved.\n");
 			#endif
 			
+			JIT_code[JIT_code_ind].fn ();
+			JIT_error = 0;	
+			return (0);
+			*/
+			
+			Func fn = asmjit_cast<Func>(a.make());
+			fn ();
+			
+			JIT_error = 0;	
 			return (0);
 		}
 		else
 		{
 			printf ("JIT compiler: error jit code list full!\n");
+			JIT_error = 1;
 			return (1);
 		}
 	}
-	return (1);
+	JIT_error = 0;
+	return (0);
 }
 
 
@@ -1246,7 +1276,15 @@ extern "C" int run_jit (S8 code, struct vmreg *vmreg)
 	#endif
 	
 	Func func = JIT_code[code].fn;
-		
+	
+	printf ("run_jit: code address: %lli\n", func);
+	
+	if (func == NULL)
+	{
+		printf("JIT compiler: FATAL ERROR! NULL pointer code!!!\n");
+		return (1);
+	}
+	
 	/* call JIT code function, stored in JIT_code[] */
 	func ();
 	return (0);

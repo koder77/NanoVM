@@ -388,6 +388,7 @@ S2 hs_send(S8 socket, S4 varind, S8 index, U1 access);
 S2 hs_load(struct varlist *varlist, S4 reg1, S8 reg2);
 S2 hs_save(struct varlist *varlist, S4 reg1, S8 reg2);
 /* vm/jit.cpp */
+
 /* vm/rights.c */
 U1 load_rights(U1 *filename);
 /* vm/dlload.c */

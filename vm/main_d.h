@@ -142,6 +142,8 @@ S4 plist_size = -1;
 U1 printmsg_no_msg = FALSE;     /* if true print no messages */
 /* CLI -q option */
 
+U1 jit_on = FALSE;				/* if true then jit compiler is on */
+
 U1 portable_install = FALSE;	/* set to true if programname starts with "port" */
 
 #if DEBUG
@@ -194,7 +196,7 @@ S4 hsserver;
 
 S4 JIT_code_ind = -1;
 S4 JIT_label_ind = -1;
-
+U1 JIT_error = 0;
 
 /* file access = on, other rights switched off! */
 /* see vm/rights.c */

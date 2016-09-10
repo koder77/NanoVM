@@ -1,3 +1,14 @@
+Nano VM (3.4.3-4)
+	nanovm: -j flag to turn on JIT compiler.
+	
+	I had to "fix" the JIT compiler to make it work again...
+	NOTE: jit (startlab, endlab);
+	Must be direct before the code section to JIT compile!
+	The JIT compiler can't save the binary for later use in the VM run.
+	This means that every time program flow reaches the jit () command the JIT compiler RUNS!
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat 10 Sep 2016 14:00 +0200	
+
 Nano VM (3.4.3-3)
 	Experimental last cache hit variable in VM code
 	Maybe speedup it a bit???

@@ -77,6 +77,7 @@ extern struct vm_mem vm_mem;
     #define PRINTD(s);
 #endif
 
+extern U1 jit_on;		/* CLI -j option to turn jit compiler on */
 
 /* hyperspace */
 extern S4 hsserver;
@@ -94,7 +95,7 @@ extern struct rights rights;
 /* AsmJit */
 
 extern S4 JIT_code_ind;
-
+extern U1 JIT_error;
 
 
 
@@ -5881,34 +5882,42 @@ void *exe_elist (S4 threadnum)
 		
 	jit:
 		#if HAVE_JIT_COMPILER
-			PRINTD("JIT");
-		
-			if (jit_compiler (&pcclist, &vmreg, ARG1, ARG2 - 1) != 0)
+			if (jit_on)
 			{
-				ERREXIT();
+				PRINTD("JIT");
+		
+				jit_compiler (&pcclist, &vmreg, ARG1, ARG2 - 1);
+				if (JIT_error == 1)
+				{
+					ERREXIT();
+				}
+			
+				/* put NOP opcode here */
+			
+				// pcclist[epos][0] = NOP;
+			
+				/* put RUN_JIT_CODE opcode in at label ARG1 */
+			
+				// pcclist[ARG1][0] = RUN_JIT_CODE;
+				// pcclist[ARG1][1] = JIT_code_ind;
+				// pcclist[ARG1][2] = ARG2 - 1;
+				
+				epos = ARG2 - 1;
 			}
-			
-			/* put NOP opcode here */
-			
-			pcclist[epos][0] = NOP;
-			
-			/* put RUN_JIT_CODE opcode in at label ARG1 */
-			
-			pcclist[ARG1][0] = RUN_JIT_CODE;
-			pcclist[ARG1][1] = JIT_code_ind;
-			pcclist[ARG1][2] = ARG2 - 1;
 		#endif
 		
 		EXE_NEXT();
 		
 	run_jit:
 		#if HAVE_JIT_COMPILER
-			PRINTD("RUNJIT");
+			if (jit_on)
+			{
+				PRINTD("RUNJIT");
 			
-			run_jit (ARG1, &vmreg);
+				run_jit (ARG1, &vmreg);
 			
-			epos = ARG2;
-			
+				epos = ARG2;
+			}
 		#endif
 			
 		EXE_NEXT ();

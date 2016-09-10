@@ -973,6 +973,8 @@ typedef int                     NINT;
 
 #define CLI_STRIP_DEBUG_SB  's'
 
+#define CLI_JIT_ON_SB		'j'				  /* VM - switch jit compiler on */ 
+
 #define REM_SB              "//"              /* comment at beginning of */
                                               /* a line */
 
@@ -1082,9 +1084,9 @@ typedef int                     NINT;
 
 /* message definitions */
 
-#define VM_START_TXT        "nano vm 64 bit 3.4.3-3 (c) 2016 by Stefan Pietzonke jay-t@gmx.net\n-== free software: GPL/MPL ==-\n     -==   blue sky   ==-\n        ==============\n"
-#define A_START_TXT         "nano assembler 64 bit 3.4.3-3  (c) 2016 by Stefan Pietzonke jay-t@gmx.net\n-== free software: GPL/MPL ==-\n"
-#define VERSION_TXT         "$VER: nano 3.4.3-3 (01.07.16)"
+#define VM_START_TXT        "nano vm 64 bit 3.4.3-4 (c) 2016 by Stefan Pietzonke jay-t@gmx.net\n-== free software: GPL/MPL ==-\n     -==   blue sky   ==-\n        ==============\n"
+#define A_START_TXT         "nano assembler 64 bit 3.4.3-4  (c) 2016 by Stefan Pietzonke jay-t@gmx.net\n-== free software: GPL/MPL ==-\n"
+#define VERSION_TXT         "$VER: nano 3.4.3-4 (10.09.16)"
 
 
 #define STATUS_OK_TXT       "ok"
