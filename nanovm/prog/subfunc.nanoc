@@ -1,0 +1,37 @@
+func main ()
+    int null = 0; int one = 1;
+
+    int x = 23; int y = 42; int z;
+
+    @multiply (x, y);
+    get (z);
+
+    print z; printn one;
+    exit null;
+funcend
+
+func multiply (int x, int y)
+    int one = 1;
+    int z;
+
+    multiply~message ();
+
+    @multiply~do (x, y);
+    get (z);
+    return (z);
+
+//  sub functions of multiply
+//  ~ in name is needed to mark this as a sub function  
+
+func multiply~do (int x, int y)
+    int z;
+
+    z = x * y;
+    return (z);
+funcend
+func multiply~message ()
+    int one = 1;
+    print "multiply...";
+    printn one;
+funcend
+funcend
