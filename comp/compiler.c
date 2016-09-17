@@ -45,10 +45,11 @@ extern struct varlist_state pvarlist_state;
 extern struct t_var t_var;
 extern struct if_comp if_comp[MAXIF];
 
-/* ????? */
 extern S4 function_ind;
 extern S4 opcode_ind;
 extern S4 if_ind;
+
+extern U1 function_main_end;
 
 extern S2 plist_ind;
 extern S2 cclist_ind;
@@ -65,6 +66,7 @@ extern U1 atomic;
 
 extern U1 optimize_O;
 extern U1 optimize_O2;
+extern U1 optimize_O3;
 
 
 U1 compile_set_init_var (S2 arg, S4 *var, U1 type)
@@ -237,6 +239,27 @@ U1 compile ()
     switch (src_line.opcode_n)
     {
         case COMP_FUNC:
+            function_main_end = 0;
+
+            i = searchstr (src_line.arg[0], TILDE_SB, 0, strlen (src_line.arg[0]) - 1, TRUE);
+            if (i != -1 && function_main_end == 0)
+            {
+                // found sub function at end of function
+                // set rts for top function
+
+                function_main_end = 1;
+
+                /* set rts opcode */
+                if (strcmp (function[function_ind].name, COMP_MAIN_SB) != 0)
+                {
+                    /* not main function, set RTS opcode at function end */
+                    if (! set0 (RTS))
+                    {
+                        return (MEMORY);
+                    }
+                }
+            }
+
             /* new function: set all registers as EMPTY: */
             init_vmreg ();
 
@@ -414,7 +437,7 @@ U1 compile ()
                                         return (MEMORY);
                                     }
                                     set_vmreg_l (reg1, var, NORMAL);
-                                }  
+                                }
                             }
                         }
 
@@ -526,7 +549,7 @@ U1 compile ()
             /* function call, push arguments on stack in reverse order!!! */
 
             if (strcmp (src_line.arg[0], COMP_GET_MULTI_END_SB) == 0) goto getmultiend;
-            
+
             if (src_line.args > 0)
             {
                 if (strcmp (src_line.arg[0], COMP_PRINT_SB) == 0) goto print;
@@ -536,17 +559,17 @@ U1 compile ()
                 if (strcmp (src_line.arg[0], COMP_RETURN_MULTI_SB) == 0) goto returnmulti;
 
 				str_len = strlen (src_line.arg[0]) - 1;
-				
+
 				// printf ("'%c'\n", src_line.arg[0][i]);
-				
+
 				if (src_line.arg[0][str_len] == NOTREVERSE_SB)
 				{
 					func_call_reverse_args = FALSE;
-					
+
 					/* function call was: foobar> (x, y);
-					 * 
+					 *
 					 * with the greater sign '>' to set not to reverse the order of the arguments pushed on stack!!!
-					 * 
+					 *
 					 */
 					src_line.arg[0][str_len] = BINUL; /* erase greater sign from function name */
 				}
@@ -554,9 +577,9 @@ U1 compile ()
 				{
 					func_call_reverse_args = TRUE;
 				}
-				
+
 				// printf ("src line arg 0: %s\n", src_line.arg[0]);
-				
+
                 translate = translate_code ();
                 if (translate == TRUE)
                 {
@@ -566,13 +589,13 @@ U1 compile ()
                 if (strcmp (src_line.arg[0], COMP_RETURN_SB) != 0)
                 {
                     /* save all registers */
-                    
+
                     if (! set0 (STPUSH_ALL_ALL))
 					{
 						return (MEMORY);
 					}
                 }
-                
+
                 /* push arguments on stack */
                 if (func_call_reverse_args == TRUE)
 				{
@@ -582,7 +605,7 @@ U1 compile ()
 				{
 					i = 1;					/* begin from start of list */
 				}
-				
+
                 ok = TRUE;
                 while (ok)
                 {
@@ -623,7 +646,7 @@ U1 compile ()
 							return (FALSE);
 						}
 					}
-					
+
                     if (src_line.arg[i][0] == COMP_PRIVATE_VAR_SB)
                     {
                         type = pvarlist_obj[var].type;
@@ -827,7 +850,7 @@ U1 compile ()
                             }
                             break;
                     }
-                    
+
                     if (func_call_reverse_args == TRUE)
 					{
 						if (i > 1)
@@ -861,7 +884,7 @@ U1 compile ()
                 }
 
                 /* save all registers */
-          
+
                 if (! set0 (STPUSH_ALL_ALL))
                 {
                     return (MEMORY);
@@ -886,7 +909,7 @@ U1 compile ()
 					{
 						set_pull_all = FALSE;
 					}
-					
+
 					getstr (src_line.arg[0], buf, MAXJUMPNAME, 0, strlen (src_line.arg[0]));
                 }
                 if (strlen (buf) == 0)
@@ -997,24 +1020,24 @@ U1 compile ()
 							 case COMP_BYTE:
 								type_const = BYTE_VAR;
 								break;
-								
+
 							 case COMP_INT:
 								 type_const = INT_VAR;
 								 break;
-								 
+
 							 case COMP_LONG_INT:
 								 type_const = LINT_VAR;
 								 break;
-								 
+
 							 case COMP_QINT:
 								 type_const = QINT_VAR;
 								 break;
-								 
+
 							 case COMP_DOUBLE:
 								 type_const = DOUBLE_VAR;
 								 break;
 						 }
-						
+
                          if (! make_val (type_const, varlist, NORMAL_VAR))
                          {
                              printerr (MEMORY, plist_ind, ST_PRE, t_var.varname);
@@ -1064,7 +1087,7 @@ U1 compile ()
                 {
                     case COMP_BYTE:
                         /* get free L register */
-                        
+
                         reg1 = get_vmreg_var_l (var2);
                         if (reg1 == EMPTY)
                         {
@@ -1109,7 +1132,7 @@ U1 compile ()
 
                     case COMP_INT:
                         /* get free L register */
-                        
+
                         reg1 = get_vmreg_var_l (var2);
                         if (reg1 == EMPTY)
                         {
@@ -1196,7 +1219,7 @@ U1 compile ()
                                 return (MEMORY);
                             }
                             set_vmreg_l (reg1, var, NORMAL);
-                            
+
                         }
                         break;
 
@@ -2003,9 +2026,9 @@ U1 compile ()
 					if (strcmp (src_line.arg[i], GET_NO_ST_PULL_SB) == 0)
 					{
 						get_no_stack_pull = TRUE;
-						
+
 						/* set i to next src line argument */
-						
+
 						if (i > 1)
 						{
 							i = i - 1;
@@ -2015,7 +2038,7 @@ U1 compile ()
 							ok = FALSE;
 						}
 					}
-					
+
                     var = getvarind_comp (src_line.arg[i]);
                     if (var == NOTDEF)
                     {
@@ -2205,9 +2228,9 @@ U1 compile ()
                         ok = FALSE;
                     }
                 }
-                
+
             }
-            
+
             if (get_no_stack_pull == FALSE)
 			{
 				/* restore all registers */
@@ -2231,18 +2254,18 @@ U1 compile ()
                 printf ("compile: COMP_TOKEN\n");
                 printf ("src_line args: %li\n", src_line.args);
             #endif
-            
+
 			if (strcmp (src_line.arg[0], COMP_PULL_SB) == 0)
 			{
 				/* pull register into variable, if variable is stored in register */
-				
+
 				var = getvarind_comp (src_line.arg[1]);
 				if (var == NOTDEF)
 				{
 					printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[0], plist_ind);
 					return (FALSE);
 				}
-				
+
 				if (src_line.arg[1][0] == COMP_PRIVATE_VAR_SB)
 				{
 					type = pvarlist_obj[var].type;
@@ -2253,7 +2276,7 @@ U1 compile ()
 					type = varlist[var].type;
 					private_variable = FALSE;
 				}
-				
+
 				switch (type)
 				{
 					case INT_VAR:
@@ -2281,7 +2304,7 @@ U1 compile ()
 							printf ("pull: warning variable %s not in register!\n", src_line.arg[1]);
 						}
 						break;
-						
+
 					case LINT_VAR:
 						reg1 = get_vmreg_var_l (var);
 						if (reg1 != EMPTY)
@@ -2307,7 +2330,7 @@ U1 compile ()
 							printf ("pull: warning variable %s not in register!\n", src_line.arg[1]);
 						}
 						break;
-						
+
 					case QINT_VAR:
 						reg1 = get_vmreg_var_l (var);
 						if (reg1 != EMPTY)
@@ -2333,7 +2356,7 @@ U1 compile ()
 							printf ("pull: warning variable %s not in register!\n", src_line.arg[1]);
 						}
 						break;
-					
+
 					case DOUBLE_VAR:
 						reg1 = get_vmreg_var_d (var);
 						if (reg1 != EMPTY)
@@ -2359,7 +2382,7 @@ U1 compile ()
 							printf ("pull: warning variable %s not in register!\n", src_line.arg[1]);
 						}
 						break;
-						
+
 					case STRING_VAR:
 						reg1 = get_vmreg_var_s (var);
 						if (reg1 != EMPTY)
@@ -2385,7 +2408,7 @@ U1 compile ()
 							printf ("pull: warning variable %s not in register!\n", src_line.arg[1]);
 						}
 						break;
-						
+
 					case BYTE_VAR:
 						reg1 = get_vmreg_var_l (var);
 						if (reg1 != EMPTY)
@@ -2414,9 +2437,9 @@ U1 compile ()
 				}
 				return (TRUE);
 			}
-				
-						
-				
+
+
+
 			/* parse expressons like: i = 1 or i = i + 1 or i = x + 1 * y... etc. */
             if (strcmp (src_line.arg[1], EQUAL_SB) != 0)
             {
@@ -2444,17 +2467,17 @@ U1 compile ()
                 private_variable = FALSE;
             }
 
-            
+
             /* check if array list */
-			
+
 			if (src_line.arg[2][0] == AROPEN_SB)
 			{
 				#if DEBUG
 					printf ("DEBUG: found list.\n");
 				#endif
-				
+
 				/* found x = [ 1 2 3 4 ] 0;  expression */
-				
+
 				/* get index offset */
 				if (checkdigit (src_line.arg[src_line.args]) == TRUE && src_line.arg[src_line.args][0] != ARCLOSE_SB)
 				{
@@ -2474,7 +2497,7 @@ U1 compile ()
 						printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[src_line.args], plist_ind);
 						return (FALSE);
 					}
-					
+
 					if (src_line.arg[src_line.args][0] == COMP_PRIVATE_VAR_SB)
 					{
 						type3 = pvarlist_obj[var3].type;
@@ -2486,14 +2509,14 @@ U1 compile ()
 						private_variable = FALSE;
 					}
 				}
-				
+
 				/* do sane check... */
 				if (type3 == DOUBLE_VAR || type3 == STRING_VAR)
 				{
 					printf ("compile: error index offset not integer number: %s, line: %li\n", src_line.arg[src_line.args], plist_ind);
 					return (FALSE);
 				}
-				
+
 				switch (type3)
 				{
 					case INT_VAR:
@@ -2513,7 +2536,7 @@ U1 compile ()
 						}
 						set_vmreg_l (reg3, var3, NORMAL);
 						break;
-						
+
 					case LINT_VAR:
 						reg3 = get_vmreg_var_l (var3);
 						if (reg3 == EMPTY)
@@ -2531,7 +2554,7 @@ U1 compile ()
 						}
 						set_vmreg_l (reg3, var3, NORMAL);
 						break;
-						
+
 					case QINT_VAR:
 						reg3 = get_vmreg_var_l (var3);
 						if (reg3 == EMPTY)
@@ -2549,7 +2572,7 @@ U1 compile ()
 						}
 						set_vmreg_l (reg3, var3, NORMAL);
 						break;
-						
+
 					case BYTE_VAR:
 						reg3 = get_vmreg_var_l (var3);
 						if (reg3 == EMPTY)
@@ -2568,7 +2591,7 @@ U1 compile ()
 						set_vmreg_l (reg3, var3, NORMAL);
 						break;
 				}
-				
+
 				for (list = 3; list <= src_line.args - 2; list++)
 				{
 					var2 = -1;
@@ -2615,15 +2638,15 @@ U1 compile ()
 							printf ("found var2: %li\n", var2);
 						#endif
 
-                  
+
 						type2 = varlist[var2].type;
 					}
 
 					#if DEBUG
 						printf ("DEBUG: var2: %li\n", var2);
 					#endif
-						
-						
+
+
 					/* do sane check... */
 					switch (varlist[var].type)
 					{
@@ -2637,7 +2660,7 @@ U1 compile ()
 								printf ("compile: error: variable not of number type: %s, line: %li\n", src_line.arg[list], plist_ind);
 								return (FALSE);
 							}
-							
+
 							if (type2 == DOUBLE_VAR)
 							{
 								/* can't assign double to integer number var */
@@ -2645,7 +2668,7 @@ U1 compile ()
 								return (FALSE);
 							}
 							break;
-							
+
 						case DOUBLE_VAR:
 							if (type2 != DOUBLE_VAR)
 							{
@@ -2654,7 +2677,7 @@ U1 compile ()
 								return (FALSE);
 							}
 							break;
-							
+
 						case STRING_VAR:
 							if (type2 != STRING_VAR)
 							{
@@ -2664,7 +2687,7 @@ U1 compile ()
 							}
 							break;
 					}
-						
+
 					switch (type2)
 					{
 						case INT_VAR:
@@ -2683,7 +2706,7 @@ U1 compile ()
                                 }
                             }
                             break;
-							
+
 						case LINT_VAR:
 							reg1 = get_vmreg_var_l (var2);
 							if (reg1 == EMPTY)
@@ -2700,7 +2723,7 @@ U1 compile ()
                                 }
                             }
                             break;
-							
+
 						case QINT_VAR:
 							reg1 = get_vmreg_var_l (var2);
 							if (reg1 == EMPTY)
@@ -2717,7 +2740,7 @@ U1 compile ()
                                 }
                             }
                             break;
-							
+
 						case DOUBLE_VAR:
 							reg1 = get_vmreg_var_d (var2);
 							if (reg1 == EMPTY)
@@ -2734,7 +2757,7 @@ U1 compile ()
                                 }
                             }
                             break;
-							
+
 						case STRING_VAR:
 							reg1 = get_vmreg_var_s (var2);
 							if (reg1 == EMPTY)
@@ -2751,7 +2774,7 @@ U1 compile ()
                                 }
                             }
                             break;
-							
+
 						case BYTE_VAR:
 							reg1 = get_vmreg_var_l (var2);
 							if (reg1 == EMPTY)
@@ -2769,7 +2792,7 @@ U1 compile ()
                             }
                             break;
 					}
-					
+
 					switch (type)
 					{
 						case INT_VAR:
@@ -2778,42 +2801,42 @@ U1 compile ()
                                  return (MEMORY);
                             }
                             break;
-							
+
 						case LINT_VAR:
 							if (! set3 (LET2ARRAY_L, reg1, var, reg3))
                             {
                                  return (MEMORY);
                             }
                             break;
-							
+
 						case QINT_VAR:
 							if (! set3 (LET2ARRAY_Q, reg1, var, reg3))
                             {
                                  return (MEMORY);
                             }
                             break;
-							
+
 						case DOUBLE_VAR:
 							if (! set3 (LET2ARRAY_D, reg1, var, reg3))
                             {
                                  return (MEMORY);
                             }
                             break;
-							
+
 						case STRING_VAR:
 							if (! set3 (LET2ARRAY_S, reg1, var, reg3))
                             {
                                  return (MEMORY);
                             }
                             break;
-							
+
 						case BYTE_VAR:
 							if (! set3 (LET2ARRAY_B, reg1, var, reg3))
                             {
                                  return (MEMORY);
                             }
                             break;
-							
+
 						case DYNAMIC_VAR:
 							switch (type2)
 							{
@@ -2823,14 +2846,14 @@ U1 compile ()
 										return (MEMORY);
 									}
 									break;
-									
+
 								case DOUBLE_VAR:
 									if (! set3 ( MOVE_D_ADYN, reg1, var, reg3))
 									{
 										return (MEMORY);
 									}
 									break;
-									
+
 								case STRING_VAR:
 									if (! set3 ( MOVE_S_ADYN, reg1, var, reg3))
 									{
@@ -2840,7 +2863,7 @@ U1 compile ()
 							}
 							break;
 					}
-					
+
 					/* increase index */
 					if (! set1 (INC_L, reg3))
                     {
@@ -2850,20 +2873,20 @@ U1 compile ()
 				unset_vmreg_l (var3);
 				return (TRUE);
 			}
-                            
-            
+
+
             /* check if: var = array [ index ]; => array2var() */
 			/* check for brackets: [ ] */
-			
+
 			if (src_line.args == 5 && src_line.arg[3][0] == AROPEN_SB && src_line.arg[5][0] == ARCLOSE_SB)
 			{
 				// printf ("checking array2var expression...\n");
 				/* parse array2var expression... */
-				
+
 				#if DEBUG
 					printf ("compile: checking array2var() expression...\n");
 				#endif
-					
+
 				/* get array name */
 				var2 = getvarind_comp (src_line.arg[2]);
 				if (var2 == NOTDEF)
@@ -2871,7 +2894,7 @@ U1 compile ()
 					printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[2], plist_ind);
 					return (FALSE);
 				}
-				
+
 				if (src_line.arg[2][0] == COMP_PRIVATE_VAR_SB)
 				{
 					type2 = pvarlist_obj[var2].type;
@@ -2882,7 +2905,7 @@ U1 compile ()
 					type2 = varlist[var2].type;
 					private_variable = FALSE;
 				}
-            
+
 				/* try get array index */
 				var3 = getvarind_comp (src_line.arg[4]);
 				if (var3 == NOTDEF)
@@ -2915,12 +2938,12 @@ U1 compile ()
 						private_variable = FALSE;
 					}
 				}
-            
+
 				switch (type3)
 				{
 					case INT_VAR:
 						/* get free L register */
-                            
+
                         reg1 = get_vmreg_var_l (var3);
                         if (reg1 == EMPTY)
                         {
@@ -3005,7 +3028,7 @@ U1 compile ()
 						}
 						break;
 				}
-				
+
 				switch (type)
 				{
 					case INT_VAR:
@@ -3014,12 +3037,12 @@ U1 compile ()
 					case BYTE_VAR:
 						reg2 = get_vmreg_l ();
 						break;
-						
+
 					case DOUBLE_VAR:
 						reg2 = get_vmreg_d ();
 						break;
 				}
-				
+
 				if (private_variable == FALSE)
 				{
 					switch (type)
@@ -3030,28 +3053,28 @@ U1 compile ()
 								return (MEMORY);
 							}
 							break;
-							
+
 						case LINT_VAR:
 							if (! set3 (LETARRAY2_L, var2, reg1, reg2))
 							{
 								return (MEMORY);
 							}
 							break;
-				
+
                         case QINT_VAR:
 							if (! set3 (LETARRAY2_Q, var2, reg1, reg2))
 							{
 								return (MEMORY);
 							}
-							break;   
-                    
+							break;
+
 						case DOUBLE_VAR:
 							if (! set3 (LETARRAY2_D, var2, reg1, reg2))
 							{
 								return (MEMORY);
 							}
 							break;
-				
+
 						case BYTE_VAR:
 							if (! set3 (LETARRAY2_B, var2, reg1, reg2))
 							{
@@ -3070,28 +3093,28 @@ U1 compile ()
 								return (MEMORY);
 							}
 							break;
-							
+
 						case LINT_VAR:
 							if (! set3 (PMOVE_A_L, var2, reg1, reg2))
 							{
 								return (MEMORY);
 							}
 							break;
-				
+
                         case QINT_VAR:
 							if (! set3 (PMOVE_A_Q, var2, reg1, reg2))
 							{
 								return (MEMORY);
 							}
-							break;   
-                    
+							break;
+
 						case DOUBLE_VAR:
 							if (! set3 (PMOVE_A_D, var2, reg1, reg2))
 							{
 								return (MEMORY);
 							}
 							break;
-				
+
 						case BYTE_VAR:
 							if (! set3 (PMOVE_A_B, var2, reg1, reg2))
 							{
@@ -3100,7 +3123,7 @@ U1 compile ()
 							break;
 					}
 				}
-				
+
 				switch (type)
                 {
                     case INT_VAR:
@@ -3188,10 +3211,10 @@ U1 compile ()
                         }
                         break;
                 }
-				
+
 				return (TRUE);
 			}
-				
+
 
             /* check if ++ or -- */
             op_found = FALSE;
@@ -3468,7 +3491,7 @@ U1 compile ()
                 if (strcmp (src_line.arg[2], NOT_SB) == 0)
                 {
                     /* not: i = ! x */
-					
+
                     var2 = -1; private_variable = FALSE;
                     if (checkdigit (src_line.arg[3]) == TRUE)
                     {
@@ -3509,7 +3532,7 @@ U1 compile ()
                     {
                         case INT_VAR:
                             /* get free L register */
-                            
+
                             reg1 = get_vmreg_var_l (var2);
                             if (reg1 == EMPTY)
                             {
@@ -3540,7 +3563,7 @@ U1 compile ()
                                     return (FALSE);
                                 }
 							}
-                                
+
                             if (! set2 (NOT_L, reg1, reg2))
                             {
                                 return (MEMORY);
@@ -3560,7 +3583,7 @@ U1 compile ()
                                 {
                                     return (MEMORY);
                                 }
-                                set_vmreg_l (reg2, var, NORMAL); 
+                                set_vmreg_l (reg2, var, NORMAL);
                             }
                             break;
 
@@ -3730,7 +3753,7 @@ U1 compile ()
                 #endif
 
 				array_type = FALSE;
-					
+
                 if (var2 == -1)
                 {
                     /* it's a already defined var */
@@ -3750,7 +3773,7 @@ U1 compile ()
                     {
                         type2 = pvarlist_obj[var2].type;
                         private_variable = TRUE;
-						
+
 						 if (pvarlist_obj[var2].dims != NODIMS)
 						 {
 							 if (type2 != STRING_VAR)
@@ -3762,7 +3785,7 @@ U1 compile ()
                     else
                     {
                         type2 = varlist[var2].type;
-						
+
 						 if (varlist[var2].dims != NODIMS)
 						 {
 							 if (type2 != STRING_VAR)
@@ -3838,7 +3861,7 @@ U1 compile ()
 						case QINT_VAR:
 							reg1 = get_vmreg_var_l (var2);
 							if (reg1 == EMPTY)
-							{ 
+							{
 								reg1 = get_vmreg_l ();
 								if (reg1 != FULL)
 								{
@@ -3872,7 +3895,7 @@ U1 compile ()
 								if (reg1 != FULL)
 								{
 									/* set assign code, using free register */
-    
+
 									if (private_variable == TRUE)
 									{
 										if (! set2 (PPUSH_D, var2, reg1))
@@ -3915,7 +3938,7 @@ U1 compile ()
 										if (! set2 (PUSH_S, var2, reg1))
 										{
 											return (MEMORY);
-										}   
+										}
 										set_vmreg_s (reg1, var2, NORMAL);
 									}
 								}
@@ -3930,7 +3953,7 @@ U1 compile ()
 								if (reg1 != FULL)
 								{
 									/* set assign code, using free register */
-	
+
 									if (private_variable == TRUE)
 									{
 										if (! set2 (PPUSH_B, var2, reg1))
@@ -4108,7 +4131,7 @@ U1 compile ()
                 /* expression: n = x + y */
 
                 /* check if target variable is array */
-				
+
 				i = FALSE;
 				if (private_variable == TRUE)
 				{
@@ -4124,15 +4147,15 @@ U1 compile ()
 						i = TRUE; /* is array */
 					}
 				}
-				
+
 				if (i == TRUE)
 				{
 					/* left value is array */
-					
+
 					/* check 5th argument: if it's a variable or array */
-					
+
 					var3 = -1; private_variable = FALSE;
-                
+
 					/* number variable */
 					array_type = FALSE;
 					if (checkdigit (src_line.arg[4]) == TRUE)
@@ -4161,7 +4184,7 @@ U1 compile ()
 						{
 							type3 = pvarlist_obj[var3].type;
 							private_variable = TRUE;
-							
+
 							if (pvarlist_obj[var3].dims != NODIMS)
 							{
 								if (pvarlist_obj[var3].type != QINT_VAR && pvarlist_obj[var3].type != DOUBLE_VAR)
@@ -4169,14 +4192,14 @@ U1 compile ()
 									printf ("compile: error: variable must be qint or double variable: %s, line: %li\n", src_line.arg[4], plist_ind);
 									return (FALSE);
 								}
-								
+
 								array_type = TRUE; /* is array */
 							}
 						}
 						else
 						{
 							type3 = varlist[var3].type;
-							
+
 							if (varlist[var3].dims != NODIMS)
 							{
 								if (varlist[var3].type != QINT_VAR && varlist[var3].type != DOUBLE_VAR)
@@ -4184,7 +4207,7 @@ U1 compile ()
 									printf ("compile: error: variable must be qint or double variable: %s, line: %li\n", src_line.arg[4], plist_ind);
 									return (FALSE);
 								}
-								
+
 								array_type = TRUE; /* is array */
 							}
 						}
@@ -4193,7 +4216,7 @@ U1 compile ()
 					if (array_type == FALSE)
 					{
 						/* 5th argument is not array, push it */
-						
+
 						switch (type3)
 						{
 							case INT_VAR:
@@ -4269,7 +4292,7 @@ U1 compile ()
 												return (MEMORY);
 											}
 											set_vmreg_l (reg3, var3, PRIVATE);
-										}	
+										}
 										else
 										{
 											if (! set2 (PUSH_Q, var3, reg3))
@@ -4348,7 +4371,7 @@ U1 compile ()
 					{
 						reg3 = var3;
 					}
-					
+
 
 					i = FALSE;
 					var2 = getvarind_comp (src_line.arg[2]);
@@ -4362,7 +4385,7 @@ U1 compile ()
 					{
 						type2 = pvarlist_obj[var2].type;
 						private_variable = TRUE;
-							
+
 						if (pvarlist_obj[var2].dims != NODIMS)
 						{
 							if (pvarlist_obj[var2].type != QINT_VAR && pvarlist_obj[var2].type != DOUBLE_VAR)
@@ -4370,14 +4393,14 @@ U1 compile ()
 								printf ("compile: error: variable must be qint or double variable: %s, line: %li\n", src_line.arg[2], plist_ind);
 								return (FALSE);
 							}
-								
+
 							i = TRUE; /* is array */
 						}
 					}
 					else
 					{
 						type2 = varlist[var2].type;
-							
+
 						if (varlist[var2].dims != NODIMS)
 						{
 							if (varlist[var2].type != QINT_VAR && varlist[var2].type != DOUBLE_VAR)
@@ -4385,22 +4408,22 @@ U1 compile ()
 								printf ("compile: error: variable must be qint or double variable: %s, line: %li\n", src_line.arg[2], plist_ind);
 								return (FALSE);
 							}
-							
+
 							i = TRUE; /* is array */
 						}
 					}
-				
+
 					if (i == TRUE)
 					{
 						op_found = FALSE; i = 3;
 						if (src_line.arg[2][0] == COMP_PRIVATE_VAR_SB)
 						{
 							/* vector array math on private variable */
-							
+
 							if (strcmp (src_line.arg[i], COMP_OP_ADD_SB) == 0)
 							{
 								switch (type)
-								{	
+								{
 									case QINT_VAR:
 										if (array_type)
 										{
@@ -4411,7 +4434,7 @@ U1 compile ()
 											opcode = PVADD_L;
 										}
 										break;
-									
+
 									case DOUBLE_VAR:
 										if (array_type)
 										{
@@ -4425,11 +4448,11 @@ U1 compile ()
 								}
 								op_found = TRUE;
 							}
-						
+
 							if (strcmp (src_line.arg[i], COMP_OP_SUB_SB) == 0)
 							{
 								switch (type)
-								{	
+								{
 									case QINT_VAR:
 										if (array_type)
 										{
@@ -4440,7 +4463,7 @@ U1 compile ()
 											opcode = PVSUB_L;
 										}
 										break;
-									
+
 									case DOUBLE_VAR:
 										if (array_type)
 										{
@@ -4454,11 +4477,11 @@ U1 compile ()
 								}
 								op_found = TRUE;
 							}
-						
+
 							if (strcmp (src_line.arg[i], COMP_OP_MUL_SB) == 0)
 							{
 								switch (type)
-								{	
+								{
 									case QINT_VAR:
 										if (array_type)
 										{
@@ -4469,7 +4492,7 @@ U1 compile ()
 											opcode = PVMUL_L;
 										}
 										break;
-									
+
 									case DOUBLE_VAR:
 										if (array_type)
 										{
@@ -4483,11 +4506,11 @@ U1 compile ()
 								}
 								op_found = TRUE;
 							}
-						
+
 							if (strcmp (src_line.arg[i], COMP_OP_DIV_SB) == 0)
 							{
 								switch (type)
-								{	
+								{
 									case QINT_VAR:
 										if (array_type)
 										{
@@ -4498,7 +4521,7 @@ U1 compile ()
 											opcode = PVDIV_L;
 										}
 										break;
-									
+
 									case DOUBLE_VAR:
 										if (array_type)
 										{
@@ -4516,11 +4539,11 @@ U1 compile ()
 						else
 						{
 							/* vector array math on normal array */
-							
+
 							if (strcmp (src_line.arg[i], COMP_OP_ADD_SB) == 0)
 							{
 								switch (type)
-								{	
+								{
 									case QINT_VAR:
 										if (array_type)
 										{
@@ -4531,7 +4554,7 @@ U1 compile ()
 											opcode = VADD_L;
 										}
 										break;
-									
+
 									case DOUBLE_VAR:
 										if (array_type)
 										{
@@ -4545,11 +4568,11 @@ U1 compile ()
 								}
 								op_found = TRUE;
 							}
-						
+
 							if (strcmp (src_line.arg[i], COMP_OP_SUB_SB) == 0)
 							{
 								switch (type)
-								{	
+								{
 									case QINT_VAR:
 										if (array_type)
 										{
@@ -4560,7 +4583,7 @@ U1 compile ()
 											opcode = VSUB_L;
 										}
 										break;
-									
+
 									case DOUBLE_VAR:
 										if (array_type)
 										{
@@ -4574,11 +4597,11 @@ U1 compile ()
 								}
 								op_found = TRUE;
 							}
-						
+
 							if (strcmp (src_line.arg[i], COMP_OP_MUL_SB) == 0)
 							{
 								switch (type)
-								{	
+								{
 									case QINT_VAR:
 										if (array_type)
 										{
@@ -4589,7 +4612,7 @@ U1 compile ()
 											opcode = VMUL_L;
 										}
 										break;
-									
+
 									case DOUBLE_VAR:
 										if (array_type)
 										{
@@ -4603,11 +4626,11 @@ U1 compile ()
 								}
 								op_found = TRUE;
 							}
-						
+
 							if (strcmp (src_line.arg[i], COMP_OP_DIV_SB) == 0)
 							{
 								switch (type)
-								{	
+								{
 									case QINT_VAR:
 										if (array_type)
 										{
@@ -4618,7 +4641,7 @@ U1 compile ()
 											opcode = VDIV_L;
 										}
 										break;
-									
+
 									case DOUBLE_VAR:
 										if (array_type)
 										{
@@ -4633,13 +4656,13 @@ U1 compile ()
 								op_found = TRUE;
 							}
 						}
-						
+
 						if (op_found == FALSE)
 						{
 							printf ("compile: error: unknown operator: %s, line %li\n", src_line.arg[i], plist_ind);
 							return (FALSE);
 						}
-						
+
 						if (! set3 (opcode, var2, reg3, var))
                        {
                             return (MEMORY);
@@ -4650,10 +4673,10 @@ U1 compile ()
 					   }
 					}
 				}
-                       
-				
+
+
 				/* check normal variable expressions */
-				
+
 				op_found = FALSE; i = 3;
 
                 if (strcmp (src_line.arg[i], COMP_OP_ADD_SB) == 0)
@@ -4866,13 +4889,13 @@ U1 compile ()
                         case STRING_VAR:
                             opcode = EQUALSTR_L;
                             break;
-                            
+
                         case BYTE_VAR:
                             opcode = EQUAL_L;
                             break;
                     }
                     op_found = TRUE;
-					
+
                     var_i = getvarind_comp (src_line.arg[i - 1]);
                     if (var_i != NOTDEF)
                     {
@@ -4883,8 +4906,8 @@ U1 compile ()
                         else
                         {
                             type_i = varlist[var_i].type;
-                        }   
-                       
+                        }
+
                         if (type_i == STRING_VAR)
                         {
                             opcode = EQUALSTR_L;
@@ -4908,14 +4931,14 @@ U1 compile ()
 
                        case STRING_VAR:
                             opcode = NOT_EQUALSTR_L;
-                            break; 
-                            
+                            break;
+
                         case BYTE_VAR:
                             opcode = NOT_EQUAL_L;
                             break;
                     }
                     op_found = TRUE;
-					
+
                     var_i = getvarind_comp (src_line.arg[i - 1]);
                     if (var_i != NOTDEF)
                     {
@@ -4926,8 +4949,8 @@ U1 compile ()
                         else
                         {
                             type_i = varlist[var_i].type;
-                        }   
-                       
+                        }
+
                         if (type_i == STRING_VAR)
                         {
                             opcode = NOT_EQUALSTR_L;
@@ -5640,13 +5663,13 @@ U1 compile ()
                             case STRING_VAR:
                                 opcode = EQUALSTR_L;
                                 break;
-                                
+
                             case BYTE_VAR:
                                 opcode = EQUAL_L;
                                 break;
                         }
                         op_found = TRUE;
-                        
+
                         var_i = getvarind_comp (src_line.arg[i - 1]);
                         if (var_i != NOTDEF)
                         {
@@ -5657,8 +5680,8 @@ U1 compile ()
                             else
                             {
                                 type_i = varlist[var_i].type;
-                            }   
-                        
+                            }
+
                             if (type_i == STRING_VAR)
                             {
                                 opcode = EQUALSTR_L;
@@ -5683,13 +5706,13 @@ U1 compile ()
                             case STRING_VAR:
                                 opcode = NOT_EQUALSTR_L;
                                 break;
-                                
+
                             case BYTE_VAR:
                                 opcode = NOT_EQUAL_L;
                                 break;
                         }
                         op_found = TRUE;
-                        
+
                         var_i = getvarind_comp (src_line.arg[i - 1]);
                         if (var_i != NOTDEF)
                         {
@@ -5700,8 +5723,8 @@ U1 compile ()
                             else
                             {
                                 type_i = varlist[var_i].type;
-                            }   
-                        
+                            }
+
                             if (type_i == STRING_VAR)
                             {
                                 opcode = NOT_EQUALSTR_L;
@@ -5853,7 +5876,7 @@ U1 compile ()
                     {
                         case INT_VAR:
                             /* get free L register */
-                            
+
                             reg2 = get_vmreg_var_l (var2);
                             if (reg2 == EMPTY)
                             {
@@ -5919,7 +5942,7 @@ U1 compile ()
                             {
                                 return (MEMORY);
                             }
-                             
+
                             break;
 
                         case QINT_VAR:
@@ -5937,7 +5960,7 @@ U1 compile ()
                                         {
                                             return (MEMORY);
                                         }
-                                        set_vmreg_l (reg2, var2, PRIVATE); 
+                                        set_vmreg_l (reg2, var2, PRIVATE);
                                     }
                                     else
                                     {
@@ -6109,7 +6132,7 @@ U1 compile ()
                             {
                                 return (MEMORY);
                             }
-                            set_vmreg_l (reg1, var, PRIVATE); 
+                            set_vmreg_l (reg1, var, PRIVATE);
                         }
                         else
                         {
@@ -6418,7 +6441,7 @@ U1 compile ()
                             {
                                 return (MEMORY);
                             }
-                            
+
                         }
                         else
                         {
@@ -6721,7 +6744,7 @@ U1 compile ()
                         ok = FALSE;
                     }
                 }
-                
+
                 /* restore all registers, the same as on getmultiend */
 				if (! set0 (STPULL_ALL_S))
 				{
@@ -6735,10 +6758,10 @@ U1 compile ()
 				{
 					return (MEMORY);
 				}
-                
+
             }
             break;
-        
+
         case COMP_RETURN_MULTI:
             returnmulti:
             if (src_line.args > 0)
@@ -6783,14 +6806,14 @@ U1 compile ()
                                         return (MEMORY);
                                     }
                                 }
-                                
+
                                 if (! set1 (STPUSH_L, reg1))
                                 {
                                     return (MEMORY);
                                 }
                             }
                             break;
-                            
+
                         case LINT_VAR:
                             reg1 = get_vmreg_l ();
                             if (reg1 != FULL)
@@ -6809,14 +6832,14 @@ U1 compile ()
                                         return (MEMORY);
                                     }
                                 }
-                                
+
                                 if (! set1 (STPUSH_L, reg1))
                                 {
                                     return (MEMORY);
                                 }
                             }
                             break;
-                            
+
                         case QINT_VAR:
                             reg1 = get_vmreg_l ();
                             if (reg1 != FULL)
@@ -6835,14 +6858,14 @@ U1 compile ()
                                         return (MEMORY);
                                     }
                                 }
-                                
+
                                 if (! set1 (STPUSH_L, reg1))
                                 {
                                     return (MEMORY);
                                 }
                             }
                             break;
-                            
+
                         case DOUBLE_VAR:
                             reg1 = get_vmreg_d ();
                             if (reg1 != FULL)
@@ -6861,14 +6884,14 @@ U1 compile ()
                                         return (MEMORY);
                                     }
                                 }
-                                
+
                                 if (! set1 (STPUSH_D, reg1))
                                 {
                                     return (MEMORY);
                                 }
                             }
                             break;
-            
+
                         case STRING_VAR:
                             reg1 = get_vmreg_s ();
                             if (reg1 != FULL)
@@ -6887,14 +6910,14 @@ U1 compile ()
                                         return (MEMORY);
                                     }
                                 }
-                                
+
                                 if (! set1 (STPUSH_S, reg1))
                                 {
                                     return (MEMORY);
                                 }
                             }
                             break;
-            
+
                         case BYTE_VAR:
                             reg1 = get_vmreg_l ();
                             if (reg1 != FULL)
@@ -6913,7 +6936,7 @@ U1 compile ()
                                         return (MEMORY);
                                     }
                                 }
-                                
+
                                 if (! set1 (STPUSH_L, reg1))
                                 {
                                     return (MEMORY);
@@ -6932,7 +6955,7 @@ U1 compile ()
                 }
             }
             break;
-            
+
         case COMP_GET_MULTI_END:
             getmultiend:
             /* restore all registers */
@@ -6956,52 +6979,56 @@ U1 compile ()
                 return (MEMORY);
             }
             break;
-            
+
         case COMP_NESTED_CODE_OFF:
             nested_code = FALSE;
-            
+
             printf ("compile: NESTED CODE OFF!\n");
             break;
-            
+
         case COMP_NESTED_CODE_ON:
             nested_code = TRUE;
-            
+
             printf ("compile: NESTED CODE ON!\n");
             break;
-			
+
 		case COMP_NESTED_CODE_GLOBAL_OFF:
 			nested_code_global_off = TRUE;
 			nested_code = FALSE;
-			
+
 			printf ("compile: NESTED CODE GLOBAL OFF!\n");
             break;
-			
+
 		case COMP_ATOMIC_START:
 			atomic = TRUE;
-			
+
 			printf ("compile: ATOMIC START!\n");
 			break;
-			
+
 		case COMP_ATOMIC_END:
 			atomic = FALSE;
-			
+
 			if (! set0 (STPULL_ALL_ALL))
             {
                 return (MEMORY);
             }
 			printf ("compile: ATOMIC END!\n");
 			break;
-			
+
 		case COMP_OPTIMIZE_O:
 			optimize_O = TRUE;
 			printf ("compile: OPTIMIZE O\n");
 			break;
-			
+
 		case COMP_OPTIMIZE_O2:
 			optimize_O2 = TRUE;
 			printf ("compile: OPTIMIZE O2\n");
 			break;
+
+		case COMP_OPTIMIZE_O3:
+			optimize_O3 = TRUE;
+			printf ("compile: OPTIMIZE O3\n");
+			break;
     }
     return (TRUE);
 }
-

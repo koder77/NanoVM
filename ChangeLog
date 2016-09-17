@@ -1,396 +1,405 @@
+Nano VM (3.4.3-5)
+	new: JIT compiler: PULL_I, PULL_L, PULL_Q, PULL_B opcodes!
+	finally I wrote code for pulling registers into their variables.
+
+	N compiler: sub functions inside of functions.
+	See subfunc.nanoc in the examples.
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat 1t Sep 2016 11:30 +0200
+
 Nano VM (3.4.3-4)
 	nanovm: -j flag to turn on JIT compiler.
-	
+
 	I had to "fix" the JIT compiler to make it work again...
 	NOTE: jit (startlab, endlab);
 	Must be direct before the code section to JIT compile!
 	The JIT compiler can't save the binary for later use in the VM run.
 	This means that every time program flow reaches the jit () command the JIT compiler RUNS!
-	
--- Stefan Pietzonke <jay-t@gmx.net>  Sat 10 Sep 2016 14:00 +0200	
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat 10 Sep 2016 14:00 +0200
 
 Nano VM (3.4.3-3)
 	Experimental last cache hit variable in VM code
 	Maybe speedup it a bit???
-	
--- Stefan Pietzonke <jay-t@gmx.net>  Mon 15 Aug 2016 22:00 +0200	
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Mon 15 Aug 2016 22:00 +0200
 
 Nano VM (3.4.3-2)
 	Now using latest libasmjit.
 	Building libasmjit.so this time.
-	
+
 	Edit /etc/ld.so.conf config file and add the directory in which the libasmjit.so is in.
 	In my case: /home/stefan/Seafile/nanovm/bin/linux-x86-64.
-	
--- Stefan Pietzonke <jay-t@gmx.net>  Mon 2 May 2016 20:42 +0200	
-	
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Mon 2 May 2016 20:42 +0200
+
 Nano VM (3.4.3)
 	Fixed portable install path for libraries: "../../lib/".
-	
+
 -- Stefan Pietzonke <jay-t@gmx.net>  Thu 24 Mar 2016 21:00 +0200
 
 Nano VM (3.4.2)
 	Nano is now "portable" and runs from an USB stick.
 	The executables begin then with "port" in the name:
-	
+
 	portnanovm, portnanoc...
-	
+
 	So no installation is needed.
-	
+
 	Added: vm/rs232.c vm/rs232.h
 	rs232_shared_lib
-	
+
 	vm/Makefile.am: AM_LDFLAGS = -Wl,--export-dynamic
-	
+
 	This is the RS232 port serial library.
 	I had to put the RS232 functions into the nanovm executable
 	and make it export dynamic. So the library can access the functions.
-	
+
 	The RS232 functions are from Teunis van Beelen.
-	
+
 	Added: statifier/
 	The tool for collecting all shared libraries needed by a program.
 	(Linux)
-	
+
 -- Stefan Pietzonke <jay-t@gmx.net>  Sat 21 Feb 2016 07:15 +0100
 
 Nano VM (3.4)
 	Added latest AsmJit JIT-compiler code from github (original code branch)
-	
+
 	JIT-compiler: new: band, bor, bxor opcodes (MMX registers).
-	
+
 	Continued work on flow2.
-	
+
 -- Stefan Pietzonke <jay-t@gmx.net>  Sat 19 Dec 2015 15:30 +0100
 
 nano (3.3.3)
 	Nanoc: new experimental #ATOMIC / #ATOMIC_END for setting vector array start and end elements.
 	Threading safe!
 
-	vm/exe_elist () added QINT type at pvarlist constants init. 
-	
+	vm/exe_elist () added QINT type at pvarlist constants init.
+
 	exe_files.c alignment bugfix for Android/ARM.
-	
+
 	new: vm/dlload.c load DLL/so shared libraries.
 	Data can be exchanged over thread stack.
 	See example in nanovm/prog/dll!
-	
+
 	new: array data can be exchanged over DLL/so library.
 	See new example in dll directory.
-	
+
 	bugfix: comp/translate.c push variable always into register if only one argument.
 	Needed to make for example "ucase (string);" work!
-	
+
 	bugfix: comp/regspill.c "=" was set in if (), replaced now by right "==" for comparison.
-	
+
 	comp/compiler.c: now getmulti sets automatically getmultiend at end.
 	So getmultiend is now not needed anymore in N!
-	
+
 	Compiler: #OPTIMIZE_O and #OPTIMIZE_O2 to set optimization in N source code.
-	
+
 	nanoc: support for private array math opcodes added.
-	
+
 	DLL/so lib: variable mutex added: var_lock / var_unlock
-	
+
 	added autogen-1.15.sh script for automake 1.15.
 	added asmjit/automake-linux.sh.
-	
+
 	added m4 and po for intltoolize and working automake scripts.
-	
+
 	Flow: use native screen resolution on Android devices.
-	
+
 	vm: _threading variable set to 1 if host supports multithreading, else set to 0.
 	See host.h include file and vm/main.c.
-	
+
 	lib/mem.c/get_memblock() alignment bugfix for 64 bit ints and double numbers on Raspberry Pi.
 	Fixing a bad bus error bug.
-	
+
 	comp/optimizer.c: optimize_remove_double_pull() STACK pull/push optimization.
 	Removing unneeded stack operations for function call boost.
-	
+
 	nanoc: -OS option for optimize stack only.
-	
+
 	overall: cleanup of DEBUG printfs, now only ERRORS are shown.
-	
+
 	Hyperspace: code cleanup, proper prototypes for htonq and ntohq.
 	Data sending now works again.
-	
+
 	comp/emit.c: negative int constants now shown as -x: for ex. as -1.
-	
+
 	optimizer: remove double push with same arguments. Is default setting, even
 	if no optimization flag was set!
-	
+
 	array2var() now can be written as "var = array [ index ];".
 	For multi dimensional arrays the index has to be calculated manually!!
-	
+
 -- Stefan Pietzonke <jay-t@gmx.net>  Wed 28 Oct 2015 11:10 +0100
 
 nano (3.2.9)
 	VM: thread exit code is now a 64 bit return value.
-	
+
 -- Stefan Pietzonke <jay-t@gmx.net>  Sun 14 Sep 2014 20:55 +0200
 
 nano (3.2.8)
 	VM: new functions for reading directory contents, filenames and
 	directory names: dobjects, dnames
 	see exe_file.
-	
+
 -- Stefan Pietzonke <jay-t@gmx.net>  Sun 7 Sep 2014 08:22 +0200
 
 nano (3.2.7)
-	Nanoc: foobar> (x, y, z);  
+	Nanoc: foobar> (x, y, z);
 	The greater sign sets not to reverse the order of arguments pushed on stack.
 	This is usefull for calling assembly functions.
-	
+
 	Now N has a new file extension ".nanoc". The old ".nc" extension was set to "nesC"
 	in the Kate editor all the time if a new file with ".nc" extension was loaded.
 	So with the new ".nanoc" extension this will not happen as it is shown right highlighted
 	then.
 	You _still can use_ ".nc" as a extension but it is _not recommended_ for new programs!
-	
-	N: (nanoc) arrays can be used in math expressions: 
+
+	N: (nanoc) arrays can be used in math expressions:
 	x = y * z; is the same as vmul2 (y, z, x);
 	And x = y * 5; is the same as vmul (y, 5, x);
-	
+
 	N: string compare bugfix -> should work again!
-	
+
 	moved include "arch.h" behind "global_d.h" to get gcc 4.8.x build the code on Windows MinGW.
-	
--- Stefan Pietzonke <jay-t@gmx.net>  Mon 19 May 2014 22:04 +0200	
-	
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Mon 19 May 2014 22:04 +0200
+
 nano (3.2.6)
 	Nanoc: fixed bug if variable type wasn't set at initializing variable:
 	qint x = 1000;  now works.
-	
+
 	Updated AsmJit to version 1.1 found on github. (asmjit directory).
-	
+
 	New lib/vm.c with paging (_EXPERIMENTAL_ virtual memory).
-	
+
 	Updated vm/register.c: new default search paths if NANOVM_ROOT was not set.
 	Registry file now saved in /home directory.
-	
+
 	If the VM can't register then simply save a file "register" in the /home directory
 	that contains a single "*" char in. That's all to do!
-	
+
 	Fixed bug in pointer opcode.
-	
+
 -- Stefan Pietzonke <jay-t@gmx.net>  Thu 15 Mar 2014 10:23 +0100
 
 nano (3.2.3)
 	Nanoc: function calls can now be with variable constants:
-	
+
 	@mul (5, 4);
 	get (ret);
-	
+
 	Updated the JIT-compiler code, now the JIT-compiler works with 32 bit
 	systems. And I made a running Windows 32 bit build.
-	
+
 -- Stefan Pietzonke <jay-t@gmx.net>  Sat 25 Jan 2014 15:30 +0100
 
 nano (3.2.2)
 	Flow: new start menu with EXIT button.
 	Android like start menu via START_MENU define in global_d.h.
-	
+
 	The start menu is the default on Android and Flow starts the
 	VM automatically with the selected program.
 	The TCP/IP port is 2000 for connection.
 	The program running on the VM has to shutdown Flow on exit.
 	See the tic tac toe program as an example.
-	
+
 	Flow Android:
 	Text input on Android via touch screen keyboard.
 	To end the input click on area outside of text gadget.
-	
+
 	Nano VM: fixed compiler warning on pthread_create() calls, using
 	void pointer for called function.
-	
+
 	BUGFIXES: nanoc: sreads removed and string type put to sread!
 	flow now compiles and runs on desktop OS too!
 	And fixes to other things...
-	
+
 -- Stefan Pietzonke <jay-t@gmx.net>  Sun, 19 Jan 2014 02:00 +0100
 
 nano (3.2.1-2)
 	exe_vector_arr.c LOCK() UNLOCK() macros for mutexes.
-	
--- Stefan Pietzonke <jay-t@gmx.net>  Sun, 05 Jan 2014 15:23 +0100	
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun, 05 Jan 2014 15:23 +0100
 
 nano (3.2.1-1)
 	File access redesign. More secure fopen.
 	Now only one ENV variable must be set: NANOVM_ROOT.
-	
+
 	Start and end variables for exe_vector_arr.c, for threaded
 	calculations.
-	
+
 	Flow: added loadscan.c for Android splash screen.
-	
+
 -- Stefan Pietzonke <jay-t@gmx.net>  Sat, 07 Dec 2013 12:03 +0100
 
 nano (3.2.0-3)
 	VM: home directory for desktop OS too:
 	NANOHOME env variable should be set to home directory.
 	(vm/exe_file.c/exe_fopen ())
-	
+
 -- Stefan Pietzonke <jay-t@gmx.net>  Sun, 17 Nov 2013 12:29 +0100
 
 nano (3.2.0-2)
 	assembler: fixed warnings on blank line with spaces/tabs.
-	
+
 -- Stefan Pietzonke <jay-t@gmx.net>  Tue, 12 Nov 2013 22:39 +0100
 
 nano (3.2.0-1)
 	checkd.c - checkdigit: removed recognition for a - f lowercase hex chars.
 	Now all hex numbers must be with uppercase letters: A - F: exp.: FF = 255.
-	This is better because if variable names like 
+	This is better because if variable names like
 	int f;
-	are used it was not clear what the meaning of 
+	are used it was not clear what the meaning of
 	f = a;
 	was!!
 	Now a variable a will be assigned not value A hex!
-	
--- Stefan Pietzonke <jay-t@gmx.net>  Sun, 20 Oct 2013 14:39 +0200	
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun, 20 Oct 2013 14:39 +0200
 
 nano (3.2.0)
 	Android ARM compatibility "fixes".
 	Added alignment for 64 bit variables.
-	
--- Stefan Pietzonke <jay-t@gmx.net>  Sun, 13 Oct 2013 12:37 +0200	
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun, 13 Oct 2013 12:37 +0200
 
 nano (3.1.1)
 	BUGFIXES!!!
-	
+
 	new functions for the JIT compiler.
-	
+
 	JIT compiler: double compare functions (if/else). bugfixes.
 	bugfix: compiler not ! bugfix. (x = ! y;)
-	
+
 	wait tick is now wait time in milliseconds.
-	
--- Stefan Pietzonke <jay-t@gmx.net>  Sat, 14 Sep 2013 09:22 +0200	
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat, 14 Sep 2013 09:22 +0200
 
 nano (3.1.00)
 	new: byte storm JIT compiler (AsmJit)
-	
+
 	supported opcodes (so far):
-	
+
 	MOVE_L
 	INC_L, DEC_L
-	
+
 	ADD_L, SUB_L, MUL_L, DIV_L
-	
+
 	AND_L, OR_L
-	
+
 	INC_LESS_OR_EQ_JMP_L, DEC_GREATER_OR_EQ_JMP_L
-	
+
 	Speedups are huge compared to Nano without JIT compiler.
-	
+
 -- Stefan Pietzonke <jay-t@gmx.net>  Mon, 19 Aug 2013 20:00 +0200
 
 nano (3.0.36)
 	missing = in expression now prints sourcecode line.
 	fclose now flushes file data with fflush (); before close.
-	
+
 	bugfix in optimizer: -O2 flag now works on nested for loops too.
 	new nanoc opcode: pull variable;  pulls variable out of register back to memory.
 	For use with #NESTED_CODE_GLOBAL_OFF.
-	
+
 	#NESTED_CODE_GLOBAL_OFF for use with -O flags, for more optimized code.
-	
+
 	val () now filters out spaces and strings like "  123456    " now
 	can be converted to numbers. (lib/checkd.c)
-	
+
 	String constant bugfix: string foobar[256] = "   foobar   "; now possible.
-	
+
 	timeron () / timeroff () now returning time in milliseconds (ms)
 	_timer variable: now is a qint variable (64 bit)
-	
+
 	SOCKBUFSIZE for socket read is now 10240 bytes.
-	
+
 	checkdigit and make_val: binary numbers are now like this:
 	$11111111 = 255 - this works now with strtoll and the base setting.
 	I removed my conv routines and this works now in the assembler and compiler!
 	So number constant handling is the same on both.
-	
+
 	input functions (exe_main.c): now fgets () return value is checked.
-	
+
 	stpush_all_l stpush_all_d stpush_all_s and pull... superopcodes:
 	stpush_all_all and stpull_all_all -> for function call speedup.
-	
+
 -- Stefan Pietzonke <jay-t@gmx.net>  Tue, 08 Aug 2013 20:20 +0200
 
 nano (3.0.35)
 	hs-client bugfix
-	
+
 -- Stefan Pietzonke <jay-t@gmx.net>  Sun, 07 July 2013 15:50 +0200
 
 nano (3.0.34)
 	checkd.c: hexstring handling improved.
-	
+
 -- Stefan Pietzonke <jay-t@gmx.net>  Sun, 02 June 2013 09:54 +0200
 
 nano (3.0.33)
 	exe_main.c: val () function now can be used with hex strings too.
 	(t_var.base = 16 for hex string or 10 for normal number)
 	N compiler: int i = FF; now works.
-	
--- Stefan Pietzonke <jay-t@gmx.net>  Sat, 30 April 2013 22:52 +0200		
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat, 30 April 2013 22:52 +0200
 
 nano (3.0.32)
 	64 bit indexes for array variables.
 	64 bit limit for virtual memory.
-	
--- Stefan Pietzonke <jay-t@gmx.net>  Sat, 06 April 2013 21:35 +0200		
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat, 06 April 2013 21:35 +0200
 
 nano (3.0.31)
 	new: hyperspace for load/save arrays to server.
 	server/client functions.
-	
--- Stefan Pietzonke <jay-t@gmx.net>  Sat, 06 April 2013 21:04 +0200	
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat, 06 April 2013 21:04 +0200
 
 nano (3.0.30)
 	new: compiler supports now lists:
 	int a[10];
 	a = [ 1 5 6 7] 0;
-	
+
 -- Stefan Pietzonke <jay-t@gmx.net>  Fri, 29 March 2013 12:57 +0100
 
 nano (3.0.29-5)
     compiler: val (), str(): byte variable type added.
-    
+
 -- Stefan Pietzonke <jay-t@gmx.net>  Fri, 1 March 2013 17:18 +0100
 
 nano (3.0.29-4)
     online registering activated again (statistics only).
-    
+
 -- Stefan Pietzonke <jay-t@gmx.net>  Sun, 10 Feb 2013 11:51 +0100
 
 nano (3.0.29-3)
     new: compiler: changed expression handling: x = y + z sets now the type of y.
-    
+
 -- Stefan Pietzonke <jay-t@gmx.net>  Fri, 18 Jan 2013 17:27 +0100
 
 nano (3.0.29-3)
     new: mod_d for modulo on double types.
-    
+
 -- Stefan Pietzonke <jay-t@gmx.net>  Sun, 13 Jan 2013 20:13 +0100
 
 nano (3.0.29)
     new: AROS socket error message handling.
-    
+
 -- Stefan Pietzonke <jay-t@gmx.net>  Wed, 9 Jan 2013 14:03 +0100
 
 nano (3.0.27)
     new: searchpaths for "portable" install on a USB stick.
     new: fixed the pointer opcode: now no errors on Windows or crashs on
     AROS anymore!!
-    
+
 -- Stefan Pietzonke <jay-t@gmx.net>  Sat, 5 Jan 2013 13:09 +0100
 
 nano (3.0.26)
     AROS now officially supported as host OS.
     Still TO DO process creation: exe_process.c
     password input with no echo: exe_passw_input.c
-    
+
 -- Stefan Pietzonke <jay-t@gmx.net>  Tue, 1 Jan 2013 20:20 +0100
 
 nano (3.0.25)
@@ -408,73 +417,73 @@ nano (3.0.24)
 
 nano (3.0.23)
     new: #NESTED_CODE_ON to make string concatenation possible... ;)
-    
+
     bugfix: VM string compare equal.
     bugfix: return value one exit: exit ()
     bugfix: compiler: fremove/frename argument count (translate.c)
-    
+
     Builds now on AROS!
-    
+
 -- Stefan Pietzonke <jay-t@gmx.net>  Sat, 29 Dec 2012 09:05 +0100
 
 nano (3.0.22)
     new: password  for reading passwords with no echo to console:
-    
+
     password (string, length);
-    
+
 -- Stefan Pietzonke <jay-t@gmx.net>  Fri, 7 Dec 2012 20:42 +0100
 
 nano (3.0.21)
     new: move opcodes to get a byte of an number variable into a register
     and store them back into a variable:
-    
+
     lint var;
     byte1 = var[0]: push_i 0 index; move_ip_b   var, index, byte1;
     byte2 = var[1]: push_i 1 index; move_ip_b   var, index, byte2;
-    
+
     And so on.
-    
+
     added var: _qintsize and _endian (machine endianess)
     bugfix: exe_fwrite_array_byte: now allocates bigger file buffer if len > bufsize!
-    
--- Stefan Pietzonke <jay-t@gmx.net>  Fri, 16 Nov 2012 22:04 +0100        
-  
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Fri, 16 Nov 2012 22:04 +0100
+
 nano (3.0.20)
     new: N compiler: #NESTED_CODE_OFF; switches nested_code to FALSE:
     sometimes needed to get correct code:
-    
+
     v = 0;
     for;
 #NESTED_CODE_OFF;
         var2array (v, state, v);
-    
+
         v = ++;
         f = v <= 255;
     next f;
-    
+
     Loads "v" only once into a register.
     The "for" loop begin normally switches nested_code to TRUE, that is
     not needed here.
-    
+
     bugfix: object file now can be stripped "-s" when private variables are used.
     I added varlist[].constant (if it's CONST_VAR then it's a constant).
     So the empty variable names couldn't be checked, because in a stripped
     object file all variable names are empty. FIXED!
-       
--- Stefan Pietzonke <jay-t@gmx.net>  Sun, 11 Nov 2012 09:45 +0100        
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun, 11 Nov 2012 09:45 +0100
 
 nano (3.0.19)
     new: atan2 function, ppointer, pgettype
     bugfix: ppull_q & ppush_q: now executing right opcode.
     Some bugfixes to private variables functions.
-    
--- Stefan Pietzonke <jay-t@gmx.net>  Sat, 27 Oct 2012 17:46 +0200    
+
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat, 27 Oct 2012 17:46 +0200
 
 nano (3.0.16)
     Windows: long long int as 64 bit datatype: for better compatibility
     and easier Windows build.
-    
-    Changed VM binary name to nanovm. 
+
+    Changed VM binary name to nanovm.
 
 -- Stefan Pietzonke <jay-t@gmx.net>  Sun, 12 Aug 2012 10:45 +0200
 
@@ -485,7 +494,7 @@ nano (3.0.15)
                       var_lock & var_unlock bugfix.
                       qint function call return value not set: bugfix.
     lib/mem.c: allocate bugfix: qint array dim
-    
+
     exe_main.c: string registers are now initialized to BINUL on start.
 
 -- Stefan Pietzonke <jay-t@gmx.net>  Mon, 06 Aug 2012 11:48 +0200

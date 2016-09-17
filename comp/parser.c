@@ -72,6 +72,9 @@ S4 for_ind = -1;
 S4 opcode_ind = -1;
 S4 linenum;
 
+// main function end, if sub function used
+U1 function_main_end;
+
 /* void *bclist[MAXCCLEN][MAXCCOMMARG];                 0 = opcode, 1 - 3 args, 4 = plist-line */
 S4 **cclist = NULL;
 S4 maxcclist;
@@ -118,13 +121,14 @@ U1 nested_code_global_off = FALSE;	/* nested code global off -> no nested code o
 U1 atomic = FALSE;					/* atomic function call, no st_pull_all set automatically */
 
 /* needed for setting the optimize flags from within code:
- * #OPTIMIZE_O 
- * #OPTIMIZE_O2 
- * 
+ * #OPTIMIZE_O
+ * #OPTIMIZE_O2
+ *
  */
 
 U1 optimize_O = FALSE;				/* off */
 U1 optimize_O2 = FALSE;				/* off */
+U1 optimize_O3 = FALSE;
 
 #if DEBUG
     U1 print_debug = FALSE;         /* CLI -d option */
@@ -243,43 +247,49 @@ S2 parse_line (U1 *str)
         src_line.opcode_n = COMP_NESTED_CODE_OFF;
         return (0);
     }
-    
+
     if (strcmp (str, COMP_NESTED_CODE_ON_SB) == 0)
     {
         src_line.opcode_n = COMP_NESTED_CODE_ON;
         return (0);
     }
-    
+
     if (strcmp (str, COMP_NESTED_CODE_GLOBAL_OFF_SB) == 0)
     {
         src_line.opcode_n = COMP_NESTED_CODE_GLOBAL_OFF;
         return (0);
     }
-    
+
     if (strcmp (str, COMP_ATOMIC_START_SB) == 0)
 	{
 		src_line.opcode_n = COMP_ATOMIC_START;
         return (0);
     }
-    
+
     if (strcmp (str, COMP_ATOMIC_END_SB) == 0)
 	{
 		src_line.opcode_n = COMP_ATOMIC_END;
         return (0);
     }
-    
+
     if (strcmp (str, COMP_OPTIMIZE_O_SB) == 0)
 	{
 		src_line.opcode_n = COMP_OPTIMIZE_O;
         return (0);
     }
-    
+
     if (strcmp (str, COMP_OPTIMIZE_O2_SB) == 0)
 	{
 		src_line.opcode_n = COMP_OPTIMIZE_O2;
         return (0);
     }
-    
+
+    if (strcmp (str, COMP_OPTIMIZE_O3_SB) == 0)
+	{
+		src_line.opcode_n = COMP_OPTIMIZE_O3;
+        return (0);
+    }
+
     if (str[0] == 'f')
     {
         /* check for func or funcend at beginning of a line */
@@ -515,11 +525,11 @@ S2 parse_line (U1 *str)
             printf ("parse_line: ERROR no function name!\n");
             return (-1);
         }
-        
+
 		#if DEBUG
 			printf ("'%s'\n", buf);
 		#endif
-        
+
 		strcpy (src_line.arg[0], buf);      /* save function name */
         src_line.opcode_n = COMP_FUNC_CALL;
 
@@ -741,7 +751,7 @@ U1 exe_assemble (S4 start, S4 end)
                             }
 
                             parse_line (prepstr);
-                            if (! compile ()) 
+                            if (! compile ())
 							{
 								printf ("ERROR compile!\n");
 								printf ("%s\n", prepstr);
@@ -794,12 +804,12 @@ U1 exe_assemble (S4 start, S4 end)
                         /* inline assembler */
                         parse_line (linestr);
                         if (! compile ())
-						{	
+						{
 							printf ("ERROR compile!\n");
 							printf ("%s\n", linestr);
 							ret_ok = FALSE;
 						}
-						
+
                         set_pline (i);
                         ok = TRUE;
                         break;
@@ -831,10 +841,11 @@ NINT main (NINT ac, char *av[])
     U1 source[256], source_suffix[256], object[256], arg[256];
     U1 do_optimize = FALSE;
     U1 do_optimize_2 = FALSE;
+	U1 do_optimize_3 = FALSE;
 	U1 do_optimize_stack_only = FALSE;
-	
+
 	S2 vmname_start = 0, i;
-	
+
     plist_size = MAXLINES;
     varlist_state.varlist_size = MAXVAR;
     pvarlist_state.varlist_size = MAXVAR;       /* thread private varlist */
@@ -858,7 +869,7 @@ NINT main (NINT ac, char *av[])
     assemb_set.quote = QUOTE_SB;
     assemb_set.separ = COMMA_SB;
     assemb_set.semicol = SEMICOL_SB;
-    
+
     #if OS_AROS
         /* open thread library */
         ThreadBase = (struct ThreadBase*) OpenLibrary ("thread.library", 0);
@@ -868,7 +879,7 @@ NINT main (NINT ac, char *av[])
             exe_shutdown (WARN);
         }
     #endif
-    
+
     printf (COMP_START_TXT);
     printcompilermsg ();
 
@@ -886,21 +897,21 @@ NINT main (NINT ac, char *av[])
         exit (WARN);
     }
 
-    
+
     if (av[0][0] == '.') vmname_start = 2;	/* Linux: ./portnanoa */
 	i = vmname_start;
     if (av[0][i] == 'p' && av[0][i + 1] == 'o' && av[0][i + 2] == 'r' && av[0][i + 3] == 't')
 	{
-		/* programname starts with "port" -> portable install on USB stick 
-		 * 
+		/* programname starts with "port" -> portable install on USB stick
+		 *
 		 * portnanovm or portnanovm.exe
-		 * 
+		 *
 		 */
-		
+
 		portable_install = TRUE;
 	}
-    
-    
+
+
     if (strlen (av[1]) > 255 - 3)
     {
         printf ("error: filename to long!\n");
@@ -914,14 +925,22 @@ NINT main (NINT ac, char *av[])
             printf ("optimizer = ON\n");
             do_optimize = TRUE;
         }
-        
+
         if (strcmp (av[2], "-O2") == 0)
         {
             printf ("optimizer = ON: O2\n");
             do_optimize = TRUE;
             do_optimize_2 = TRUE;
         }
-        
+
+        if (strcmp (av[2], "-O3") == 0)
+        {
+            printf ("optimizer = ON: O3\n");
+            do_optimize = TRUE;
+            do_optimize_2 = TRUE;
+			do_optimize_3 = TRUE;
+        }
+
         if (strcmp (av[2], "-OS") == 0)
         {
             printf ("optimizer = ON: OS\n");
@@ -932,17 +951,17 @@ NINT main (NINT ac, char *av[])
 	if (av[1][0] == '/' && av[1][1] == 'p' && av[1][2] == 'r' && av[1][3] == 'o' && av[1][4] == 'g')
 	{
 		/* /prog access: add nano root path */
-			
+
 		#if OS_ANDROID
 			strcpy (source, ANDROID_SDCARD);
 			strcat (source, "nanovm");
 		#else
 			/* check ENV variable */
-		
+
 			if (getenv (NANOVM_ROOT_SB) == NULL)
 			{
 				/* ENV not set use defaults */
-			
+
 				if (OS_AMIGA || OS_AROS)
 				{
 					strcpy (source, "Work:nanovm");
@@ -952,7 +971,7 @@ NINT main (NINT ac, char *av[])
 				{
 					strcpy (source, "~/nanovm");
 				}
-            
+
 				if (OS_WINDOWS)
 				{
 					strcpy (source, "C:/nanovm");
@@ -963,16 +982,16 @@ NINT main (NINT ac, char *av[])
 				/* use ENV variable setting */
 				strcpy (source, getenv (NANOVM_ROOT_SB));
 			}
-			
+
 		#endif
-		
+
 		strcat (source, av[1]);
 		strcpy (object, source);
 		strcat (object, ".na");
 	}
     else
 	{
-    
+
 	#if OS_ANDROID
 		/* because typing the full pathnames on mobile devices isn't fun! */
 
@@ -982,18 +1001,18 @@ NINT main (NINT ac, char *av[])
 		strcpy (source, ANDROID_SDCARD);
 		strcat (source, "nanovm/prog/");
 	#endif
-	
+
 	strcat (source, av[1]);
 	strcpy (object, source);
 	strcat (object, ".na");
-	
+
 	#else
-	
+
     if (portable_install)
 	{
 		strcpy (source, "../../prog/");
 		strcat (source, av[1]);
-		
+
 		strcpy (object, source);
 		strcat (object, ".na");
 	}
@@ -1003,11 +1022,11 @@ NINT main (NINT ac, char *av[])
 		strcpy (object, source);
 		strcat (object, ".na");
 	}
-	
+
 	#endif
-	
+
 	}
-	
+
     if (init_files () == FALSE)
     {
         exe_shutdown (WARN);
@@ -1094,13 +1113,13 @@ NINT main (NINT ac, char *av[])
 
 	strcpy (source_suffix, source);
 	strcat (source_suffix, ".nanoc");
-	
+
     if (! exe_load_prog (source_suffix))
     {
 		printf ("error: no source with file extension .nanoc found\ntry old .nc extension...\n");
 		strcpy (source_suffix, source);
 		strcat (source_suffix, ".nc");
-		
+
 		if (! exe_load_prog (source_suffix))
 		{
 			printf ("ERROR can't load source file!\n");
@@ -1123,13 +1142,13 @@ NINT main (NINT ac, char *av[])
 	if (do_optimize_stack_only)
 	{
 		printf ("optimizing stack only...\n");
-		
+
 		if (! optimize_stack ())
 		{
 			exe_shutdown (WARN);
 		}
 	}
-		
+
     if (do_optimize || optimize_O)
     {
         printf ("optimizing...\n");
@@ -1138,27 +1157,37 @@ NINT main (NINT ac, char *av[])
 		{
 			exe_shutdown (WARN);
 		}
-		
+
 		if (! optimize_stack ())
 		{
 			exe_shutdown (WARN);
 		}
     }
-    
+
     if (do_optimize_2 || optimize_O2)
     {
         printf ("optimizing O2...\n");
-        
+
         if (! optimize_2 ())
 		{
 			exe_shutdown (WARN);
 		}
-		
+
 		if (! optimize_remove_double_pull ())
 		{
 			exe_shutdown (WARN);
 		}
     }
+
+    if (do_optimize_3 || optimize_O3)
+	{
+		printf ("optimizing O3...\n");
+
+		if (! optimize_remove_pull_push ())
+		{
+			exe_shutdown (WARN);
+		}
+	}
 
     emit_code (object);
     exe_shutdown ((S2) NULL);

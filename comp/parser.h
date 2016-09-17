@@ -196,6 +196,8 @@
 #define NOT_SB                          "!"
 #define NOT                             50
 
+#define TILDE_SB                        "~"
+#define TILDE                           51
 
 #define ASSEMB_INLINE                   MAXOPCODE + 1
 
@@ -237,6 +239,9 @@
 #define COMP_OPTIMIZE_O2_SB				"#OPTIMIZE_O2"
 #define COMP_OPTIMIZE_O2 				MAXOPCODE + 10
 
+#define COMP_OPTIMIZE_O3_SB				"#OPTIMIZE_O3"
+#define COMP_OPTIMIZE_O3 				MAXOPCODE + 11
+
 #define COMP_PRIVATE_VAR_SB             'P'
 #define AROPEN_SB                       '['
 #define ARCLOSE_SB                      ']'
@@ -260,8 +265,8 @@ struct comp_opcode
 struct function
 {
     U1 name[MAXLINELEN + 1];
-    S2 start;                   /* linenumbers */
-    S2 end;
+    S4 start;                   /* linenumbers */
+    S4 end;
 };
 
 struct vmreg_comp
@@ -269,7 +274,7 @@ struct vmreg_comp
     S2 l[MAXVMREG];                         /* the vm-registers */
     S2 d[MAXVMREG];
     S2 s[MAXVMREG];
-    
+
     U1 lp[MAXVMREG];                        /* set to true, if private variable */
     U1 dp[MAXVMREG];
     U1 sp[MAXVMREG];
@@ -280,7 +285,7 @@ struct vmreg_comp_info
     S2 l[MAXVMREG];                         /* the vm-registers spilling info */
     S2 d[MAXVMREG];
     S2 s[MAXVMREG];
-};   
+};
 
 struct if_comp
 {
@@ -311,8 +316,8 @@ struct translate
 
 /* message definitions */
 
-#define COMP_START_TXT      "nanoc 64 bit 1.4  (c) 2016 by Stefan Pietzonke jay-t@gmx.net\n-== free software: GPL/MPL ==-\n"
-#define VERSION_NANOC_TXT   "$VER: nanoc 1.4 (16.01.16)"
+#define COMP_START_TXT      "nanoc 64 bit 1.5  (c) 2016 by Stefan Pietzonke jay-t@gmx.net\n-== free software: GPL/MPL ==-\n"
+#define VERSION_NANOC_TXT   "$VER: nanoc 1.5 (17.09.16)"
 
 
 #define STATUS_OK_TXT       "ok"

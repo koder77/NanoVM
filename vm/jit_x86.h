@@ -82,6 +82,9 @@ extern S4 maxjumplist;
 
 extern S4 JIT_code_ind;
 
+extern struct varlist *varlist;
+extern struct varlist *pvarlist_obj;
+
 struct JIT_code
 {
 	Func fn;
@@ -157,6 +160,7 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 
 	JitRuntime runtime;
 	X86Assembler a(&runtime);
+	a.reset ();
 	a.setLogger(&logger);
 	
 	// logger.setOption(kLoggerOptionBinaryForm, true);
@@ -206,10 +210,12 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 					break;
 				}
 				
+				/*
 				if (jumplist[j].lab[0] == 'e' && jumplist[j].lab[1] == 'n' && jumplist[j].lab[2] == 'd' && jumplist[j].lab[3] == 'i' && jumplist[j].lab[4] == 'f')
 				{
 					break;
 				}
+				*/
 				
 				for (l = 0; l < MAXJUMPLEN; l++)
 				{
@@ -276,19 +282,92 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 		switch ((*clist)[i][0])
 		{
 			case PUSH_I:
+				r1 = (*clist)[i][1]; r2 = (*clist)[i][2];
+				
+				a.mov (qword_ptr (RSI, OFFSET(r2)), (S2) *varlist[r1].i_m);
+				
+				run_jit = 1;
+				break;
+				
 			case PUSH_L:
+				r1 = (*clist)[i][1]; r2 = (*clist)[i][2];
+				
+				a.mov (qword_ptr (RSI, OFFSET(r2)), (S4) *varlist[r1].li_m);
+				
+				run_jit = 1;
+				break;
+				
 			case PUSH_Q:
-			case PUSH_D:
+				r1 = (*clist)[i][1]; r2 = (*clist)[i][2];
+				
+				a.mov (qword_ptr (RSI, OFFSET(r2)), (S8) *varlist[r1].q_m);
+				
+				run_jit = 1;
+				break;
+				
+			case PUSH_D:		/* nothing here */
+				break;
+				
 			case PUSH_B:
+				r1 = (*clist)[i][1]; r2 = (*clist)[i][2];
+				
+				a.mov (qword_ptr (RSI, OFFSET(r2)), (U1) varlist[r1].s_m[0]);
+				
+				run_jit = 1;
 				break;
 			
+				/* PULL opcodes
+				 * 
+				 * using indirect access via pointer of variable (varlist)
+				 * there are three steps needed for this!!!
+				 * 
+				 * seems to work right
+				 */
+				
 			case PULL_I:
-			case PULL_L:
-			case PULL_Q:
-			case PULL_D:
-			case PULL_B:
+				r1 = (*clist)[i][1]; r2 = (*clist)[i][2];
+				
+				a.mov (RBX, imm ((intptr_t)(void*) varlist[r2].i_m));
+				a.mov (RCX, qword_ptr (RSI, OFFSET(r1)));
+				a.mov (ptr (RBX), RCX);
+				
+				run_jit = 1;
 				break;
-			
+				
+			case PULL_L:
+				r1 = (*clist)[i][1]; r2 = (*clist)[i][2];
+				
+				a.mov (RBX, imm ((intptr_t)(void*) varlist[r2].li_m));
+				a.mov (RCX, qword_ptr (RSI, OFFSET(r1)));
+				a.mov (ptr (RBX), RCX);
+				
+				run_jit = 1;
+				break;
+				
+			case PULL_Q:
+				r1 = (*clist)[i][1]; r2 = (*clist)[i][2];
+				
+				a.mov (RBX, imm ((intptr_t)(void*) varlist[r2].q_m));
+				a.mov (RCX, qword_ptr (RSI, OFFSET(r1)));
+				a.mov (ptr (RBX), RCX);
+				
+				run_jit = 1;
+				break;
+				
+			case PULL_D:		/* leaved BLANK, maybe I do it later */
+				break;
+				
+			case PULL_B:
+				r1 = (*clist)[i][1]; r2 = (*clist)[i][2];
+				
+				a.mov (RBX, imm ((intptr_t)(void*) varlist[r2].s_m[0]));
+				a.mov (RCX, qword_ptr (RSI, OFFSET(r1)));
+				a.mov (ptr (RBX), RCX);
+				
+				run_jit = 1;
+				break;
+				
+				
 			case MOVE_L:
 				PRINTD ("MOVE_L");
 				
@@ -346,19 +425,23 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 				
 				switch ((*clist)[i][0])
 				{
-					case ADD_L:						
+					case ADD_L:	
+						PRINTD ("ADD_L");
 						a.add (RBX, RCX);
 						break;
 					
 					case SUB_L:
+						PRINTD ("SUB_L");
 						a.sub (RBX, RCX);
 						break;
 						
 					case MUL_L:
+						PRINTD ("MUL_L");
 						a.imul (RBX, RCX);
 						break;
 						
 					case DIV_L:
+						PRINTD ("DIV_L");
 						a.mov (EAX, RBX);
 						a.xor_ (EDX, EDX);		/* clear the upper 64 bit */
 						a.idiv (RCX);
@@ -381,21 +464,25 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 						switch ((*clist)[i][0])
 						{
 							case ADD_L:	
+								PRINTD ("ADD_L multi");
 								a.mov (RCX, qword_ptr (RSI, OFFSET(r2)));
 								a.add (RBX, RCX);
 								break;
 						
 							case SUB_L:
+								PRINTD ("SUB_L multi");
 								a.mov (RCX, qword_ptr (RSI, OFFSET(r2)));
 								a.sub (RBX, RCX);
 								break;
 								
 							case MUL_L:
+								PRINTD ("MUL_L multi");
 								a.mov (RCX, qword_ptr (RSI, OFFSET(r2)));
 								a.imul (RBX, RCX);
 								break;
 								
 							case DIV_L:
+								PRINTD ("DIV_L multi");
 								a.mov (EAX, RBX);
 								a.xor_ (EDX, EDX);		/* clear the upper 64 bit */
 								a.idiv (RCX);
@@ -424,19 +511,23 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 				
 				switch ((*clist)[i][0])
 				{
-					case ADD_D:						
+					case ADD_D:
+						PRINTD ("ADD_D");
 						a.faddp ();
 						break;
 					
 					case SUB_D:
+						PRINTD ("SUB_D");
 						a.fsubp ();
 						break;
 						
 					case MUL_D:
+						PRINTD ("MUL_D");
 						a.fmulp ();
 						break;
 						
 					case DIV_D:
+						PRINTD ("DIV_D");
 						a.fdivp ();
 						break;
 				}
@@ -457,19 +548,23 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 					{
 						switch ((*clist)[i][0])
 						{
-							case ADD_D:						
+							case ADD_D:
+								PRINTD ("ADD_D multi");
 								a.faddp ();
 								break;
 					
 							case SUB_D:
+								PRINTD ("SUB_D multi");
 								a.fsubp ();
 								break;
 						
 							case MUL_D:
+								PRINTD ("MUL_D multi");
 								a.fmulp ();
 								break;
 						
 							case DIV_D:
+								PRINTD ("DIV_D multi");
 								a.fdivp ();
 								break;
 						}
@@ -1221,6 +1316,14 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 				break;
 			
 			case NOT_L:
+				r1 = (*clist)[i][1]; r2 = (*clist)[i][2];
+				
+				a.mov (RBX, qword_ptr (RSI, OFFSET(r1))); /* r1v */
+				
+				a.not_ (RBX);
+				a.mov (qword_ptr (RSI, OFFSET(r2)), RBX);
+				
+				run_jit = 1;
 				break;
 				
 			default:
@@ -1253,7 +1356,12 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 			
 			Func fn = asmjit_cast<Func>(a.make());
 			fn ();
+			runtime.release((Func *) fn);
 			
+			#if DEBUG
+				printf ("JIT code EXIT\n");
+			#endif
+				
 			JIT_error = 0;	
 			return (0);
 		}

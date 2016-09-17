@@ -58,6 +58,67 @@ Hello world!
 65
 
 
+===========================================================================================
+NEWS
+===========================================================================================
+
+Nano VM (3.4.3-5)
+-----------------
+
+See ChangeLog: PULL opcodes added to the JIT-compiler.
+New: sub functions in N. Now it's possible to write "private" sub functions.
+Here is an example:
+
+//  subfunc.nanoc - sub functions example
+//
+//  Sub functions are "private functions" inside functions.
+//  Here is an example program.
+//  Inside a sub functions name there must be always the ~ char!
+//
+//  I did implement this in N with minimal code.
+//
+//  Take a look at the assembly output of the N compiler, file subfunc.na.
+
+func main ()
+    int null = 0; int one = 1;
+
+    int x = 23; int y = 42; int z;
+
+    @multiply (x, y);
+    get (z);
+
+    print z; printn one;
+    exit null;
+funcend
+
+func multiply (int x, int y)
+    int one = 1;
+    int z;
+
+    multiply~message ();
+
+    @multiply~do (x, y);
+    get (z);
+    return (z);
+
+//  sub functions of multiply
+//  ~ in name is needed to mark this as a sub function
+
+func multiply~do (int x, int y)
+    int z;
+
+    z = x * y;
+    return (z);
+funcend
+func multiply~message ()
+    int one = 1;
+    print "multiply...";
+    printn one;
+funcend
+funcend
+
+
+===========================================================================================
 
 Flow
 ====

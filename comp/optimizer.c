@@ -608,3 +608,171 @@ U1 optimize_remove_double_opcode (void)
 	return (TRUE);
 }
 
+U1 optimize_remove_pull_push (void)
+{
+    /* remove pull / push of same variable 
+	 * do move instead
+	 */
+    
+    S4 ind, nind = 0, i, j;
+	S4 found;
+	
+    S4 **newcclist = NULL;
+
+    newcclist = alloc_array_lint (cclist_ind + 1, MAXCCOMMARG);
+    if (newcclist == NULL)
+    {
+        printerr (MEMORY, NOTDEF, ST_PRE, "opcodes optimizing list");
+        return (FALSE);
+    }
+
+    printf ("optimizer: remove pull/push START\n");
+    
+	for (i = 0; i <= cclist_ind; i++)
+    {
+		found = 0;
+		
+        if (cclist[i][0] == PULL_I || cclist[i][0] == PULL_L || cclist[i][0] == PULL_Q || cclist[i][0] == PULL_D  || cclist[i][0] == PULL_S || cclist[i][0] == PULL_B || cclist[i][0] == PPULL_I || cclist[i][0] == PPULL_L || cclist[i][0] == PPULL_Q || cclist[i][0] == PPULL_D  || cclist[i][0] == PPULL_S || cclist[i][0] == PPULL_B)
+        {
+            /* found PULL opcode: check for PUSH of same variable */
+			
+			switch (cclist[i][0])
+			{
+				case PULL_I:
+					if (cclist[i + 1][0] == PUSH_I) found = 1;
+					break;
+					
+				case PULL_L:
+					if (cclist[i + 1][0] == PUSH_L) found = 1;
+					break;	
+				
+				case PULL_Q:
+					if (cclist[i + 1][0] == PUSH_Q) found = 1;
+					break;
+				
+				case PULL_D:
+					if (cclist[i + 1][0] == PUSH_D) found = 1;
+					break;
+			
+				case PULL_S:
+					if (cclist[i + 1][0] == PUSH_S) found = 1;
+					break;
+			
+				case PULL_B:
+					if (cclist[i + 1][0] == PUSH_B) found = 1;
+					break;
+					
+				case PPULL_I:
+					if (cclist[i + 1][0] == PPUSH_I) found = 1;
+					break;
+					
+				case PPULL_L:
+					if (cclist[i + 1][0] == PPUSH_L) found = 1;
+					break;	
+				
+				case PPULL_Q:
+					if (cclist[i + 1][0] == PPUSH_Q) found = 1;
+					break;
+				
+				case PPULL_D:
+					if (cclist[i + 1][0] == PPUSH_D) found = 1;
+					break;
+			
+				case PPULL_S:
+					if (cclist[i + 1][0] == PPUSH_S) found = 1;
+					break;
+			
+				case PPULL_B:
+					if (cclist[i + 1][0] == PPUSH_B) found = 1;
+					break;
+			}
+			
+			if (found == 1)
+			{
+				if (cclist[i][0] != PULL_S)
+				{
+					/* not string register */
+					
+					if (cclist[i][0] == PULL_D)
+					{
+						/* double reg */
+						
+						newcclist[nind][0] = MOVE_D;
+						newcclist[nind][1] = cclist[i][1];
+						newcclist[nind][2] = cclist[i + 1][2];
+						nind++;
+					}
+					else
+					{
+						/* lint reg */
+						
+						newcclist[nind][0] = MOVE_L;
+						newcclist[nind][1] = cclist[i][1];
+						newcclist[nind][2] = cclist[i + 1][2];
+						nind++;
+					}
+				}
+				else
+				{
+					newcclist[nind][0] = MOVESTR;
+					newcclist[nind][1] = cclist[i][1];
+					newcclist[nind][2] = cclist[i + 1][2];
+					nind++;
+				}
+				
+				i++;
+			}
+			else
+			{
+				/* direct opcode copy */
+			
+				newcclist[nind][0] = cclist[i][0];
+				newcclist[nind][1] = cclist[i][1];
+				newcclist[nind][2] = cclist[i][2];
+				newcclist[nind][3] = cclist[i][3];
+				newcclist[nind][4] = cclist[i][4];
+				newcclist[nind][5] = cclist[i][5];
+				newcclist[nind][6] = cclist[i][6];
+				nind++;
+			}
+		}
+		else
+		{
+			/* direct opcode copy */
+			
+			newcclist[nind][0] = cclist[i][0];
+			newcclist[nind][1] = cclist[i][1];
+			newcclist[nind][2] = cclist[i][2];
+			newcclist[nind][3] = cclist[i][3];
+			newcclist[nind][4] = cclist[i][4];
+			newcclist[nind][5] = cclist[i][5];
+			newcclist[nind][6] = cclist[i][6];
+			nind++;
+		}
+	}
+	
+	/* copy newcclist to cclist */
+
+    for (i = 0; i < nind; i++)
+    {
+        for (j = 0; j < MAXCCOMMARG; j++)
+        {
+            cclist[i][j] = newcclist[i][j];
+        }
+    }
+    cclist_ind = nind - 1;
+    
+    free (newcclist);
+    
+    /* set jumps */
+    
+    for (i = 0; i <= cclist_ind; i++)
+    {
+        if (cclist[i][0] == VM_LAB)
+        {
+            jumplist[cclist[i][1]].pos = i;
+        }
+    }
+		
+	return (TRUE);
+}
