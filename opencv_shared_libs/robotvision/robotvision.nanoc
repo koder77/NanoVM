@@ -1,0 +1,105 @@
+//	robotvision.nanoc robot vision 1.0 - use librobotvision.so to measure distances to objects in a webcam live video
+//	uses two webcams for a real 3D sensing
+//
+//	return variable (array) must be locked while reading!
+//	see C code for more information
+//
+//	Stefan Pietzonke 2016
+
+func main ()
+	lint null = 0; lint one = 1;
+	lint delay = 50;
+	lint secs = 5;
+	qint ind = 0;
+	lint dll; 
+	
+	lint objectdet;
+	lint objectdetthread;
+	lint f;
+	
+	string dllname[256] = "librobotvision.so";
+	string objectdetn[256] = "opencv_detect_object";
+
+	qint _cam = 0;
+	
+//	global array for return value of object detect library
+	qint _objects[256][3]; 
+	qint ret; qint _objectsptr;
+	
+//	open librobotvision.so library in nanovm/lib directory
+	lopen (dll, dllname);	
+
+//	set function handle
+	lfunc (dll, objectdet, objectdetn);
+	getaddress (_objects, _objectsptr);
+	
+//	call object detection
+	threadcreate (objectdetthread, objectdetect);
+	threadsync (objectdetthread);
+	threadpush (objectdetthread, objectdet);
+	threadpush (objectdetthread, dll);
+	threadpushsync (objectdetthread);
+	
+	
+	qint x; qint y; qint distance;
+	
+	waitsec (secs);
+	
+lab loop;	
+	waittick (delay);
+	
+	goto loop;
+
+//	get object infos
+//
+//	x = 0: object is ahead
+//	x = -1: object is on the left
+//	x = 1: object is on the right
+//
+//	distance = distance in millimeters (50 - 250). Everything farer away is: -1.
+//	
+
+	lint i = 0; lint j = 0;
+	varlock (_objects);
+	for;
+		array2var (_objects, j, x);
+		j = ++;
+		array2var (_objects, j, y);
+		j = ++;
+		array2var (_objects, j, distance);
+		j = ++;
+	
+		f = y > -1;
+		if f;
+			print "got object: "; print i; print " x:  "; print x; print " y: "; print y; print " distance: "; print distance; printn one;
+		endif;
+		
+		i = ++;
+		f = i < 256;
+	next f;
+	varunlock (_objects);
+	
+	
+	goto loop;
+	
+	threadjoin ();
+	
+	exit null;
+funcend
+
+func objectdetect (#sync, lint Pdll, lint Pfunc)
+	int Pnull = 0;
+	//	call object detection
+	#ATOMIC;
+	pushtostack (_objectsptr, _cam);
+	
+	lcall (Pdll, Pfunc);
+	#ATOMIC_END
+	
+	exit Pnull;
+funcend
+
+lab pushtostack;
+#ASSEMB
+	rts;
+#ASSEMB_END
