@@ -38,6 +38,8 @@ extern struct varlist *pvarlist_obj;
 extern struct varlist_state varlist_state;
 extern struct varlist_state pvarlist_state;
 
+extern struct t_var t_var;
+
 extern S2 plist_ind;
 extern struct jumplist *jumplist;
 extern struct plist *plist;
@@ -658,12 +660,41 @@ S2 translate_code (void)
 		}
         else
         {
-            var = getvarind_comp (src_line.arg[i + 1]);
-            if (var == NOTDEF)
-            {
-                printf ("compile: translate_code: error: variable not defined: %s, line: %li\n", src_line.arg[i + 1], plist_ind);
-                return (FALSE);
-            }
+			/* check if argument is string or number constant */
+			var = -1;
+			if (checkstring (src_line.arg[i + 1]))
+			{
+				if (! make_string ())
+				{
+					printf ("compile: translate_code: error: can't create string: %s, line %li\n", src_line.arg[i + 1], plist_ind);
+					return (FALSE);
+				}
+				var = t_var.varlist_ind;
+			}
+			else
+			{
+				/* number variable */
+				if (checkdigit (src_line.arg[i + 1]) == TRUE)
+				{
+					if (! make_val (INT_VAR, varlist, NORMAL_VAR))
+					{
+						printerr (MEMORY, plist_ind, ST_PRE, t_var.varname);
+						return (FALSE);
+					}
+					var = t_var.varlist_ind;
+				}
+			}
+
+			if (var == -1)
+			{
+				/* it's a already defined var */
+				var = getvarind_comp (src_line.arg[i + 1]);
+				if (var == NOTDEF)
+				{
+					printf ("compile: translate_code: error: variable not defined: %s, line: %li\n", src_line.arg[i], plist_ind);
+					return (FALSE);
+				}
+			}
 
             if (src_line.arg[i + 1][0] == COMP_PRIVATE_VAR_SB)
             {

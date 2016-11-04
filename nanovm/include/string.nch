@@ -23,6 +23,8 @@ func string_part (string str[4000], int startpos, int endpos)
 funcend
 		
 
+//	search for string start inside string --------------------------------------
+
 func string_search (string str[4000], int startpos, string searchstr[4000])
     int null = 0; int one = 1;
 
@@ -193,4 +195,68 @@ lab string_search_ab_check_end;
 lab string_search_ab_end;
     pdealloc (Px);
     return (Ppos);
+funcend
+
+
+//	search for pattern ---------------------------------------------------------
+
+func string_pattern (string str[4000], string searchstr[4000])
+    int null = 0; int one = 1;
+
+    int startpos = 0;
+    int pos = -1;
+    int i;
+    int j;
+    int f;
+    int str_len; 
+    int searchstr_len;
+    int check = 0;
+    
+    string str_ch[2];
+    string searchstr_ch[2];
+    
+    string wildch[2] = "?"; 
+    
+    strlen (str, str_len);
+    strlen (searchstr, searchstr_len);
+    
+    str_len = --;
+    searchstr_len = --;
+    
+    f = startpos > str_len;
+    if f;
+        goto string_search_end;
+    endif;
+    
+    i = startpos;
+    j = 0;
+    
+lab string_pattern_loop;
+    part2string (str, i, str_ch);
+    part2string (searchstr, j, searchstr_ch);
+    
+    f = searchstr_ch != wildch;
+    if f;
+		f = str_ch != searchstr_ch;
+		if f;
+//	chars don't match: string not found!
+			goto string_pattern_end;
+		endif;
+    endif;
+    
+    j = ++;
+    f = j == searchstr_len;
+    if f;
+		pos = 0;
+		goto string_pattern_end;
+	endif;
+	
+	i = ++;
+	f = i < str_len;
+	if f;
+		goto string_pattern_loop;
+	endif;
+	
+lab string_pattern_end;
+	return (pos);
 funcend

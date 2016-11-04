@@ -31,6 +31,3 @@ push_i          17, L0;
 pull_i          L0, string_reg;
 
 // EOF
-
-int byte_type = 6; int int_type = 1; int lint_type = 2; int qint_type = 3; int double_type = 4; int string_type = 5;
-int lint_reg = 15; int double_reg = 16; int string_reg = 17;

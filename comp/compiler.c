@@ -609,7 +609,7 @@ U1 compile ()
                 ok = TRUE;
                 while (ok)
                 {
-					/* check if argument is string or number contstant */
+					/* check if argument is string or number constant */
 					var = -1;
 					if (checkstring (src_line.arg[i]))
 					{
