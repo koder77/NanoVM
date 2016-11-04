@@ -5,7 +5,9 @@ Nano VM (3.4.3-5)
 	N compiler: sub functions inside of functions.
 	See subfunc.nanoc in the examples.
 
--- Stefan Pietzonke <jay-t@gmx.net>  Sat 1t Sep 2016 11:30 +0200
+	JIT-compiler ON message.
+	
+-- Stefan Pietzonke <jay-t@gmx.net>  Fri 30 Sep 2016 22:00 +0200
 
 Nano VM (3.4.3-4)
 	nanovm: -j flag to turn on JIT compiler.

@@ -132,7 +132,7 @@ extern "C" int opencv_face_detection (U1 *pthreads_ptr, U1 *varlist_ptr, U1 *vm_
 			
             // Create the text we will annotate the box with:
 			
-			rectangle(original, face_i, CV_RGB(0, 255,0), 1);
+			rectangle(original, face_i, CV_RGB(0, 255, 0), 1);
 			// box_text = format("detected");
 			// And now put it into the image:
 			// putText(original, box_text, Point(pos_x, pos_y), FONT_HERSHEY_PLAIN, 1.0, CV_RGB(0,255,0), 2.0);

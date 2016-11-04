@@ -473,6 +473,14 @@ run_prog:
 
     PRINTD("creating main thread...\n");
     
+	if (! printmsg_no_msg)
+    {
+		if (jit_on)
+		{
+			printf ("[JIT-compiler ON]\n");
+		}
+	}
+	
     if (maxcclist >= 0)
     {
         /* create main thread */

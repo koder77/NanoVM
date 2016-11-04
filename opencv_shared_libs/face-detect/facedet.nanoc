@@ -22,7 +22,12 @@ func main ()
 	string dllname[256] = "libopencvfacedet.so";
 	string facedetn[256] = "opencv_face_detection";
 	
-	string _cascade[256] = "/home/stefan/Seafile/nanovm/home/haarcascade_face.xml";
+	string haar[256] = "/home/haarcascade_face.xml";
+	
+	string _cascade[256];
+	_cascade = _nanopath + haar;
+	
+	
 	qint _cam = 0;
 	
 //	global array for return value of face detect library
