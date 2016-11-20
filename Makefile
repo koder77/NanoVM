@@ -87,8 +87,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/m4/nls.m4 \
-	$(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 DIST_COMMON = $(srcdir)/Makefile.am $(top_srcdir)/configure \
@@ -156,9 +155,10 @@ ETAGS = etags
 CTAGS = ctags
 CSCOPE = cscope
 DIST_SUBDIRS = $(SUBDIRS)
-am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/config.h.in AUTHORS \
-	COPYING ChangeLog INSTALL NEWS README compile config.guess \
-	config.sub depcomp install-sh missing mkinstalldirs
+am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/config.h.in \
+	ABOUT-NLS AUTHORS COPYING ChangeLog INSTALL NEWS README \
+	compile config.guess config.rpath config.sub depcomp \
+	install-sh missing mkinstalldirs
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -201,24 +201,22 @@ distuninstallcheck_listfiles = find . -type f -print
 am__distuninstallcheck_listfiles = $(distuninstallcheck_listfiles) \
   | sed 's|^\./|$(prefix)/|' | grep -v '$(infodir)/dir$$'
 distcleancheck_listfiles = find . -type f -print
-ACLOCAL = ${SHELL} /home/stefan/Seafile/nanovm/source/NanoVM-work/missing aclocal-1.15
-ALL_LINGUAS = 
+ACLOCAL = ${SHELL} /home/stefan/Seafile/nanovm/source/NanoVM-work-dthread/missing aclocal-1.15
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
-AUTOCONF = ${SHELL} /home/stefan/Seafile/nanovm/source/NanoVM-work/missing autoconf
-AUTOHEADER = ${SHELL} /home/stefan/Seafile/nanovm/source/NanoVM-work/missing autoheader
-AUTOMAKE = ${SHELL} /home/stefan/Seafile/nanovm/source/NanoVM-work/missing automake-1.15
-AWK = gawk
+AUTOCONF = ${SHELL} /home/stefan/Seafile/nanovm/source/NanoVM-work-dthread/missing autoconf
+AUTOHEADER = ${SHELL} /home/stefan/Seafile/nanovm/source/NanoVM-work-dthread/missing autoheader
+AUTOMAKE = ${SHELL} /home/stefan/Seafile/nanovm/source/NanoVM-work-dthread/missing automake-1.15
+AWK = mawk
 CC = clang
 CCDEPMODE = depmode=gcc3
 CFLAGS = -ffast-math -fomit-frame-pointer -O3 -march=native -s
-CPP = clang-3.7 -E
+CPP = clang-3.6 -E
 CPPFLAGS = 
-CXX = clang++-3.7
+CXX = clang++-3.6
 CXXDEPMODE = depmode=gcc3
 CXXFLAGS = -g -O2
 CYGPATH_W = echo
-DATADIRNAME = share
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
 ECHO_C = 
@@ -226,29 +224,18 @@ ECHO_N = -n
 ECHO_T = 
 EGREP = /bin/grep -E
 EXEEXT = 
-GMSGFMT = /usr/bin/msgfmt
 GREP = /bin/grep
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-INTLTOOL_EXTRACT = /usr/bin/intltool-extract
-INTLTOOL_MERGE = /usr/bin/intltool-merge
-INTLTOOL_PERL = /usr/bin/perl
-INTLTOOL_UPDATE = /usr/bin/intltool-update
-INTLTOOL_V_MERGE = $(INTLTOOL__v_MERGE_$(V))
-INTLTOOL_V_MERGE_OPTIONS = $(intltool__v_merge_options_$(V))
-INTLTOOL__v_MERGE_ = $(INTLTOOL__v_MERGE_$(AM_DEFAULT_VERBOSITY))
-INTLTOOL__v_MERGE_0 = @echo "  ITMRG " $@;
 LDFLAGS = -lrt
 LIBOBJS = 
 LIBS = -lpthread 
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /home/stefan/Seafile/nanovm/source/NanoVM-work/missing makeinfo
+MAKEINFO = ${SHELL} /home/stefan/Seafile/nanovm/source/NanoVM-work-dthread/missing makeinfo
 MKDIR_P = /bin/mkdir -p
-MSGFMT = /usr/bin/msgfmt
-MSGMERGE = /usr/bin/msgmerge
 OBJEXT = o
 PACKAGE = nanovm
 PACKAGE_BUGREPORT = jay-t@gmx.net
@@ -262,14 +249,12 @@ RANLIB = ranlib
 SET_MAKE = 
 SHELL = /bin/bash
 STRIP = 
-USE_NLS = yes
 VERSION = 3.3.3
-XGETTEXT = /usr/bin/xgettext
-abs_builddir = /home/stefan/Seafile/nanovm/source/NanoVM-work
-abs_srcdir = /home/stefan/Seafile/nanovm/source/NanoVM-work
-abs_top_builddir = /home/stefan/Seafile/nanovm/source/NanoVM-work
-abs_top_srcdir = /home/stefan/Seafile/nanovm/source/NanoVM-work
-ac_ct_CC = clang-3.7
+abs_builddir = /home/stefan/Seafile/nanovm/source/NanoVM-work-dthread
+abs_srcdir = /home/stefan/Seafile/nanovm/source/NanoVM-work-dthread
+abs_top_builddir = /home/stefan/Seafile/nanovm/source/NanoVM-work-dthread
+abs_top_srcdir = /home/stefan/Seafile/nanovm/source/NanoVM-work-dthread
+ac_ct_CC = clang-3.6
 ac_ct_CXX = 
 am__include = include
 am__leading_dot = .
@@ -288,9 +273,7 @@ host_alias =
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /home/stefan/Seafile/nanovm/source/NanoVM-work/install-sh
-intltool__v_merge_options_ = $(intltool__v_merge_options_$(AM_DEFAULT_VERBOSITY))
-intltool__v_merge_options_0 = -q
+install_sh = ${SHELL} /home/stefan/Seafile/nanovm/source/NanoVM-work-dthread/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -312,7 +295,7 @@ top_build_prefix =
 top_builddir = .
 top_srcdir = .
 SUBDIRS = m4 include lib assemb vm comp
-EXTRA_DIST = config.rpath  autogen.sh
+EXTRA_DIST = config.rpath  config.rpath  autogen.sh
 AM_CFLAGS = -O0 -g
 ACLOCAL_AMFLAGS = -I m4
 all: config.h

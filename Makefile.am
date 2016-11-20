@@ -1,6 +1,6 @@
 SUBDIRS = m4 include lib assemb vm comp
 
-EXTRA_DIST = config.rpath  autogen.sh
+EXTRA_DIST = config.rpath  config.rpath  autogen.sh
 
 AM_CFLAGS = -O0 -g
 

@@ -1,7 +1,7 @@
-/home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/install.dir
-/home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/list_install_components.dir
-/home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/rebuild_cache.dir
-/home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/asmjit.dir
-/home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/edit_cache.dir
-/home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/install/strip.dir
-/home/stefan/Seafile/nanovm/source/NanoVM/asmjit/build/CMakeFiles/install/local.dir
+/home/stefan/Seafile/nanovm/source/NanoVM-work-dthread/asmjit/build/CMakeFiles/install.dir
+/home/stefan/Seafile/nanovm/source/NanoVM-work-dthread/asmjit/build/CMakeFiles/list_install_components.dir
+/home/stefan/Seafile/nanovm/source/NanoVM-work-dthread/asmjit/build/CMakeFiles/rebuild_cache.dir
+/home/stefan/Seafile/nanovm/source/NanoVM-work-dthread/asmjit/build/CMakeFiles/asmjit.dir
+/home/stefan/Seafile/nanovm/source/NanoVM-work-dthread/asmjit/build/CMakeFiles/edit_cache.dir
+/home/stefan/Seafile/nanovm/source/NanoVM-work-dthread/asmjit/build/CMakeFiles/install/strip.dir
+/home/stefan/Seafile/nanovm/source/NanoVM-work-dthread/asmjit/build/CMakeFiles/install/local.dir

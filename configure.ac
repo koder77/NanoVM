@@ -6,7 +6,7 @@ AC_INIT([nanovm], [3.3.3], [jay-t@gmx.net])
 AM_INIT_AUTOMAKE([1.9.6])
 # AM_GNU_GETTEXT_VERSION([0.19.4])
 # AM_GNU_GETTEXT([external])
-IT_PROG_INTLTOOL(0.50.2)
+# IT_PROG_INTLTOOL(0.50.2)
 
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADERS([config.h])

@@ -59,9 +59,10 @@ extern struct vm_mem vm_mem;
 #endif
 
 #if DEBUG
-    #define EXE_NEXT();  if (rinzler() != 0) { printf ("EPOS: %i, OPCODE: %i\n", epos, pcclist[epos][0]); printerr (OVERFLOW_IND, epos, ST_EXE, ""); } check_code (threadnum, maxcclist, pcclist); goto *jumpt[pcclist[++epos][0]];
+    #define EXE_NEXT();  if (rinzler() != 0) { printf ("EPOS: %i, OPCODE: %i\n", epos, pcclist[epos][0]); printerr (OVERFLOW_IND, epos, ST_EXE, ""); } check_code (threadnum, maxcclist, pcclist); goto *dthread[++epos];
 #else
-    #define EXE_NEXT(); goto *jumpt[pcclist[++epos][0]];
+   // #define EXE_NEXT(); goto *jumpt[pcclist[++epos][0]];
+#define EXE_NEXT(); goto *dthread[++epos];
 #endif
 
 #define ERREXIT();   goto eexit;
@@ -189,6 +190,10 @@ void *exe_elist (S4 threadnum)
 
     S4 **pcclist = NULL;             /* local pcclist */
 
+    /* addresses for direct threading */
+    void **dthread = NULL; 
+    
+    
     struct timespec timerstart;
 	struct timespec timerend;
 	struct timespec timerun;
@@ -354,6 +359,21 @@ void *exe_elist (S4 threadnum)
         }
     }
 
+    /* alloc direct threading list */
+    dthread = calloc ((maxcclist + 1), sizeof (*dthread));
+    if (dthread == NULL)
+    {
+        printerr (MEMORY, NOTDEF, ST_PRE, "error: can't allocate dthread memory!");
+        return (FALSE);
+    }
+    
+    /* copy opcodes to direct threading list */
+    for (i = 0; i <= maxcclist; i++)
+    {
+        dthread[i] = jumpt[pcclist[i][0]];
+    }
+    
+    
     
     /* copy global thread private varlist to local private varlist */
 
@@ -3898,6 +3918,7 @@ void *exe_elist (S4 threadnum)
 
         dealloc_array_lint (pcclist, maxcclist + 1);
         exe_dealloc_pvarlist (pvarlist);
+        free (dthread);
 		set_thread_stopped (threadnum);
         
         #if OS_AROS

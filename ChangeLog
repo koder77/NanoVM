@@ -1,3 +1,9 @@
+Nano VM (3.4.3-6)
+    new: exe_elist: direct threading with dthread void* array.
+    Speedup factor of about x 1.2.
+    
+-- Stefan Pietzonke <jay-t@gmx.net>  Thu 17 Nov 2016 20:54 +0100    
+
 Nano VM (3.4.3-5)
 	new: JIT compiler: PULL_I, PULL_L, PULL_Q, PULL_B opcodes!
 	finally I wrote code for pulling registers into their variables.
