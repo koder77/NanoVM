@@ -8,7 +8,7 @@
 #ifndef _ASMJIT_BASE_GLOBALS_H
 #define _ASMJIT_BASE_GLOBALS_H
 
-// [Dependencies - AsmJit]
+// [Dependencies]
 #include "../build.h"
 
 // [Api-Begin]
@@ -534,7 +534,7 @@ ASMJIT_ENUM(ErrorCode) {
   //! a.mov(byte_ptr(r10), ah);
   //! ~~~
   //!
-  //! \note In debug mode assertion is raised instead of returning an error.
+  //! NOTE: In debug mode assertion is raised instead of returning an error.
   kErrorIllegalInst,
 
   //! Illegal (unencodable) addressing used.

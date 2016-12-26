@@ -11,7 +11,7 @@
 #include "../build.h"
 #if defined(ASMJIT_BUILD_X86) || defined(ASMJIT_BUILD_X64)
 
-// [Dependencies - AsmJit]
+// [Dependencies]
 #include "../base/containers.h"
 #include "../base/cpuinfo.h"
 #include "../base/logger.h"
@@ -35,7 +35,7 @@ enum { kX86RexNoRexMask = kX86InstOptionRex | _kX86InstOptionNoRex };
 //!
 //! X86/X64 bytes used to encode important prefixes.
 enum X86Byte {
-  //! 1-byte REX prefix
+  //! 1-byte REX prefix mask.
   kX86ByteRex = 0x40,
 
   //! 1-byte REX.W component.
@@ -75,12 +75,12 @@ enum X86Byte {
   //!   - `P[   10]` - ___: Must be 1.
   //!   - `P[14:11]` - REG: 2nd SRC vector register (4 bits).
   //!   - `P[   15]` - EXT: VEX.W.
-  //!   - `P[18:16]` - REG: K registers k0...k7 (Merging/Zeroing Vector Ops.).
+  //!   - `P[18:16]` - REG: K registers k0...k7 (Merging/Zeroing Vector Ops).
   //!   - `P[   19]` - REG: 2nd SRC vector register (Hi bit).
   //!   - `P[   20]` - EXT: Broadcast/Static-Rounding/SAE bit.
   //!   - `P[22.21]` - EXT: Vector Length/Rounding Control.
-  //!   - `P[   23]` - EXT: Destination result behavior (Merging/Zeroing Vector Ops.).
-  kX86ByteEvex4 = 0x62
+  //!   - `P[   23]` - EXT: Destination result behavior (Merging/Zeroing Vector Ops).
+  kX86ByteEvex = 0x62
 };
 
 // AsmJit specific (used to encode VVVV field in XOP/VEX).
@@ -99,8 +99,7 @@ struct X86OpCodeMM {
 
 //! \internal
 //!
-//! Mandatory prefixes encoded in 'asmjit' opcode [66, F3, F2] and AsmJit
-//! extensions
+//! Mandatory prefixes used to encode [66, F3, F2] and [9B].
 static const uint8_t x86OpCodePP[8] = {
   0x00, 0x66, 0xF3, 0xF2, 0x00, 0x00, 0x00, 0x9B
 };
@@ -162,7 +161,7 @@ static ASMJIT_INLINE uint32_t x86EncodeSib(uint32_t s, uint32_t i, uint32_t b) {
   return (s << 6) + (i << 3) + b;
 }
 
-//! Get whether the two pointers `a` and `b` can be encoded by using relative
+//! Get if the given pointers `a` and `b` can be encoded by using relative
 //! displacement, which fits into a signed 32-bit integer.
 static ASMJIT_INLINE bool x64IsRelative(Ptr a, Ptr b) {
   SignedPtr diff = static_cast<SignedPtr>(a) - static_cast<SignedPtr>(b);
@@ -189,11 +188,17 @@ static ASMJIT_INLINE uint32_t x86ExtractO(uint32_t opCode) {
   return (opCode >> kX86InstOpCode_O_Shift) & 0x07;
 }
 
+static ASMJIT_INLINE bool x86IsGpq(const Operand* op) { return op->isRegType(kX86RegTypeGpq); }
+static ASMJIT_INLINE bool x86IsGpq(const X86Reg* reg) { return reg->isGpq(); }
+
 static ASMJIT_INLINE bool x86IsXmm(const Operand* op) { return op->isRegType(kX86RegTypeXmm); }
 static ASMJIT_INLINE bool x86IsXmm(const X86Reg* reg) { return reg->isXmm(); }
 
 static ASMJIT_INLINE bool x86IsYmm(const Operand* op) { return op->isRegType(kX86RegTypeYmm); }
 static ASMJIT_INLINE bool x86IsYmm(const X86Reg* reg) { return reg->isYmm(); }
+
+static ASMJIT_INLINE bool x86IsZmm(const Operand* op) { return op->isRegType(kX86RegTypeZmm); }
+static ASMJIT_INLINE bool x86IsZmm(const X86Reg* reg) { return reg->isZmm(); }
 
 // ============================================================================
 // [Macros]
@@ -606,7 +611,7 @@ static const char* AssemblerX86_getAddressSizeString(uint32_t size) noexcept {
     case 4 : return "dword ptr ";
     case 8 : return "qword ptr ";
     case 10: return "tword ptr ";
-    case 16: return "oword ptr ";
+    case 16: return "dqword ptr ";
     case 32: return "yword ptr ";
     case 64: return "zword ptr ";
     default: return "";
@@ -863,7 +868,7 @@ static bool X86Assembler_dumpInstruction(StringBuilder& sb,
     sb._appendString("short ", 6);
 
   // Dump instruction name.
-  sb._appendString(_x86InstInfo[code].getInstName());
+  sb._appendString(X86Util::getInstNameById(code));
 
   // Dump operands.
   if (!o0->isNone()) {
@@ -968,9 +973,7 @@ static ASMJIT_INLINE Error X86Assembler_emit(Assembler* self_, uint32_t code, co
   // Displacement relocation id.
   intptr_t relocId;
 
-#if defined(ASMJIT_DEBUG)
   bool assertIllegal = false;
-#endif // ASMJIT_DEBUG
 
   const X86InstInfo& info = _x86InstInfo[code];
   const X86InstExtendedInfo& extendedInfo = info.getExtendedInfo();
@@ -1031,30 +1034,30 @@ static ASMJIT_INLINE Error X86Assembler_emit(Assembler* self_, uint32_t code, co
   // [Group]
   // --------------------------------------------------------------------------
 
-  switch (info.getEncodingId()) {
+  switch (info.getEncoding()) {
     // ------------------------------------------------------------------------
     // [None]
     // ------------------------------------------------------------------------
 
-    case kX86InstEncodingIdNone:
+    case kX86InstEncodingNone:
       goto _EmitDone;
 
     // ------------------------------------------------------------------------
     // [X86]
     // ------------------------------------------------------------------------
 
-    case kX86InstEncodingIdX86Op_66H:
+    case kX86InstEncodingX86Op_66H:
       ADD_66H_P(true);
       ASMJIT_FALLTHROUGH;
 
-    case kX86InstEncodingIdX86Op:
+    case kX86InstEncodingX86Op:
       goto _EmitX86Op;
 
-    case kX86InstEncodingIdX86Rm_B:
+    case kX86InstEncodingX86Rm_B:
       opCode += o0->getSize() != 1;
       ASMJIT_FALLTHROUGH;
 
-    case kX86InstEncodingIdX86Rm:
+    case kX86InstEncodingX86Rm:
       ADD_66H_P_BY_SIZE(o0->getSize());
       ADD_REX_W_BY_SIZE(o0->getSize());
 
@@ -1069,7 +1072,7 @@ static ASMJIT_INLINE Error X86Assembler_emit(Assembler* self_, uint32_t code, co
       }
       break;
 
-    case kX86InstEncodingIdX86RmReg:
+    case kX86InstEncodingX86RmReg:
       if (encoded == ENC_OPS(Reg, Reg, None)) {
         opCode += o0->getSize() != 1;
         ADD_66H_P_BY_SIZE(o0->getSize());
@@ -1091,7 +1094,7 @@ static ASMJIT_INLINE Error X86Assembler_emit(Assembler* self_, uint32_t code, co
       }
       break;
 
-    case kX86InstEncodingIdX86RegRm:
+    case kX86InstEncodingX86RegRm:
       ADD_66H_P_BY_SIZE(o0->getSize());
       ADD_REX_W_BY_SIZE(o0->getSize());
 
@@ -1114,14 +1117,14 @@ static ASMJIT_INLINE Error X86Assembler_emit(Assembler* self_, uint32_t code, co
       }
       break;
 
-    case kX86InstEncodingIdX86M:
+    case kX86InstEncodingX86M:
       if (encoded == ENC_OPS(Mem, None, None)) {
         rmMem = x86OpMem(o0);
         goto _EmitX86M;
       }
       break;
 
-    case kX86InstEncodingIdX86Arith:
+    case kX86InstEncodingX86Arith:
       if (encoded == ENC_OPS(Reg, Reg, None)) {
         opCode += (o0->getSize() != 1) + 2;
         ADD_66H_P_BY_SIZE(o0->getSize());
@@ -1193,7 +1196,7 @@ static ASMJIT_INLINE Error X86Assembler_emit(Assembler* self_, uint32_t code, co
       }
       break;
 
-    case kX86InstEncodingIdX86BSwap:
+    case kX86InstEncodingX86BSwap:
       if (encoded == ENC_OPS(Reg, None, None)) {
         if (o0->getSize() < 4)
           goto _IllegalInst;
@@ -1204,7 +1207,7 @@ static ASMJIT_INLINE Error X86Assembler_emit(Assembler* self_, uint32_t code, co
       }
       break;
 
-    case kX86InstEncodingIdX86BTest:
+    case kX86InstEncodingX86BTest:
       if (encoded == ENC_OPS(Reg, Reg, None)) {
         ADD_66H_P_BY_SIZE(o1->getSize());
         ADD_REX_W_BY_SIZE(o1->getSize());
@@ -1247,7 +1250,7 @@ static ASMJIT_INLINE Error X86Assembler_emit(Assembler* self_, uint32_t code, co
       }
       break;
 
-    case kX86InstEncodingIdX86Call:
+    case kX86InstEncodingX86Call:
       if (encoded == ENC_OPS(Reg, None, None)) {
         rmReg = x86OpReg(o0);
         goto _EmitX86R;
@@ -1289,7 +1292,7 @@ static ASMJIT_INLINE Error X86Assembler_emit(Assembler* self_, uint32_t code, co
       }
       break;
 
-    case kX86InstEncodingIdX86Enter:
+    case kX86InstEncodingX86Enter:
       if (encoded == ENC_OPS(Imm, Imm, None)) {
         EMIT_BYTE(0xC8);
         EMIT_WORD(static_cast<const Imm*>(o1)->getUInt16());
@@ -1298,7 +1301,7 @@ static ASMJIT_INLINE Error X86Assembler_emit(Assembler* self_, uint32_t code, co
       }
       break;
 
-    case kX86InstEncodingIdX86Imul:
+    case kX86InstEncodingX86Imul:
       ADD_66H_P_BY_SIZE(o0->getSize());
       ADD_REX_W_BY_SIZE(o0->getSize());
 
@@ -1395,7 +1398,7 @@ static ASMJIT_INLINE Error X86Assembler_emit(Assembler* self_, uint32_t code, co
       }
       break;
 
-    case kX86InstEncodingIdX86IncDec:
+    case kX86InstEncodingX86IncDec:
       ADD_66H_P_BY_SIZE(o0->getSize());
       ADD_REX_W_BY_SIZE(o0->getSize());
 
@@ -1421,7 +1424,7 @@ static ASMJIT_INLINE Error X86Assembler_emit(Assembler* self_, uint32_t code, co
       }
       break;
 
-    case kX86InstEncodingIdX86Int:
+    case kX86InstEncodingX86Int:
       if (encoded == ENC_OPS(Imm, None, None)) {
         imVal = static_cast<const Imm*>(o0)->getInt64();
         uint8_t imm8 = static_cast<uint8_t>(imVal & 0xFF);
@@ -1437,7 +1440,7 @@ static ASMJIT_INLINE Error X86Assembler_emit(Assembler* self_, uint32_t code, co
       }
       break;
 
-    case kX86InstEncodingIdX86Jcc:
+    case kX86InstEncodingX86Jcc:
       if (encoded == ENC_OPS(Label, None, None)) {
         label = self->getLabelData(static_cast<const Label*>(o0)->getId());
 
@@ -1493,7 +1496,7 @@ static ASMJIT_INLINE Error X86Assembler_emit(Assembler* self_, uint32_t code, co
       }
       break;
 
-    case kX86InstEncodingIdX86Jecxz:
+    case kX86InstEncodingX86Jecxz:
       if (encoded == ENC_OPS(Reg, Label, None)) {
         if (x86OpReg(o0) != kX86RegIndexCx)
           goto _IllegalInst;
@@ -1525,7 +1528,7 @@ static ASMJIT_INLINE Error X86Assembler_emit(Assembler* self_, uint32_t code, co
       }
       break;
 
-    case kX86InstEncodingIdX86Jmp:
+    case kX86InstEncodingX86Jmp:
       if (encoded == ENC_OPS(Reg, None, None)) {
         rmReg = x86OpReg(o0);
         goto _EmitX86R;
@@ -1588,7 +1591,7 @@ static ASMJIT_INLINE Error X86Assembler_emit(Assembler* self_, uint32_t code, co
       }
       break;
 
-    case kX86InstEncodingIdX86Lea:
+    case kX86InstEncodingX86Lea:
       if (encoded == ENC_OPS(Reg, Mem, None)) {
         ADD_66H_P_BY_SIZE(o0->getSize());
         ADD_REX_W_BY_SIZE(o0->getSize());
@@ -1599,7 +1602,7 @@ static ASMJIT_INLINE Error X86Assembler_emit(Assembler* self_, uint32_t code, co
       }
       break;
 
-    case kX86InstEncodingIdX86Mov:
+    case kX86InstEncodingX86Mov:
       if (encoded == ENC_OPS(Reg, Reg, None)) {
         opReg = x86OpReg(o0);
         rmReg = x86OpReg(o1);
@@ -1746,7 +1749,7 @@ static ASMJIT_INLINE Error X86Assembler_emit(Assembler* self_, uint32_t code, co
       }
       break;
 
-    case kX86InstEncodingIdX86MovSxZx:
+    case kX86InstEncodingX86MovsxMovzx:
       if (encoded == ENC_OPS(Reg, Reg, None)) {
         opCode += o1->getSize() != 1;
         ADD_66H_P_BY_SIZE(o0->getSize());
@@ -1768,7 +1771,7 @@ static ASMJIT_INLINE Error X86Assembler_emit(Assembler* self_, uint32_t code, co
       }
       break;
 
-    case kX86InstEncodingIdX86MovSxd:
+    case kX86InstEncodingX86Movsxd:
       if (encoded == ENC_OPS(Reg, Reg, None)) {
         ADD_REX_W(true);
 
@@ -1786,7 +1789,7 @@ static ASMJIT_INLINE Error X86Assembler_emit(Assembler* self_, uint32_t code, co
       }
       break;
 
-    case kX86InstEncodingIdX86MovPtr:
+    case kX86InstEncodingX86MovPtr:
       if (encoded == ENC_OPS(Reg, Imm, None)) {
         if (x86OpReg(o0) != 0)
           goto _IllegalInst;
@@ -1817,7 +1820,7 @@ static ASMJIT_INLINE Error X86Assembler_emit(Assembler* self_, uint32_t code, co
       }
       break;
 
-    case kX86InstEncodingIdX86Push:
+    case kX86InstEncodingX86Push:
       if (encoded == ENC_OPS(Reg, None, None)) {
         if (o0->isRegType(kX86RegTypeSeg)) {
           uint32_t segment = x86OpReg(o0);
@@ -1844,7 +1847,7 @@ static ASMJIT_INLINE Error X86Assembler_emit(Assembler* self_, uint32_t code, co
       }
       ASMJIT_FALLTHROUGH;
 
-    case kX86InstEncodingIdX86Pop:
+    case kX86InstEncodingX86Pop:
       if (encoded == ENC_OPS(Reg, None, None)) {
         if (o0->isRegType(kX86RegTypeSeg)) {
           uint32_t segment = x86OpReg(o0);
@@ -1883,12 +1886,12 @@ _GroupPop_Gp:
       }
       break;
 
-    case kX86InstEncodingIdX86Rep:
+    case kX86InstEncodingX86Rep:
       // Emit REP 0xF2 or 0xF3 prefix first.
       EMIT_BYTE(0xF2 + opReg);
       goto _EmitX86Op;
 
-    case kX86InstEncodingIdX86Ret:
+    case kX86InstEncodingX86Ret:
       if (encoded == ENC_OPS(None, None, None)) {
         EMIT_BYTE(0xC3);
         goto _EmitDone;
@@ -1908,7 +1911,7 @@ _GroupPop_Gp:
       }
       break;
 
-    case kX86InstEncodingIdX86Rot:
+    case kX86InstEncodingX86Rot:
       opCode += o0->getSize() != 1;
       ADD_66H_P_BY_SIZE(o0->getSize());
       ADD_REX_W_BY_SIZE(o0->getSize());
@@ -1949,7 +1952,7 @@ _GroupPop_Gp:
       }
       break;
 
-    case kX86InstEncodingIdX86Set:
+    case kX86InstEncodingX86Set:
       if (encoded == ENC_OPS(Reg, None, None)) {
         ASMJIT_ASSERT(o0->getSize() == 1);
 
@@ -1965,7 +1968,7 @@ _GroupPop_Gp:
       }
       break;
 
-    case kX86InstEncodingIdX86Shlrd:
+    case kX86InstEncodingX86ShldShrd:
       if (encoded == ENC_OPS(Reg, Reg, Imm)) {
         ASMJIT_ASSERT(o0->getSize() == o1->getSize());
 
@@ -2019,7 +2022,7 @@ _GroupPop_Gp:
       }
       break;
 
-    case kX86InstEncodingIdX86Test:
+    case kX86InstEncodingX86Test:
       if (encoded == ENC_OPS(Reg, Reg, None)) {
         ASMJIT_ASSERT(o0->getSize() == o1->getSize());
 
@@ -2079,7 +2082,7 @@ _GroupPop_Gp:
       }
       break;
 
-    case kX86InstEncodingIdX86Xchg:
+    case kX86InstEncodingX86Xchg:
       if (encoded == ENC_OPS(Reg, Mem, None)) {
         opCode += o0->getSize() != 1;
         ADD_66H_P_BY_SIZE(o0->getSize());
@@ -2091,7 +2094,7 @@ _GroupPop_Gp:
       }
       ASMJIT_FALLTHROUGH;
 
-    case kX86InstEncodingIdX86Xadd:
+    case kX86InstEncodingX86Xadd:
       if (encoded == ENC_OPS(Reg, Reg, None)) {
         opReg = x86OpReg(o1);
         rmReg = x86OpReg(o0);
@@ -2123,14 +2126,57 @@ _GroupPop_Gp:
       }
       break;
 
+    case kX86InstEncodingX86Crc:
+      ADD_66H_P_BY_SIZE(o0->getSize());
+      ADD_REX_W_BY_SIZE(o0->getSize());
+
+      if (encoded == ENC_OPS(Reg, Reg, None)) {
+        if (!Utils::inInterval<uint32_t>(static_cast<const X86Reg*>(o0)->getRegType(), kX86RegTypeGpd, kX86RegTypeGpq))
+          goto _IllegalInst;
+
+        opCode += o0->getSize() != 1;
+        opReg = x86OpReg(o0);
+        rmReg = x86OpReg(o1);
+        goto _EmitX86R;
+      }
+
+      if (encoded == ENC_OPS(Reg, Mem, None)) {
+        if (!Utils::inInterval<uint32_t>(static_cast<const X86Reg*>(o0)->getRegType(), kX86RegTypeGpd, kX86RegTypeGpq))
+          goto _IllegalInst;
+
+        opCode += o0->getSize() != 1;
+        opReg = x86OpReg(o0);
+        rmMem = x86OpMem(o1);
+        goto _EmitX86M;
+      }
+      break;
+
+    case kX86InstEncodingX86Prefetch:
+      if (encoded == ENC_OPS(Mem, Imm, None)) {
+        opReg = static_cast<const Imm*>(o1)->getUInt32() & 0x3;
+        rmMem = x86OpMem(o0);
+        goto _EmitX86M;
+      }
+      break;
+
+    case kX86InstEncodingX86Fence:
+      if (Arch == kArchX64 && (opCode & kX86InstOpCode_W_Mask)) {
+        EMIT_BYTE(kX86ByteRex | kX86ByteRexW);
+      }
+
+      EMIT_BYTE(0x0F);
+      EMIT_BYTE(opCode);
+      EMIT_BYTE(0xC0 | (opReg << 3));
+      goto _EmitDone;
+
     // ------------------------------------------------------------------------
     // [Fpu]
     // ------------------------------------------------------------------------
 
-    case kX86InstEncodingIdFpuOp:
+    case kX86InstEncodingFpuOp:
       goto _EmitFpuOp;
 
-    case kX86InstEncodingIdFpuArith:
+    case kX86InstEncodingFpuArith:
       if (encoded == ENC_OPS(Reg, Reg, None)) {
         opReg = x86OpReg(o0);
         rmReg = x86OpReg(o1);
@@ -2161,7 +2207,7 @@ _EmitFpArith_Mem:
       }
       break;
 
-    case kX86InstEncodingIdFpuCom:
+    case kX86InstEncodingFpuCom:
       if (encoded == ENC_OPS(None, None, None)) {
         rmReg = 1;
         goto _EmitFpArith_Reg;
@@ -2177,20 +2223,20 @@ _EmitFpArith_Mem:
       }
       break;
 
-    case kX86InstEncodingIdFpuFldFst:
+    case kX86InstEncodingFpuFldFst:
       if (encoded == ENC_OPS(Mem, None, None)) {
         rmMem = x86OpMem(o0);
 
-        if (o0->getSize() == 4 && info.hasInstFlag(kX86InstFlagMem4)) {
+        if (o0->getSize() == 4 && info.hasFlag(kX86InstFlagMem4)) {
           goto _EmitX86M;
         }
 
-        if (o0->getSize() == 8 && info.hasInstFlag(kX86InstFlagMem8)) {
+        if (o0->getSize() == 8 && info.hasFlag(kX86InstFlagMem8)) {
           opCode += 4;
           goto _EmitX86M;
         }
 
-        if (o0->getSize() == 10 && info.hasInstFlag(kX86InstFlagMem10)) {
+        if (o0->getSize() == 10 && info.hasFlag(kX86InstFlagMem10)) {
           opCode = extendedInfo.getSecondaryOpCode();
           opReg  = x86ExtractO(opCode);
           goto _EmitX86M;
@@ -2216,20 +2262,20 @@ _EmitFpArith_Mem:
       break;
 
 
-    case kX86InstEncodingIdFpuM:
+    case kX86InstEncodingFpuM:
       if (encoded == ENC_OPS(Mem, None, None)) {
         rmMem = x86OpMem(o0);
 
-        if (o0->getSize() == 2 && info.hasInstFlag(kX86InstFlagMem2)) {
+        if (o0->getSize() == 2 && info.hasFlag(kX86InstFlagMem2)) {
           opCode += 4;
           goto _EmitX86M;
         }
 
-        if (o0->getSize() == 4 && info.hasInstFlag(kX86InstFlagMem4)) {
+        if (o0->getSize() == 4 && info.hasFlag(kX86InstFlagMem4)) {
           goto _EmitX86M;
         }
 
-        if (o0->getSize() == 8 && info.hasInstFlag(kX86InstFlagMem8)) {
+        if (o0->getSize() == 8 && info.hasFlag(kX86InstFlagMem8)) {
           opCode = extendedInfo.getSecondaryOpCode();
           opReg  = x86ExtractO(opCode);
           goto _EmitX86M;
@@ -2237,21 +2283,21 @@ _EmitFpArith_Mem:
       }
       break;
 
-    case kX86InstEncodingIdFpuRDef:
+    case kX86InstEncodingFpuRDef:
       if (encoded == ENC_OPS(None, None, None)) {
         opCode += 1;
         goto _EmitFpuOp;
       }
       ASMJIT_FALLTHROUGH;
 
-    case kX86InstEncodingIdFpuR:
+    case kX86InstEncodingFpuR:
       if (encoded == ENC_OPS(Reg, None, None)) {
         opCode += x86OpReg(o0);
         goto _EmitFpuOp;
       }
       break;
 
-    case kX86InstEncodingIdFpuStsw:
+    case kX86InstEncodingFpuStsw:
       if (encoded == ENC_OPS(Reg, None, None)) {
         if (x86OpReg(o0) != 0)
           goto _IllegalInst;
@@ -2270,32 +2316,7 @@ _EmitFpArith_Mem:
     // [Ext]
     // ------------------------------------------------------------------------
 
-    case kX86InstEncodingIdExtCrc:
-      ADD_66H_P_BY_SIZE(o0->getSize());
-      ADD_REX_W_BY_SIZE(o0->getSize());
-
-      if (encoded == ENC_OPS(Reg, Reg, None)) {
-        if (!Utils::inInterval<uint32_t>(static_cast<const X86Reg*>(o0)->getRegType(), kX86RegTypeGpd, kX86RegTypeGpq))
-          goto _IllegalInst;
-
-        opCode += o0->getSize() != 1;
-        opReg = x86OpReg(o0);
-        rmReg = x86OpReg(o1);
-        goto _EmitX86R;
-      }
-
-      if (encoded == ENC_OPS(Reg, Mem, None)) {
-        if (!Utils::inInterval<uint32_t>(static_cast<const X86Reg*>(o0)->getRegType(), kX86RegTypeGpd, kX86RegTypeGpq))
-          goto _IllegalInst;
-
-        opCode += o0->getSize() != 1;
-        opReg = x86OpReg(o0);
-        rmMem = x86OpMem(o1);
-        goto _EmitX86M;
-      }
-      break;
-
-    case kX86InstEncodingIdExtExtrW:
+    case kX86InstEncodingSimdPextrw:
       if (encoded == ENC_OPS(Reg, Reg, Imm)) {
         ADD_66H_P(x86IsXmm(static_cast<const X86Reg*>(o1)));
 
@@ -2321,7 +2342,7 @@ _EmitFpArith_Mem:
       }
       break;
 
-    case kX86InstEncodingIdExtExtract:
+    case kX86InstEncodingSimdExtract:
       if (encoded == ENC_OPS(Reg, Reg, Imm)) {
         ADD_66H_P(x86IsXmm(static_cast<const X86Reg*>(o1)));
 
@@ -2345,22 +2366,12 @@ _EmitFpArith_Mem:
       }
       break;
 
-    case kX86InstEncodingIdExtFence:
-      if (Arch == kArchX64 && (opCode & kX86InstOpCode_W_Mask)) {
-        EMIT_BYTE(kX86ByteRex | kX86ByteRexW);
-      }
-
-      EMIT_BYTE(0x0F);
-      EMIT_BYTE(opCode);
-      EMIT_BYTE(0xC0 | (opReg << 3));
-      goto _EmitDone;
-
-    case kX86InstEncodingIdExtMov:
-    case kX86InstEncodingIdExtMovNoRexW:
+    case kX86InstEncodingSimdMov:
+    case kX86InstEncodingSimdMovNoRexW:
       ASMJIT_ASSERT(extendedInfo._opFlags[0] != 0);
       ASMJIT_ASSERT(extendedInfo._opFlags[1] != 0);
 
-      // Check parameters Gpd|Gpq|Mm|Xmm <- Gpd|Gpq|Mm|Xmm|X86Mem|Imm.
+      // Check parameters GPD|GPQ|MMX|XMM <- GPD|GPQ|MMX|XMM|Mem|Imm.
       ASMJIT_ASSERT(!((o0->isMem()                   && (extendedInfo._opFlags[0] & kX86InstOpMem) == 0) ||
                       (o0->isRegType(kX86RegTypeMm ) && (extendedInfo._opFlags[0] & kX86InstOpMm ) == 0) ||
                       (o0->isRegType(kX86RegTypeXmm) && (extendedInfo._opFlags[0] & kX86InstOpXmm) == 0) ||
@@ -2372,19 +2383,19 @@ _EmitFpArith_Mem:
                       (o1->isRegType(kX86RegTypeGpd) && (extendedInfo._opFlags[1] & kX86InstOpGd ) == 0) ||
                       (o1->isRegType(kX86RegTypeGpq) && (extendedInfo._opFlags[1] & kX86InstOpGq ) == 0) ));
 
-      // Gp|Mm|Xmm <- Gp|Mm|Xmm
+      // GP|MMX|XMM <- GP|MMX|XMM
       if (encoded == ENC_OPS(Reg, Reg, None)) {
-        ADD_REX_W(static_cast<const X86Reg*>(o0)->isGpq() && (info.getEncodingId() != kX86InstEncodingIdExtMovNoRexW));
-        ADD_REX_W(static_cast<const X86Reg*>(o1)->isGpq() && (info.getEncodingId() != kX86InstEncodingIdExtMovNoRexW));
+        ADD_REX_W(x86IsGpq(static_cast<const X86Reg*>(o0)) && (info.getEncoding() != kX86InstEncodingSimdMovNoRexW));
+        ADD_REX_W(x86IsGpq(static_cast<const X86Reg*>(o1)) && (info.getEncoding() != kX86InstEncodingSimdMovNoRexW));
 
         opReg = x86OpReg(o0);
         rmReg = x86OpReg(o1);
         goto _EmitX86R;
       }
 
-      // Gp|Mm|Xmm <- Mem
+      // GP|MMX|XMM <- Mem
       if (encoded == ENC_OPS(Reg, Mem, None)) {
-        ADD_REX_W(static_cast<const X86Reg*>(o0)->isGpq() && (info.getEncodingId() != kX86InstEncodingIdExtMovNoRexW));
+        ADD_REX_W(x86IsGpq(static_cast<const X86Reg*>(o0)) && (info.getEncoding() != kX86InstEncodingSimdMovNoRexW));
 
         opReg = x86OpReg(o0);
         rmMem = x86OpMem(o1);
@@ -2394,9 +2405,9 @@ _EmitFpArith_Mem:
       // The following instruction uses opCode[1].
       opCode = extendedInfo.getSecondaryOpCode();
 
-      // X86Mem <- Gp|Mm|Xmm
+      // X86Mem <- GP|MMX|XMM
       if (encoded == ENC_OPS(Mem, Reg, None)) {
-        ADD_REX_W(static_cast<const X86Reg*>(o1)->isGpq() && (info.getEncodingId() != kX86InstEncodingIdExtMovNoRexW));
+        ADD_REX_W(x86IsGpq(static_cast<const X86Reg*>(o1)) && (info.getEncoding() != kX86InstEncodingSimdMovNoRexW));
 
         opReg = x86OpReg(o1);
         rmMem = x86OpMem(o0);
@@ -2404,7 +2415,7 @@ _EmitFpArith_Mem:
       }
       break;
 
-    case kX86InstEncodingIdExtMovBe:
+    case kX86InstEncodingSimdMovBe:
       if (encoded == ENC_OPS(Reg, Mem, None)) {
         if (o0->getSize() == 1)
           goto _IllegalInst;
@@ -2433,18 +2444,18 @@ _EmitFpArith_Mem:
       }
       break;
 
-    case kX86InstEncodingIdExtMovD:
+    case kX86InstEncodingSimdMovD:
 _EmitMmMovD:
       opReg = x86OpReg(o0);
       ADD_66H_P(x86IsXmm(static_cast<const X86Reg*>(o0)));
 
-      // Mm/Xmm <- Gp
+      // MMX/XMM <- Gp
       if (encoded == ENC_OPS(Reg, Reg, None) && static_cast<const X86Reg*>(o1)->isGp()) {
         rmReg = x86OpReg(o1);
         goto _EmitX86R;
       }
 
-      // Mm/Xmm <- Mem
+      // MMX/XMM <- Mem
       if (encoded == ENC_OPS(Reg, Mem, None)) {
         rmMem = x86OpMem(o1);
         goto _EmitX86M;
@@ -2455,43 +2466,43 @@ _EmitMmMovD:
       opReg = x86OpReg(o1);
       ADD_66H_P(x86IsXmm(static_cast<const X86Reg*>(o1)));
 
-      // Gp <- Mm/Xmm
+      // GP <- MMX/XMM
       if (encoded == ENC_OPS(Reg, Reg, None) && static_cast<const X86Reg*>(o0)->isGp()) {
         rmReg = x86OpReg(o0);
         goto _EmitX86R;
       }
 
-      // X86Mem <- Mm/Xmm
+      // Mem <- MMX/XMM
       if (encoded == ENC_OPS(Mem, Reg, None)) {
         rmMem = x86OpMem(o0);
         goto _EmitX86M;
       }
       break;
 
-    case kX86InstEncodingIdExtMovQ:
+    case kX86InstEncodingSimdMovQ:
       if (encoded == ENC_OPS(Reg, Reg, None)) {
         opReg = x86OpReg(o0);
         rmReg = x86OpReg(o1);
 
-        // Mm <- Mm
+        // MMX <- MMX
         if (static_cast<const X86Reg*>(o0)->isMm() && static_cast<const X86Reg*>(o1)->isMm()) {
           opCode = kX86InstOpCode_PP_00 | kX86InstOpCode_MM_0F | 0x6F;
           goto _EmitX86R;
         }
 
-        // Xmm <- Xmm
+        // XMM <- XMM
         if (static_cast<const X86Reg*>(o0)->isXmm() && static_cast<const X86Reg*>(o1)->isXmm()) {
           opCode = kX86InstOpCode_PP_F3 | kX86InstOpCode_MM_0F | 0x7E;
           goto _EmitX86R;
         }
 
-        // Mm <- Xmm (Movdq2q)
+        // MMX <- XMM (MOVDQ2Q)
         if (static_cast<const X86Reg*>(o0)->isMm() && static_cast<const X86Reg*>(o1)->isXmm()) {
           opCode = kX86InstOpCode_PP_F2 | kX86InstOpCode_MM_0F | 0xD6;
           goto _EmitX86R;
         }
 
-        // Xmm <- Mm (Movq2dq)
+        // XMM <- MMX (MOVQ2DQ)
         if (static_cast<const X86Reg*>(o0)->isXmm() && static_cast<const X86Reg*>(o1)->isMm()) {
           opCode = kX86InstOpCode_PP_F3 | kX86InstOpCode_MM_0F | 0xD6;
           goto _EmitX86R;
@@ -2502,13 +2513,13 @@ _EmitMmMovD:
         opReg = x86OpReg(o0);
         rmMem = x86OpMem(o1);
 
-        // Mm <- Mem
+        // MMX <- Mem
         if (static_cast<const X86Reg*>(o0)->isMm()) {
           opCode = kX86InstOpCode_PP_00 | kX86InstOpCode_MM_0F | 0x6F;
           goto _EmitX86M;
         }
 
-        // Xmm <- Mem
+        // XMM <- Mem
         if (static_cast<const X86Reg*>(o0)->isXmm()) {
           opCode = kX86InstOpCode_PP_F3 | kX86InstOpCode_MM_0F | 0x7E;
           goto _EmitX86M;
@@ -2519,13 +2530,13 @@ _EmitMmMovD:
         opReg = x86OpReg(o1);
         rmMem = x86OpMem(o0);
 
-        // X86Mem <- Mm
+        // Mem <- MMX
         if (static_cast<const X86Reg*>(o1)->isMm()) {
           opCode = kX86InstOpCode_PP_00 | kX86InstOpCode_MM_0F | 0x7F;
           goto _EmitX86M;
         }
 
-        // X86Mem <- Xmm
+        // Mem <- XMM
         if (static_cast<const X86Reg*>(o1)->isXmm()) {
           opCode = kX86InstOpCode_PP_66 | kX86InstOpCode_MM_0F | 0xD6;
           goto _EmitX86M;
@@ -2533,29 +2544,21 @@ _EmitMmMovD:
       }
 
       if (Arch == kArchX64) {
-        // Movq in other case is simply a MOVD instruction promoted to 64-bit.
+        // MOVQ in other case is simply a MOVD instruction promoted to 64-bit.
         opCode |= kX86InstOpCode_W;
         goto _EmitMmMovD;
       }
       break;
 
-    case kX86InstEncodingIdExtPrefetch:
-      if (encoded == ENC_OPS(Mem, Imm, None)) {
-        opReg = static_cast<const Imm*>(o1)->getUInt32() & 0x3;
-        rmMem = x86OpMem(o0);
-        goto _EmitX86M;
-      }
-      break;
-
-    case kX86InstEncodingIdExtRm_PQ:
+    case kX86InstEncodingSimdRm_PQ:
       ADD_66H_P(o0->isRegType(kX86RegTypeXmm) || o1->isRegType(kX86RegTypeXmm));
       ASMJIT_FALLTHROUGH;
 
-    case kX86InstEncodingIdExtRm_Q:
+    case kX86InstEncodingSimdRm_Q:
       ADD_REX_W(o0->isRegType(kX86RegTypeGpq) || o1->isRegType(kX86RegTypeGpq) || (o1->isMem() && o1->getSize() == 8));
       ASMJIT_FALLTHROUGH;
 
-    case kX86InstEncodingIdExtRm:
+    case kX86InstEncodingSimdRm:
       if (encoded == ENC_OPS(Reg, Reg, None)) {
         opReg = x86OpReg(o0);
         rmReg = x86OpReg(o1);
@@ -2569,7 +2572,7 @@ _EmitMmMovD:
       }
       break;
 
-    case kX86InstEncodingIdExtRm_P:
+    case kX86InstEncodingSimdRm_P:
       if (encoded == ENC_OPS(Reg, Reg, None)) {
         ADD_66H_P(x86IsXmm(static_cast<const X86Reg*>(o0)) | x86IsXmm(static_cast<const X86Reg*>(o1)));
 
@@ -2587,7 +2590,7 @@ _EmitMmMovD:
       }
       break;
 
-    case kX86InstEncodingIdExtRmRi:
+    case kX86InstEncodingSimdRmRi:
       if (encoded == ENC_OPS(Reg, Reg, None)) {
         opReg = x86OpReg(o0);
         rmReg = x86OpReg(o1);
@@ -2613,7 +2616,7 @@ _EmitMmMovD:
       }
       break;
 
-    case kX86InstEncodingIdExtRmRi_P:
+    case kX86InstEncodingSimdRmRi_P:
       if (encoded == ENC_OPS(Reg, Reg, None)) {
         ADD_66H_P(x86IsXmm(static_cast<const X86Reg*>(o0)) | x86IsXmm(static_cast<const X86Reg*>(o1)));
 
@@ -2645,7 +2648,7 @@ _EmitMmMovD:
       }
       break;
 
-    case kX86InstEncodingIdExtRmi:
+    case kX86InstEncodingSimdRmi:
       imVal = static_cast<const Imm*>(o2)->getInt64();
       imLen = 1;
 
@@ -2662,7 +2665,7 @@ _EmitMmMovD:
       }
       break;
 
-    case kX86InstEncodingIdExtRmi_P:
+    case kX86InstEncodingSimdRmi_P:
       imVal = static_cast<const Imm*>(o2)->getInt64();
       imLen = 1;
 
@@ -2687,7 +2690,7 @@ _EmitMmMovD:
     // [Group - Extrq / Insertq (SSE4a)]
     // ------------------------------------------------------------------------
 
-    case kX86InstEncodingIdExtExtrq:
+    case kX86InstEncodingSimdExtrq:
       opReg = x86OpReg(o0);
       rmReg = x86OpReg(o1);
 
@@ -2707,7 +2710,7 @@ _EmitMmMovD:
       }
       break;
 
-    case kX86InstEncodingIdExtInsertq:
+    case kX86InstEncodingSimdInsertq:
       opReg = x86OpReg(o0);
       rmReg = x86OpReg(o1);
 
@@ -2729,7 +2732,7 @@ _EmitMmMovD:
     // [Group - 3dNow]
     // ------------------------------------------------------------------------
 
-    case kX86InstEncodingId3dNow:
+    case kX86InstEncodingSimd3dNow:
       // Every 3dNow instruction starts with 0x0F0F and the actual opcode is
       // stored as 8-bit immediate.
       imVal = opCode & 0xFF;
@@ -2753,21 +2756,21 @@ _EmitMmMovD:
     // [Avx]
     // ------------------------------------------------------------------------
 
-    case kX86InstEncodingIdAvxOp:
+    case kX86InstEncodingAvxOp:
       goto _EmitAvxOp;
 
-    case kX86InstEncodingIdAvxM:
+    case kX86InstEncodingAvxM:
       if (encoded == ENC_OPS(Mem, None, None)) {
         rmMem = x86OpMem(o0);
         goto _EmitAvxM;
       }
       break;
 
-    case kX86InstEncodingIdAvxMr_P:
+    case kX86InstEncodingAvxMr_OptL:
       ADD_VEX_L(x86IsYmm(o0) | x86IsYmm(o1));
       ASMJIT_FALLTHROUGH;
 
-    case kX86InstEncodingIdAvxMr:
+    case kX86InstEncodingAvxMr:
       if (encoded == ENC_OPS(Reg, Reg, None)) {
         opReg = x86OpReg(o1);
         rmReg = x86OpReg(o0);
@@ -2781,11 +2784,11 @@ _EmitMmMovD:
       }
       break;
 
-    case kX86InstEncodingIdAvxMri_P:
+    case kX86InstEncodingAvxMri_OptL:
       ADD_VEX_L(x86IsYmm(o0) | x86IsYmm(static_cast<const X86Reg*>(o1)));
       ASMJIT_FALLTHROUGH;
 
-    case kX86InstEncodingIdAvxMri:
+    case kX86InstEncodingAvxMri:
       imVal = static_cast<const Imm*>(o2)->getInt64();
       imLen = 1;
 
@@ -2802,11 +2805,11 @@ _EmitMmMovD:
       }
       break;
 
-    case kX86InstEncodingIdAvxRm_P:
+    case kX86InstEncodingAvxRm_OptL:
       ADD_VEX_L(x86IsYmm(static_cast<const X86Reg*>(o0)) | x86IsYmm(o1));
       ASMJIT_FALLTHROUGH;
 
-    case kX86InstEncodingIdAvxRm:
+    case kX86InstEncodingAvxRm:
       if (encoded == ENC_OPS(Reg, Reg, None)) {
         opReg = x86OpReg(o0);
         rmReg = x86OpReg(o1);
@@ -2820,11 +2823,8 @@ _EmitMmMovD:
       }
       break;
 
-    case kX86InstEncodingIdAvxRmi_P:
-      ADD_VEX_L(x86IsYmm(static_cast<const X86Reg*>(o0)) | x86IsYmm(o1));
-      ASMJIT_FALLTHROUGH;
-
-    case kX86InstEncodingIdAvxRmi:
+    case kX86InstEncodingAvxRmi:
+CaseAvxRmi:
       imVal = static_cast<const Imm*>(o2)->getInt64();
       imLen = 1;
 
@@ -2841,13 +2841,18 @@ _EmitMmMovD:
       }
       break;
 
-    case kX86InstEncodingIdAvxRvm_P:
-      ADD_VEX_L(x86IsYmm(static_cast<const X86Reg*>(o0)) | x86IsYmm(static_cast<const X86Reg*>(o1)));
-      ASMJIT_FALLTHROUGH;
+    case kX86InstEncodingAvxRmi_OptW:
+      ADD_REX_W(x86IsGpq(static_cast<const X86Reg*>(o0)) | x86IsGpq(o1));
+      goto CaseAvxRmi;
 
-    case kX86InstEncodingIdAvxRvm:
-      if (encoded == ENC_OPS(Reg, Reg, Reg)) {
+    case kX86InstEncodingAvxRmi_OptL:
+      ADD_VEX_L(x86IsYmm(static_cast<const X86Reg*>(o0)) | x86IsYmm(o1));
+      goto CaseAvxRmi;
+
+    case kX86InstEncodingAvxRvm:
 _EmitAvxRvm:
+      if (encoded == ENC_OPS(Reg, Reg, Reg)) {
+_EmitAvxRvm_Reg:
         opReg = x86RegAndVvvv(x86OpReg(o0), x86OpReg(o1));
         rmReg = x86OpReg(o2);
         goto _EmitAvxR;
@@ -2860,11 +2865,19 @@ _EmitAvxRvm:
       }
       break;
 
-    case kX86InstEncodingIdAvxRvmr_P:
+    case kX86InstEncodingAvxRvm_OptW:
+      ADD_REX_W(x86IsGpq(static_cast<const X86Reg*>(o0)) | x86IsGpq(static_cast<const X86Reg*>(o1)));
+      goto _EmitAvxRvm;
+
+    case kX86InstEncodingAvxRvm_OptL:
+      ADD_VEX_L(x86IsYmm(static_cast<const X86Reg*>(o0)) | x86IsYmm(static_cast<const X86Reg*>(o1)));
+      goto _EmitAvxRvm;
+
+    case kX86InstEncodingAvxRvmr_OptL:
       ADD_VEX_L(x86IsYmm(static_cast<const X86Reg*>(o0)) | x86IsYmm(static_cast<const X86Reg*>(o1)));
       ASMJIT_FALLTHROUGH;
 
-    case kX86InstEncodingIdAvxRvmr:
+    case kX86InstEncodingAvxRvmr:
       if (!o3->isReg())
         goto _IllegalInst;
 
@@ -2884,11 +2897,11 @@ _EmitAvxRvm:
       }
       break;
 
-    case kX86InstEncodingIdAvxRvmi_P:
+    case kX86InstEncodingAvxRvmi_OptL:
       ADD_VEX_L(x86IsYmm(static_cast<const X86Reg*>(o0)) | x86IsYmm(static_cast<const X86Reg*>(o1)));
       ASMJIT_FALLTHROUGH;
 
-    case kX86InstEncodingIdAvxRvmi:
+    case kX86InstEncodingAvxRvmi:
       if (!o3->isImm())
         goto _IllegalInst;
 
@@ -2908,7 +2921,8 @@ _EmitAvxRvm:
       }
       break;
 
-    case kX86InstEncodingIdAvxRmv:
+    case kX86InstEncodingAvxRmv:
+CaseAvxRmv:
       if (encoded == ENC_OPS(Reg, Reg, Reg)) {
         opReg = x86RegAndVvvv(x86OpReg(o0), x86OpReg(o2));
         rmReg = x86OpReg(o1);
@@ -2922,7 +2936,11 @@ _EmitAvxRvm:
       }
       break;
 
-    case kX86InstEncodingIdAvxRmvi:
+    case kX86InstEncodingAvxRmv_OptW:
+      ADD_REX_W(x86IsGpq(static_cast<const X86Reg*>(o0)) | x86IsGpq(static_cast<const X86Reg*>(o2)));
+      goto CaseAvxRmv;
+
+    case kX86InstEncodingAvxRmvi:
       if (!o3->isImm())
         goto _IllegalInst;
 
@@ -2942,7 +2960,7 @@ _EmitAvxRvm:
       }
       break;
 
-    case kX86InstEncodingIdAvxMovDQ:
+    case kX86InstEncodingAvxMovDQ:
       if (encoded == ENC_OPS(Reg, Reg, None)) {
         if (static_cast<const X86Reg*>(o0)->isGp()) {
           opCode = extendedInfo.getSecondaryOpCode();
@@ -2960,11 +2978,11 @@ _EmitAvxRvm:
 
       goto _AvxRmMr_AfterRegRegCheck;
 
-    case kX86InstEncodingIdAvxRmMr_P:
+    case kX86InstEncodingAvxRmMr_OptL:
       ADD_VEX_L(x86IsYmm(o0) | x86IsYmm(o1));
       ASMJIT_FALLTHROUGH;
 
-    case kX86InstEncodingIdAvxRmMr:
+    case kX86InstEncodingAvxRmMr:
       if (encoded == ENC_OPS(Reg, Reg, None)) {
         opReg = x86OpReg(o0);
         rmReg = x86OpReg(o1);
@@ -2989,11 +3007,11 @@ _AvxRmMr_AfterRegRegCheck:
       }
       break;
 
-    case kX86InstEncodingIdAvxRvmRmi_P:
+    case kX86InstEncodingAvxRvmRmi_OptL:
       ADD_VEX_L(x86IsYmm(static_cast<const X86Reg*>(o0)) | x86IsYmm(o1));
       ASMJIT_FALLTHROUGH;
 
-    case kX86InstEncodingIdAvxRvmRmi:
+    case kX86InstEncodingAvxRvmRmi:
       if (encoded == ENC_OPS(Reg, Reg, Reg)) {
         opReg = x86RegAndVvvv(x86OpReg(o0), x86OpReg(o1));
         rmReg = x86OpReg(o2);
@@ -3026,7 +3044,7 @@ _AvxRmMr_AfterRegRegCheck:
       }
       break;
 
-    case kX86InstEncodingIdAvxRvmMr:
+    case kX86InstEncodingAvxRvmMr:
       if (encoded == ENC_OPS(Reg, Reg, Reg)) {
         opReg = x86RegAndVvvv(x86OpReg(o0), x86OpReg(o1));
         rmReg = x86OpReg(o2);
@@ -3055,11 +3073,11 @@ _AvxRmMr_AfterRegRegCheck:
       }
       break;
 
-    case kX86InstEncodingIdAvxRvmMvr_P:
+    case kX86InstEncodingAvxRvmMvr_OptL:
       ADD_VEX_L(x86IsYmm(o0) | x86IsYmm(o1));
       ASMJIT_FALLTHROUGH;
 
-    case kX86InstEncodingIdAvxRvmMvr:
+    case kX86InstEncodingAvxRvmMvr:
       if (encoded == ENC_OPS(Reg, Reg, Reg)) {
         opReg = x86RegAndVvvv(x86OpReg(o0), x86OpReg(o1));
         rmReg = x86OpReg(o2);
@@ -3083,11 +3101,11 @@ _AvxRmMr_AfterRegRegCheck:
       }
       break;
 
-    case kX86InstEncodingIdAvxRvmVmi_P:
+    case kX86InstEncodingAvxRvmVmi_OptL:
       ADD_VEX_L(x86IsYmm(static_cast<const X86Reg*>(o0)) | x86IsYmm(o1));
       ASMJIT_FALLTHROUGH;
 
-    case kX86InstEncodingIdAvxRvmVmi:
+    case kX86InstEncodingAvxRvmVmi:
       if (encoded == ENC_OPS(Reg, Reg, Reg)) {
         opReg = x86RegAndVvvv(x86OpReg(o0), x86OpReg(o1));
         rmReg = x86OpReg(o2);
@@ -3121,7 +3139,8 @@ _AvxRmMr_AfterRegRegCheck:
       }
       break;
 
-    case kX86InstEncodingIdAvxVm:
+    case kX86InstEncodingAvxVm:
+CaseAvxVm:
       if (encoded == ENC_OPS(Reg, Reg, None)) {
         opReg = x86RegAndVvvv(opReg, x86OpReg(o0));
         rmReg = x86OpReg(o1);
@@ -3135,11 +3154,15 @@ _AvxRmMr_AfterRegRegCheck:
       }
       break;
 
-    case kX86InstEncodingIdAvxVmi_P:
+    case kX86InstEncodingAvxVm_OptW:
+      ADD_REX_W(x86IsGpq(static_cast<const X86Reg*>(o0)) | x86IsGpq(o1));
+      goto CaseAvxVm;
+
+    case kX86InstEncodingAvxVmi_OptL:
       ADD_VEX_L(x86IsYmm(static_cast<const X86Reg*>(o0)) | x86IsYmm(o1));
       ASMJIT_FALLTHROUGH;
 
-    case kX86InstEncodingIdAvxVmi:
+    case kX86InstEncodingAvxVmi:
       imVal = static_cast<const Imm*>(o3)->getInt64();
       imLen = 1;
 
@@ -3156,11 +3179,11 @@ _AvxRmMr_AfterRegRegCheck:
       }
       break;
 
-    case kX86InstEncodingIdAvxRvrmRvmr_P:
+    case kX86InstEncodingAvxRvrmRvmr_OptL:
       ADD_VEX_L(x86IsYmm(static_cast<const X86Reg*>(o0)) | x86IsYmm(static_cast<const X86Reg*>(o1)));
       ASMJIT_FALLTHROUGH;
 
-    case kX86InstEncodingIdAvxRvrmRvmr:
+    case kX86InstEncodingAvxRvrmRvmr:
       if (encoded == ENC_OPS(Reg, Reg, Reg) && o3->isReg()) {
         imVal = x86OpReg(o3) << 4;
         imLen = 1;
@@ -3193,9 +3216,9 @@ _AvxRmMr_AfterRegRegCheck:
       }
       break;
 
-    case kX86InstEncodingIdAvxMovSsSd:
+    case kX86InstEncodingAvxMovSsSd:
       if (encoded == ENC_OPS(Reg, Reg, Reg)) {
-        goto _EmitAvxRvm;
+        goto _EmitAvxRvm_Reg;
       }
 
       if (encoded == ENC_OPS(Reg, Mem, None)) {
@@ -3212,7 +3235,7 @@ _AvxRmMr_AfterRegRegCheck:
       }
       break;
 
-    case kX86InstEncodingIdAvxGatherEx:
+    case kX86InstEncodingAvxGatherEx:
       if (encoded == ENC_OPS(Reg, Mem, Reg)) {
         opReg = x86RegAndVvvv(x86OpReg(o0), x86OpReg(o2));
         rmMem = x86OpMem(o1);
@@ -3226,7 +3249,7 @@ _AvxRmMr_AfterRegRegCheck:
       }
       break;
 
-    case kX86InstEncodingIdAvxGather:
+    case kX86InstEncodingAvxGather:
       if (encoded == ENC_OPS(Reg, Mem, Reg)) {
         opReg = x86RegAndVvvv(x86OpReg(o0), x86OpReg(o2));
         rmMem = x86OpMem(o1);
@@ -3244,12 +3267,12 @@ _AvxRmMr_AfterRegRegCheck:
     // [FMA4]
     // ------------------------------------------------------------------------
 
-    case kX86InstEncodingIdFma4_P:
+    case kX86InstEncodingFma4_OptL:
       // It's fine to just check the first operand, second is just for sanity.
       ADD_VEX_L(x86IsYmm(static_cast<const X86Reg*>(o0)) | x86IsYmm(static_cast<const X86Reg*>(o1)));
       ASMJIT_FALLTHROUGH;
 
-    case kX86InstEncodingIdFma4:
+    case kX86InstEncodingFma4:
       if (encoded == ENC_OPS(Reg, Reg, Reg) && o3->isReg()) {
         imVal = x86OpReg(o3) << 4;
         imLen = 1;
@@ -3286,11 +3309,11 @@ _AvxRmMr_AfterRegRegCheck:
     // [XOP]
     // ------------------------------------------------------------------------
 
-    case kX86InstEncodingIdXopRm_P:
+    case kX86InstEncodingXopRm_OptL:
       ADD_VEX_L(x86IsYmm(static_cast<const X86Reg*>(o0)) | x86IsYmm(o1));
       ASMJIT_FALLTHROUGH;
 
-    case kX86InstEncodingIdXopRm:
+    case kX86InstEncodingXopRm:
       if (encoded == ENC_OPS(Reg, Reg, None)) {
         opReg = x86OpReg(o0);
         rmReg = x86OpReg(o1);
@@ -3304,7 +3327,7 @@ _AvxRmMr_AfterRegRegCheck:
       }
       break;
 
-    case kX86InstEncodingIdXopRvmRmv:
+    case kX86InstEncodingXopRvmRmv:
       if (encoded == ENC_OPS(Reg, Reg, Reg)) {
         opReg = x86RegAndVvvv(x86OpReg(o0), x86OpReg(o2));
         rmReg = x86OpReg(o1);
@@ -3329,7 +3352,7 @@ _AvxRmMr_AfterRegRegCheck:
 
       break;
 
-    case kX86InstEncodingIdXopRvmRmi:
+    case kX86InstEncodingXopRvmRmi:
       if (encoded == ENC_OPS(Reg, Reg, Reg)) {
         opReg = x86RegAndVvvv(x86OpReg(o0), x86OpReg(o2));
         rmReg = x86OpReg(o1);
@@ -3370,11 +3393,11 @@ _AvxRmMr_AfterRegRegCheck:
       }
       break;
 
-    case kX86InstEncodingIdXopRvmr_P:
+    case kX86InstEncodingXopRvmr_OptL:
       ADD_VEX_L(x86IsYmm(static_cast<const X86Reg*>(o0)) | x86IsYmm(static_cast<const X86Reg*>(o1)));
       ASMJIT_FALLTHROUGH;
 
-    case kX86InstEncodingIdXopRvmr:
+    case kX86InstEncodingXopRvmr:
       if (!o3->isReg())
         goto _IllegalInst;
 
@@ -3394,11 +3417,11 @@ _AvxRmMr_AfterRegRegCheck:
       }
       break;
 
-    case kX86InstEncodingIdXopRvmi_P:
+    case kX86InstEncodingXopRvmi_OptL:
       ADD_VEX_L(x86IsYmm(static_cast<const X86Reg*>(o0)) | x86IsYmm(static_cast<const X86Reg*>(o1)));
       ASMJIT_FALLTHROUGH;
 
-    case kX86InstEncodingIdXopRvmi:
+    case kX86InstEncodingXopRvmi:
       if (!o3->isImm())
         goto _IllegalInst;
 
@@ -3418,11 +3441,11 @@ _AvxRmMr_AfterRegRegCheck:
       }
       break;
 
-    case kX86InstEncodingIdXopRvrmRvmr_P:
+    case kX86InstEncodingXopRvrmRvmr_OptL:
       ADD_VEX_L(x86IsYmm(static_cast<const X86Reg*>(o0)) | x86IsYmm(static_cast<const X86Reg*>(o1)));
       ASMJIT_FALLTHROUGH;
 
-    case kX86InstEncodingIdXopRvrmRvmr:
+    case kX86InstEncodingXopRvrmRvmr:
       if (encoded == ENC_OPS(Reg, Reg, Reg) && o3->isReg()) {
         imVal = x86OpReg(o3) << 4;
         imLen = 1;
@@ -3451,6 +3474,22 @@ _AvxRmMr_AfterRegRegCheck:
         opReg = x86RegAndVvvv(x86OpReg(o0), x86OpReg(o1));
         rmMem = x86OpMem(o2);
 
+        goto _EmitXopM;
+      }
+      break;
+
+    case kX86InstEncodingXopVm_OptW:
+      ADD_REX_W(x86IsGpq(static_cast<const X86Reg*>(o0)) | x86IsGpq(o1));
+
+      if (encoded == ENC_OPS(Reg, Reg, None)) {
+        opReg = x86RegAndVvvv(opReg, x86OpReg(o0));
+        rmReg = x86OpReg(o1);
+        goto _EmitXopR;
+      }
+
+      if (encoded == ENC_OPS(Reg, Mem, None)) {
+        opReg = x86RegAndVvvv(opReg, x86OpReg(o0));
+        rmMem = x86OpMem(o1);
         goto _EmitXopM;
       }
       break;
@@ -4204,11 +4243,7 @@ _EmitDisplacement:
 
 _EmitDone:
 #if !defined(ASMJIT_DISABLE_LOGGER)
-# if defined(ASMJIT_DEBUG)
   if (self->_logger || assertIllegal) {
-# else
-  if (self->_logger) {
-# endif // ASMJIT_DEBUG
     StringBuilderTmp<512> sb;
     uint32_t loggerOptions = 0;
 
@@ -4236,9 +4271,7 @@ _EmitDone:
 # endif // ASMJIT_DEBUG
   }
 #else
-# if defined(ASMJIT_DEBUG)
   ASMJIT_ASSERT(!assertIllegal);
-# endif // ASMJIT_DEBUG
 #endif // !ASMJIT_DISABLE_LOGGER
 
   self->_comment = nullptr;

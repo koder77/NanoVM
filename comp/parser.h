@@ -40,7 +40,7 @@
 
 /* tokens: keywords */
 
-#define MAX_TOKENS                      22
+#define MAX_TOKENS                      23
 
 
 #define COMP_FUNC_SB                    "func"
@@ -107,97 +107,100 @@
 #define COMP_GOTO_SB                    "goto"
 #define COMP_GOTO                       21
 
+#define COMP_GOSUB_SB                   "gosub"
+#define COMP_GOSUB                      22
+
 #define COMP_GET_MULTI_SB               "getmulti"
-#define COMP_GET_MULTI                  22
+#define COMP_GET_MULTI                  23
 
 #define COMP_RETURN_MULTI_SB            "returnmulti"
-#define COMP_RETURN_MULTI               23
+#define COMP_RETURN_MULTI               24
 
 #define COMP_GET_MULTI_END_SB           "getmultiend"
-#define COMP_GET_MULTI_END              24
+#define COMP_GET_MULTI_END              25
 
 /* inline assembler definition */
 #define COMP_ASSEMB_SB                  "#ASSEMB"
-#define COMP_ASSEMB                     25
+#define COMP_ASSEMB                     26
 
 #define COMP_ASSEMB_END_SB              "#ASSEMB_END"
-#define COMP_ASSEMB_END                 26
+#define COMP_ASSEMB_END                 27
 
 
 #define COMP_OP_ADD_SB                  "+"
-#define COMP_OP_ADD                     27
+#define COMP_OP_ADD                     28
 
 #define COMP_OP_SUB_SB                  "-"
-#define COMP_OP_SUB                     28
+#define COMP_OP_SUB                     29
 
 #define COMP_OP_MUL_SB                  "*"
-#define COMP_OP_MUL                     29
+#define COMP_OP_MUL                     30
 
 #define COMP_OP_DIV_SB                  "/"
-#define COMP_OP_DIV                     30
+#define COMP_OP_DIV                     31
 
 #define COMP_OP_INC_SB                  "++"
-#define COMP_OP_INC                     31
+#define COMP_OP_INC                     32
 
 #define COMP_OP_DEC_SB                  "--"
-#define COMP_OP_DEC                     32
+#define COMP_OP_DEC                     33
 
 #define COMP_OP_SMUL_SB                 "<<"
-#define COMP_OP_SMUL                    33
+#define COMP_OP_SMUL                    34
 
 #define COMP_OP_SDIV_SB                 ">>"
-#define COMP_OP_SDIV                    34
+#define COMP_OP_SDIV                    35
 
 #define COMP_OP_AND_SB                  "&&"
-#define COMP_OP_AND                     35
+#define COMP_OP_AND                     36
 
 #define COMP_OP_OR_SB                   "||"
-#define COMP_OP_OR                      36
+#define COMP_OP_OR                      37
 
 #define COMP_OP_BAND_SB                 "&"
-#define COMP_OP_BAND                    37
+#define COMP_OP_BAND                    38
 
 #define COMP_OP_BOR_SB                  "|"
-#define COMP_OP_BOR                     38
+#define COMP_OP_BOR                     39
 
 #define COMP_OP_BXOR_SB                 "^"
-#define COMP_OP_BXOR                    39
+#define COMP_OP_BXOR                    40
 
 #define COMP_OP_MOD_SB                  "%"
-#define COMP_OP_MOD                     40
+#define COMP_OP_MOD                     41
 
 #define COMP_OP_GREATER_SB              ">"
-#define COMP_OP_GREATER                 41
+#define COMP_OP_GREATER                 42
 
 #define COMP_OP_LESS_SB                 "<"
-#define COMP_OP_LESS                    42
+#define COMP_OP_LESS                    43
 
 #define COMP_OP_GREATER_OR_EQ_SB        ">="
-#define COMP_OP_GREATER_OR_EQ           43
+#define COMP_OP_GREATER_OR_EQ           45
 
 #define COMP_OP_LESS_OR_EQ_SB           "<="
-#define COMP_OP_LESS_OR_EQ              44
+#define COMP_OP_LESS_OR_EQ              46
 
 #define NBRACKET_OPEN_SB                "("
-#define NBRACKET_OPEN                   45
+#define NBRACKET_OPEN                   47
 
 #define NBRACKET_CLOSE_SB               ")"
-#define NBRACKET_CLOSE                  46
+#define NBRACKET_CLOSE                  48
 
 #define EQUAL_SB                        "="
-#define EQUAL                           47
+#define EQUAL                           49
 
 #define NOT_EQUAL_SB                    "!="
-#define NOT_EQUAL                       48
+#define NOT_EQUAL                       50
 
 #define EQUAL_LOG_SB                    "=="
-#define EQUAL_LOG                       49
+#define EQUAL_LOG                       51
 
 #define NOT_SB                          "!"
-#define NOT                             50
+#define NOT                             52
 
 #define TILDE_SB                        "~"
-#define TILDE                           51
+#define TILDE                           53
 
 #define ASSEMB_INLINE                   MAXOPCODE + 1
 

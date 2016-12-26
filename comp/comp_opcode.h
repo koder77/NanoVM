@@ -49,4 +49,5 @@ struct opcode comp_opcode[] =
     { "next" },
     { "lab" },
     { "goto" },
+    { "gosub" }
 };

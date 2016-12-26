@@ -2,7 +2,31 @@ Nano VM (3.4.3-6)
     new: exe_elist: direct threading with dthread void* array.
     Speedup factor of about x 1.2.
     
--- Stefan Pietzonke <jay-t@gmx.net>  Thu 17 Nov 2016 20:54 +0100    
+    Commented OUT PULL opcodes in JIT-compiler. The code is not working right!!
+    
+    New: gosub opcode in N compiler.
+    The return has to be set like this:
+    
+    #ASSEMB
+    rts;
+    #ASSEMB_END
+    
+    This can be usefull in some cases if the overhead of a function call is to big.
+    
+    new: assembler now shows the size of the object file.
+    The size of the assembler object buffer is now 1 MB. The buffer will be automatically
+    increased to 10 MB if it is needed.
+    
+    AsmJit now builds as static linked library.
+    
+    comp/regspill.c code changed. Now spills first half of registers if running out of free regs.
+    
+    new: CPU_CORES in include/host.h sets the number of CPU cores set by pthreads CPU affinity.
+    The threads are assigned to different CPU cores to speedup execution.
+    
+    new: JIT-compiler: PUSH_D.
+    
+-- Stefan Pietzonke <jay-t@gmx.net>  Fri 23 Dec 2016 17:40 +0100    
 
 Nano VM (3.4.3-5)
 	new: JIT compiler: PULL_I, PULL_L, PULL_Q, PULL_B opcodes!

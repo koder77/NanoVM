@@ -47,7 +47,7 @@
 // debug AsmJit itself.
 //
 // #define ASMJIT_DEBUG              // Define to enable debug-mode.
-// #define ASMJIT_RELEASE            // Define to enable release-mode.
+#define ASMJIT_RELEASE            // Define to enable release-mode.
 // #define ASMJIT_TRACE              // Define to enable tracing.
 
 // AsmJit Build Backends
@@ -86,10 +86,9 @@
 #endif
 
 // ASMJIT_EMBED implies ASMJIT_STATIC.
-//#if defined(ASMJIT_EMBED) && !defined(ASMJIT_STATIC)
-// #define ASMJIT_STATIC
-// #define ASMJIT_EMBED
-//#endif
+#if defined(ASMJIT_EMBED) && !defined(ASMJIT_STATIC)
+#define ASMJIT_STATIC
+#endif
 
 // ============================================================================
 // [asmjit::Build - VERSION]
@@ -608,9 +607,7 @@
 // [@CC_INLINE{@]
 // \def ASMJIT_INLINE
 // Always inline the decorated function.
-#if ASMJIT_CC_HAS_ATTRIBUTE_ALWAYS_INLINE && ASMJIT_CC_CLANG
-# define ASMJIT_INLINE inline __attribute__((__always_inline__, __visibility__("hidden")))
-#elif ASMJIT_CC_HAS_ATTRIBUTE_ALWAYS_INLINE
+#if ASMJIT_CC_HAS_ATTRIBUTE_ALWAYS_INLINE
 # define ASMJIT_INLINE inline __attribute__((__always_inline__))
 #elif ASMJIT_CC_HAS_DECLSPEC_FORCEINLINE
 # define ASMJIT_INLINE __forceinline
@@ -921,6 +918,7 @@ static inline int disabledTrace(...) { return 0; }
 // ============================================================================
 // [asmjit::Build - Test]
 // ============================================================================
+
 
 // Include a unit testing package if this is a `asmjit_test` build.
 #if defined(ASMJIT_TEST)

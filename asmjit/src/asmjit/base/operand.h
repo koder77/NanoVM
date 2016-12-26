@@ -8,7 +8,7 @@
 #ifndef _ASMJIT_BASE_OPERAND_H
 #define _ASMJIT_BASE_OPERAND_H
 
-// [Dependencies - AsmJit]
+// [Dependencies]
 #include "../base/utils.h"
 
 // [Api-Begin]
@@ -20,8 +20,8 @@ namespace asmjit {
 // [Forward Declarations]
 // ============================================================================
 
-struct Assembler;
-struct Compiler;
+class Assembler;
+class Compiler;
 
 //! \addtogroup asmjit_base
 //! \{
@@ -52,8 +52,8 @@ ASMJIT_ENUM(SizeDefs) {
   kSizeQWord = 8,
   //! 10 bytes size (TWORD).
   kSizeTWord = 10,
-  //! 16 bytes size (OWORD / DQWORD).
-  kSizeOWord = 16,
+  //! 16 bytes size (DQWORD).
+  kSizeDQWord = 16,
   //! 32 bytes size (YWORD / QQWORD).
   kSizeYWord = 32,
   //! 64 bytes size (ZWORD / DQQWORD).
@@ -143,7 +143,8 @@ ASMJIT_ENUM(VarType) {
 // ============================================================================
 
 //! Operand can contain register, memory location, immediate, or label.
-struct Operand {
+class Operand {
+ public:
   // --------------------------------------------------------------------------
   // [Type]
   // --------------------------------------------------------------------------
@@ -197,7 +198,7 @@ struct Operand {
 
     //! Operand id, identifier used by `Assembler` and `Compiler`.
     //!
-    //! \note Uninitialized operand has always set id to `kInvalidValue`.
+    //! NOTE: Uninitialized operand has always set id to `kInvalidValue`.
     uint32_t id;
 
     //! \internal
@@ -543,7 +544,7 @@ struct OperandUtil {
 
   //! Get whether the id refers to `Var`.
   //!
-  //! \note The function will never return `true` if the id is `kInvalidValue`.
+  //! NOTE: The function will never return `true` if the id is `kInvalidValue`.
   //! The trick is to compare a given id to -1 (kInvalidValue) so we check both
   //! using only one comparison.
   static ASMJIT_INLINE bool isVarId(uint32_t id) noexcept {
@@ -552,7 +553,7 @@ struct OperandUtil {
 
   //! Get whether the id refers to `Label`.
   //!
-  //! \note The function will never return `true` if the id is `kInvalidValue`.
+  //! NOTE: The function will never return `true` if the id is `kInvalidValue`.
   static ASMJIT_INLINE bool isLabelId(uint32_t id) noexcept {
     return static_cast<int32_t>(id) >= 0;
   }
@@ -563,7 +564,8 @@ struct OperandUtil {
 // ============================================================================
 
 //! Base class for all register operands.
-struct Reg : public Operand {
+class Reg : public Operand {
+ public:
   // --------------------------------------------------------------------------
   // [Construction / Destruction]
   // --------------------------------------------------------------------------
@@ -683,7 +685,8 @@ struct Reg : public Operand {
 // ============================================================================
 
 //! Base class for all memory operands.
-struct BaseMem : public Operand {
+class BaseMem : public Operand {
+ public:
   // --------------------------------------------------------------------------
   // [Construction / Destruction]
   // --------------------------------------------------------------------------
@@ -778,7 +781,8 @@ struct BaseMem : public Operand {
 //!
 //! To create immediate operand use `imm()` or `imm_u()` non-members or `Imm`
 //! constructors.
-struct Imm : public Operand {
+class Imm : public Operand {
+ public:
   // --------------------------------------------------------------------------
   // [Construction / Destruction]
   // --------------------------------------------------------------------------
@@ -1056,7 +1060,8 @@ struct Imm : public Operand {
 //! // Bind label to the current position, see `Assembler::bind()`.
 //! a.bind(L1);
 //! ~~~
-struct Label : public Operand {
+class Label : public Operand {
+ public:
   // --------------------------------------------------------------------------
   // [Construction / Destruction]
   // --------------------------------------------------------------------------
@@ -1108,7 +1113,8 @@ struct Label : public Operand {
 
 #if !defined(ASMJIT_DISABLE_COMPILER)
 //! Base class for all variables.
-struct Var : public Operand {
+class Var : public Operand {
+ public:
   // --------------------------------------------------------------------------
   // [Construction / Destruction]
   // --------------------------------------------------------------------------

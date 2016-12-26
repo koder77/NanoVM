@@ -25,6 +25,8 @@
 *
 ***************************************************************************/
 
+#define _GNU_SOURCE
+
 #if OS_WINDOWS
     #define WINVER              0x0501      /* = Windows XP, for Windows socket API */
 #endif
@@ -34,6 +36,9 @@
     #include <proto/thread.h>
     #include <proto/dos.h>
 #else
+#if OS_LINUX
+    #include <sched.h>
+#endif
     #include <pthread.h>            /* for POSIX threads */
 #endif
 
@@ -202,7 +207,7 @@ typedef int                     NINT;
 #define MAXJUMPRECLEN       256     /* gosub calls (dynamic) */
 #define MAXSUBARG           32      /* number of subroutine arguments */
 #define MAXOPCODE           389     /* number of opcodes, 0 - x */
-#define OBJBUFSIZE          10      /* object bufsize (KB), assembler only! */
+#define OBJBUFSIZE          1024    /* object bufsize (KB), assembler only! */
 #define MAXSHELLARG         10      /* shell arguments, vm */
 
 #define MAXVMPAGES			10		/* pages for virtual memory */

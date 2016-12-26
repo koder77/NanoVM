@@ -37,28 +37,34 @@ extern struct varlist *pvarlist_obj;
 
 extern struct vmreg_comp vmreg_comp;
 
+
+S2 spill_vmreg_l_old (S2 spillreg);
+S2 spill_vmreg_d_old (S2 spillreg);
+S2 spill_vmreg_s_old (S2 spillreg);
+
 S2 spill_vmreg_l (void)
 {
-    S2 spillreg, i;
-    S4 var;
-    U1 type, private;
+    S2 i;
     
-    for (i = 0; i <= MAXVMREG_L; i++)
+    for (i = 0; i < (MAXVMREG_L / 2); i++)
     {
-        if (i == 0)
+        /* spill half of registers */
+        
+        if (spill_vmreg_l_old (i) != i)
         {
-            spillreg = i;
-        }
-        else
-        {
-            if (vmreg_comp_info.l[i] < vmreg_comp_info.l[spillreg])
-            {
-                spillreg = i;
-            }
+            printf ("spill_vmreg_l: ERROR can't pull register %i to variable!\n", i);
+            
+            return (-1);
         }
     }
     
-    /* now spillreg contains the less used register, -> spill it */
+    return (0);
+}
+
+S2 spill_vmreg_l_old (S2 spillreg)
+{
+    S4 var;
+    U1 type, private;
     
     var = vmreg_comp.l[spillreg];
     if (vmreg_comp.lp[spillreg] == PRIVATE)
@@ -143,31 +149,33 @@ S2 spill_vmreg_l (void)
             break;
     }
     unset_vmreg_l (var);
+    
     return (spillreg);
 }
 
 S2 spill_vmreg_d (void)
 {
-    S2 spillreg, i;
-    S4 var;
-    U1 type, private;
+    S2 i;
     
-    for (i = 0; i <= MAXVMREG; i++)
+    for (i = 0; i < (MAXVMREG / 2); i++)
     {
-        if (i == 0)
+        /* spill half of registers */
+        
+        if (spill_vmreg_d_old (i) != i)
         {
-            spillreg = i;
-        }
-        else
-        {
-            if (vmreg_comp_info.d[i] < vmreg_comp_info.d[spillreg])
-            {
-                spillreg = i;
-            }
+            printf ("spill_vmreg_d: ERROR can't pull register %i to variable!\n", i);
+            
+            return (-1);
         }
     }
     
-    /* now spillreg contains the less used register, -> spill it */
+    return (0);
+}
+
+S2 spill_vmreg_d_old (S2 spillreg)
+{
+    S4 var;
+    U1 type, private;
             
     var = vmreg_comp.d[spillreg];
     if (vmreg_comp.dp[spillreg] == PRIVATE)
@@ -199,29 +207,30 @@ S2 spill_vmreg_d (void)
     unset_vmreg_d (var);
     return (spillreg);
 }
-    
+   
 S2 spill_vmreg_s (void)
 {
-    S2 spillreg, i;
-    S4 var;
-    U1 type, private;
+    S2 i;
     
-    for (i = 0; i <= MAXVMREG; i++)
+    for (i = 0; i < (MAXVMREG / 2); i++)
     {
-        if (i == 0)
+        /* spill half of registers */
+        
+        if (spill_vmreg_s_old (i) != i)
         {
-            spillreg = i;
-        }
-        else
-        {
-            if (vmreg_comp_info.s[i] < vmreg_comp_info.s[spillreg])
-            {
-                spillreg = i;
-            }
+            printf ("spill_vmreg_s: ERROR can't pull register %i to variable!\n", i);
+            
+            return (-1);
         }
     }
     
-    /* now spillreg contains the less used register, -> spill it */
+    return (0);
+}
+   
+S2 spill_vmreg_s_old (S2 spillreg)
+{
+    S4 var;
+    U1 type, private;
             
     var = vmreg_comp.s[spillreg];
     if (vmreg_comp.sp[spillreg] == PRIVATE)

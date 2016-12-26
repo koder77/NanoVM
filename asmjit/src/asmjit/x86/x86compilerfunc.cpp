@@ -11,7 +11,7 @@
 #include "../build.h"
 #if !defined(ASMJIT_DISABLE_COMPILER) && (defined(ASMJIT_BUILD_X86) || defined(ASMJIT_BUILD_X64))
 
-// [Dependencies - AsmJit]
+// [Dependencies]
 #include "../x86/x86compiler.h"
 #include "../x86/x86compilerfunc.h"
 
@@ -378,7 +378,7 @@ static Error X86FuncDecl_initFunc(X86FuncDecl* self, uint32_t arch,
     if (callConv == kCallConvX64Win) {
       int32_t argMax = Utils::iMin<int32_t>(numArgs, 4);
 
-      // Register arguments (Gp/Xmm), always left-to-right.
+      // Register arguments (GP/XMM), always left-to-right.
       for (i = 0; i != argMax; i++) {
         FuncInOut& arg = self->getArg(i);
         uint32_t varType = varMapping[arg.getVarType()];
@@ -433,7 +433,7 @@ static Error X86FuncDecl_initFunc(X86FuncDecl* self, uint32_t arch,
         self->_used.or_(kX86RegClassGp, Utils::mask(arg.getRegIndex()));
       }
 
-      // Register arguments (Xmm), always left-to-right.
+      // Register arguments (XMM), always left-to-right.
       for (i = 0; i != static_cast<int32_t>(numArgs); i++) {
         FuncInOut& arg = self->getArg(i);
         uint32_t varType = varMapping[arg.getVarType()];

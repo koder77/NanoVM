@@ -8,6 +8,11 @@ Complete x86/x64 JIT and Remote Assembler for C++.
   * [Official Chat (gitter)](https://gitter.im/kobalicek/asmjit)
   * [Permissive ZLIB license](./LICENSE.md)
 
+News
+----
+
+For all new users - please use asmjit:next branch instead of asmjit:master if you are starting with AsmJit and want to use a new API, which is not backward compatible with current master. Asmjit:next is still in development, but the main refactorization already happened, so if it breaks it will be minor changes.
+
 Introduction
 ------------
 
@@ -497,11 +502,11 @@ printf("Logger Content:\n%s", logger.getString());
 // You can use `logger.clearString()` if the intend is to reuse the logger.
 ```
 
-Logger can be configured to show more information by using `logger.setOption()` method. The following options are available:
+Logger can be configured to show more information by using `logger.addOptions()` method. The following options are available:
 
-  * `kLoggerOptionBinaryForm` - Log also binary sequence for each instruction generated.
-  * `kLoggerOptionHexImmediate` - Format immediate values to base16 (hex) form.
-  * `kLoggerOptionHexDisplacement` - Format memory displacements to base16 (hex) form.
+  * `Logger::kOptionBinaryForm` - Log also binary sequence for each instruction generated.
+  * `Logger::kOptionHexImmediate` - Log immediate values as hexadecimal.
+  * `Logger::kOptionHexDisplacement` - Log memory displacements as hexadecimal.
 
 TODO: Liveness analysis and instruction scheduling options.
 

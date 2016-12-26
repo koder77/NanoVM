@@ -8,7 +8,7 @@
 #ifndef _ASMJIT_BASE_CONSTPOOL_H
 #define _ASMJIT_BASE_CONSTPOOL_H
 
-// [Dependencies - AsmJit]
+// [Dependencies]
 #include "../base/zone.h"
 
 // [Api-Begin]
@@ -24,7 +24,8 @@ namespace asmjit {
 // ============================================================================
 
 //! Constant pool.
-struct ConstPool {
+class ConstPool {
+ public:
   ASMJIT_NO_COPY(ConstPool)
 
   enum {
@@ -141,40 +142,33 @@ struct ConstPool {
     template<typename Visitor>
     ASMJIT_INLINE void iterate(Visitor& visitor) const noexcept {
       Node* node = const_cast<Node*>(_root);
-      Node* link;
-
-      Node* stack[kHeightLimit];
-
       if (node == nullptr)
         return;
 
+      Node* stack[kHeightLimit];
       size_t top = 0;
 
       for (;;) {
-        link = node->_link[0];
-
-        if (link != nullptr) {
+        Node* left = node->_link[0];
+        if (left != nullptr) {
           ASMJIT_ASSERT(top != kHeightLimit);
           stack[top++] = node;
 
-          node = link;
+          node = left;
           continue;
         }
 
-_Visit:
+L_Visit:
         visitor.visit(node);
-        link = node->_link[1];
-
-        if (link != nullptr) {
-          node = link;
+        node = node->_link[1];
+        if (node != nullptr)
           continue;
-        }
 
         if (top == 0)
-          break;
+          return;
 
         node = stack[--top];
-        goto _Visit;
+        goto L_Visit;
       }
     }
 

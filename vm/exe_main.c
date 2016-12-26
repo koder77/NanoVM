@@ -3938,6 +3938,7 @@ void *exe_elist (S4 threadnum)
 
         dealloc_array_lint (pcclist, maxcclist + 1);
         exe_dealloc_pvarlist (pvarlist);
+        free (dthread);
         set_thread_stopped (threadnum);
        
         #if OS_AROS
@@ -5907,7 +5908,7 @@ void *exe_elist (S4 threadnum)
 			{
 				PRINTD("JIT");
 		
-				jit_compiler (&pcclist, &vmreg, ARG1, ARG2 - 1);
+				jit_compiler (&pcclist, &vmreg, &pvarlist, ARG1, ARG2 - 1);
 				if (JIT_error == 1)
 				{
 					ERREXIT();
@@ -5922,8 +5923,16 @@ void *exe_elist (S4 threadnum)
 				// pcclist[ARG1][0] = RUN_JIT_CODE;
 				// pcclist[ARG1][1] = JIT_code_ind;
 				// pcclist[ARG1][2] = ARG2 - 1;
-				
-				epos = ARG2 - 1;
+                
+                /* copy opcodes to direct threading list */
+                /*
+                for (i = 0; i <= maxcclist; i++)
+                {
+                    dthread[i] = jumpt[pcclist[i][0]];
+                }
+                */
+                
+                epos = ARG2;
 			}
 		#endif
 		

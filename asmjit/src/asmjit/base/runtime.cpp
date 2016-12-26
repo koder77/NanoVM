@@ -7,7 +7,7 @@
 // [Export]
 #define ASMJIT_EXPORTS
 
-// [Dependencies - AsmJit]
+// [Dependencies]
 #include "../base/assembler.h"
 #include "../base/runtime.h"
 
@@ -115,7 +115,7 @@ StaticRuntime::StaticRuntime(void* baseAddress, size_t sizeLimit) noexcept {
   _sizeLimit = sizeLimit;
   _baseAddress = static_cast<Ptr>((uintptr_t)baseAddress);
 }
-StaticRuntime::~StaticRuntime() {}
+StaticRuntime::~StaticRuntime() noexcept {}
 
 // ============================================================================
 // [asmjit::StaticRuntime - Interface]

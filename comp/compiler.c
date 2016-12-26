@@ -6546,6 +6546,32 @@ U1 compile ()
             }
             break;
 
+        case COMP_GOSUB:
+            if (nested_code_global_off == FALSE) nested_code = TRUE;         /* goto used, set flag (opcode.c) */
+            reg1 = getjumpind (src_line.arg[1]);
+            if (reg1 == NOTDEF)
+            {
+                /* LAB not defined, so we define it now.
+                 * and set the 'pos' in jumplist when we reach
+                 * the LAB definition.
+                 */
+
+                if (jumplist_gonext () == FALSE)
+                {
+                    return (FALSE);
+                }
+
+                strcpy (jumplist[jumplist_ind].lab, src_line.arg[1]);
+                jumplist[jumplist_ind].pos = NOTDEF;
+                jumplist[jumplist_ind].islabel = FALSE;
+                reg1 = jumplist_ind;
+            }
+            if (! set1 (JSR, reg1))
+            {
+                return (MEMORY);
+            }
+            break;
+            
         case COMP_GET_MULTI:
             getmulti:
             if (src_line.args > 0)

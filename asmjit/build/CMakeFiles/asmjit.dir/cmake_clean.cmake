@@ -22,7 +22,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/asmjit.dir/src/asmjit/x86/x86operand.cpp.o"
   "CMakeFiles/asmjit.dir/src/asmjit/x86/x86operand_regs.cpp.o"
   "libasmjit.pdb"
-  "libasmjit.so"
+  "libasmjit.a"
 )
 
 # Per-language clean rules from dependency scanning.

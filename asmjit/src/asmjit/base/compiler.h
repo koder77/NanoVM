@@ -11,7 +11,7 @@
 #include "../build.h"
 #if !defined(ASMJIT_DISABLE_COMPILER)
 
-// [Dependencies - AsmJit]
+// [Dependencies]
 #include "../base/assembler.h"
 #include "../base/compilerfunc.h"
 #include "../base/constpool.h"
@@ -138,7 +138,8 @@ struct VarInfo {
 //! Compiler interface.
 //!
 //! \sa Assembler.
-struct ASMJIT_VIRTAPI Compiler : public ExternalTool {
+class ASMJIT_VIRTAPI Compiler : public ExternalTool {
+ public:
   ASMJIT_NO_COPY(Compiler)
 
   // --------------------------------------------------------------------------
@@ -372,7 +373,7 @@ struct ASMJIT_VIRTAPI Compiler : public ExternalTool {
 
   //! Bind label to the current offset.
   //!
-  //! \note Label can be bound only once!
+  //! NOTE: Label can be bound only once!
   ASMJIT_API Error bind(const Label& label) noexcept;
 
   // --------------------------------------------------------------------------
@@ -465,7 +466,7 @@ struct ASMJIT_VIRTAPI Compiler : public ExternalTool {
 
   //! Rename variable `var` to `name`.
   //!
-  //! \note Only new name will appear in the logger.
+  //! NOTE: Only new name will appear in the logger.
   ASMJIT_API void rename(Var& var, const char* fmt, ...) noexcept;
 
   // --------------------------------------------------------------------------

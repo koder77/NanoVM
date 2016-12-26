@@ -52,13 +52,17 @@
 #define OS_LINUX_RPI	0			/* Raspberry Pi Raspbian: used for exe_socket.c, include IP V 4 sockets if set to 1. */
 
 
-
 /* switch online registering: default on at firstrun ---------------- */
 
 #define ONLINE_REGISTER 0
 
 
-/* switch JIT compiler on/off */
+/* posix threads CPU ------------------------------------------------ */
+
+#define CPU_CORES   2
+
+
+/* switch JIT compiler on/off --------------------------------------- */
 
 #define HAVE_JIT_COMPILER	1
 

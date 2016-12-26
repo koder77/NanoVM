@@ -719,6 +719,8 @@ U1 exe_save_object (U1 *file, S4 obj_size, U1 save_debug)
             SAVE_ERR ();
         }
 
+        printf ("%li bytes object file saved\n", pos + 1);
+        
         free (obj_buf);
         fclose (obj);
         printmsg (STATUS_OK, "");

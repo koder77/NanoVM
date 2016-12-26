@@ -75,7 +75,7 @@ using namespace asmjit;
 using namespace asmjit::host;
 
 // This is type of function we will generate
-typedef uint32_t (*Func)(void);
+typedef void (*Func)(void);
 
 extern struct jumplist *jumplist;
 extern S4 maxjumplist;
@@ -90,7 +90,9 @@ struct JIT_code
 	Func fn;
 };
 
-struct JIT_code JIT_code[MAXJITCODE];
+struct JIT_code *JIT_code;
+
+// static struct JIT_code JIT_code[MAXJITCODE];
 
 
 struct JIT_label
@@ -117,24 +119,44 @@ void partstr (U1 *str, U1 *retstr, S2 start, S2 end)
     retstr[j] = BINUL;
 }
 
-extern "C" void jit_init_code (void)
+extern "C" int jit_init_code (void)
 {
 	S8 i;
 	
+    // allocate JIT function struct
+                
+    JIT_code = (struct JIT_code *) malloc (MAXJITCODE * sizeof (struct JIT_code));
+    if (JIT_code == NULL)
+    {
+        printf ("JIT compiler: ERROR can't allocate space for code struct!\n");
+                
+        JIT_error = 1;
+        return (1);
+    }
+    
 	for (i = 0; i < MAXJITCODE; i++)
 	{
 		JIT_code[i].fn = NULL;
 	}
+	return (0);
 }
 
-extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
+extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, struct varlist *pvarlist, S4 start, S4 end)
 {
 
 // ==========================================================================
 
 	/* debug: */
 	S8 deb;
-	
+    
+    /* to store double values */
+    #define JITMAXDOUBLES 255
+    
+    double doubleval[JITMAXDOUBLES];
+    S4 doubleval_ind = -1;
+    
+    asmjit::X86GpReg RSIback;
+    
 	S4 i, j, l, k;
 	S8 r1, r2, r3;
 	S8 r1v, r2v, r3v;
@@ -171,8 +193,8 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 	
 	a.mov (RDI, imm ((intptr_t)(void *) &vmreg->d[0])); /* double registers base: rdi */
 	
-	
-	
+    RSIback = RSI;
+    
 	#if DEBUG
 		printf ("JUMPLIST\n");
 		for (i = 0; i <= maxjumplist; i++)
@@ -300,12 +322,40 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 			case PUSH_Q:
 				r1 = (*clist)[i][1]; r2 = (*clist)[i][2];
 				
+                #if DEBUG
+                    if (RSI != RSIback) printf ("JIT COMPILER: PUSH_Q FATAL ERROR RSI changed!\n");
+                
+                    printf ("JIT COMPILER: PUSH_Q: %lli to register: %i\n", *varlist[r1].q_m, r2); 
+                #endif
+                    
 				a.mov (qword_ptr (RSI, OFFSET(r2)), (S8) *varlist[r1].q_m);
 				
 				run_jit = 1;
 				break;
 				
-			case PUSH_D:		/* nothing here */
+			case PUSH_D:		/* WIP */
+                r1 = (*clist)[i][1]; r2 = (*clist)[i][2];
+                
+                // a.mov (RDI, imm ((intptr_t)(void *) &vmreg->d[0])); 
+                
+                if (doubleval_ind < JITMAXDOUBLES - 1)
+                {
+                    doubleval_ind++;
+                }
+                else
+                {
+                    printf ("JIT COMPILER: ERROR maximum double values OVERFLOW!\n");
+                    return (1);
+                }
+                
+                doubleval[doubleval_ind] = *varlist[r1].d_m;
+                // writes pointer to register address
+                
+                a.mov (RBX, imm ((intptr_t) &doubleval[doubleval_ind]));
+                a.mov (RCX, qword_ptr(RBX));
+                a.mov (qword_ptr (RDI, OFFSET(r2)), RCX);
+                
+                run_jit = 1;
 				break;
 				
 			case PUSH_B:
@@ -318,13 +368,15 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 			
 				/* PULL opcodes
 				 * 
-				 * using indirect access via pointer of variable (varlist)
-				 * there are three steps needed for this!!!
 				 * 
-				 * seems to work right
+				 * CODE COMMENTED OUT -> NOT WORKING!!
+                 * 
+                 * FIXME
+                 * 
 				 */
 				
 			case PULL_I:
+                /*
 				r1 = (*clist)[i][1]; r2 = (*clist)[i][2];
 				
 				a.mov (RBX, imm ((intptr_t)(void*) varlist[r2].i_m));
@@ -332,9 +384,11 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 				a.mov (ptr (RBX), RCX);
 				
 				run_jit = 1;
+                */
 				break;
 				
 			case PULL_L:
+                /*
 				r1 = (*clist)[i][1]; r2 = (*clist)[i][2];
 				
 				a.mov (RBX, imm ((intptr_t)(void*) varlist[r2].li_m));
@@ -342,22 +396,37 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 				a.mov (ptr (RBX), RCX);
 				
 				run_jit = 1;
+                */
 				break;
 				
 			case PULL_Q:
+                /*
 				r1 = (*clist)[i][1]; r2 = (*clist)[i][2];
 				
-				a.mov (RBX, imm ((intptr_t)(void*) varlist[r2].q_m));
+                #if DEBUG
+                    printf ("JIT COMPILER: PULL_Q: [%lli] = %lli to variable: %s\n", r1, vmreg->l[r1], varlist[r2].name);
+                #endif                
+				
+				a.mov (RBX, imm ((intptr_t)(void *) varlist[r2].q_m));
 				a.mov (RCX, qword_ptr (RSI, OFFSET(r1)));
 				a.mov (ptr (RBX), RCX);
-				
+                
 				run_jit = 1;
+                */
 				break;
 				
 			case PULL_D:		/* leaved BLANK, maybe I do it later */
-				break;
+				r1 = (*clist)[i][1]; r2 = (*clist)[i][2];
+                
+				a.mov (RBX, imm ((intptr_t) &varlist[r2].d_m));
+				a.mov (RCX, qword_ptr (RSI, OFFSET(r1)));
+				a.mov (qword_ptr(RBX), RCX);
+				
+				run_jit = 1;
+                break;
 				
 			case PULL_B:
+                /*
 				r1 = (*clist)[i][1]; r2 = (*clist)[i][2];
 				
 				a.mov (RBX, imm ((intptr_t)(void*) varlist[r2].s_m[0]));
@@ -365,6 +434,7 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 				a.mov (ptr (RBX), RCX);
 				
 				run_jit = 1;
+                */
 				break;
 				
 				
@@ -724,9 +794,11 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 					partstr ((U1 *) jumplist[j].lab, (U1 *) buf, 3, strlen ((const char *) jumplist[j].lab) - 1);
 					JIT_label[JIT_label_ind].if_ = strtoll ((const char *) buf, NULL, 10);
 					
-					printf ("IF: %i\n", JIT_label[JIT_label_ind].if_);
+                    #if DEBUG
+                        printf ("IF: %i\n", JIT_label[JIT_label_ind].if_);
+                    #endif
 					
-					JIT_label[JIT_label_ind].endif = -1;
+                    JIT_label[JIT_label_ind].endif = -1;
 					
 					switch ((*clist)[i][0])
 					{
@@ -865,9 +937,11 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 					partstr ((U1 *) jumplist[j].lab, (U1 *) buf, 3, strlen ((const char *) jumplist[j].lab) - 1);
 					JIT_label[JIT_label_ind].if_ = strtoll ((const char *) buf, NULL, 10);
 					
-					printf ("IF: %i\n", JIT_label[JIT_label_ind].if_);
+                    #if DEBUG
+                        printf ("IF: %i\n", JIT_label[JIT_label_ind].if_);
+                    #endif					
 					
-					JIT_label[JIT_label_ind].endif = -1;
+                    JIT_label[JIT_label_ind].endif = -1;
 					
 					switch ((*clist)[i][0])
 					{
@@ -1325,7 +1399,32 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 				
 				run_jit = 1;
 				break;
-				
+			
+            case PPUSH_D:		/* WIP */
+                r1 = (*clist)[i][1]; r2 = (*clist)[i][2];
+                
+                // a.mov (RDI, imm ((intptr_t)(void *) &vmreg->d[0])); 
+                
+                if (doubleval_ind < JITMAXDOUBLES - 1)
+                {
+                    doubleval_ind++;
+                }
+                else
+                {
+                    printf ("JIT COMPILER: ERROR maximum double values OVERFLOW!\n");
+                    return (1);
+                }
+                
+                doubleval[doubleval_ind] = *pvarlist[r1].d_m;
+                // writes pointer to register address
+                
+                a.mov (RBX, imm ((intptr_t) &doubleval[doubleval_ind]));
+                a.mov (RCX, qword_ptr(RBX));
+                a.mov (qword_ptr (RDI, OFFSET(r2)), RCX);
+                
+                run_jit = 1;
+				break;
+                
 			default:
 				printf ("JIT compiler: UNKNOWN opcode: %i - exiting!\n", (*clist)[i][0]);
 				return (1);
@@ -1340,29 +1439,28 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, S4 start, S4 end)
 		{
 			/* create JIT code function */ 
 			
-			/*
+			// JIT_code_ind++;
+            JIT_code_ind = 0;
+            
+            void* funcptr = a.make();
+            
+			JIT_code[JIT_code_ind].fn = asmjit_cast<Func>(funcptr);
 			
-			JIT_code_ind++;
-			JIT_code[JIT_code_ind].fn = asmjit_cast<Func>(a.make());		
-			
+            // printf ("run_jit: code address: SAVED %lli\n", funcptr);
+            
 			#if DEBUG
 				printf ("JIT compiler: function saved.\n");
 			#endif
 			
-			JIT_code[JIT_code_ind].fn ();
-			JIT_error = 0;	
-			return (0);
-			*/
-			
-			Func fn = asmjit_cast<Func>(a.make());
-			fn ();
-			runtime.release((Func *) fn);
-			
-			#if DEBUG
-				printf ("JIT code EXIT\n");
-			#endif
-				
-			JIT_error = 0;	
+            /* call JIT code */
+            
+            JIT_code[JIT_code_ind].fn();
+            
+            // printf ("JIT COMPILER: register [L2] = %lli\n", vmreg->l[2]);
+            
+            JIT_label_ind = -1;
+            
+			JIT_error = 0;
 			return (0);
 		}
 		else
@@ -1385,9 +1483,11 @@ extern "C" int run_jit (S8 code, struct vmreg *vmreg)
 	
 	Func func = JIT_code[code].fn;
 	
-	printf ("run_jit: code address: %lli\n", func);
+    #if DEBUG
+        printf ("run_jit: code address: %lli\n", func);
+    #endif
 	
-	if (func == NULL)
+    if (func == NULL)
 	{
 		printf("JIT compiler: FATAL ERROR! NULL pointer code!!!\n");
 		return (1);
@@ -1395,6 +1495,7 @@ extern "C" int run_jit (S8 code, struct vmreg *vmreg)
 	
 	/* call JIT code function, stored in JIT_code[] */
 	func ();
+	//JIT_code[code].fn();
 	return (0);
 }
 
@@ -1417,6 +1518,8 @@ extern "C" int free_jit_code ()
 		}
 	}
 
+	free (JIT_code);
+	
 	return (0);
 }
 

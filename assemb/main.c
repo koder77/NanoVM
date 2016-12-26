@@ -700,8 +700,17 @@ NINT main (NINT ac, char *av[])
 
     if (! exe_save_object (object, obj_size, save_debug))
     {
-        printerr (PREP_FAIL, NOTDEF, ST_PRE, "");
-        exe_shutdown (WARN);
+        /* save failed, retry with bigger obj_size buffer */
+        
+        if (obj_size < (1024 * 1024 * 10)) obj_size = 1024 * 1024 * 10;   /* 10 MB object buffer, should be enough? */
+        
+        printf ("\nAUTOMATIC object buffer increase to %li bytes!\n", obj_size);
+            
+        if (! exe_save_object (object, obj_size, save_debug))
+        {
+            printerr (PREP_FAIL, NOTDEF, ST_PRE, "");
+            exe_shutdown (WARN);
+        }
     }
 
     #if DEBUG

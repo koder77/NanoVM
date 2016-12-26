@@ -11,7 +11,7 @@
 #include "../build.h"
 #if !defined(ASMJIT_DISABLE_COMPILER)
 
-// [Dependencies - AsmJit]
+// [Dependencies]
 #include "../base/compiler.h"
 #include "../base/podvector.h"
 #include "../base/zone.h"
@@ -120,7 +120,7 @@ ASMJIT_ENUM(VarHint) {
 //!
 //! State of variable.
 //!
-//! \note Variable states are used only during register allocation.
+//! NOTE: Variable states are used only during register allocation.
 ASMJIT_ENUM(kVarState) {
   //! Variable is currently not used.
   kVarStateNone = 0,

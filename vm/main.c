@@ -131,6 +131,13 @@ NINT main (NINT ac, char *av[])
     /* memory block index, normal variables */
     vm_mem.mblock_ind = 0;
 
+    
+    /* posix cpu setting */
+    cpu_set_t cpuset;
+    S2 last_core = 0; 
+    S2 core_max = CPU_CORES - 1;
+    
+    
     /* Cygwin posix threads stack size setting variables
      * original: Corinna Vinschen, found via the web
      */
@@ -462,7 +469,7 @@ run_prog:
 
     #if HAVE_JIT_COMPILER
 		PRINTD("init JIT code...\n");
-		jit_init_code ();
+		if (jit_init_code () != 0) exe_shutdown (WARN);
 	#endif
     
     if (init_pthreads () != 0)
@@ -485,6 +492,9 @@ run_prog:
     {
         /* create main thread */
 
+        // initialization posix cpu code
+        CPU_ZERO(&cpuset);
+        
         threadnum = get_new_thread ();
         if (threadnum == -1)
         {
@@ -529,6 +539,27 @@ run_prog:
                     pthreads[threadnum].thread = CreateThread (exe_elist_trampoline, (void *) threadnum);
                 #else
                     exe_retval = pthread_create (&pthreads[threadnum].thread, NULL, (void *) exe_elist, (void*) threadnum);
+                    
+                #if OS_LINUX
+                    /* do run threads on different CPU cores
+                     * or at least try it
+                     */
+                    
+                    /* assign thread to CPU core */
+                    if (last_core < core_max)
+                    {
+                        last_core++;
+                    }
+                    else
+                    {
+                        last_core = 0;
+                    }
+                    CPU_SET (last_core, &cpuset);
+                    // printf ("thread %i on CPU %i\n", threadnum, last_core);
+                        
+                    pthread_setaffinity_np (pthreads[threadnum].thread, sizeof(cpu_set_t), &cpuset);
+                #endif
+                    
                 #endif
 
                 if (exe_retval == 0)

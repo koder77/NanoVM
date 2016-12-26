@@ -8,7 +8,7 @@
 #ifndef _ASMJIT_BASE_ASSEMBLER_H
 #define _ASMJIT_BASE_ASSEMBLER_H
 
-// [Dependencies - AsmJit]
+// [Dependencies]
 #include "../base/containers.h"
 #include "../base/logger.h"
 #include "../base/operand.h"
@@ -235,7 +235,8 @@ struct RelocData {
 //! Please note that `addRef` and `release` functions are used, but there is
 //! no reference counting implemented by default, reimplement to change the
 //! default behavior.
-struct ASMJIT_VIRTAPI ErrorHandler {
+class ASMJIT_VIRTAPI ErrorHandler {
+ public:
   // --------------------------------------------------------------------------
   // [Construction / Destruction]
   // --------------------------------------------------------------------------
@@ -251,7 +252,7 @@ struct ASMJIT_VIRTAPI ErrorHandler {
 
   //! Reference this error handler.
   //!
-  //! \note This member function is provided for convenience. The default
+  //! NOTE: This member function is provided for convenience. The default
   //! implementation does nothing. If you are working in environment where
   //! multiple `ErrorHandler` instances are used by a different code generators
   //! you may provide your own functionality for reference counting. In that
@@ -260,7 +261,7 @@ struct ASMJIT_VIRTAPI ErrorHandler {
 
   //! Release this error handler.
   //!
-  //! \note This member function is provided for convenience. See `addRef()`
+  //! NOTE: This member function is provided for convenience. See `addRef()`
   //! for more detailed information related to reference counting.
   ASMJIT_API virtual void release() noexcept;
 
@@ -297,7 +298,8 @@ struct ASMJIT_VIRTAPI ErrorHandler {
 // ============================================================================
 
 //! An external tool (i.e. `Stream` or `Compiler`) that can serialize to `Assembler`
-struct ASMJIT_VIRTAPI ExternalTool {
+class ASMJIT_VIRTAPI ExternalTool {
+ public:
   // --------------------------------------------------------------------------
   // [Construction / Destruction]
   // --------------------------------------------------------------------------
@@ -404,7 +406,8 @@ struct ASMJIT_VIRTAPI ExternalTool {
 //! specific assemblers.
 //!
 //! \sa Compiler.
-struct ASMJIT_VIRTAPI Assembler {
+class ASMJIT_VIRTAPI Assembler {
+ public:
   ASMJIT_NO_COPY(Assembler)
 
   // --------------------------------------------------------------------------
@@ -814,7 +817,7 @@ struct ASMJIT_VIRTAPI Assembler {
 
   //! Get whether the `label` is bound.
   //!
-  //! \note It's an error to pass label that is not valid. Check the validity
+  //! NOTE: It's an error to pass label that is not valid. Check the validity
   //! of the label by using `isLabelValid()` method before the bound check if
   //! you are not sure about its validity, otherwise you may hit an assertion
   //! failure in debug mode, and undefined behavior in release mode.
@@ -862,7 +865,7 @@ struct ASMJIT_VIRTAPI Assembler {
 
   //! Bind the `label` to the current offset.
   //!
-  //! \note Label can be bound only once!
+  //! NOTE: Label can be bound only once!
   ASMJIT_API virtual Error bind(const Label& label) noexcept;
 
   // --------------------------------------------------------------------------

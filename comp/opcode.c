@@ -42,6 +42,7 @@ extern struct vmreg_comp vmreg_comp;
 extern struct vmreg_comp_info vmreg_comp_info;
 
 extern U1 nested_code;
+extern U1 nested_code_global_off;
 
 void init_vmreg (void)
 {
@@ -129,7 +130,7 @@ void set_vmreg_d (S2 reg, S4 var, U1 fprivate)
             info = vmreg_comp_info.d[i];
         }
     }
-
+    
     vmreg_comp.d[reg] = var;
     vmreg_comp.dp[reg] = fprivate;
     vmreg_comp_info.d[reg] = vmreg_comp_info.d[reg] + info;
@@ -147,7 +148,7 @@ void set_vmreg_s (S2 reg, S4 var, U1 fprivate)
             info = vmreg_comp_info.s[i];
         }
     }
-
+    
     vmreg_comp.s[reg] = var;
     vmreg_comp.sp[reg] = fprivate;
     vmreg_comp_info.s[reg] = vmreg_comp_info.s[reg] + info;
@@ -159,6 +160,8 @@ void unset_vmreg_l (S4 var)
 {
     S2 i;
 
+    if (nested_code_global_off == FALSE)
+    {
     for (i = 0; i <= MAXVMREG_L; i++)
     {
         if (vmreg_comp.l[i] == var)
@@ -167,12 +170,15 @@ void unset_vmreg_l (S4 var)
             vmreg_comp_info.l[i] = 0;
         }
     }
+    }
 }
 
 void unset_vmreg_d (S4 var)
 {
     S2 i;
 
+    if (nested_code_global_off == FALSE)
+    {
     for (i = 0; i <= MAXVMREG_L; i++)
     {
         if (vmreg_comp.d[i] == var)
@@ -181,12 +187,15 @@ void unset_vmreg_d (S4 var)
             vmreg_comp_info.d[i] = 0;
         }
     }
+    }
 }
 
 void unset_vmreg_s (S4 var)
 {
     S2 i;
 
+    if (nested_code_global_off == FALSE)
+    {
     for (i = 0; i <= MAXVMREG_L; i++)
     {
         if (vmreg_comp.s[i] == var)
@@ -194,6 +203,7 @@ void unset_vmreg_s (S4 var)
             vmreg_comp.s[i] = EMPTY;
             vmreg_comp_info.s[i] = 0;
         }
+    }
     }
 }
 
