@@ -133,10 +133,23 @@ NINT main (NINT ac, char *av[])
 
     
     /* posix cpu setting */
+    
+#if OS_LINUX
     cpu_set_t cpuset;
     S2 last_core = 0; 
+    // S2 core_max = CPU_CORES - 1;
+    
+#if CPU_CORES == 0
+    S2 core_max = sysconf (_SC_NPROCESSORS_ONLN) - 1;
+    
+    #pragma message("CPU CORES = sysconf at runtime")
+#else
     S2 core_max = CPU_CORES - 1;
     
+    #pragma message("CPU CORES = core_max at compile time")
+#endif    
+    
+#endif    
     
     /* Cygwin posix threads stack size setting variables
      * original: Corinna Vinschen, found via the web
@@ -258,6 +271,20 @@ NINT main (NINT ac, char *av[])
         printf (VM_START_TXT);
         printcompilermsg ();
 		
+        #if OS_LINUX
+            printf ("threading: CPU cores: 0 - %i ", core_max);
+            
+            #if CPU_CORES == 0
+                printf ("dynamic SET at runtime\n");
+            #else
+                printf ("static SET in build\n");
+            #endif
+            
+            #if HYPERTHREADING
+                printf ("hyperthreading CPU affinity setting: ON\n");
+            #endif
+        #endif
+            
 		#if HAVE_JIT_COMPILER
 		printf ("byte storm JIT compiler inside. powered by AsmJit.\n");
 		
@@ -493,8 +520,10 @@ run_prog:
         /* create main thread */
 
         // initialization posix cpu code
+#if OS_LINUX
         CPU_ZERO(&cpuset);
-        
+        CPU_SET (0, &cpuset);
+#endif
         threadnum = get_new_thread ();
         if (threadnum == -1)
         {
@@ -513,7 +542,12 @@ run_prog:
                 pthreads[threadnum].thread = CreateThread (exe_elist_trampoline, (void *) threadnum);
             #else
 				#if HAVE_THREADING
-					exe_retval = pthread_create (&pthreads[threadnum].thread, NULL, exe_elist, (void*) threadnum);
+					exe_retval = pthread_create (&pthreads[threadnum].thread, NULL, (void *) exe_elist, (void*) threadnum);
+                    
+                    if (pthread_setaffinity_np (pthreads[threadnum].thread, sizeof(cpu_set_t), &cpuset) != 0)
+                    {
+                        printf ("ERROR: setting pthread affinity of thread: %i\n", threadnum);
+                    }
 				#else
 					exe_retval = exe_elist (threadnum);
 				#endif
@@ -554,10 +588,55 @@ run_prog:
                     {
                         last_core = 0;
                     }
+                    
+                    CPU_ZERO(&cpuset);
                     CPU_SET (last_core, &cpuset);
+                    
+                    printf ("thread %i set to core %i / ", threadnum, last_core);
+                    
+                    #if HYPERTHREADING
+                        if (core_max == 3)
+                        {
+                            switch (last_core)
+                            {
+                                case 0:
+                                    CPU_SET (1, &cpuset);
+                                    
+                                    printf ("1\n");
+                                    break;
+                                    
+                                case 1:
+                                    CPU_SET (0, &cpuset);
+                                    
+                                    printf ("0\n");
+                                    break;   
+                    
+                                case 2:
+                                    CPU_SET (3, &cpuset);
+                                    
+                                    printf ("3\n");
+                                    break;
+                                    
+                                case 3:
+                                    CPU_SET (2, &cpuset);
+                                    
+                                    printf ("2\n");
+                                    break;
+                            }
+                        }
+                    #endif
+                    
                     // printf ("thread %i on CPU %i\n", threadnum, last_core);
                         
-                    pthread_setaffinity_np (pthreads[threadnum].thread, sizeof(cpu_set_t), &cpuset);
+                    if (pthread_setaffinity_np (pthreads[threadnum].thread, sizeof(cpu_set_t), &cpuset) != 0)
+                    {
+                        printf ("ERROR: setting pthread affinity of thread: %i\n", threadnum);
+                    }
+  
+                    if (pthread_getaffinity_np (pthreads[threadnum].thread, sizeof(cpu_set_t), &cpuset) != 0)
+                    {
+                        printf ("ERROR: unable to set pthread affinity!\n");
+                    }
                 #endif
                     
                 #endif

@@ -67,7 +67,7 @@ extern U1 atomic;
 extern U1 optimize_O;
 extern U1 optimize_O2;
 extern U1 optimize_O3;
-
+extern U1 optimize_not;
 
 U1 compile_set_init_var (S2 arg, S4 *var, U1 type)
 {
@@ -7055,6 +7055,16 @@ U1 compile ()
 			optimize_O3 = TRUE;
 			printf ("compile: OPTIMIZE O3\n");
 			break;
+            
+        case COMP_OPTIMIZE_NOT_START:
+            optimize_not = TRUE;
+            printf ("compile: OPTIMIZE NOT START!\n");
+            break;
+            
+        case COMP_OPTIMIZE_NOT_END:
+            optimize_not = FALSE;
+            printf ("compile: OPTIMIZE NOT END!\n");
+            break;
     }
     return (TRUE);
 }

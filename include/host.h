@@ -57,14 +57,17 @@
 #define ONLINE_REGISTER 0
 
 
-/* posix threads CPU ------------------------------------------------ */
+/* posix threads CPU cores (Linux) ---------------------------------- */
 
-#define CPU_CORES   2
+/* set this to 0 to do autoconfig at runtime */
+#define CPU_CORES   4
+
+#define HYPERTHREADING  1
 
 
 /* switch JIT compiler on/off --------------------------------------- */
 
-#define HAVE_JIT_COMPILER	1
+#define HAVE_JIT_COMPILER	0
 
 #define JIT_X86_64 		TRUE
 #define JIT_X86_32		FALSE

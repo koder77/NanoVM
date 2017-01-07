@@ -48,7 +48,7 @@ U1 optimize (void)
 
     for (i = 0; i <= cclist_ind; i++)
     {
-        if (cclist[i][0] == JMP_L)
+        if (cclist[i][0] == JMP_L && cclist[i][NOOPTIM] == 0)
         {
             jumpind = cclist[i][2];
             if (jumplist[jumpind].lab[0] == 'f' && jumplist[jumpind].lab[1] == 'o' && jumplist[jumpind].lab[2] == 'r')
@@ -237,7 +237,7 @@ optimize:
     optimized = FALSE; nind = 0;
     for (i = 0; i <= cclist_ind; i++)
     {
-        if ((cclist[i][0] == GREATER_JMP_L || cclist[i][0] == LESS_JMP_L || cclist[i][0] == GREATER_OR_EQ_JMP_L || cclist[i][0] == LESS_OR_EQ_JMP_L) && optimized == FALSE)
+        if ((cclist[i][0] == GREATER_JMP_L || cclist[i][0] == LESS_JMP_L || cclist[i][0] == GREATER_OR_EQ_JMP_L || cclist[i][0] == LESS_OR_EQ_JMP_L) && optimized == FALSE && cclist[i][NOOPTIM] == 0)
         {
             /* found for loop footer -> do optimization */
             
@@ -382,7 +382,7 @@ U1 optimize_remove_double_pull (void)
 			found = 1;
             /* found PULL opcode: check for double PULL of same variable */
 			
-			if (cclist[i][0] == cclist[i + 1][0] && cclist[i][1] == cclist[i + 1][1])
+			if (cclist[i][0] == cclist[i + 1][0] && cclist[i][1] == cclist[i + 1][1] && cclist[i][NOOPTIM] == 0)
 			{
 				printf ("optimizer: removing double PULL\n");
 			}
@@ -540,7 +540,7 @@ U1 optimize_remove_double_opcode (void)
 	for (i = 0; i <= cclist_ind; i++)
     {
 		found = 0;
-		if (cclist[i + 1][0] == cclist[i][0])
+		if (cclist[i + 1][0] == cclist[i][0] && cclist[i][NOOPTIM] == 0)
 		{
 			/* same opcode, compare arguments, if the same then skip second opcode. */
 			found = 1;
@@ -636,6 +636,8 @@ U1 optimize_remove_pull_push (void)
         {
             /* found PULL opcode: check for PUSH of same variable */
 			
+            if (cclist[i][NOOPTIM] == 0)
+            {
 			switch (cclist[i][0])
 			{
 				case PULL_I:
@@ -686,6 +688,7 @@ U1 optimize_remove_pull_push (void)
 					if (cclist[i + 1][0] == PPUSH_B) found = 1;
 					break;
 			}
+            }
 			
 			if (found == 1)
 			{

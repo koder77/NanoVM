@@ -128,7 +128,8 @@ U1 atomic = FALSE;					/* atomic function call, no st_pull_all set automatically
 
 U1 optimize_O = FALSE;				/* off */
 U1 optimize_O2 = FALSE;				/* off */
-U1 optimize_O3 = FALSE;
+U1 optimize_O3 = FALSE;             /* off */
+U1 optimize_not = FALSE;            /* off */
 
 #if DEBUG
     U1 print_debug = FALSE;         /* CLI -d option */
@@ -290,6 +291,18 @@ S2 parse_line (U1 *str)
         return (0);
     }
 
+    if (strcmp (str, COMP_OPTIMIZE_NOT_START_SB) == 0)
+	{
+		src_line.opcode_n = COMP_OPTIMIZE_NOT_START;
+        return (0);
+    }
+    
+    if (strcmp (str, COMP_OPTIMIZE_NOT_END_SB) == 0)
+	{
+		src_line.opcode_n = COMP_OPTIMIZE_NOT_END;
+        return (0);
+    }
+    
     if (str[0] == 'f')
     {
         /* check for func or funcend at beginning of a line */
@@ -844,7 +857,7 @@ NINT main (NINT ac, char *av[])
 	U1 do_optimize_3 = FALSE;
 	U1 do_optimize_stack_only = FALSE;
 
-	S2 vmname_start = 0, i;
+	S4 vmname_start = 0, i;
 
     plist_size = MAXLINES;
     varlist_state.varlist_size = MAXVAR;
@@ -1084,6 +1097,12 @@ NINT main (NINT ac, char *av[])
         exe_shutdown (WARN);
     }
 
+    /* initialize NOOPTIM flag */
+    for (i = 0; i < cclist_size; i++)
+    {
+        cclist[i][NOOPTIM] = 0;
+    }
+    
     jumplist = (struct jumplist *) malloc ((jumplist_size) * sizeof (struct jumplist));
     if (jumplist == NULL)
     {

@@ -44,6 +44,8 @@ extern struct vmreg_comp_info vmreg_comp_info;
 extern U1 nested_code;
 extern U1 nested_code_global_off;
 
+extern U1 optimize_not;         /* sets if optimzer should do it's job on this opcode OR NOT! */
+
 void init_vmreg (void)
 {
     S2 i;
@@ -285,7 +287,7 @@ U1 set0 (S4 comm)
     CC_NEXT ();
 
     cclist[cclist_ind][0] = comm;
-
+    cclist[cclist_ind][NOOPTIM] = optimize_not;
     return (TRUE);
 }
 
@@ -295,7 +297,7 @@ U1 set1 (S4 comm, S4 vind1)
 
     cclist[cclist_ind][0] = comm;
     cclist[cclist_ind][1] = vind1;
-
+    cclist[cclist_ind][NOOPTIM] = optimize_not;
     return (TRUE);
 }
 
@@ -306,7 +308,7 @@ U1 set2 (S4 comm, S4 vind1, S4 vind2)
     cclist[cclist_ind][0] = comm;
     cclist[cclist_ind][1] = vind1;
     cclist[cclist_ind][2] = vind2;
-
+    cclist[cclist_ind][NOOPTIM] = optimize_not;
     return (TRUE);
 }
 
@@ -318,7 +320,7 @@ U1 set3 (S4 comm, S4 vind1, S4 vind2, S4 vind3)
     cclist[cclist_ind][1] = vind1;
     cclist[cclist_ind][2] = vind2;
     cclist[cclist_ind][3] = vind3;
-
+    cclist[cclist_ind][NOOPTIM] = optimize_not;
     return (TRUE);
 }
 /*

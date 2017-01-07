@@ -166,6 +166,29 @@ struct timespec time_diff (struct timespec start, struct timespec end)
 	return temp;
 }
 
+#if OS_LINUX
+void set_sched_priority()
+{
+    int rc;
+    struct sched_param sched_param;
+    int  policy;
+
+    policy = SCHED_BATCH;
+
+    /** highest priority **/
+    sched_param.sched_priority = 0;
+
+    /** with chrt -m or sched_get_priority_max, I get to know the priority range **/
+
+    rc = pthread_setschedparam (pthread_self(), policy, &sched_param);
+
+    if (rc != 0)
+    {
+        printf ("ERROR: set sched_param!\n");
+    }
+}
+#endif
+
 void *exe_elist (S4 threadnum)
 {
     /* execution part
@@ -190,7 +213,7 @@ void *exe_elist (S4 threadnum)
 
     S4 **pcclist = NULL;             /* local pcclist */
 
-    /* addresses for direct threading */
+    /* addresses for direct threading dispatch */
     void **dthread = NULL; 
     
     
@@ -319,6 +342,10 @@ void *exe_elist (S4 threadnum)
 		&&dobjects, &&dnames, &&pdnames,
 		&&lopen, &&lclose, &&lfunc, &&lcall
     };
+    
+#if OS_LINUX
+    set_sched_priority();
+#endif
     
 	PRINTD("exe_elist: releasing rinzler...\n");
 	

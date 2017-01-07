@@ -202,7 +202,7 @@ typedef int                     NINT;
 #define INCLUDELIST         5       /* pos in bclist, for include file-index (exelist) */
 #define PLINELIST           6       /* pos in bclist, for inline assembler (translate.c) */
 #define MAXCCLEN            32000   /* max cclist len (bytecode) */
-#define MAXCCOMMARG         7       /* bytecode list arguments */
+#define MAXCCOMMARG         8       /* was 7, bytecode list arguments */
 #define MAXJUMPLEN          10000   /* jumps can be done, (goto ...) */
 #define MAXJUMPRECLEN       256     /* gosub calls (dynamic) */
 #define MAXSUBARG           32      /* number of subroutine arguments */

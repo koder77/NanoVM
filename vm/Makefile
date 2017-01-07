@@ -119,7 +119,7 @@ am_nanovm_OBJECTS = main.$(OBJEXT) openo.$(OBJEXT) openend.$(OBJEXT) \
 	dlload.$(OBJEXT) rs232.$(OBJEXT)
 nanovm_OBJECTS = $(am_nanovm_OBJECTS)
 nanovm_LDADD = $(LDADD)
-nanovm_DEPENDENCIES = ../lib/libshared.a ../asmjit/build/libasmjit.a
+nanovm_DEPENDENCIES = ../lib/libshared.a
 AM_V_P = $(am__v_P_$(V))
 am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))
 am__v_P_0 = false
@@ -191,12 +191,12 @@ CTAGS = ctags
 am__DIST_COMMON = $(srcdir)/Makefile.in $(top_srcdir)/depcomp \
 	$(top_srcdir)/mkinstalldirs
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/missing aclocal-1.15
+ACLOCAL = ${SHELL} /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-25-sched/missing aclocal-1.15
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
-AUTOCONF = ${SHELL} /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/missing autoconf
-AUTOHEADER = ${SHELL} /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/missing autoheader
-AUTOMAKE = ${SHELL} /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/missing automake-1.15
+AUTOCONF = ${SHELL} /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-25-sched/missing autoconf
+AUTOHEADER = ${SHELL} /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-25-sched/missing autoheader
+AUTOMAKE = ${SHELL} /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-25-sched/missing automake-1.15
 AWK = mawk
 CC = clang-3.6
 CCDEPMODE = depmode=gcc3
@@ -224,7 +224,7 @@ LDFLAGS = -lrt
 LIBOBJS = 
 LIBS = -lpthread 
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/missing makeinfo
+MAKEINFO = ${SHELL} /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-25-sched/missing makeinfo
 MKDIR_P = /bin/mkdir -p
 OBJEXT = o
 PACKAGE = nanovm
@@ -240,10 +240,10 @@ SET_MAKE =
 SHELL = /bin/bash
 STRIP = 
 VERSION = 3.3.3
-abs_builddir = /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/vm
-abs_srcdir = /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/vm
-abs_top_builddir = /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17
-abs_top_srcdir = /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17
+abs_builddir = /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-25-sched/vm
+abs_srcdir = /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-25-sched/vm
+abs_top_builddir = /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-25-sched
+abs_top_srcdir = /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-25-sched
 ac_ct_CC = clang-3.6
 ac_ct_CXX = 
 am__include = include
@@ -263,7 +263,7 @@ host_alias =
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/install-sh
+install_sh = ${SHELL} /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-25-sched/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -321,8 +321,9 @@ noinst_HEADERS = main_d.h \
 		 snprintf.h \
 		 jit_x86.h
 
-LDADD = ../lib/libshared.a -ldl ../asmjit/build/libasmjit.a
-#LDADD = ../lib/libshared.a -ldl
+
+#LDADD = ../lib/libshared.a -ldl ../asmjit/build/libasmjit.a
+LDADD = ../lib/libshared.a -ldl
 AM_CFLAGS = -O0 -g -lm -ldl
 AM_CPPFLAGS = -I../include
 AM_LDFLAGS = -Wl,--export-dynamic

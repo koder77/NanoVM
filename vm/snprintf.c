@@ -1,6 +1,6 @@
 #include "host.h"
 
-#if OS_LINUX || OS_WINDOWS_CYGWIN
+#if OS_LINUX || OS_WINDOWS_CYGWIN || OS_WINDOWS
     #define HAVE_SNPRINTF
 #endif
 

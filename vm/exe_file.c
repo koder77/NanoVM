@@ -275,7 +275,7 @@ U1 expand_pathname (U1 *path, U1 *newpath)
 				
 				if (portable_install)
 				{
-					strcpy (newpath, "../home/");
+					strcpy (newpath, "../../home/");
 				}
 			}
 			else

@@ -247,7 +247,7 @@ U1 exe_stpush_s (S4 threadnum, U1 *s_reg)
         }
 
         /* write type */
-        pthreads[threadnum].stack[pthreads[threadnum].stack_ind] = STRING_VAR;
+        pthreads[threadnum].stack[pthreads[threadnum].stack_ind] = S_REG;
         pthreads[threadnum].stack_ind++;
 
         pthreads[threadnum].stack_elements++;
@@ -369,7 +369,7 @@ U1 exe_stpull_s (S4 threadnum, U1 *s_reg)
         pthreads[threadnum].stack_ind--;
         type = pthreads[threadnum].stack[pthreads[threadnum].stack_ind];
 
-        if (type != STRING_VAR)
+        if (type != S_REG)
         {
             /* error: wrong type */
 
@@ -444,7 +444,7 @@ U1 exe_show_stack (S4 threadnum)
     }
 
     LOCK();
-    printf ("\ndebug: show stack\n");
+    printf ("\ndebug: show stack\ntop to bottom\n");
 
     while (read)
     {
@@ -496,7 +496,7 @@ U1 exe_show_stack (S4 threadnum)
                     }
                     break;
 
-                case STRING_VAR:
+                case S_REG:
                     ptr = (U1 *) &str_len;
 
                     pos = ind - sizeof (S4);

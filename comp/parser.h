@@ -245,6 +245,12 @@
 #define COMP_OPTIMIZE_O3_SB				"#OPTIMIZE_O3"
 #define COMP_OPTIMIZE_O3 				MAXOPCODE + 11
 
+#define COMP_OPTIMIZE_NOT_START_SB      "#OPTIMIZE_NOT"             /* used to mark blocks which should be not OPTIMIZED */
+#define COMP_OPTIMIZE_NOT_START         MAXOPCODE + 12
+
+#define COMP_OPTIMIZE_NOT_END_SB        "#OPTIMIZE_NOT_END"
+#define COMP_OPTIMIZE_NOT_END           MAXOPCODE + 13
+
 #define COMP_PRIVATE_VAR_SB             'P'
 #define AROPEN_SB                       '['
 #define ARCLOSE_SB                      ']'
@@ -259,6 +265,10 @@
 #define INTEGER_VAR                     21
 #define DIRECT                          -1
 #define TRANSLATE_MAX                   165     /* opcodes */
+
+/* space for set NO OPTIMIZATION flag */
+/* #define MAXCCOMMARG                     8 */
+#define NOOPTIM                         7
 
 struct comp_opcode
 {
