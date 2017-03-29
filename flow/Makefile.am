@@ -23,5 +23,5 @@ noinst_HEADERS = global_d.h \
 		rs232.h \
 		socket.h
 
-AM_CFLAGS = -O0 -g -lpng
+AM_CFLAGS = -O0 -g
 # AM_CPPFLAGS = -I../include

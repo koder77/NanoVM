@@ -1,4 +1,4 @@
-# Install script for directory: /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit
+# Install script for directory: /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -29,123 +29,147 @@ endif()
 
 # Install shared libraries without execute permission?
 if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
-  set(CMAKE_INSTALL_SO_NO_EXE "1")
+  set(CMAKE_INSTALL_SO_NO_EXE "0")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit" TYPE FILE FILES "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/src/asmjit/apibegin.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/asmjit.h")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit" TYPE FILE FILES "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/src/asmjit/apiend.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/asmjit_apibegin.h")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit" TYPE FILE FILES "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/src/asmjit/asmjit.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/asmjit_apiend.h")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit" TYPE FILE FILES "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/src/asmjit/base.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/asmjit_build.h")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit" TYPE FILE FILES "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/src/asmjit/build.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/base.h")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit" TYPE FILE FILES "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/src/asmjit/host.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/arm.h")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit" TYPE FILE FILES "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/src/asmjit/arm.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/x86.h")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit" TYPE FILE FILES "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/src/asmjit/x86.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/base/arch.h")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/src/asmjit/base/assembler.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/base/assembler.h")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/src/asmjit/base/compiler.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/base/codebuilder.h")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/src/asmjit/base/compilerfunc.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/base/codecompiler.h")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/src/asmjit/base/constpool.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/base/codeemitter.h")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/src/asmjit/base/containers.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/base/codeholder.h")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/src/asmjit/base/cpuinfo.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/base/constpool.h")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/src/asmjit/base/globals.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/base/cpuinfo.h")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/src/asmjit/base/hlstream.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/base/func.h")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/src/asmjit/base/logger.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/base/globals.h")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/src/asmjit/base/operand.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/base/inst.h")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/src/asmjit/base/podvector.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/base/logging.h")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/src/asmjit/base/runtime.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/base/operand.h")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/src/asmjit/base/utils.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/base/osutils.h")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/src/asmjit/base/vectypes.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/base/runtime.h")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/src/asmjit/base/vmem.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/base/simdtypes.h")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/src/asmjit/base/zone.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/base/string.h")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/x86" TYPE FILE FILES "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/src/asmjit/x86/x86assembler.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/base/utils.h")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/x86" TYPE FILE FILES "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/src/asmjit/x86/x86compiler.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/base/vmem.h")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/x86" TYPE FILE FILES "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/src/asmjit/x86/x86compilerfunc.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/base" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/base/zone.h")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/x86" TYPE FILE FILES "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/src/asmjit/x86/x86inst.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/x86" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/x86/x86assembler.h")
 endif()
 
 if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/x86" TYPE FILE FILES "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/src/asmjit/x86/x86operand.h")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/x86" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/x86/x86builder.h")
+endif()
+
+if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/x86" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/x86/x86compiler.h")
+endif()
+
+if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/x86" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/x86/x86emitter.h")
+endif()
+
+if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/x86" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/x86/x86globals.h")
+endif()
+
+if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/x86" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/x86/x86inst.h")
+endif()
+
+if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/x86" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/x86/x86misc.h")
+endif()
+
+if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/asmjit/x86" TYPE FILE FILES "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/src/asmjit/x86/x86operand.h")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -156,5 +180,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

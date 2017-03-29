@@ -329,8 +329,8 @@ struct translate
 
 /* message definitions */
 
-#define COMP_START_TXT      "nanoc 64 bit 1.5  (c) 2016 by Stefan Pietzonke jay-t@gmx.net\n-== free software: GPL/MPL ==-\n"
-#define VERSION_NANOC_TXT   "$VER: nanoc 1.5 (17.09.16)"
+#define COMP_START_TXT      "nanoc 64 bit 1.6  (c) 2017 by Stefan Pietzonke jay-t@gmx.net\n-== free software: GPL/MPL ==-\n"
+#define VERSION_NANOC_TXT   "$VER: nanoc 1.6 (28.03.17)"
 
 
 #define STATUS_OK_TXT       "ok"

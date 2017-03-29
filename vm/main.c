@@ -544,7 +544,7 @@ run_prog:
 				#if HAVE_THREADING
 					exe_retval = pthread_create (&pthreads[threadnum].thread, NULL, (void *) exe_elist, (void*) threadnum);
                     
-                    if (pthread_setaffinity_np (pthreads[threadnum].thread, sizeof(cpu_set_t), &cpuset) != 0)
+                    if (sched_setaffinity (pthreads[threadnum].thread, sizeof(cpu_set_t), &cpuset) != 0)
                     {
                         printf ("ERROR: setting pthread affinity of thread: %i\n", threadnum);
                     }
@@ -592,8 +592,9 @@ run_prog:
                     CPU_ZERO(&cpuset);
                     CPU_SET (last_core, &cpuset);
                     
-                    printf ("thread %i set to core %i / ", threadnum, last_core);
+                    printf ("thread %i set to core %i\n", threadnum, last_core);
                     
+                    /*
                     #if HYPERTHREADING
                         if (core_max == 3)
                         {
@@ -625,18 +626,10 @@ run_prog:
                             }
                         }
                     #endif
-                    
+                    */
                     // printf ("thread %i on CPU %i\n", threadnum, last_core);
-                        
-                    if (pthread_setaffinity_np (pthreads[threadnum].thread, sizeof(cpu_set_t), &cpuset) != 0)
-                    {
-                        printf ("ERROR: setting pthread affinity of thread: %i\n", threadnum);
-                    }
-  
-                    if (pthread_getaffinity_np (pthreads[threadnum].thread, sizeof(cpu_set_t), &cpuset) != 0)
-                    {
-                        printf ("ERROR: unable to set pthread affinity!\n");
-                    }
+                    
+                    pthreads[threadnum].cpuset = cpuset;
                 #endif
                     
                 #endif

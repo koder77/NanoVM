@@ -364,7 +364,7 @@ typedef int                     NINT;
 #define THREADING			34
 #define THREADING_SB		"_threading"
 
-#define VERSION_NUM         3430            /* version number */
+#define VERSION_NUM         3437            /* version number */
 #define VERSION_OBJECT      3101            /* object file version, required */
 
 #define BLOCK_TMP_1         0              /* TMP block handling */
@@ -410,7 +410,7 @@ typedef int                     NINT;
 #define MAXSTSIZE           1024000           /* 1000 KB (in bytes) */
 
 /* includes (assembler), debug info */
-#define MAXINCLUDES         32
+#define MAXINCLUDES         64
 
 
 
@@ -1089,9 +1089,9 @@ typedef int                     NINT;
 
 /* message definitions */
 
-#define VM_START_TXT        "nano vm 64 bit 3.4.3-6 (c) 2016 by Stefan Pietzonke jay-t@gmx.net\n-== free software: GPL/MPL ==-\n     -==  dthreading  ==-\n        ==============\n"
-#define A_START_TXT         "nano assembler 64 bit 3.4.3-6  (c) 2016 by Stefan Pietzonke jay-t@gmx.net\n-== free software: GPL/MPL ==-\n"
-#define VERSION_TXT         "$VER: nanovm 3.4.3-6 (17.11.16)"
+#define VM_START_TXT        "nano vm 64 bit 3.4.3-7 (c) 2017 by Stefan Pietzonke jay-t@gmx.net\n-== free software: GPL/MPL ==-\n     -==  dthreading  ==-\n        ==============\n"
+#define A_START_TXT         "nano assembler 64 bit 3.4.3-7  (c) 2017 by Stefan Pietzonke jay-t@gmx.net\n-== free software: GPL/MPL ==-\n"
+#define VERSION_TXT         "$VER: nanovm 3.4.3-7 (28.03.17)"
 
 
 #define STATUS_OK_TXT       "ok"
@@ -1324,6 +1324,7 @@ struct pthreads
     U1 state;
     S4 startpos;
     S8 ret_val;					/* new: changed to 64 bit value */
+    cpu_set_t cpuset;           /* for cpu affinity setting */
     
     #if OS_AROS
         uint32_t thread;

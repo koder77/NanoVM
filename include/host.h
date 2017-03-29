@@ -60,14 +60,14 @@
 /* posix threads CPU cores (Linux) ---------------------------------- */
 
 /* set this to 0 to do autoconfig at runtime */
-#define CPU_CORES   4
+#define CPU_CORES   0
 
 #define HYPERTHREADING  1
 
 
 /* switch JIT compiler on/off --------------------------------------- */
 
-#define HAVE_JIT_COMPILER	0
+#define HAVE_JIT_COMPILER	1
 
 #define JIT_X86_64 		TRUE
 #define JIT_X86_32		FALSE

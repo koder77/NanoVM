@@ -1,3 +1,10 @@
+Nano VM (3.4.3-7)
+    BUGFIX: include path on portable install now set right.
+    
+    vm: main.c, exe_main.c: now uses sched_setaffinity () on Linux to run threads on CPU cores. All cores can be used now right.
+    
+-- Stefan Pietzonke <jay-t@gmx.net>  Tue 28 Mar 2017 21:00 +0200    
+
 Nano VM (3.4.3-6)
     new: exe_elist: direct threading with dthread void* array.
     Speedup factor of about x 1.2.
@@ -31,6 +38,10 @@ Nano VM (3.4.3-6)
     BUGFIX: /home path on portable "installation". 
     
     BUGFIX: now stack type for string variables is S_REG and not STRING_VAR.
+    
+    BUGFIX: include path on portable install now set right.
+    
+    vm: main.c, exe_main.c: now uses sched_setaffinity () on Linux to run threads on CPU cores. All cores can be used now right.
     
 -- Stefan Pietzonke <jay-t@gmx.net>  Sat 31 Dec 2016 12:52 +0100    
 

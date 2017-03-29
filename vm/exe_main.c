@@ -344,6 +344,11 @@ void *exe_elist (S4 threadnum)
     };
     
 #if OS_LINUX
+    if (sched_setaffinity (0, sizeof(cpu_set_t), &pthreads[threadnum].cpuset) != 0)
+    {
+        printf ("ERROR: setting pthread affinity of thread: %i\n", threadnum);
+    }
+    
     set_sched_priority();
 #endif
     

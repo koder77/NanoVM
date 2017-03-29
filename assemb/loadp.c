@@ -42,6 +42,8 @@ extern struct includes *includes;
 /* taken from invocation commandline */
 extern U1 programpath[MAXLINELEN + 1];
 
+extern U1 portable_install;
+
 #if DEBUG
     extern U1 print_debug;
 #endif
@@ -56,7 +58,7 @@ U1 exe_load_prog (U1 *file)
     U1 include_file[MAXLINELEN + 1];
     U1 ok, rem = FALSE, inc = FALSE;
     U1 *read;
-    S2 size, pos, pos_start, pos_end, inc_type;     /* size (length + 1) of one line */
+    S2 size, pos, pos_start, pos_end, inc_type, inc_type_max, i;    /* size (length + 1) of one line */
     S4 srcline = 1;
     S2 includes_ind_private;
 	
@@ -125,7 +127,16 @@ U1 exe_load_prog (U1 *file)
                     {
                         inc = FALSE;
 
-                        for (inc_type = 1; inc_type <= 6; inc_type++)
+                        if (portable_install)
+                        {
+                            i = 5; inc_type_max = 6;        // search in ../../include/ and ../../prog/ for includes
+                        }
+                        else
+                        {
+                            i = 1; inc_type_max = 6;
+                        }
+                        
+                        for (inc_type = i; inc_type <= inc_type_max; inc_type++)
                         {
                             if (conv_include_name (argstr, include_file, inc_type))
                             {

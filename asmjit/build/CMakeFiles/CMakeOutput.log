@@ -1,6 +1,6 @@
-The system is: Linux - 4.8.0-parrot-amd64 - x86_64
+The system is: Linux - 4.4.38-11.pvops.qubes.x86_64 - x86_64
 Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
-Compiler: /usr/bin/clang-3.6 
+Compiler: /usr/bin/clang 
 Build flags: 
 Id flags: 
 
@@ -10,10 +10,10 @@ The output was:
 
 Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
 
-The C compiler identification is Clang, found in "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/3.7.1/CompilerIdC/a.out"
+The C compiler identification is Clang, found in "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/3.6.2/CompilerIdC/a.out"
 
 Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
-Compiler: /usr/bin/clang++-3.6 
+Compiler: /usr/bin/clang++ 
 Build flags: 
 Id flags: 
 
@@ -23,117 +23,98 @@ The output was:
 
 Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
 
-The CXX compiler identification is Clang, found in "/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/3.7.1/CompilerIdCXX/a.out"
+The CXX compiler identification is Clang, found in "/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/3.6.2/CompilerIdCXX/a.out"
 
 Determining if the C compiler works passed with the following output:
-Change Dir: /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp
+Change Dir: /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_57149/fast"
-/usr/bin/make -f CMakeFiles/cmTC_57149.dir/build.make CMakeFiles/cmTC_57149.dir/build
-make[1]: Verzeichnis „/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten
-Building C object CMakeFiles/cmTC_57149.dir/testCCompiler.c.o
-/usr/bin/clang-3.6     -o CMakeFiles/cmTC_57149.dir/testCCompiler.c.o   -c /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp/testCCompiler.c
-Linking C executable cmTC_57149
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_57149.dir/link.txt --verbose=1
-/usr/bin/clang-3.6       CMakeFiles/cmTC_57149.dir/testCCompiler.c.o  -o cmTC_57149 -rdynamic 
-make[1]: Verzeichnis „/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp“ wird verlassen
+Run Build Command:"/usr/bin/gmake" "cmTC_bb82a/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_bb82a.dir/build.make CMakeFiles/cmTC_bb82a.dir/build
+gmake[1]: Entering directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_bb82a.dir/testCCompiler.c.o
+/usr/bin/clang     -o CMakeFiles/cmTC_bb82a.dir/testCCompiler.c.o   -c /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp/testCCompiler.c
+Linking C executable cmTC_bb82a
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_bb82a.dir/link.txt --verbose=1
+/usr/bin/clang       CMakeFiles/cmTC_bb82a.dir/testCCompiler.c.o  -o cmTC_bb82a -rdynamic 
+gmake[1]: Leaving directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
 
 
 Detecting C compiler ABI info compiled with the following output:
-Change Dir: /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp
+Change Dir: /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_009e5/fast"
-/usr/bin/make -f CMakeFiles/cmTC_009e5.dir/build.make CMakeFiles/cmTC_009e5.dir/build
-make[1]: Verzeichnis „/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten
-Building C object CMakeFiles/cmTC_009e5.dir/CMakeCCompilerABI.c.o
-/usr/bin/clang-3.6     -o CMakeFiles/cmTC_009e5.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.7/Modules/CMakeCCompilerABI.c
-Linking C executable cmTC_009e5
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_009e5.dir/link.txt --verbose=1
-/usr/bin/clang-3.6      -v CMakeFiles/cmTC_009e5.dir/CMakeCCompilerABI.c.o  -o cmTC_009e5 -rdynamic  
-Debian clang version 3.6.2-3 (tags/RELEASE_362/final) (based on LLVM 3.6.2)
-Target: x86_64-pc-linux-gnu
+Run Build Command:"/usr/bin/gmake" "cmTC_80ed6/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_80ed6.dir/build.make CMakeFiles/cmTC_80ed6.dir/build
+gmake[1]: Entering directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_80ed6.dir/CMakeCCompilerABI.c.o
+/usr/bin/clang     -o CMakeFiles/cmTC_80ed6.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake/Modules/CMakeCCompilerABI.c
+Linking C executable cmTC_80ed6
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_80ed6.dir/link.txt --verbose=1
+/usr/bin/clang      -v CMakeFiles/cmTC_80ed6.dir/CMakeCCompilerABI.c.o  -o cmTC_80ed6 -rdynamic  
+clang version 3.8.1 (tags/RELEASE_381/final)
+Target: x86_64-unknown-linux-gnu
 Thread model: posix
-Found candidate GCC installation: /usr/bin/../lib/gcc/i686-linux-gnu/6.2.1
-Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.8
-Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.8.5
-Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.9
-Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.9.3
-Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/5.4.1
-Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1
-Found candidate GCC installation: /usr/lib/gcc/i686-linux-gnu/6.2.1
-Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.8
-Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.8.5
-Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.9
-Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.9.3
-Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/5.4.1
-Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/6.2.1
-Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1
+InstalledDir: /usr/bin
+Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1
+Found candidate GCC installation: /usr/lib/gcc/x86_64-redhat-linux/6.3.1
+Selected GCC installation: /usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1
 Candidate multilib: .;@m64
+Candidate multilib: 32;@m32
 Selected multilib: .;@m64
- "/usr/bin/ld" -export-dynamic --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_009e5 /usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../x86_64-linux-gnu/crt1.o /usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../x86_64-linux-gnu/crti.o /usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/crtbegin.o -L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1 -L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../x86_64-linux-gnu -L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../../lib64 -L/lib/x86_64-linux-gnu -L/lib/../lib64 -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib64 -L/usr/lib/x86_64-linux-gnu/../../lib64 -L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../.. -L/usr/lib/llvm-3.6/bin/../lib -L/lib -L/usr/lib CMakeFiles/cmTC_009e5.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/crtend.o /usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../x86_64-linux-gnu/crtn.o
-make[1]: Verzeichnis „/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp“ wird verlassen
+ "/usr/bin/ld" -export-dynamic --hash-style=gnu --no-add-needed --build-id --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_80ed6 /usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../../../lib64/crt1.o /usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../../../lib64/crti.o /usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/crtbegin.o -L/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1 -L/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../../../lib64 -L/usr/bin/../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../.. -L/usr/bin/../lib -L/lib -L/usr/lib CMakeFiles/cmTC_80ed6.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/crtend.o /usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../../../lib64/crtn.o
+gmake[1]: Leaving directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
 
 
 Parsed C implicit link information from above output:
   link line regex: [^( *|.*[/\])(ld|([^/\]+-)?ld|collect2)[^/\]*( |$)]
-  ignore line: [Change Dir: /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp]
+  ignore line: [Change Dir: /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp]
   ignore line: []
-  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_009e5/fast"]
-  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_009e5.dir/build.make CMakeFiles/cmTC_009e5.dir/build]
-  ignore line: [make[1]: Verzeichnis „/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten]
-  ignore line: [Building C object CMakeFiles/cmTC_009e5.dir/CMakeCCompilerABI.c.o]
-  ignore line: [/usr/bin/clang-3.6     -o CMakeFiles/cmTC_009e5.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.7/Modules/CMakeCCompilerABI.c]
-  ignore line: [Linking C executable cmTC_009e5]
-  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_009e5.dir/link.txt --verbose=1]
-  ignore line: [/usr/bin/clang-3.6      -v CMakeFiles/cmTC_009e5.dir/CMakeCCompilerABI.c.o  -o cmTC_009e5 -rdynamic  ]
-  ignore line: [Debian clang version 3.6.2-3 (tags/RELEASE_362/final) (based on LLVM 3.6.2)]
-  ignore line: [Target: x86_64-pc-linux-gnu]
+  ignore line: [Run Build Command:"/usr/bin/gmake" "cmTC_80ed6/fast"]
+  ignore line: [/usr/bin/gmake -f CMakeFiles/cmTC_80ed6.dir/build.make CMakeFiles/cmTC_80ed6.dir/build]
+  ignore line: [gmake[1]: Entering directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp']
+  ignore line: [Building C object CMakeFiles/cmTC_80ed6.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/usr/bin/clang     -o CMakeFiles/cmTC_80ed6.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake/Modules/CMakeCCompilerABI.c]
+  ignore line: [Linking C executable cmTC_80ed6]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_80ed6.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/clang      -v CMakeFiles/cmTC_80ed6.dir/CMakeCCompilerABI.c.o  -o cmTC_80ed6 -rdynamic  ]
+  ignore line: [clang version 3.8.1 (tags/RELEASE_381/final)]
+  ignore line: [Target: x86_64-unknown-linux-gnu]
   ignore line: [Thread model: posix]
-  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/i686-linux-gnu/6.2.1]
-  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.8]
-  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.8.5]
-  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.9]
-  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.9.3]
-  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/5.4.1]
-  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1]
-  ignore line: [Found candidate GCC installation: /usr/lib/gcc/i686-linux-gnu/6.2.1]
-  ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.8]
-  ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.8.5]
-  ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.9]
-  ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.9.3]
-  ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/5.4.1]
-  ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/6.2.1]
-  ignore line: [Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1]
+  ignore line: [InstalledDir: /usr/bin]
+  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1]
+  ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-redhat-linux/6.3.1]
+  ignore line: [Selected GCC installation: /usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1]
   ignore line: [Candidate multilib: .]
   ignore line: [@m64]
+  ignore line: [Candidate multilib: 32]
+  ignore line: [@m32]
   ignore line: [Selected multilib: .]
   ignore line: [@m64]
-  link line: [ "/usr/bin/ld" -export-dynamic --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_009e5 /usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../x86_64-linux-gnu/crt1.o /usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../x86_64-linux-gnu/crti.o /usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/crtbegin.o -L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1 -L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../x86_64-linux-gnu -L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../../lib64 -L/lib/x86_64-linux-gnu -L/lib/../lib64 -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib64 -L/usr/lib/x86_64-linux-gnu/../../lib64 -L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../.. -L/usr/lib/llvm-3.6/bin/../lib -L/lib -L/usr/lib CMakeFiles/cmTC_009e5.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/crtend.o /usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../x86_64-linux-gnu/crtn.o]
+  link line: [ "/usr/bin/ld" -export-dynamic --hash-style=gnu --no-add-needed --build-id --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_80ed6 /usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../../../lib64/crt1.o /usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../../../lib64/crti.o /usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/crtbegin.o -L/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1 -L/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../../../lib64 -L/usr/bin/../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../.. -L/usr/bin/../lib -L/lib -L/usr/lib CMakeFiles/cmTC_80ed6.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/crtend.o /usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../../../lib64/crtn.o]
     arg [/usr/bin/ld] ==> ignore
     arg [-export-dynamic] ==> ignore
+    arg [--hash-style=gnu] ==> ignore
+    arg [--no-add-needed] ==> ignore
+    arg [--build-id] ==> ignore
     arg [--eh-frame-hdr] ==> ignore
     arg [-m] ==> ignore
     arg [elf_x86_64] ==> ignore
     arg [-dynamic-linker] ==> ignore
     arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
     arg [-o] ==> ignore
-    arg [cmTC_009e5] ==> ignore
-    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../x86_64-linux-gnu/crt1.o] ==> ignore
-    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../x86_64-linux-gnu/crti.o] ==> ignore
-    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/crtbegin.o] ==> ignore
-    arg [-L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1] ==> dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1]
-    arg [-L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../x86_64-linux-gnu] ==> dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../x86_64-linux-gnu]
-    arg [-L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../../lib64] ==> dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../../lib64]
-    arg [-L/lib/x86_64-linux-gnu] ==> dir [/lib/x86_64-linux-gnu]
+    arg [cmTC_80ed6] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../../../lib64/crt1.o] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../../../lib64/crti.o] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/crtbegin.o] ==> ignore
+    arg [-L/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1] ==> dir [/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1]
+    arg [-L/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../../../lib64] ==> dir [/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../../../lib64]
+    arg [-L/usr/bin/../lib64] ==> dir [/usr/bin/../lib64]
     arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
-    arg [-L/usr/lib/x86_64-linux-gnu] ==> dir [/usr/lib/x86_64-linux-gnu]
     arg [-L/usr/lib/../lib64] ==> dir [/usr/lib/../lib64]
-    arg [-L/usr/lib/x86_64-linux-gnu/../../lib64] ==> dir [/usr/lib/x86_64-linux-gnu/../../lib64]
-    arg [-L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../..] ==> dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../..]
-    arg [-L/usr/lib/llvm-3.6/bin/../lib] ==> dir [/usr/lib/llvm-3.6/bin/../lib]
+    arg [-L/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../..] ==> dir [/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../..]
+    arg [-L/usr/bin/../lib] ==> dir [/usr/bin/../lib]
     arg [-L/lib] ==> dir [/lib]
     arg [-L/usr/lib] ==> dir [/usr/lib]
-    arg [CMakeFiles/cmTC_009e5.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [CMakeFiles/cmTC_80ed6.dir/CMakeCCompilerABI.c.o] ==> ignore
     arg [-lgcc] ==> lib [gcc]
     arg [--as-needed] ==> ignore
     arg [-lgcc_s] ==> lib [gcc_s]
@@ -143,43 +124,40 @@ Parsed C implicit link information from above output:
     arg [--as-needed] ==> ignore
     arg [-lgcc_s] ==> lib [gcc_s]
     arg [--no-as-needed] ==> ignore
-    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/crtend.o] ==> ignore
-    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../x86_64-linux-gnu/crtn.o] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/crtend.o] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../../../lib64/crtn.o] ==> ignore
   remove lib [gcc]
   remove lib [gcc_s]
   remove lib [gcc]
   remove lib [gcc_s]
-  collapse library dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1] ==> [/usr/lib/gcc/x86_64-linux-gnu/6.2.1]
-  collapse library dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../x86_64-linux-gnu] ==> [/usr/lib/x86_64-linux-gnu]
-  collapse library dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../../lib64] ==> [/usr/lib64]
-  collapse library dir [/lib/x86_64-linux-gnu] ==> [/lib/x86_64-linux-gnu]
+  collapse library dir [/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1] ==> [/usr/lib/gcc/x86_64-redhat-linux/6.3.1]
+  collapse library dir [/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../../../lib64] ==> [/usr/lib64]
+  collapse library dir [/usr/bin/../lib64] ==> [/usr/lib64]
   collapse library dir [/lib/../lib64] ==> [/lib64]
-  collapse library dir [/usr/lib/x86_64-linux-gnu] ==> [/usr/lib/x86_64-linux-gnu]
   collapse library dir [/usr/lib/../lib64] ==> [/usr/lib64]
-  collapse library dir [/usr/lib/x86_64-linux-gnu/../../lib64] ==> [/usr/lib64]
-  collapse library dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../..] ==> [/usr/lib]
-  collapse library dir [/usr/lib/llvm-3.6/bin/../lib] ==> [/usr/lib/llvm-3.6/lib]
+  collapse library dir [/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../..] ==> [/usr/lib]
+  collapse library dir [/usr/bin/../lib] ==> [/usr/lib]
   collapse library dir [/lib] ==> [/lib]
   collapse library dir [/usr/lib] ==> [/usr/lib]
   implicit libs: [c]
-  implicit dirs: [/usr/lib/gcc/x86_64-linux-gnu/6.2.1;/usr/lib/x86_64-linux-gnu;/usr/lib64;/lib/x86_64-linux-gnu;/lib64;/usr/lib;/usr/lib/llvm-3.6/lib;/lib]
+  implicit dirs: [/usr/lib/gcc/x86_64-redhat-linux/6.3.1;/usr/lib64;/lib64;/usr/lib;/lib]
   implicit fwks: []
 
 
 
 
 Detecting C [-std=c11] compiler features compiled with the following output:
-Change Dir: /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp
+Change Dir: /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_a55dc/fast"
-/usr/bin/make -f CMakeFiles/cmTC_a55dc.dir/build.make CMakeFiles/cmTC_a55dc.dir/build
-make[1]: Verzeichnis „/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten
-Building C object CMakeFiles/cmTC_a55dc.dir/feature_tests.c.o
-/usr/bin/clang-3.6    -std=c11 -o CMakeFiles/cmTC_a55dc.dir/feature_tests.c.o   -c /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/feature_tests.c
-Linking C executable cmTC_a55dc
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a55dc.dir/link.txt --verbose=1
-/usr/bin/clang-3.6       CMakeFiles/cmTC_a55dc.dir/feature_tests.c.o  -o cmTC_a55dc -rdynamic 
-make[1]: Verzeichnis „/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp“ wird verlassen
+Run Build Command:"/usr/bin/gmake" "cmTC_f9992/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_f9992.dir/build.make CMakeFiles/cmTC_f9992.dir/build
+gmake[1]: Entering directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_f9992.dir/feature_tests.c.o
+/usr/bin/clang    -std=c11 -o CMakeFiles/cmTC_f9992.dir/feature_tests.c.o   -c /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/feature_tests.c
+Linking C executable cmTC_f9992
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f9992.dir/link.txt --verbose=1
+/usr/bin/clang       CMakeFiles/cmTC_f9992.dir/feature_tests.c.o  -o cmTC_f9992 -rdynamic 
+gmake[1]: Leaving directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
 
 
     Feature record: C_FEATURE:1c_function_prototypes
@@ -189,17 +167,17 @@ make[1]: Verzeichnis „/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-d
 
 
 Detecting C [-std=c99] compiler features compiled with the following output:
-Change Dir: /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp
+Change Dir: /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_e5b14/fast"
-/usr/bin/make -f CMakeFiles/cmTC_e5b14.dir/build.make CMakeFiles/cmTC_e5b14.dir/build
-make[1]: Verzeichnis „/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten
-Building C object CMakeFiles/cmTC_e5b14.dir/feature_tests.c.o
-/usr/bin/clang-3.6    -std=c99 -o CMakeFiles/cmTC_e5b14.dir/feature_tests.c.o   -c /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/feature_tests.c
-Linking C executable cmTC_e5b14
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e5b14.dir/link.txt --verbose=1
-/usr/bin/clang-3.6       CMakeFiles/cmTC_e5b14.dir/feature_tests.c.o  -o cmTC_e5b14 -rdynamic 
-make[1]: Verzeichnis „/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp“ wird verlassen
+Run Build Command:"/usr/bin/gmake" "cmTC_a4ef7/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_a4ef7.dir/build.make CMakeFiles/cmTC_a4ef7.dir/build
+gmake[1]: Entering directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_a4ef7.dir/feature_tests.c.o
+/usr/bin/clang    -std=c99 -o CMakeFiles/cmTC_a4ef7.dir/feature_tests.c.o   -c /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/feature_tests.c
+Linking C executable cmTC_a4ef7
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a4ef7.dir/link.txt --verbose=1
+/usr/bin/clang       CMakeFiles/cmTC_a4ef7.dir/feature_tests.c.o  -o cmTC_a4ef7 -rdynamic 
+gmake[1]: Leaving directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
 
 
     Feature record: C_FEATURE:1c_function_prototypes
@@ -209,17 +187,17 @@ make[1]: Verzeichnis „/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-d
 
 
 Detecting C [-std=c90] compiler features compiled with the following output:
-Change Dir: /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp
+Change Dir: /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_404f9/fast"
-/usr/bin/make -f CMakeFiles/cmTC_404f9.dir/build.make CMakeFiles/cmTC_404f9.dir/build
-make[1]: Verzeichnis „/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten
-Building C object CMakeFiles/cmTC_404f9.dir/feature_tests.c.o
-/usr/bin/clang-3.6    -std=c90 -o CMakeFiles/cmTC_404f9.dir/feature_tests.c.o   -c /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/feature_tests.c
-Linking C executable cmTC_404f9
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_404f9.dir/link.txt --verbose=1
-/usr/bin/clang-3.6       CMakeFiles/cmTC_404f9.dir/feature_tests.c.o  -o cmTC_404f9 -rdynamic 
-make[1]: Verzeichnis „/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp“ wird verlassen
+Run Build Command:"/usr/bin/gmake" "cmTC_615ac/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_615ac.dir/build.make CMakeFiles/cmTC_615ac.dir/build
+gmake[1]: Entering directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_615ac.dir/feature_tests.c.o
+/usr/bin/clang    -std=c90 -o CMakeFiles/cmTC_615ac.dir/feature_tests.c.o   -c /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/feature_tests.c
+Linking C executable cmTC_615ac
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_615ac.dir/link.txt --verbose=1
+/usr/bin/clang       CMakeFiles/cmTC_615ac.dir/feature_tests.c.o  -o cmTC_615ac -rdynamic 
+gmake[1]: Leaving directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
 
 
     Feature record: C_FEATURE:1c_function_prototypes
@@ -227,114 +205,95 @@ make[1]: Verzeichnis „/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-d
     Feature record: C_FEATURE:0c_static_assert
     Feature record: C_FEATURE:0c_variadic_macros
 Determining if the CXX compiler works passed with the following output:
-Change Dir: /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp
+Change Dir: /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_2e130/fast"
-/usr/bin/make -f CMakeFiles/cmTC_2e130.dir/build.make CMakeFiles/cmTC_2e130.dir/build
-make[1]: Verzeichnis „/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten
-Building CXX object CMakeFiles/cmTC_2e130.dir/testCXXCompiler.cxx.o
-/usr/bin/clang++-3.6      -o CMakeFiles/cmTC_2e130.dir/testCXXCompiler.cxx.o -c /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
-Linking CXX executable cmTC_2e130
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2e130.dir/link.txt --verbose=1
-/usr/bin/clang++-3.6        CMakeFiles/cmTC_2e130.dir/testCXXCompiler.cxx.o  -o cmTC_2e130 -rdynamic 
-make[1]: Verzeichnis „/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp“ wird verlassen
+Run Build Command:"/usr/bin/gmake" "cmTC_5ca6a/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_5ca6a.dir/build.make CMakeFiles/cmTC_5ca6a.dir/build
+gmake[1]: Entering directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_5ca6a.dir/testCXXCompiler.cxx.o
+/usr/bin/clang++      -o CMakeFiles/cmTC_5ca6a.dir/testCXXCompiler.cxx.o -c /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
+Linking CXX executable cmTC_5ca6a
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5ca6a.dir/link.txt --verbose=1
+/usr/bin/clang++        CMakeFiles/cmTC_5ca6a.dir/testCXXCompiler.cxx.o  -o cmTC_5ca6a -rdynamic 
+gmake[1]: Leaving directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
 
 
 Detecting CXX compiler ABI info compiled with the following output:
-Change Dir: /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp
+Change Dir: /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_63a89/fast"
-/usr/bin/make -f CMakeFiles/cmTC_63a89.dir/build.make CMakeFiles/cmTC_63a89.dir/build
-make[1]: Verzeichnis „/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten
-Building CXX object CMakeFiles/cmTC_63a89.dir/CMakeCXXCompilerABI.cpp.o
-/usr/bin/clang++-3.6      -o CMakeFiles/cmTC_63a89.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.7/Modules/CMakeCXXCompilerABI.cpp
-Linking CXX executable cmTC_63a89
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_63a89.dir/link.txt --verbose=1
-/usr/bin/clang++-3.6       -v CMakeFiles/cmTC_63a89.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_63a89 -rdynamic  
-Debian clang version 3.6.2-3 (tags/RELEASE_362/final) (based on LLVM 3.6.2)
-Target: x86_64-pc-linux-gnu
+Run Build Command:"/usr/bin/gmake" "cmTC_42ecf/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_42ecf.dir/build.make CMakeFiles/cmTC_42ecf.dir/build
+gmake[1]: Entering directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_42ecf.dir/CMakeCXXCompilerABI.cpp.o
+/usr/bin/clang++      -o CMakeFiles/cmTC_42ecf.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp
+Linking CXX executable cmTC_42ecf
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_42ecf.dir/link.txt --verbose=1
+/usr/bin/clang++       -v CMakeFiles/cmTC_42ecf.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_42ecf -rdynamic  
+clang version 3.8.1 (tags/RELEASE_381/final)
+Target: x86_64-unknown-linux-gnu
 Thread model: posix
-Found candidate GCC installation: /usr/bin/../lib/gcc/i686-linux-gnu/6.2.1
-Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.8
-Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.8.5
-Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.9
-Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.9.3
-Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/5.4.1
-Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1
-Found candidate GCC installation: /usr/lib/gcc/i686-linux-gnu/6.2.1
-Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.8
-Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.8.5
-Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.9
-Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.9.3
-Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/5.4.1
-Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/6.2.1
-Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1
+InstalledDir: /usr/bin
+Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1
+Found candidate GCC installation: /usr/lib/gcc/x86_64-redhat-linux/6.3.1
+Selected GCC installation: /usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1
 Candidate multilib: .;@m64
+Candidate multilib: 32;@m32
 Selected multilib: .;@m64
- "/usr/bin/ld" -export-dynamic --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_63a89 /usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../x86_64-linux-gnu/crt1.o /usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../x86_64-linux-gnu/crti.o /usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/crtbegin.o -L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1 -L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../x86_64-linux-gnu -L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../../lib64 -L/lib/x86_64-linux-gnu -L/lib/../lib64 -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib64 -L/usr/lib/x86_64-linux-gnu/../../lib64 -L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../.. -L/usr/lib/llvm-3.6/bin/../lib -L/lib -L/usr/lib CMakeFiles/cmTC_63a89.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/crtend.o /usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../x86_64-linux-gnu/crtn.o
-make[1]: Verzeichnis „/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp“ wird verlassen
+ "/usr/bin/ld" -export-dynamic --hash-style=gnu --no-add-needed --build-id --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_42ecf /usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../../../lib64/crt1.o /usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../../../lib64/crti.o /usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/crtbegin.o -L/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1 -L/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../../../lib64 -L/usr/bin/../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../.. -L/usr/bin/../lib -L/lib -L/usr/lib CMakeFiles/cmTC_42ecf.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/crtend.o /usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../../../lib64/crtn.o
+gmake[1]: Leaving directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
 
 
 Parsed CXX implicit link information from above output:
   link line regex: [^( *|.*[/\])(ld|([^/\]+-)?ld|collect2)[^/\]*( |$)]
-  ignore line: [Change Dir: /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp]
+  ignore line: [Change Dir: /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp]
   ignore line: []
-  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_63a89/fast"]
-  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_63a89.dir/build.make CMakeFiles/cmTC_63a89.dir/build]
-  ignore line: [make[1]: Verzeichnis „/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten]
-  ignore line: [Building CXX object CMakeFiles/cmTC_63a89.dir/CMakeCXXCompilerABI.cpp.o]
-  ignore line: [/usr/bin/clang++-3.6      -o CMakeFiles/cmTC_63a89.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.7/Modules/CMakeCXXCompilerABI.cpp]
-  ignore line: [Linking CXX executable cmTC_63a89]
-  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_63a89.dir/link.txt --verbose=1]
-  ignore line: [/usr/bin/clang++-3.6       -v CMakeFiles/cmTC_63a89.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_63a89 -rdynamic  ]
-  ignore line: [Debian clang version 3.6.2-3 (tags/RELEASE_362/final) (based on LLVM 3.6.2)]
-  ignore line: [Target: x86_64-pc-linux-gnu]
+  ignore line: [Run Build Command:"/usr/bin/gmake" "cmTC_42ecf/fast"]
+  ignore line: [/usr/bin/gmake -f CMakeFiles/cmTC_42ecf.dir/build.make CMakeFiles/cmTC_42ecf.dir/build]
+  ignore line: [gmake[1]: Entering directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp']
+  ignore line: [Building CXX object CMakeFiles/cmTC_42ecf.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [/usr/bin/clang++      -o CMakeFiles/cmTC_42ecf.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [Linking CXX executable cmTC_42ecf]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_42ecf.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/clang++       -v CMakeFiles/cmTC_42ecf.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_42ecf -rdynamic  ]
+  ignore line: [clang version 3.8.1 (tags/RELEASE_381/final)]
+  ignore line: [Target: x86_64-unknown-linux-gnu]
   ignore line: [Thread model: posix]
-  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/i686-linux-gnu/6.2.1]
-  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.8]
-  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.8.5]
-  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.9]
-  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/4.9.3]
-  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/5.4.1]
-  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1]
-  ignore line: [Found candidate GCC installation: /usr/lib/gcc/i686-linux-gnu/6.2.1]
-  ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.8]
-  ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.8.5]
-  ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.9]
-  ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/4.9.3]
-  ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/5.4.1]
-  ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-linux-gnu/6.2.1]
-  ignore line: [Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1]
+  ignore line: [InstalledDir: /usr/bin]
+  ignore line: [Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1]
+  ignore line: [Found candidate GCC installation: /usr/lib/gcc/x86_64-redhat-linux/6.3.1]
+  ignore line: [Selected GCC installation: /usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1]
   ignore line: [Candidate multilib: .]
   ignore line: [@m64]
+  ignore line: [Candidate multilib: 32]
+  ignore line: [@m32]
   ignore line: [Selected multilib: .]
   ignore line: [@m64]
-  link line: [ "/usr/bin/ld" -export-dynamic --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_63a89 /usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../x86_64-linux-gnu/crt1.o /usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../x86_64-linux-gnu/crti.o /usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/crtbegin.o -L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1 -L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../x86_64-linux-gnu -L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../../lib64 -L/lib/x86_64-linux-gnu -L/lib/../lib64 -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib64 -L/usr/lib/x86_64-linux-gnu/../../lib64 -L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../.. -L/usr/lib/llvm-3.6/bin/../lib -L/lib -L/usr/lib CMakeFiles/cmTC_63a89.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/crtend.o /usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../x86_64-linux-gnu/crtn.o]
+  link line: [ "/usr/bin/ld" -export-dynamic --hash-style=gnu --no-add-needed --build-id --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_42ecf /usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../../../lib64/crt1.o /usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../../../lib64/crti.o /usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/crtbegin.o -L/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1 -L/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../../../lib64 -L/usr/bin/../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../.. -L/usr/bin/../lib -L/lib -L/usr/lib CMakeFiles/cmTC_42ecf.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/crtend.o /usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../../../lib64/crtn.o]
     arg [/usr/bin/ld] ==> ignore
     arg [-export-dynamic] ==> ignore
+    arg [--hash-style=gnu] ==> ignore
+    arg [--no-add-needed] ==> ignore
+    arg [--build-id] ==> ignore
     arg [--eh-frame-hdr] ==> ignore
     arg [-m] ==> ignore
     arg [elf_x86_64] ==> ignore
     arg [-dynamic-linker] ==> ignore
     arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
     arg [-o] ==> ignore
-    arg [cmTC_63a89] ==> ignore
-    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../x86_64-linux-gnu/crt1.o] ==> ignore
-    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../x86_64-linux-gnu/crti.o] ==> ignore
-    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/crtbegin.o] ==> ignore
-    arg [-L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1] ==> dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1]
-    arg [-L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../x86_64-linux-gnu] ==> dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../x86_64-linux-gnu]
-    arg [-L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../../lib64] ==> dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../../lib64]
-    arg [-L/lib/x86_64-linux-gnu] ==> dir [/lib/x86_64-linux-gnu]
+    arg [cmTC_42ecf] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../../../lib64/crt1.o] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../../../lib64/crti.o] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/crtbegin.o] ==> ignore
+    arg [-L/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1] ==> dir [/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1]
+    arg [-L/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../../../lib64] ==> dir [/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../../../lib64]
+    arg [-L/usr/bin/../lib64] ==> dir [/usr/bin/../lib64]
     arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
-    arg [-L/usr/lib/x86_64-linux-gnu] ==> dir [/usr/lib/x86_64-linux-gnu]
     arg [-L/usr/lib/../lib64] ==> dir [/usr/lib/../lib64]
-    arg [-L/usr/lib/x86_64-linux-gnu/../../lib64] ==> dir [/usr/lib/x86_64-linux-gnu/../../lib64]
-    arg [-L/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../..] ==> dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../..]
-    arg [-L/usr/lib/llvm-3.6/bin/../lib] ==> dir [/usr/lib/llvm-3.6/bin/../lib]
+    arg [-L/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../..] ==> dir [/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../..]
+    arg [-L/usr/bin/../lib] ==> dir [/usr/bin/../lib]
     arg [-L/lib] ==> dir [/lib]
     arg [-L/usr/lib] ==> dir [/usr/lib]
-    arg [CMakeFiles/cmTC_63a89.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+    arg [CMakeFiles/cmTC_42ecf.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
     arg [-lstdc++] ==> lib [stdc++]
     arg [-lm] ==> lib [m]
     arg [-lgcc_s] ==> lib [gcc_s]
@@ -342,43 +301,40 @@ Parsed CXX implicit link information from above output:
     arg [-lc] ==> lib [c]
     arg [-lgcc_s] ==> lib [gcc_s]
     arg [-lgcc] ==> lib [gcc]
-    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/crtend.o] ==> ignore
-    arg [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../x86_64-linux-gnu/crtn.o] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/crtend.o] ==> ignore
+    arg [/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../../../lib64/crtn.o] ==> ignore
   remove lib [gcc_s]
   remove lib [gcc]
   remove lib [gcc_s]
   remove lib [gcc]
-  collapse library dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1] ==> [/usr/lib/gcc/x86_64-linux-gnu/6.2.1]
-  collapse library dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../x86_64-linux-gnu] ==> [/usr/lib/x86_64-linux-gnu]
-  collapse library dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../../../lib64] ==> [/usr/lib64]
-  collapse library dir [/lib/x86_64-linux-gnu] ==> [/lib/x86_64-linux-gnu]
+  collapse library dir [/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1] ==> [/usr/lib/gcc/x86_64-redhat-linux/6.3.1]
+  collapse library dir [/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../../../lib64] ==> [/usr/lib64]
+  collapse library dir [/usr/bin/../lib64] ==> [/usr/lib64]
   collapse library dir [/lib/../lib64] ==> [/lib64]
-  collapse library dir [/usr/lib/x86_64-linux-gnu] ==> [/usr/lib/x86_64-linux-gnu]
   collapse library dir [/usr/lib/../lib64] ==> [/usr/lib64]
-  collapse library dir [/usr/lib/x86_64-linux-gnu/../../lib64] ==> [/usr/lib64]
-  collapse library dir [/usr/bin/../lib/gcc/x86_64-linux-gnu/6.2.1/../../..] ==> [/usr/lib]
-  collapse library dir [/usr/lib/llvm-3.6/bin/../lib] ==> [/usr/lib/llvm-3.6/lib]
+  collapse library dir [/usr/bin/../lib/gcc/x86_64-redhat-linux/6.3.1/../../..] ==> [/usr/lib]
+  collapse library dir [/usr/bin/../lib] ==> [/usr/lib]
   collapse library dir [/lib] ==> [/lib]
   collapse library dir [/usr/lib] ==> [/usr/lib]
   implicit libs: [stdc++;m;c]
-  implicit dirs: [/usr/lib/gcc/x86_64-linux-gnu/6.2.1;/usr/lib/x86_64-linux-gnu;/usr/lib64;/lib/x86_64-linux-gnu;/lib64;/usr/lib;/usr/lib/llvm-3.6/lib;/lib]
+  implicit dirs: [/usr/lib/gcc/x86_64-redhat-linux/6.3.1;/usr/lib64;/lib64;/usr/lib;/lib]
   implicit fwks: []
 
 
 
 
 Detecting CXX [-std=c++14] compiler features compiled with the following output:
-Change Dir: /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp
+Change Dir: /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_0e77e/fast"
-/usr/bin/make -f CMakeFiles/cmTC_0e77e.dir/build.make CMakeFiles/cmTC_0e77e.dir/build
-make[1]: Verzeichnis „/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten
-Building CXX object CMakeFiles/cmTC_0e77e.dir/feature_tests.cxx.o
-/usr/bin/clang++-3.6     -std=c++14 -o CMakeFiles/cmTC_0e77e.dir/feature_tests.cxx.o -c /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_0e77e
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0e77e.dir/link.txt --verbose=1
-/usr/bin/clang++-3.6        CMakeFiles/cmTC_0e77e.dir/feature_tests.cxx.o  -o cmTC_0e77e -rdynamic 
-make[1]: Verzeichnis „/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp“ wird verlassen
+Run Build Command:"/usr/bin/gmake" "cmTC_34584/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_34584.dir/build.make CMakeFiles/cmTC_34584.dir/build
+gmake[1]: Entering directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_34584.dir/feature_tests.cxx.o
+/usr/bin/clang++     -std=c++14 -o CMakeFiles/cmTC_34584.dir/feature_tests.cxx.o -c /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_34584
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_34584.dir/link.txt --verbose=1
+/usr/bin/clang++        CMakeFiles/cmTC_34584.dir/feature_tests.cxx.o  -o cmTC_34584 -rdynamic 
+gmake[1]: Leaving directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
 
 
     Feature record: CXX_FEATURE:1cxx_aggregate_default_initializers
@@ -441,17 +397,17 @@ make[1]: Verzeichnis „/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-d
 
 
 Detecting CXX [-std=c++11] compiler features compiled with the following output:
-Change Dir: /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp
+Change Dir: /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_cc366/fast"
-/usr/bin/make -f CMakeFiles/cmTC_cc366.dir/build.make CMakeFiles/cmTC_cc366.dir/build
-make[1]: Verzeichnis „/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten
-Building CXX object CMakeFiles/cmTC_cc366.dir/feature_tests.cxx.o
-/usr/bin/clang++-3.6     -std=c++11 -o CMakeFiles/cmTC_cc366.dir/feature_tests.cxx.o -c /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_cc366
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_cc366.dir/link.txt --verbose=1
-/usr/bin/clang++-3.6        CMakeFiles/cmTC_cc366.dir/feature_tests.cxx.o  -o cmTC_cc366 -rdynamic 
-make[1]: Verzeichnis „/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp“ wird verlassen
+Run Build Command:"/usr/bin/gmake" "cmTC_661d8/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_661d8.dir/build.make CMakeFiles/cmTC_661d8.dir/build
+gmake[1]: Entering directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_661d8.dir/feature_tests.cxx.o
+/usr/bin/clang++     -std=c++11 -o CMakeFiles/cmTC_661d8.dir/feature_tests.cxx.o -c /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_661d8
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_661d8.dir/link.txt --verbose=1
+/usr/bin/clang++        CMakeFiles/cmTC_661d8.dir/feature_tests.cxx.o  -o cmTC_661d8 -rdynamic 
+gmake[1]: Leaving directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
 
 
     Feature record: CXX_FEATURE:0cxx_aggregate_default_initializers
@@ -514,17 +470,17 @@ make[1]: Verzeichnis „/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-d
 
 
 Detecting CXX [-std=c++98] compiler features compiled with the following output:
-Change Dir: /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp
+Change Dir: /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_c34cf/fast"
-/usr/bin/make -f CMakeFiles/cmTC_c34cf.dir/build.make CMakeFiles/cmTC_c34cf.dir/build
-make[1]: Verzeichnis „/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp“ wird betreten
-Building CXX object CMakeFiles/cmTC_c34cf.dir/feature_tests.cxx.o
-/usr/bin/clang++-3.6     -std=c++98 -o CMakeFiles/cmTC_c34cf.dir/feature_tests.cxx.o -c /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_c34cf
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c34cf.dir/link.txt --verbose=1
-/usr/bin/clang++-3.6        CMakeFiles/cmTC_c34cf.dir/feature_tests.cxx.o  -o cmTC_c34cf -rdynamic 
-make[1]: Verzeichnis „/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp“ wird verlassen
+Run Build Command:"/usr/bin/gmake" "cmTC_af763/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_af763.dir/build.make CMakeFiles/cmTC_af763.dir/build
+gmake[1]: Entering directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_af763.dir/feature_tests.cxx.o
+/usr/bin/clang++     -std=c++98 -o CMakeFiles/cmTC_af763.dir/feature_tests.cxx.o -c /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_af763
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_af763.dir/link.txt --verbose=1
+/usr/bin/clang++        CMakeFiles/cmTC_af763.dir/feature_tests.cxx.o  -o cmTC_af763 -rdynamic 
+gmake[1]: Leaving directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
 
 
     Feature record: CXX_FEATURE:0cxx_aggregate_default_initializers
@@ -584,18 +540,258 @@ make[1]: Verzeichnis „/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-d
     Feature record: CXX_FEATURE:0cxx_variable_templates
     Feature record: CXX_FEATURE:0cxx_variadic_macros
     Feature record: CXX_FEATURE:0cxx_variadic_templates
-Performing C++ SOURCE FILE Test ok succeeded with the following output:
-Change Dir: /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp
+Performing C++ SOURCE FILE Test __CxxFlag__msse succeeded with the following output:
+Change Dir: /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_045a6/fast"
-/usr/bin/make -f CMakeFiles/cmTC_045a6.dir/build.make CMakeFiles/cmTC_045a6.dir/build
-make[1]: Entering directory '/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_045a6.dir/src.cxx.o
-/usr/bin/clang++-3.6     -Dok   -std=c++14 -o CMakeFiles/cmTC_045a6.dir/src.cxx.o -c /home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp/src.cxx
-Linking CXX executable cmTC_045a6
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_045a6.dir/link.txt --verbose=1
-/usr/bin/clang++-3.6    -Dok    CMakeFiles/cmTC_045a6.dir/src.cxx.o  -o cmTC_045a6 -rdynamic 
-make[1]: Leaving directory '/home/stefan/Seafile/Seafile/nanovm/source/NanoVM-work-dthread-2016-12-17/asmjit/build/CMakeFiles/CMakeTmp'
+Run Build Command:"/usr/bin/gmake" "cmTC_3eec9/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_3eec9.dir/build.make CMakeFiles/cmTC_3eec9.dir/build
+gmake[1]: Entering directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_3eec9.dir/src.cxx.o
+/usr/bin/clang++     -D__CxxFlag__msse   -msse -o CMakeFiles/cmTC_3eec9.dir/src.cxx.o -c /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_3eec9
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3eec9.dir/link.txt --verbose=1
+/usr/bin/clang++    -D__CxxFlag__msse    CMakeFiles/cmTC_3eec9.dir/src.cxx.o  -o cmTC_3eec9 -rdynamic 
+gmake[1]: Leaving directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test __CxxFlag__msse2 succeeded with the following output:
+Change Dir: /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/gmake" "cmTC_b750f/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_b750f.dir/build.make CMakeFiles/cmTC_b750f.dir/build
+gmake[1]: Entering directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_b750f.dir/src.cxx.o
+/usr/bin/clang++     -D__CxxFlag__msse2   -msse2 -o CMakeFiles/cmTC_b750f.dir/src.cxx.o -c /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_b750f
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_b750f.dir/link.txt --verbose=1
+/usr/bin/clang++    -D__CxxFlag__msse2    CMakeFiles/cmTC_b750f.dir/src.cxx.o  -o cmTC_b750f -rdynamic 
+gmake[1]: Leaving directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test __CxxFlag__msse3 succeeded with the following output:
+Change Dir: /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/gmake" "cmTC_523b4/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_523b4.dir/build.make CMakeFiles/cmTC_523b4.dir/build
+gmake[1]: Entering directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_523b4.dir/src.cxx.o
+/usr/bin/clang++     -D__CxxFlag__msse3   -msse3 -o CMakeFiles/cmTC_523b4.dir/src.cxx.o -c /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_523b4
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_523b4.dir/link.txt --verbose=1
+/usr/bin/clang++    -D__CxxFlag__msse3    CMakeFiles/cmTC_523b4.dir/src.cxx.o  -o cmTC_523b4 -rdynamic 
+gmake[1]: Leaving directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test __CxxFlag__mssse3 succeeded with the following output:
+Change Dir: /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/gmake" "cmTC_a65a3/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_a65a3.dir/build.make CMakeFiles/cmTC_a65a3.dir/build
+gmake[1]: Entering directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_a65a3.dir/src.cxx.o
+/usr/bin/clang++     -D__CxxFlag__mssse3   -mssse3 -o CMakeFiles/cmTC_a65a3.dir/src.cxx.o -c /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_a65a3
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a65a3.dir/link.txt --verbose=1
+/usr/bin/clang++    -D__CxxFlag__mssse3    CMakeFiles/cmTC_a65a3.dir/src.cxx.o  -o cmTC_a65a3 -rdynamic 
+gmake[1]: Leaving directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test __CxxFlag__msse4_1 succeeded with the following output:
+Change Dir: /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/gmake" "cmTC_a1085/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_a1085.dir/build.make CMakeFiles/cmTC_a1085.dir/build
+gmake[1]: Entering directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_a1085.dir/src.cxx.o
+/usr/bin/clang++     -D__CxxFlag__msse4_1   -msse4.1 -o CMakeFiles/cmTC_a1085.dir/src.cxx.o -c /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_a1085
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a1085.dir/link.txt --verbose=1
+/usr/bin/clang++    -D__CxxFlag__msse4_1    CMakeFiles/cmTC_a1085.dir/src.cxx.o  -o cmTC_a1085 -rdynamic 
+gmake[1]: Leaving directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test __CxxFlag__msse4_2 succeeded with the following output:
+Change Dir: /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/gmake" "cmTC_9ba01/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_9ba01.dir/build.make CMakeFiles/cmTC_9ba01.dir/build
+gmake[1]: Entering directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_9ba01.dir/src.cxx.o
+/usr/bin/clang++     -D__CxxFlag__msse4_2   -msse4.2 -o CMakeFiles/cmTC_9ba01.dir/src.cxx.o -c /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_9ba01
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9ba01.dir/link.txt --verbose=1
+/usr/bin/clang++    -D__CxxFlag__msse4_2    CMakeFiles/cmTC_9ba01.dir/src.cxx.o  -o cmTC_9ba01 -rdynamic 
+gmake[1]: Leaving directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test __CxxFlag__mavx succeeded with the following output:
+Change Dir: /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/gmake" "cmTC_abeaa/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_abeaa.dir/build.make CMakeFiles/cmTC_abeaa.dir/build
+gmake[1]: Entering directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_abeaa.dir/src.cxx.o
+/usr/bin/clang++     -D__CxxFlag__mavx   -mavx -o CMakeFiles/cmTC_abeaa.dir/src.cxx.o -c /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_abeaa
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_abeaa.dir/link.txt --verbose=1
+/usr/bin/clang++    -D__CxxFlag__mavx    CMakeFiles/cmTC_abeaa.dir/src.cxx.o  -o cmTC_abeaa -rdynamic 
+gmake[1]: Leaving directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test __CxxFlag__mavx2 succeeded with the following output:
+Change Dir: /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/gmake" "cmTC_75699/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_75699.dir/build.make CMakeFiles/cmTC_75699.dir/build
+gmake[1]: Entering directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_75699.dir/src.cxx.o
+/usr/bin/clang++     -D__CxxFlag__mavx2   -mavx2 -o CMakeFiles/cmTC_75699.dir/src.cxx.o -c /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_75699
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_75699.dir/link.txt --verbose=1
+/usr/bin/clang++    -D__CxxFlag__mavx2    CMakeFiles/cmTC_75699.dir/src.cxx.o  -o cmTC_75699 -rdynamic 
+gmake[1]: Leaving directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test __CxxFlag__std_c++14 succeeded with the following output:
+Change Dir: /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/gmake" "cmTC_98f71/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_98f71.dir/build.make CMakeFiles/cmTC_98f71.dir/build
+gmake[1]: Entering directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_98f71.dir/src.cxx.o
+/usr/bin/clang++     -D__CxxFlag__std_c++14   -std=c++14 -o CMakeFiles/cmTC_98f71.dir/src.cxx.o -c /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp/src.cxx
+In file included from <built-in>:351:
+<command line>:1:25: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
+#define __CxxFlag__std_c++14 1
+                        ^
+1 warning generated.
+Linking CXX executable cmTC_98f71
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_98f71.dir/link.txt --verbose=1
+/usr/bin/clang++    -D__CxxFlag__std_c++14    CMakeFiles/cmTC_98f71.dir/src.cxx.o  -o cmTC_98f71 -rdynamic 
+gmake[1]: Leaving directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test __CxxFlag__std_c++11 succeeded with the following output:
+Change Dir: /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/gmake" "cmTC_1062f/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_1062f.dir/build.make CMakeFiles/cmTC_1062f.dir/build
+gmake[1]: Entering directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_1062f.dir/src.cxx.o
+/usr/bin/clang++     -D__CxxFlag__std_c++11   -std=c++11 -o CMakeFiles/cmTC_1062f.dir/src.cxx.o -c /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp/src.cxx
+In file included from <built-in>:343:
+<command line>:1:25: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
+#define __CxxFlag__std_c++11 1
+                        ^
+1 warning generated.
+Linking CXX executable cmTC_1062f
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1062f.dir/link.txt --verbose=1
+/usr/bin/clang++    -D__CxxFlag__std_c++11    CMakeFiles/cmTC_1062f.dir/src.cxx.o  -o cmTC_1062f -rdynamic 
+gmake[1]: Leaving directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test __CxxFlag__std_c++0x succeeded with the following output:
+Change Dir: /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/gmake" "cmTC_12884/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_12884.dir/build.make CMakeFiles/cmTC_12884.dir/build
+gmake[1]: Entering directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_12884.dir/src.cxx.o
+/usr/bin/clang++     -D__CxxFlag__std_c++0x   -std=c++0x -o CMakeFiles/cmTC_12884.dir/src.cxx.o -c /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp/src.cxx
+In file included from <built-in>:343:
+<command line>:1:25: warning: ISO C99 requires whitespace after the macro name [-Wc99-extensions]
+#define __CxxFlag__std_c++0x 1
+                        ^
+1 warning generated.
+Linking CXX executable cmTC_12884
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_12884.dir/link.txt --verbose=1
+/usr/bin/clang++    -D__CxxFlag__std_c++0x    CMakeFiles/cmTC_12884.dir/src.cxx.o  -o cmTC_12884 -rdynamic 
+gmake[1]: Leaving directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test __CxxFlag__fno_tree_vectorize succeeded with the following output:
+Change Dir: /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/gmake" "cmTC_1ee8f/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_1ee8f.dir/build.make CMakeFiles/cmTC_1ee8f.dir/build
+gmake[1]: Entering directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_1ee8f.dir/src.cxx.o
+/usr/bin/clang++     -D__CxxFlag__fno_tree_vectorize   -fno-tree-vectorize -o CMakeFiles/cmTC_1ee8f.dir/src.cxx.o -c /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_1ee8f
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1ee8f.dir/link.txt --verbose=1
+/usr/bin/clang++    -D__CxxFlag__fno_tree_vectorize    CMakeFiles/cmTC_1ee8f.dir/src.cxx.o  -o cmTC_1ee8f -rdynamic 
+gmake[1]: Leaving directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test __CxxFlag__fvisibility_hidden succeeded with the following output:
+Change Dir: /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/gmake" "cmTC_4cfd4/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_4cfd4.dir/build.make CMakeFiles/cmTC_4cfd4.dir/build
+gmake[1]: Entering directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_4cfd4.dir/src.cxx.o
+/usr/bin/clang++     -D__CxxFlag__fvisibility_hidden   -fvisibility=hidden -o CMakeFiles/cmTC_4cfd4.dir/src.cxx.o -c /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_4cfd4
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4cfd4.dir/link.txt --verbose=1
+/usr/bin/clang++    -D__CxxFlag__fvisibility_hidden    CMakeFiles/cmTC_4cfd4.dir/src.cxx.o  -o cmTC_4cfd4 -rdynamic 
+gmake[1]: Leaving directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test __CxxFlag__Winconsistent_missing_override succeeded with the following output:
+Change Dir: /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/gmake" "cmTC_4d6b0/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_4d6b0.dir/build.make CMakeFiles/cmTC_4d6b0.dir/build
+gmake[1]: Entering directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_4d6b0.dir/src.cxx.o
+/usr/bin/clang++     -D__CxxFlag__Winconsistent_missing_override   -Winconsistent-missing-override -o CMakeFiles/cmTC_4d6b0.dir/src.cxx.o -c /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_4d6b0
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4d6b0.dir/link.txt --verbose=1
+/usr/bin/clang++    -D__CxxFlag__Winconsistent_missing_override    CMakeFiles/cmTC_4d6b0.dir/src.cxx.o  -o cmTC_4d6b0 -rdynamic 
+gmake[1]: Leaving directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test __CxxFlag__O2 succeeded with the following output:
+Change Dir: /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/gmake" "cmTC_fde51/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_fde51.dir/build.make CMakeFiles/cmTC_fde51.dir/build
+gmake[1]: Entering directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_fde51.dir/src.cxx.o
+/usr/bin/clang++     -D__CxxFlag__O2   -O2 -o CMakeFiles/cmTC_fde51.dir/src.cxx.o -c /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_fde51
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fde51.dir/link.txt --verbose=1
+/usr/bin/clang++    -D__CxxFlag__O2    CMakeFiles/cmTC_fde51.dir/src.cxx.o  -o cmTC_fde51 -rdynamic 
+gmake[1]: Leaving directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }
+Performing C++ SOURCE FILE Test __CxxFlag__fmerge_all_constants succeeded with the following output:
+Change Dir: /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/gmake" "cmTC_b0c5c/fast"
+/usr/bin/gmake -f CMakeFiles/cmTC_b0c5c.dir/build.make CMakeFiles/cmTC_b0c5c.dir/build
+gmake[1]: Entering directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_b0c5c.dir/src.cxx.o
+/usr/bin/clang++     -D__CxxFlag__fmerge_all_constants   -fmerge-all-constants -o CMakeFiles/cmTC_b0c5c.dir/src.cxx.o -c /home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_b0c5c
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_b0c5c.dir/link.txt --verbose=1
+/usr/bin/clang++    -D__CxxFlag__fmerge_all_constants    CMakeFiles/cmTC_b0c5c.dir/src.cxx.o  -o cmTC_b0c5c -rdynamic 
+gmake[1]: Leaving directory '/home/user/Seafile/Seafile/nanovm/source/current-work/asmjit/build/CMakeFiles/CMakeTmp'
 
 Source file was:
 int main() { return 0; }

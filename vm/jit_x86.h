@@ -72,7 +72,7 @@
 /* AsmJit JIT compiler functions */
 
 using namespace asmjit;
-using namespace asmjit::host;
+using namespace asmjit::x86;
 
 // This is type of function we will generate
 typedef void (*Func)(void);
@@ -155,7 +155,7 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, struct varlist *p
     double doubleval[JITMAXDOUBLES];
     S4 doubleval_ind = -1;
     
-    asmjit::X86GpReg RSIback;
+    asmjit::X86Gp RSIback;
     
 	S4 i, j, l, k;
 	S8 r1, r2, r3;
@@ -178,13 +178,13 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, struct varlist *p
 	#endif				
 	// Create assembler.
 	
-	StringLogger logger;
-
-	JitRuntime runtime;
-	X86Assembler a(&runtime);
-	a.reset ();
-	a.setLogger(&logger);
-	
+    JitRuntime rt;
+    
+    CodeHolder code;
+    code.init(rt.getCodeInfo());
+    
+    X86Assembler a(&code);
+    
 	// logger.setOption(kLoggerOptionBinaryForm, true);
 	
 	/* register bases used for calculating register offset (OFFSET()) */
@@ -1442,9 +1442,17 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, struct varlist *p
 			// JIT_code_ind++;
             JIT_code_ind = 0;
             
-            void* funcptr = a.make();
+            Func funcptr;
             
-			JIT_code[JIT_code_ind].fn = asmjit_cast<Func>(funcptr);
+            Error err = rt.add (&funcptr, &code);
+            if (err == 1)
+            {
+                printf ("JIT compiler: code generation failed!\n");
+                JIT_error = 1;
+                return (1);
+            }
+            
+			JIT_code[JIT_code_ind].fn = funcptr;
 			
             // printf ("run_jit: code address: SAVED %lli\n", funcptr);
             
@@ -1504,7 +1512,6 @@ extern "C" int free_jit_code ()
 	/* free all JIT code functions from memory */
 
 	using namespace asmjit;
-	using namespace asmjit::host;
 	
 	JitRuntime runtime;
 	

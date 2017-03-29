@@ -1106,7 +1106,6 @@ wait_command:
 
                 case UPDATE_SCREEN:
                     update_screen (screennum);
-					
                     send_8 (new_tcpsock, OK);
                     break;
 
