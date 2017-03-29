@@ -1,0 +1,41 @@
+//	console.nch
+//
+//	console helper functions
+
+func console_clear ()
+	int esc = 27;
+	string escch[2];
+
+	char (esc, escch);
+	
+	print escch; print "c";
+funcend
+
+func console_locate (int y, int x)
+//	locate cursor at row y, colummn x
+	locate (y, x);
+funcend
+
+lab console_bold;
+#ASSEMB
+	print_b;
+	rts;
+#ASSEMB_END
+
+lab console_italic;
+#ASSEMB
+	print_i;
+	rts;
+#ASSEMB_END
+
+lab console_underlined;
+#ASSEMB
+	print_u;
+	rts;
+#ASSEMB_END
+
+lab console_normal;
+#ASSEMB
+	print_r;
+	rts;
+#ASSEMB_END

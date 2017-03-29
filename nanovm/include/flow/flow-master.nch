@@ -1,0 +1,97 @@
+//  flow-master.nch
+
+//  screen () open a new screen on flow-master
+//  connects to flow-master program on port 50000
+//
+//  first program then gets new flow instance at port 50001, next one
+//  at 50002 and so on.
+//
+//  needs:
+//
+//  int _client;
+//  int _client_open;
+
+func screen (int width, int height, string screenname[256], string ip[256])
+    #include <socket.nch>
+
+    lint nlf; lint ncr;
+    string cr[2]; string lf[2];
+    string fnewline[3];
+
+    int args; int null = 0; int one = 1; int two = 2;
+    string portstr[256]; string buf[256];
+    qint port;
+    qint portmaster = 50000;
+    int delay = 5;
+    int f;
+
+    int alpha = 255; int bit = 24;
+    int error;
+
+    string com_run[80] = "RUN SERVER";
+
+//  nl = CRLF
+    ncr = 13L;
+    char (ncr, cr);
+    fnewline = cr;
+    nlf = 10L;
+    char (nlf, lf);
+    fnewline = fnewline + lf;
+    _fnewline = fnewline;
+
+    nanogfx_init ();
+
+    scopen (_client, ip, portmaster);
+
+	@socket_error ();
+    get (error);
+
+    f = error != err_sock_ok;
+    if f;
+		buf = ip;
+		hostbyname (buf, ip);
+		scopen (_client, ip, portmaster);
+		check_err ();
+	endif;
+	
+//	send RUN command
+	swrite (_client, com_run);
+	swriten (_client, one);
+
+	sreadls (_client, portstr);
+	val (portstr, port);
+	scclose (_client);
+
+	waitsec (delay);
+
+	scopen (_client, ip, port);
+
+	@socket_error ();
+    get (error);
+
+    f = error != err_sock_ok;
+    if f;
+		buf = ip;
+		hostbyname (buf, ip);
+		scopen (_client, ip, port);
+		check_err ();
+	endif;
+	
+    _client_open = 1;
+
+    @nanogfx_openscreen (alpha, bit, height, width, screenname, screenname, null, _client);
+    get (_ret);
+    f = _ret != null;
+    if f;
+        print "no screen!";
+        printn one;
+        end ();
+    endif;
+
+    scclose (_client);
+
+    waitsec (two);
+
+    scopen (_client, ip, port);
+    check_err ();
+funcend

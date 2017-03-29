@@ -1,0 +1,764 @@
+//	datacube - simple database
+//
+//	work in progress!!
+
+func init_types ()
+    int _byte_type = 0;
+    int _qint_type = 1;
+    int _double_type = 2;
+    int _string_type = 3;
+    int _Pfile_type = 4;
+funcend
+
+func data (qint Pinfo_max, qint Pbyte_max, qint Pqint_max, qint Pdouble_max, qint Pstring_max)
+    dynamic Pinfo[Pinfo_max];
+    qint Pinfo_ind = 0Q;
+    
+    byte Pbyte[Pbyte_max];
+    qint Pbyte_ind = 0Q;
+    
+    qint Pqint[Pqint_max];
+    qint Pqint_ind = 0Q;
+    
+    double Pdouble[Pdouble_max];
+    qint Pdouble_ind = 0Q;
+    
+    string Pstring[Pstring_max][512];
+    qint Pstring_ind = 0Q;
+    
+    init_info (Pinfo_max);
+funcend
+
+func store_info (qint Pinfo_ind, qint Ptype, qint Pindex, string Pname[256], qint Phash, qint len)
+//  store info in dynamic array Pinfo
+    
+    int Pf; int Pret = 0;
+    
+    Pf = Pinfo_ind + 5 > Pinfo_max@data;
+    if Pf;
+        Pret = 1;
+        goto store_info_end;
+    endif;
+
+    pvar2dynarray (Ptype, Pinfo@data, Pinfo_ind);
+    Pinfo_ind = Pinfo_ind + 1;
+    
+    pvar2dynarray (Pindex, Pinfo@data, Pinfo_ind);
+    Pinfo_ind = Pinfo_ind + 1;
+    
+    pvar2dynarray (Pname, Pinfo@data, Pinfo_ind);
+    Pinfo_ind = Pinfo_ind + 1;
+    
+//	DEBUG
+	int Pone = 1;
+    print "store_info: name: "; print Pname; printn Pone;
+    
+    
+    pvar2dynarray (Phash, Pinfo@data, Pinfo_ind);
+    Pinfo_ind = Pinfo_ind + 1;
+    
+    pvar2dynarray (len, Pinfo@data, Pinfo_ind);
+    
+lab store_info_end;
+    return (Pret);
+funcend
+ 
+func init_info (qint Pinfo_max)
+    qint Pi = 0Q; int Pf;
+    qint Ptype = -1Q; qint Pindex = -1Q; string Pname[2] = ""; qint Phash = -1Q; qint len = 0Q;
+    qint Pret;
+    
+    for;
+        @store_info (Pi, Ptype, Pindex, Pname, Phash, len);
+        get (Pret);
+        
+        Pi = Pi + 5;
+        Pf = Pi < Pinfo_max;
+    next Pf;
+funcend
+
+
+
+func load_info (qint Pindexi)
+    int Pindex_a;
+    
+    qint Ptype; qint Pindex; string Pname[256]; qint Phash; qint len;
+    
+    Pindex_a = Pindexi * 5;
+    
+    pdynarray2var (Pinfo@data, Pindex_a, Ptype);
+    Pindex_a = ++;
+    
+    pdynarray2var (Pinfo@data, Pindex_a, Pindex);
+    Pindex_a = ++;
+
+    pdynarray2var (Pinfo@data, Pindex_a, Pname);
+    Pindex_a = ++;
+    
+    pdynarray2var (Pinfo@data, Pindex_a, Phash);
+    Pindex_a = ++;
+    
+    pdynarray2var (Pinfo@data, Pindex_a, len);
+    
+    returnmulti (Ptype, Pindex, Pname, Phash, len);
+funcend
+ 
+ 
+//  store functions -------------------------------------------------
+ 
+func store_byte (string Pname[256], qint Pdata, qint len, int PPfile_type)
+//  PPfile_type = _byte_type || _Pfile_type
+
+    byte Pd[1];
+    qint Phash;
+    int Pret = 0; int Pf;
+    qint Pindex;
+    
+    ppointer (Pdata, Pd, store_byte_p1);
+
+lab store_byte_p1;
+    phash64ab (Pd, len, Phash);
+    
+    @copy_byte (Pdata, len);
+    get (Pindex);
+    
+    Pf = Pindex == -1;
+    if Pf;
+        Pret = 1;
+        goto store_byte_end;
+    endif;
+    
+    @store_info (Pinfo_ind@data, PPfile_type, Pindex, Pname, Phash, len);
+    get (Pret);
+    
+    Pinfo_ind@data = Pinfo_ind@data + 5;
+    
+lab store_byte_end;
+    return (Pret);
+funcend
+
+func store_qint (string Pname[256], qint Pdata)
+    #include <endian.nch>
+    
+    byte Pd[8]; byte Pb;
+    qint Phash; qint len = 8Q;
+    int Pret = 0; int Pf;
+    qint Pindex; 
+    int Pi = 0; int Pj;
+    
+    Pf = Pqint_ind@data == Pqint_max@data;
+    if Pf;
+        Pret = 1;
+        goto store_qint_end;
+    endif;
+    
+    Pindex = Pqint_ind@data;
+    
+    Pf = _endian == endian_big;
+    if Pf;
+        for;
+            @move_qintp2byte (Pdata, Pi);
+            get (Pb);
+        
+            pvar2array (Pb, Pd, Pi);
+            Pi = ++;
+            Pf = Pi < len;
+        next Pf;
+    else;
+//  little endian
+
+        Pj = 7;
+        for;
+            @move_qintp2byte (Pdata, Pj);
+            get (Pb);
+            
+            pvar2array (Pb, Pd, Pi);
+            Pj = --;
+            Pi = ++;
+            Pf = Pi < len;
+        next Pf;
+    endif;
+    
+    phash64ab (Pd, len, Phash);
+    
+    pvar2array (Pdata, Pqint@data, Pqint_ind@data);
+    
+    @store_info (Pinfo_ind@data, _qint_type, Pindex, Pname, Phash, len);
+    get (Pret);
+    
+    Pqint_ind@data = ++;
+    Pinfo_ind@data = Pinfo_ind@data + 5;
+    
+lab store_qint_end;
+    return (Pret);
+funcend
+
+func store_double (string Pname[256], double Pdata)
+    #include <endian.nch>
+    
+    byte Pd[8]; byte Pb;
+    qint Phash; qint len = 8Q;
+    int Pret = 0; int Pf;
+    qint Pindex; 
+    int Pi = 0; int Pj;
+    
+    Pf = Pdouble_ind@data == Pdouble_max@data;
+    if Pf;
+        Pret = 1;
+        goto store_double_end;
+    endif;
+    
+    Pindex = Pdouble_ind@data;
+    
+    Pf = _endian == endian_big;
+    if Pf;
+        for;
+            @move_doublep2byte (Pdata, Pi);
+            get (Pb);
+        
+            pvar2array (Pb, Pd, Pi);
+            Pi = ++;
+            Pf = Pi < len;
+        next Pf;
+    else;
+//  little endian
+
+        Pj = 7;
+        for;
+            @move_doublep2byte (Pdata, Pj);
+            get (Pb);
+            
+            pvar2array (Pb, Pd, Pi);
+            Pj = --;
+            Pi = ++;
+            Pf = Pi < len;
+        next Pf;
+    endif;
+    
+    phash64ab (Pd, len, Phash);
+    
+    pvar2array (Pdata, Pdouble@data, Pdouble_ind@data);
+    
+    @store_info (Pinfo_ind@data, _double_type, Pindex, Pname, Phash, len);
+    get (Pret);
+    
+    Pdouble_ind@data = ++;
+    Pinfo_ind@data = Pinfo_ind@data + 5;
+    
+lab store_double_end;
+    return (Pret);
+funcend
+
+func store_string (string Pname[256], string Pdata[512])
+   
+    qint Phash;
+    int Pret = 0; int Pf;
+    qint Pindex;
+    int Plen; int Pi;
+    byte Pb; string ch[2];
+    
+    Pf = Pstring_ind@data == Pstring_max@data;
+    if Pf;
+        Pret = 1;
+        goto store_string_end;
+    endif;
+    
+    strlen (Pdata, Plen);
+    byte Pd[Plen];
+    
+    Pi = 0;
+    for;
+        part2string (Pdata, Pi, ch);
+        asc (ch, Pb);
+        pvar2array (Pb, Pd, Pi);
+        
+        Pi = ++;
+        Pf = Pi < Plen;
+    next Pf;
+    
+    phash64ab (Pd, Plen, Phash);
+    
+    pvar2array (Pdata, Pstring@data, Pstring_ind@data);
+    
+    @store_info (Pinfo_ind@data, _string_type, Pindex, Pname, Phash, Plen);
+    get (Pret);
+    
+    Pstring_ind@data = ++;
+    Pinfo_ind@data = Pinfo_ind@data + 5;
+    
+lab store_string_end;
+    return (Pret);
+funcend
+
+
+func copy_byte (qint Pdata, qint Plen)
+    qint Pi = 0Q;
+    int Pf;
+    byte Pd[1]; byte Pb;
+    qint Pindex = -1Q;
+    
+    ppointer (Pdata, Pd, copy_byte_p1);
+    
+    Pf = Pbyte_ind@data + Plen > Pbyte_max@data;
+    if Pf;
+        goto copy_byte_end;
+    endif;
+    
+    Pindex = Pbyte_ind@data;
+    
+    for; 
+lab copy_byte_p1;
+
+        parray2var (Pd, Pi, Pb);
+        pvar2array (Pb, Pbyte@data, Pbyte_ind@data);
+        
+        Pbyte_ind@data = ++;
+        Pi = ++;
+        Pf = Pi < Plen;
+    next Pf;
+    
+lab copy_byte_end;
+    return (Pindex);
+funcend
+
+
+//  load functions --------------------------------------------------
+
+func load_byte (qint Pindex, qint Pdata, qint len)
+    qint Pi = Pindex;
+    qint Pj;
+    int Pf;
+    byte Pd[1]; byte Pb;
+    
+    ppointer (Pdata, Pd, load_byte_p1);
+    
+    Pj = 0Q;
+    
+    for;
+        parray2var (Pbyte@data, Pi, Pb);
+        
+lab load_byte_p1;
+        pvar2array (Pb, Pd, Pj);
+        
+        Pj = ++;
+        Pi = ++;
+        Pf = Pi < len;
+    next Pf;
+funcend
+
+func load_qint (qint Pindex)
+    qint Pdata;
+    
+    parray2var (Pqint@data, Pindex, Pdata);
+    
+    return (Pdata);
+funcend
+
+func load_double (qint Pindex)
+    double Pdata;
+    
+    parray2var (Pdouble@data, Pindex, Pdata);
+    
+    return (Pdata);
+funcend
+
+func load_string (qint Pindex)
+    string Pdata[512];
+    
+    parray2var (Pstring@data, Pindex, Pdata);
+    
+    return (Pdata);
+funcend
+
+
+func search_name (string Pnames[256])
+    qint Pi = 0Q; int Pf;
+    qint Pret = -1Q;
+    
+    qint Pi_max;
+    Pi_max = Pinfo_max@data / 5;
+    qint Ptype; qint Pindex; string Pname[256]; qint Phash; qint len;
+    
+//	DEBUG
+	int Pone = 1;
+    
+    print "search_name: Pi_max: "; print Pi_max; printn Pone;
+    
+    for;
+        @load_info (Pi);
+        
+        getmulti (Ptype, Pindex, Pname, Phash, len);
+        
+        print "search_name: Pname: "; print Pname; printn Pone;
+        print "search_name: find: "; print Pnames; printn Pone;
+        
+        Pf = Pname == Pnames;
+        if Pf;
+            Pret = Pindex;
+            goto search_name_end;
+        endif;
+        
+        Pi = ++;
+        Pf = Pi < Pi_max;
+    next Pf;
+    
+lab search_name_end;
+    returnmulti (Pret, Ptype, Pi);
+funcend
+
+func search_pattern (string Ppattern[256])
+    qint Pi = 0Q; int Pf;
+    qint Pret = -1Q;
+    
+    qint Pi_max;
+    Pi_max = Pinfo_max@data / 5;
+    qint Ptype; qint Pindex; string Pname[256]; qint Phash; qint len;
+    
+    qint pos; qint slen;
+    
+//	DEBUG
+	int Pone = 1;
+    
+    print "search_pattern: Pi_max: "; print Pi_max; printn Pone;
+    
+    for;
+        @load_info (Pi);
+        
+        getmulti (Ptype, Pindex, Pname, Phash, len);
+        
+        print "search_pattern: Pname: "; print Pname; printn Pone;
+        print "search_pattern: find: "; print Ppattern; printn Pone;
+        
+        strlen (Pname, slen);
+        Pf = slen == 0;
+        if Pf;
+//	ERROR: Pname string is empty! return -1
+			goto search_pattern_end;
+		endif;
+        
+        @string_pattern (Pname, Ppattern);
+        get (pos);
+        
+        Pf = pos > -1;
+        if Pf;
+            Pret = Pindex;
+            goto search_pattern_end;
+        endif;
+        
+        Pi = ++;
+        Pf = Pi < Pi_max;
+    next Pf;
+    
+lab search_pattern_end;
+    returnmulti (Pret, Ptype, Pi);
+funcend
+
+
+func save_database (string filename[256])
+	#NESTED_CODE_ON;
+	int Pone = 1;
+	
+	print "save_database start..."; printn Pone;
+	
+	int file;
+	
+	qint Pi = 0Q; int Pf;
+    qint Pret = -1Q;
+    
+    print "Pinfo..."; printn Pone;
+    
+    qint Pi_max;
+    Pi_max = Pinfo_max@data / 5;
+    qint Ptype; qint Pindex; string Pname[256]; qint Phash; qint Plen;
+	
+	print "strings..."; printn Pone;
+	
+	string Pwritestr[2] = "w";
+	string Pheaderstr[256] = "datacube V1.0";
+	string Pinfostr[256] = "INFO";
+	string Pdatastr[256] = "DATA";
+	
+	print "strings done"; printn Pone;
+	
+//	temp data
+	qint Pdatq = 0;
+	double Pdatd = 0.0;
+	string Pdats[512] = "";
+	
+	print "variable init done!"; printn Pone;
+	
+	newline_lf ();
+	_fendian = 0;
+	
+	print "saving database "; print filename; printn Pone;
+	
+	fopen (file, filename, Pwritestr);
+	
+// save header
+	fwrite (file, Pheaderstr); fwriten (file, Pone);
+	fwrite (file, Pinfostr); fwriten (file, Pone);
+	
+//	save number of data entries
+	fwrite (file, Pi_max);
+
+//	save data info
+	for;
+		@load_info (Pi);
+		
+		getmulti (Ptype, Pindex, Pname, Phash, Plen);
+		
+		fwrite (file, Ptype);
+		fwrite (file, Pindex);
+		fwrite (file, Pname); fwriten (file, Pone);
+		fwrite (file, Phash);
+		fwrite (file, Plen);
+		
+		Pi = ++;
+        Pf = Pi < Pi_max;
+    next Pf;
+    
+    print "info saved"; printn Pone;
+    
+    print "saving data..."; printn Pone;
+//	save data
+    fwrite (file, Pdatastr); fwriten (file, Pone);
+    
+	Pi = 0Q;
+    for;
+		@load_info (Pi);
+		
+		getmulti (Ptype, Pindex, Pname, Phash, Plen);
+		
+		Pf = Ptype == _qint_type;
+		if Pf;
+			@load_qint (Pindex);
+			get (Pdatq);
+			
+			fwrite (file, Pdatq);
+		endif;
+		
+		Pf = Ptype == _double_type;
+		if Pf;
+			@load_double (Pindex);
+			get (Pdatd);
+			
+			fwrite (file, Pdatd);
+		endif;
+		
+		Pf = Ptype == _string_type;
+		if Pf;
+			@load_string (Pindex);
+			get (Pdats);
+			
+			fwrite (file, Pdats); fwrite (file, Pone);
+		endif;
+		
+//		func load_byte (qint Pindex, qint Pdata, qint len)
+		
+		Pf = Ptype == _byte_type;
+		if Pf;
+//			allocate byte data array
+			qint len;
+			len = Plen;
+			byte datb[len];
+			qint datbpointer;
+			
+			getaddress (datb, datbpointer);
+			
+			load_byte (Pindex, datbpointer, len);
+			fwriteab (file, datb, len);
+			
+			dealloc (datb);
+		endif;
+			
+		Pf = Ptype == _Pfile_type;
+		if Pf;
+//			allocate byte data array
+			qint len;
+			len = Plen;
+			byte datbf[len];
+			qint datbfpointer;
+			
+			getaddress (datbf, datbfpointer);
+			
+			load_byte (Pindex, datbfpointer, len);
+			fwriteab (file, datbf, len);
+			
+			dealloc (datbf);
+		endif;	
+			
+		Pf = Ptype == -1;
+		if Pf;
+			goto save_database_end;
+		endif;
+		
+		Pi = ++;
+        Pf = Pi < Pi_max;
+    next Pf;	
+	
+lab save_database_end;
+	print "OK"; printn Pone;
+	fclose (file);
+funcend
+
+func load_database (string filename[256])
+	#NESTED_CODE_ON;
+	int Pone = 1;
+
+	int file;
+	
+	qint Pi = 0Q; int Pf;
+    qint Pret = 1;
+    
+    qint Pi_max;
+    Pi_max = Pinfo_max@data / 5;
+    qint Ptype; qint Pindex; string Pname[256]; qint Phash; qint Plen;
+	
+	string Preadstr[2] = "r";
+	string Pheaderstr[256] = "datacube V1.0";
+	string Pinfostr[256] = "INFO";
+	string Pdatastr[256] = "DATA";
+	
+//	temp data
+	qint Pdatq = 0;
+	double Pdatd = 0.0;
+	string Pdats[512] = "";
+	
+	string buf[256];
+	
+	int Pr;
+	
+	newline_lf ();
+	_fendian = 0;
+	
+	print "loading database "; print filename; printn Pone;
+	
+	fopen (file, filename, Preadstr);
+
+// 	read header
+	freadls (file, buf);
+	Pf = buf != Pheaderstr;
+	if Pf;
+		print "ERROR: file not a datacube database!"; printn Pone;
+		goto load_database_end;
+	endif;
+	
+	freadls (file, buf);
+	Pf = buf != Pinfostr;
+	if Pf;
+		print "ERROR: file corrupt!"; printn Pone;
+		goto load_database_end;
+	endif;
+		
+//	read number of data entries
+	fread (file, Pi_max);
+	
+	Pinfo_ind@data = 0Q;
+	
+//	load data info
+	for;
+		fread (file, Ptype);
+		fread (file, Pindex);
+		freadls (file, Pname);
+		fread (file, Phash);
+		fread (file, Plen);
+		
+		@store_info (Pinfo_ind@data, Ptype, Pindex, Pname, Phash, Plen);
+		get (Pret);
+		
+		Pinfo_ind@data = Pinfo_ind@data + 5;		
+		Pi = ++;
+        Pf = Pi < Pi_max;
+    next Pf;
+	
+// 	load data
+	freadls (file, buf);
+	Pf = buf != Pdatastr;
+	if Pf;
+		print "ERROR: file corrupt!"; printn Pone;
+		goto load_database_end;
+	endif;
+
+	Pi = 0Q;
+    for;
+		@load_info (Pi);
+		
+		getmulti (Ptype, Pindex, Pname, Phash, Plen);
+		
+		Pf = Ptype == _qint_type;
+		if Pf;
+			fread (file, Pdatq);
+			
+			@store_qint (Pname, Pdatq);
+			get (Pr);
+		endif;
+		
+		Pf = Ptype == _double_type;
+		if Pf;
+			fread (file, Pdatd);
+			
+			@store_double (Pname, Pdatd);
+			get (Pr);
+		endif;
+	
+		Pf = Ptype == _string_type;
+		if Pf;
+			freadls (file, Pdats);
+			
+			@store_string (Pname, Pdats);
+			get (Pr);
+		endif;
+		
+		Pf = Ptype == _byte_type;
+		if Pf;
+//			allocate byte data array
+			qint len;
+			len = Plen;
+			byte datb[len];
+			qint datbpointer;
+			
+			getaddress (datb, datbpointer);
+			
+			freadab (file, datb, len);
+			store_byte (Pname, datbpointer, len, Ptype);
+			
+			dealloc (datb);
+		endif;
+		
+		Pf = Ptype == _Pfile_type;
+		if Pf;
+//			allocate byte data array
+			qint len;
+			len = Plen;
+			byte datbf[len];
+			qint datbfpointer;
+			
+			getaddress (datbf, datbfpointer);
+			
+			freadab (file, datbf, len);
+			store_byte (Pname, datbfpointer, len, Ptype);
+			
+			dealloc (datbf);
+		endif;
+		
+		Pf = Ptype == -1;
+		if Pf;
+			goto load_database_end;
+		endif;
+		
+		Pi = ++;
+        Pf = Pi < Pi_max;
+    next Pf;
+    
+    Pret = 0;
+    
+lab load_database_end;
+	print "OK"; printn Pone;
+	fclose (file);    
+funcend
+
+#include <datacube/replace.nch>
+
+#include <newline.nch>
+#include <bytemove.nch>
+#include <string.nch>

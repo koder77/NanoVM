@@ -1,0 +1,37 @@
+//  newline.nch
+//  set _fnewline global newline chars
+
+func newline_crlf ()
+    lint nlf; lint ncr;
+    string cr[2]; string lf[2];
+    string fnewline[3];
+
+//  nl = CRLF
+    ncr = 13L;
+    char (ncr, cr);
+    fnewline = cr;
+    nlf = 10L;
+    char (nlf, lf);
+    fnewline = fnewline + lf;
+    _fnewline = fnewline;
+funcend
+
+func newline_cr ()
+    lint ncr;
+    string cr[2];
+
+//  nl = CR
+    ncr = 13L;
+    char (ncr, cr);
+    _fnewline = cr;
+funcend
+
+func newline_lf ()
+    lint nlf;
+    string lf[2];
+
+//  nl = LF
+    nlf = 10L;
+    char (nlf, lf);
+    _fnewline = lf;
+funcend

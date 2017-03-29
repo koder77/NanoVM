@@ -1,0 +1,59 @@
+//	threadpush.nch
+
+lab dothreadpush;
+//	arguments: number-of-push-elements, threadnumber, element1, element2, ...
+
+#ASSEMB;
+	#setreg_l		L0, null;
+	#setreg_l		L1, one;
+	#setreg_l		L2, stackelements;
+	#setreg_l		L3, i;
+	#setreg_l		L4, type;
+	#setreg_l		L5, threadnumber;
+	#setreg_l		L6, lint_t;
+	#setreg_l		L7, double_t;
+	#setreg_l		L8, string_t;
+	#setreg_l		L9, lint;
+	#setreg_s		S0, string;
+	#setreg_d		D0, double;
+	
+	#include <types.nah>
+	
+	push_i			0, null;
+	push_i			1, one;
+	
+	push_i			qint_type, lint_t;
+	push_i			double_type, double_t;
+	push_i			string_type, string_t;
+	
+	stpull_l		stackelements;
+	stpull_l		threadnumber;
+
+lab dothreadpush_loop;
+	stgettype       type;
+	
+	eq_jsr_l		type, lint_t, dothreadpush_lint;
+	eq_jsr_l		type, double_t, dothreadpush_double;
+	eq_jsr_l		type, string_t, dothreadpush_string;
+	
+	dec_l			stackelements;
+	gr_jmp_l		stackelements, null, dothreadpush_loop;
+	
+	thpush_sync		threadnumber;
+	rts;
+	
+lab dothreadpush_lint;
+	stpull_l		lint;
+	thpush_l		threadnumber, lint;		
+	rts;
+	
+lab dothreadpush_double;
+	stpull_d		double;
+	thpush_d		threadnumber, double;
+	rts;
+	
+lab dothreadpush_string;
+	stpull_s		string;
+	thpush_s		threadnumber, string;
+	rts;
+#ASSEMB_END;

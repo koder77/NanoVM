@@ -1,0 +1,135 @@
+func replace_qint (string Pname[256], qint Pdata)
+    #include <endian.nch>
+    
+    byte Pd[8]; byte Pb;
+    qint Phash; qint len = 8Q;
+    int Pret = 0; int Pf;
+    qint Pindex; 
+    qint Pqint_ind;
+    qint Pinfo;
+    int type;
+    
+    int Pi = 0; int Pj;
+    
+    @search_name (Pname);
+    getmulti (Pqint_ind, type, Pinfo);
+    
+    Pf = Pqint_ind == Pqint_max@data;
+    if Pf;
+        Pret = 1;
+        goto replace_qint_end;
+    endif;
+    
+    Pf = Pqint_ind < 0;
+    if Pf;
+        Pret = 1;
+        goto replace_qint_end;
+    endif;
+    
+    Pindex = Pqint_ind;
+    
+    Pf = _endian == endian_big;
+    if Pf;
+        for;
+            @move_qintp2byte (Pdata, Pi);
+            get (Pb);
+        
+            pvar2array (Pb, Pd, Pi);
+            Pi = ++;
+            Pf = Pi < len;
+        next Pf;
+    else;
+//  little endian
+
+        Pj = 7;
+        for;
+            @move_qintp2byte (Pdata, Pj);
+            get (Pb);
+            
+            pvar2array (Pb, Pd, Pi);
+            Pj = --;
+            Pi = ++;
+            Pf = Pi < len;
+        next Pf;
+    endif;
+    
+    phash64ab (Pd, len, Phash);
+    
+    pvar2array (Pdata, Pqint@data, Pqint_ind);
+    
+    Pinfo = Pinfo * 5;
+    @store_info (Pinfo, _qint_type, Pindex, Pname, Phash, len);
+    get (Pret);
+
+lab replace_qint_end;
+    return (Pret);
+funcend
+
+func replace_double (string Pname[256], double Pdata)
+    #include <endian.nch>
+    
+    byte Pd[8]; byte Pb;
+    qint Phash; qint len = 8Q;
+    int Pret = 0; int Pf;
+    
+    qint Pindex; 
+    qint Pdouble_ind;
+    qint Pinfo;
+    int type;
+    
+    int Pi = 0; int Pj;
+    
+    @search_name (Pname);
+    getmulti (Pdouble_ind, type, Pinfo);
+    
+    Pf = Pdouble_ind == Pdouble_max@data;
+    if Pf;
+        Pret = 1;
+        goto replace_double_end;
+    endif;
+    
+    Pf = Pdouble_ind < 0;
+    if Pf;
+        Pret = 1;
+        goto replace_double_end;
+    endif;
+    
+    Pindex = Pdouble_ind@data;
+    
+    Pf = _endian == endian_big;
+    if Pf;
+        for;
+            @move_doublep2byte (Pdata, Pi);
+            get (Pb);
+        
+            pvar2array (Pb, Pd, Pi);
+            Pi = ++;
+            Pf = Pi < len;
+        next Pf;
+    else;
+//  little endian
+
+        Pj = 7;
+        for;
+            @move_doublep2byte (Pdata, Pj);
+            get (Pb);
+            
+            pvar2array (Pb, Pd, Pi);
+            Pj = --;
+            Pi = ++;
+            Pf = Pi < len;
+        next Pf;
+    endif;
+    
+    phash64ab (Pd, len, Phash);
+    
+    pvar2array (Pdata, Pdouble@data, Pdouble_ind);
+    
+    Pinfo = Pinfo * 5;
+    @store_info (Pinfo, _double_type, Pindex, Pname, Phash, len);
+    get (Pret);
+    
+lab replace_double_end;
+    return (Pret);
+funcend
+
