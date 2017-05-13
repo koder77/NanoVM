@@ -543,11 +543,6 @@ run_prog:
             #else
 				#if HAVE_THREADING
 					exe_retval = pthread_create (&pthreads[threadnum].thread, NULL, (void *) exe_elist, (void*) threadnum);
-                    
-                    if (sched_setaffinity (pthreads[threadnum].thread, sizeof(cpu_set_t), &cpuset) != 0)
-                    {
-                        printf ("ERROR: setting pthread affinity of thread: %i\n", threadnum);
-                    }
 				#else
 					exe_retval = exe_elist (threadnum);
 				#endif
@@ -592,42 +587,15 @@ run_prog:
                     CPU_ZERO(&cpuset);
                     CPU_SET (last_core, &cpuset);
                     
-                    printf ("thread %i set to core %i\n", threadnum, last_core);
+                    printf ("threadnum: %d\n", threadnum);
                     
-                    /*
-                    #if HYPERTHREADING
-                        if (core_max == 3)
+                    if (threadnum != 0)
+                    {
+                        if (pthread_setaffinity_np (pthreads[threadnum].thread, sizeof(cpu_set_t), &cpuset) != 0)
                         {
-                            switch (last_core)
-                            {
-                                case 0:
-                                    CPU_SET (1, &cpuset);
-                                    
-                                    printf ("1\n");
-                                    break;
-                                    
-                                case 1:
-                                    CPU_SET (0, &cpuset);
-                                    
-                                    printf ("0\n");
-                                    break;   
-                    
-                                case 2:
-                                    CPU_SET (3, &cpuset);
-                                    
-                                    printf ("3\n");
-                                    break;
-                                    
-                                case 3:
-                                    CPU_SET (2, &cpuset);
-                                    
-                                    printf ("2\n");
-                                    break;
-                            }
+                            printf ("ERROR: setting pthread affinity of thread: %d\n", threadnum);
                         }
-                    #endif
-                    */
-                    // printf ("thread %i on CPU %i\n", threadnum, last_core);
+                    }
                     
                     pthreads[threadnum].cpuset = cpuset;
                 #endif

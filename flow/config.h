@@ -14,7 +14,7 @@
 #define HAVE_LIBSDL 1
 
 /* Define to 1 if you have the `SDLmain' library (-lSDLmain). */
-/* #undef HAVE_LIBSDLMAIN */
+#define HAVE_LIBSDLMAIN 1
 
 /* Define to 1 if you have the `SDL_gfx' library (-lSDL_gfx). */
 #define HAVE_LIBSDL_GFX 1

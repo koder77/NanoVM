@@ -1,9 +1,10 @@
 Nano VM (3.4.3-7)
     BUGFIX: include path on portable install now set right.
     
-    vm: main.c, exe_main.c: now uses sched_setaffinity () on Linux to run threads on CPU cores. All cores can be used now right.
+    BUGFIX: vm: main.c, exe_main.c: now uses pthread_setaffinity_np () on Linux to run threads on CPU cores. All cores can be used now right.
+    The VM scheduler binds the treads to the CPU cores. So this time multithreading performs well.
     
--- Stefan Pietzonke <jay-t@gmx.net>  Tue 28 Mar 2017 21:00 +0200    
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat 13 May 2017 20:00 +0200    
 
 Nano VM (3.4.3-6)
     new: exe_elist: direct threading with dthread void* array.

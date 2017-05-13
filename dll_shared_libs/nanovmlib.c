@@ -215,7 +215,7 @@ U1 stpull_s (S4 threadnum, struct pthreads *pthreads, S8 stacksize, U1 *s_reg)
         pthreads[threadnum].stack_ind--;
         type = pthreads[threadnum].stack[pthreads[threadnum].stack_ind];
 
-        if (type != STRING_VAR)
+        if (type != S_REG)
         {
             /* error: wrong type */
 

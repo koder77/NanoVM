@@ -47,10 +47,10 @@ int rs232_OpenComport (U1 *pthreads_ptr, U1 *varlist_ptr, U1 *vm_mem_ptr, S4 thr
 	varlist = (struct varlist *) varlist_ptr;
 	vm_mem = (struct vm_mem *) vm_mem_ptr;
 
-	if (stpull_l (threadnum, pthreads, stacksize, &retvar_index) != ERR_STACK_OK) printf ("rs232_OpenComport: stack error!\n");
-	if (stpull_s (threadnum, pthreads, stacksize, mode) != ERR_STACK_OK) printf ("rs232_OpenComport: stack error!\n");
-	if (stpull_l (threadnum, pthreads, stacksize, &baudrate) != ERR_STACK_OK) printf ("rs232_OpenComport: stack error!\n");
-	if (stpull_l (threadnum, pthreads, stacksize, &portnumber) != ERR_STACK_OK) printf ("rs232_OpenComport: stack error!\n");
+	if (stpull_l (threadnum, pthreads, stacksize, &retvar_index) != ERR_STACK_OK) printf ("rs232_OpenComport: retvar stack error!\n");
+	if (stpull_s (threadnum, pthreads, stacksize, mode) != ERR_STACK_OK) printf ("rs232_OpenComport: mode stack error!\n");
+	if (stpull_l (threadnum, pthreads, stacksize, &baudrate) != ERR_STACK_OK) printf ("rs232_OpenComport: baudrate stack error!\n");
+	if (stpull_l (threadnum, pthreads, stacksize, &portnumber) != ERR_STACK_OK) printf ("rs232_OpenComport: portnumber stack error!\n");
 	
 	ret = RS232_OpenComport (portnumber, baudrate, mode);
 

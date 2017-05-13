@@ -63,19 +63,25 @@ extern "C" int opencv_face_detection (U1 *pthreads_ptr, U1 *varlist_ptr, U1 *vm_
 	/* get arguments from stack */
 	
 	U1 haar[256];
+	U1 eyes[256];
     S8 deviceId;
 	S8 qvar_index;			/* qint var, return code variable index */
+	S8 drop_frames;
 	
 	if (stpull_l (threadnum, pthreads, stacksize, &qvar_index) != ERR_STACK_OK) printf ("opencv facerec: ERROR on stack qvar_index!\n");
 	if (stpull_l (threadnum, pthreads, stacksize, &deviceId) != ERR_STACK_OK) printf ("opencv facerec: ERROR on stack deviceId!\n");
 	if (stpull_s (threadnum, pthreads, stacksize, haar) != ERR_STACK_OK) printf ("opencv facerec: ERROR on stack haar!\n");
-	
+	if (stpull_s (threadnum, pthreads, stacksize, eyes) != ERR_STACK_OK) printf ("opencv facerec: ERROR on stack eyes!\n");
 	// printf ("opencv facerec: csv: %s\n", csv);
 	
 	string fn_haar = (const char *) haar;
+	string fn_eyes = (const char *) eyes;
 	
     CascadeClassifier haar_cascade;
     haar_cascade.load(fn_haar);
+	CascadeClassifier eyes_cascade;
+	eyes_cascade.load(fn_eyes);
+	
     // Get a handle to the Video device:
     VideoCapture cap(deviceId);
     // Check if we can use this device at all:
@@ -86,7 +92,10 @@ extern "C" int opencv_face_detection (U1 *pthreads_ptr, U1 *varlist_ptr, U1 *vm_
     // Holds the current frame from the Video device:
     Mat frame;
     for(;;) {
-        cap >> frame;
+		for (drop_frames = 20; drop_frames > 0; drop_frames--)
+		{
+			cap >> frame;
+		}
         // Clone the current frame:
         Mat original = frame.clone();
         // Convert the current frame to grayscale:
@@ -136,6 +145,20 @@ extern "C" int opencv_face_detection (U1 *pthreads_ptr, U1 *varlist_ptr, U1 *vm_
 			// box_text = format("detected");
 			// And now put it into the image:
 			// putText(original, box_text, Point(pos_x, pos_y), FONT_HERSHEY_PLAIN, 1.0, CV_RGB(0,255,0), 2.0);
+			
+			Mat faceROI = face;
+			std::vector<Rect> eyes;
+
+			//-- In each face, detect eyes
+			eyes_cascade.detectMultiScale( faceROI, eyes, 1.1, 2, 0 |CV_HAAR_SCALE_IMAGE, Size(30, 30) );
+
+			for( size_t j = 0; j < eyes.size(); j++ )
+			{
+				Point center( faces[i].x + eyes[j].x + eyes[j].width*0.5, faces[i].y + eyes[j].y + eyes[j].height*0.5 );
+				int radius = cvRound( (eyes[j].width + eyes[j].height)*0.25 );
+				circle( original, center, radius, Scalar( 255, 0, 0 ), 4, 8, 0 );
+			}
+			
 			var_lock (varlist, qvar_index);
 			if (! let_2array_qint (varlist, vm_mem, 1, qvar_index, 0)) printf ("opencv facedet: return value array overflow!\n");
 			var_unlock (varlist, qvar_index);

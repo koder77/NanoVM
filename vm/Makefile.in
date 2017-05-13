@@ -119,7 +119,7 @@ am_nanovm_OBJECTS = main.$(OBJEXT) openo.$(OBJEXT) openend.$(OBJEXT) \
 	dlload.$(OBJEXT) rs232.$(OBJEXT)
 nanovm_OBJECTS = $(am_nanovm_OBJECTS)
 nanovm_LDADD = $(LDADD)
-nanovm_DEPENDENCIES = ../lib/libshared.a ../asmjit/build/libasmjit.a
+nanovm_DEPENDENCIES = ../lib/libshared.a
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -321,8 +321,9 @@ noinst_HEADERS = main_d.h \
 		 snprintf.h \
 		 jit_x86.h
 
-LDADD = ../lib/libshared.a -ldl ../asmjit/build/libasmjit.a
-#LDADD = ../lib/libshared.a -ldl
+
+#LDADD = ../lib/libshared.a -ldl ../asmjit/build/libasmjit.a
+LDADD = ../lib/libshared.a -ldl
 AM_CFLAGS = -O0 -g -lm -ldl
 AM_CPPFLAGS = -I../include
 AM_LDFLAGS = -Wl,--export-dynamic
