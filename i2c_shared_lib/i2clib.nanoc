@@ -1,0 +1,142 @@
+//	i2clib.nanoc
+//
+//	reads i2c port with shared library
+//	Stefan Pietzonke 2017
+
+func main ()
+	lint null = 0; lint one = 1;
+	qint _fd = 0;
+	
+	lint _dll;
+	
+	lint _setup;
+	lint _writereg8;
+	lint _readreg8;
+	
+	string dllname[256] = "libi2c.so";
+	string i2csetup[256] = "i2c_setup";
+	string i2cwritereg8[256] = "i2c_writereg8";
+	string i2creadreg8[256] = "i2c_readreg8";
+	
+	int gyroskop_xout;
+	int gyroskop_yout;
+	int gyroskop_zout;
+	
+	int accel_xout;
+	int accel_yout;
+	int accel_zout;
+	
+	#NESTED_CODE_ON;
+	
+//	open libi2c.so library in nanovm/lib directory
+	lopen (_dll, dllname);	
+
+//	set function handles
+	lfunc (_dll, _setup, i2csetup);
+	lfunc (_dll, _writereg8, i2cwritereg8);
+	lfunc (_dll, _readreg8, i2creadreg8);
+	
+//	init module MPU 6050
+	#ATOMIC;
+	pushtostack (&68);
+	
+	lcall (_dll, _setup);
+	get (_fd, >);
+	#ATOMIC_END;
+	
+//	print "_fd: ", _fd; printn one;
+	
+//	setup MPU 6050
+	#ATOMIC;
+	pushtostack> (_fd, &6B, 0);
+	
+	lcall (_dll, _writereg8);
+	#ATOMIC_END;
+	
+	@read_word_2c (_fd, &43);
+	get (gyroskop_xout);
+	
+	@read_word_2c (_fd, &45);
+	get (gyroskop_yout);
+
+	@read_word_2c (_fd, &47);
+	get (gyroskop_zout);
+	
+
+	@read_word_2c (_fd, &3B);
+	get (accel_xout);
+	
+	@read_word_2c (_fd, &3D);
+	get (accel_yout);
+
+	@read_word_2c (_fd, &3F);
+	get (accel_zout);
+	
+	
+	print "gyroskop"; printn one;
+	print "x: ", gyroskop_xout; printn one;
+	print "y: ", gyroskop_yout; printn one;
+	print "z: ", gyroskop_zout; printn one;
+	printn one;
+	
+	print "accelleration"; printn one;
+	print "x: ", accel_xout; printn one;
+	print "y: ", accel_yout; printn one;
+	print "z: ", accel_zout; printn one;
+	printn one;
+	printn one;
+	
+	exit null;
+funcend
+
+func read_word_i2c (qint fd, int reg)
+	int h;
+	int l;
+	int value;
+	
+	#NESTED_CODE_ON;
+	
+//	print "fd: ", fd; printn 1;
+	
+	#ATOMIC;
+	pushtostack (reg, fd);
+	
+	lcall (_dll, _readreg8);
+	get (h, >);
+	#ATOMIC_END;
+	
+	reg = ++;
+	#ATOMIC;
+	pushtostack (reg, fd);
+	
+	lcall (_dll, _readreg8);
+	get (l, >);
+	#ATOMIC_END;
+	
+	value = h << 8 + l;
+	return (value);
+funcend
+
+func read_word_2c (qint fd, int reg)
+	int val;
+	int f;
+	int ret;
+	
+	@read_word_i2c (fd, reg);
+	get (val);
+	
+	f = val >= &8000;
+	if f;
+		ret = 65535 - val + 1;
+		ret = 0 - ret;
+	else;
+		ret = val;
+	endif;
+	
+	return (ret);
+funcend
+	
+lab pushtostack;
+#ASSEMB
+	rts;
+#ASSEMB_END
