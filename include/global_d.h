@@ -191,7 +191,7 @@ typedef int                     NINT;
 
 
 #define MAXLINES            10000    /* maximum line number 32767 */
-#define MAXLINELEN          256     /* max line length */
+#define MAXLINELEN          1024     /* max line length */
 #define MAXVAR              2048    /* max number of variables */
                                     /* areas count as one, (should be enough) */
 #define MAXDIMENS           32      /* max dimensions for array */
@@ -1323,9 +1323,10 @@ struct pthreads
 {
     U1 state;
     S4 startpos;
-    S8 ret_val;					/* new: changed to 64 bit value */
-    cpu_set_t cpuset;           /* for cpu affinity setting */
-    
+    S8 ret_val; /* new: changed to 64 bit value */
+    #if OS_LINUX
+        cpu_set_t cpuset;           /* for cpu affinity setting */
+    #endif   
     #if OS_AROS
         uint32_t thread;
         U1 socket_lib_open;

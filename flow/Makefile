@@ -202,7 +202,7 @@ AUTOMAKE = automake-1.15
 AWK = mawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g -O2
+CFLAGS = -O3 -g0 -fomit-frame-pointer
 CPP = gcc -E
 CPPFLAGS = 
 CYGPATH_W = echo
@@ -298,7 +298,7 @@ noinst_HEADERS = global_d.h \
 		rs232.h \
 		socket.h
 
-AM_CFLAGS = -O0 -g
+AM_CFLAGS = -O3 -g0
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 

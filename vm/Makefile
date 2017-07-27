@@ -200,7 +200,7 @@ AUTOMAKE = ${SHELL} /home/stefan/nanovm/source/current-work-sched-new/missing au
 AWK = mawk
 CC = clang-3.9
 CCDEPMODE = depmode=gcc3
-CFLAGS = -ffast-math -fomit-frame-pointer -O6 -march=native -s
+CFLAGS = -ffast-math -fomit-frame-pointer -g0 -O3 -march=native -s
 CPP = clang-3.9 -E
 CPPFLAGS = 
 CXX = clang++-3.9
@@ -324,7 +324,7 @@ noinst_HEADERS = main_d.h \
 
 #LDADD = ../lib/libshared.a -ldl ../asmjit/build/libasmjit.a
 LDADD = ../lib/libshared.a -ldl
-AM_CFLAGS = -O0 -g -lm -ldl
+AM_CFLAGS = -O3 -g0 -lm -ldl
 AM_CPPFLAGS = -I../include
 AM_LDFLAGS = -Wl,--export-dynamic
 all: all-am

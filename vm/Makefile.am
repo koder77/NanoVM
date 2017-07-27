@@ -46,7 +46,7 @@ noinst_HEADERS = main_d.h \
 #LDADD = ../lib/libshared.a -ldl ../asmjit/build/libasmjit.a
 LDADD = ../lib/libshared.a -ldl
 
-AM_CFLAGS = -O0 -g -lm -ldl
+AM_CFLAGS = -O3 -g0 -lm -ldl
 
 AM_CPPFLAGS = -I../include
 

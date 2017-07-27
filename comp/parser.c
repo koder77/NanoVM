@@ -481,11 +481,16 @@ S2 parse_line (U1 *str)
             }
             else
             {
-                if (arg_ind < MAXCOMMARG - 1)
+                if (strcmp (buf, COMP_IF_SB) != 0)
                 {
-                    arg_ind++;
+                    if (arg_ind < MAXCOMMARG - 1)
+                    {
+                        arg_ind++;
+                    }
+                
+                
+                    strcpy (src_line.arg[arg_ind], buf);      /* save argument name */
                 }
-                strcpy (src_line.arg[arg_ind], buf);      /* save argument name */
                 start = start + strlen (buf) + 1;
 
                 opcode = scan_token (buf);
@@ -506,6 +511,13 @@ S2 parse_line (U1 *str)
             }
         }
         src_line.args = arg_ind;
+        
+        /* check if COMPLEX if... */
+        if (src_line.opcode_n == COMP_IF && src_line.args > 1)
+        {
+            src_line.opcode_n = COMP_IF_COMPLEX;
+        }
+        
         return (0);
     }
     else
@@ -610,14 +622,17 @@ S2 parse_line (U1 *str)
             }
             else
             {
-                if (arg_ind < MAXCOMMARG - 1)
+                if (strcmp (buf, COMP_IF_SB) != 0)
                 {
-                    arg_ind++;
-                    #if DEBUG
-                        printf ("argind++: %li\n", arg_ind);
-                    #endif
+                    if (arg_ind < MAXCOMMARG - 1)
+                    {
+                        arg_ind++;
+                        #if DEBUG
+                            printf ("argind++: %li\n", arg_ind);
+                        #endif
+                    }
+                    strcpy (src_line.arg[arg_ind], buf);      /* save argument name */
                 }
-                strcpy (src_line.arg[arg_ind], buf);      /* save argument name */
                 start = start + strlen (buf) + 1;
 
                 opcode = scan_token (buf);
@@ -639,6 +654,12 @@ S2 parse_line (U1 *str)
         }
         src_line.args = arg_ind;
 
+        /* check if COMPLEX if... */
+        if (src_line.opcode_n == COMP_IF && src_line.args > 1)
+        {
+            src_line.opcode_n = COMP_IF_COMPLEX;
+        }
+        
         #if DEBUG
             printf ("src_line.args: %li\n", src_line.args);
         #endif

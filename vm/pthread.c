@@ -31,6 +31,8 @@
 
 extern struct pthreads pthreads[MAXPTHREADS];
 
+extern S4 pthreads_request;
+
 #if OS_AROS
     extern void *pthreads_mutex;
     extern void *create_pthread_mutex;
@@ -169,7 +171,8 @@ void join_threads (S4 threadnum)
 
     U1 threads_stopped;
     S4 i;
-
+    S4 loop_count;
+    
     while (1)
     {
         threads_stopped = TRUE;
@@ -190,7 +193,8 @@ void join_threads (S4 threadnum)
                 }
             }
         }
-        
+    
+    
         #if OS_AROS
             UnlockMutex (pthreads_mutex);
         #else
@@ -201,6 +205,9 @@ void join_threads (S4 threadnum)
         {
             break;
         }
+        
+        // for (loop_count = 0; loop_count < 100000; loop_count++);
+        PWAIT_TICK();
     }
 }
 
@@ -247,6 +254,8 @@ S8 create_new_thread (S4 startpos)
     #else
         pthread_mutex_lock (&pthreads_mutex);
     #endif
+    
+        
         
     for (i = 0; i < MAXPTHREADS; i++)
     {
@@ -261,6 +270,7 @@ S8 create_new_thread (S4 startpos)
     {
         pthreads[ret].state = PTHREAD_REQUEST;
         pthreads[ret].startpos = startpos;
+        pthreads_request++;
     }
     
     #if OS_AROS
@@ -282,13 +292,17 @@ S4 get_new_thread_startpos (void)
     #else
         pthread_mutex_lock (&pthreads_mutex);
     #endif
-        
-    for (i = 0; i < MAXPTHREADS; i++)
+    
+    if (pthreads_request >= 0)
     {
-        if (pthreads[i].state == PTHREAD_REQUEST)
+        for (i = 0; i < MAXPTHREADS; i++)
         {
-            ret = i;
-            break;
+            if (pthreads[i].state == PTHREAD_REQUEST)
+            {
+                ret = i;
+                pthreads_request--;
+                break;
+            }
         }
     }
 

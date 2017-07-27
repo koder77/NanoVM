@@ -44,10 +44,16 @@
 
 #define ANDROID_DEBUG	0
 
-/* set Android SD card */
-/* #define ANDROID_SDCARD "/sdcard/" */
+/* set Android SD card path for Nano VM root */
 
 #define ANDROID_SDCARD	"/sdcard/"
+
+#define ANDROID_TERMUX  "~/storage/external-1/"
+
+/* should be only one of this two settings */
+#define ANDROID_SDCARD_SET  0
+#define ANDROID_TERMUX_SET  1
+
 
 #define OS_LINUX_RPI	0			/* Raspberry Pi Raspbian: used for exe_socket.c, include IP V 4 sockets if set to 1. */
 

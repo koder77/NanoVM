@@ -68,9 +68,9 @@
 #endif
 
 #if OS_WINDOWS
-    #define PWAIT_TICK();  Sleep (5 * CLOCKS_PER_SEC / NANO_TIMER_TICKS);
+    #define PWAIT_TICK();  Sleep (40 * CLOCKS_PER_SEC / NANO_TIMER_TICKS);
 #endif
 
 #if OS_LINUX || OS_WINDOWS_CYGWIN || OS_ANDROID
-    #define PWAIT_TICK();  usleep (5 * CLOCKS_PER_SEC / NANO_TIMER_TICKS);
+    #define PWAIT_TICK();  usleep (40 * CLOCKS_PER_SEC / NANO_TIMER_TICKS);
 #endif

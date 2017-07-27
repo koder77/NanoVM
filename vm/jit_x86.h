@@ -1415,10 +1415,10 @@ extern "C" int jit_compiler (S4 ***clist, struct vmreg *vmreg, struct varlist *p
                     return (1);
                 }
                 
-                doubleval[doubleval_ind] = *pvarlist[r1].d_m;
+               // doubleval[doubleval_ind] = *pvarlist[r1].d_m;
                 // writes pointer to register address
                 
-                a.mov (RBX, imm ((intptr_t) &doubleval[doubleval_ind]));
+                a.mov (RBX, imm ((intptr_t) &pvarlist[r1].d_m));
                 a.mov (RCX, qword_ptr(RBX));
                 a.mov (qword_ptr (RDI, OFFSET(r2)), RCX);
                 

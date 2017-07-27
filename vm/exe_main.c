@@ -62,7 +62,7 @@ extern struct vm_mem vm_mem;
     #define EXE_NEXT();  if (rinzler() != 0) { printf ("EPOS: %i, OPCODE: %i\n", epos, pcclist[epos][0]); printerr (OVERFLOW_IND, epos, ST_EXE, ""); } check_code (threadnum, maxcclist, pcclist); goto *dthread[++epos];
 #else
    // #define EXE_NEXT(); goto *jumpt[pcclist[++epos][0]];
-#define EXE_NEXT(); goto *dthread[++epos];
+    #define EXE_NEXT(); goto *dthread[++epos];
 #endif
 
 #define ERREXIT();   goto eexit;
@@ -344,12 +344,7 @@ void *exe_elist (S4 threadnum)
     };
     
 #if OS_LINUX
-    if (sched_setaffinity (0, sizeof(cpu_set_t), &pthreads[threadnum].cpuset) != 0)
-    {
-        printf ("ERROR: setting pthread affinity of thread: %i\n", threadnum);
-    }
-    
-    set_sched_priority();
+    // set_sched_priority();
 #endif
     
 	PRINTD("exe_elist: releasing rinzler...\n");
@@ -3269,7 +3264,7 @@ void *exe_elist (S4 threadnum)
         snprintf (varlist[STRING_TMP_1].s_m, varlist[STRING_TMP_1].size, "%.10lf", vmreg.d[ARG1]);
         if (MAXSTRING_VAR + 1 >= strlen (varlist[STRING_TMP_1].s_m) + 1)
         {
-            strcpy (vmreg.s[ARG1], varlist[STRING_TMP_1].s_m);
+            strcpy (vmreg.s[ARG2], varlist[STRING_TMP_1].s_m);
         }
         else
         {

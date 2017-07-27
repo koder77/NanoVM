@@ -44,6 +44,8 @@ struct includes *includes;
 
 struct pthreads pthreads[MAXPTHREADS];
 
+S4 pthreads_request = -1;
+
 struct varlist *pvarlist_obj;
 
 S4 **cclist = NULL;

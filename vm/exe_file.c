@@ -208,8 +208,17 @@ U1 expand_pathname (U1 *path, U1 *newpath)
 		}
 		
 		#if OS_ANDROID
+		
+        #if ANDROD_SDCARD_SET
 			strcpy (newpath, ANDROID_SDCARD);
 			strcat (newpath, "nanovm/");
+        #endif
+
+        #if ANDROID_TERMUX_SET
+            strcpy (newpath, ANDROID_TERMUX);
+            strcat (newpath, "nanovm/");
+        #endif     
+            
 		#else
 			/* check ENV variable */
 		
@@ -249,8 +258,17 @@ U1 expand_pathname (U1 *path, U1 *newpath)
 		/* /home directory access */
 		
 		#if OS_ANDROID
+			
+        #if ANDROD_SDCARD_SET
 			strcpy (newpath, ANDROID_SDCARD);
-			strcat (newpath, "nanovm/home/");
+			strcat (newpath, "nanovm/");
+        #endif
+
+        #if ANDROID_TERMUX_SET
+            strcpy (newpath, ANDROID_TERMUX);
+            strcat (newpath, "nanovm/");
+        #endif   
+			
 		#else
 			/* check ENV variable */
 		

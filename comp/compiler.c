@@ -2250,8 +2250,16 @@ U1 compile ()
             break;
 
         case COMP_TOKEN:
+        case COMP_IF_COMPLEX:
             #if DEBUG
-                printf ("compile: COMP_TOKEN\n");
+                if (src_line.opcode_n == COMP_TOKEN)
+                {
+                    printf ("compile: COMP_TOKEN\n");
+                }
+                else 
+                {
+                    printf ("compile: COMP_IF_COMPLEX\n");
+                }
                 printf ("src_line args: %li\n", src_line.args);
             #endif
 
@@ -5443,6 +5451,142 @@ U1 compile ()
                         }
                         break;
                 }
+                
+                if (src_line.opcode_n == COMP_IF_COMPLEX)
+                {
+                    if (nested_code_global_off == FALSE) nested_code = TRUE;
+                    
+                    var = getvarind_comp (src_line.arg[0]);
+                    if (var == NOTDEF)
+                    {
+                        printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[0], plist_ind);
+                        return (FALSE);
+                    }
+                    
+                    if (src_line.arg[0][0] == COMP_PRIVATE_VAR_SB)
+                    {
+                        type = pvarlist_obj[var].type;
+                        private_variable = TRUE;
+                    }
+                    else
+                    {
+                        type = varlist[var].type;
+                        private_variable = FALSE;
+                    }
+
+                    #if DEBUG
+                        printf ("type: %i\n", type);
+                    #endif
+                        
+                    switch (type)
+                    {
+                        /* get free L register */
+                        case INT_VAR:
+                            reg1 = get_vmreg_l ();
+                            if (reg1 != FULL)
+                            {
+                                /* set opcode using free register */
+
+                                if (private_variable == TRUE)
+                                {
+                                    if (! set2 (PPUSH_I, var, reg1))
+                                    {
+                                        return (MEMORY);
+                                    }
+                                    set_vmreg_l (reg1, var, PRIVATE);
+                                }
+                                else
+                                {
+                                    if (! set2 (PUSH_I, var, reg1))
+                                    {
+                                        return (MEMORY);
+                                    }
+                                    set_vmreg_l (reg1, var, NORMAL);
+                                }
+                            }
+                            break;
+
+                        case LINT_VAR:
+                            reg1 = get_vmreg_l ();
+                            if (reg1 != FULL)
+                            {
+                                /* set opcode using free register */
+
+                                if (private_variable == TRUE)
+                                {
+                                    if (! set2 (PPUSH_L, var, reg1))
+                                    {
+                                        return (MEMORY);
+                                    }
+                                    set_vmreg_l (reg1, var, PRIVATE);
+                                }
+                                else
+                                {
+                                    if (! set2 (PUSH_L, var, reg1))
+                                    {
+                                        return (MEMORY);
+                                    }
+                                    set_vmreg_l (reg1, var, NORMAL);
+                                }
+                            }
+                            break;
+
+                        case QINT_VAR:
+                            reg1 = get_vmreg_l ();
+                            if (reg1 != FULL)
+                            {
+                                /* set opcode using free register */
+
+                                if (private_variable == TRUE)
+                                {
+                                    if (! set2 (PPUSH_Q, var, reg1))
+                                    {
+                                        return (MEMORY);
+                                    }
+                                    set_vmreg_l (reg1, var, PRIVATE);
+                                }
+                                else
+                                {
+                                    if (! set2 (PUSH_Q, var, reg1))
+                                    {
+                                        return (MEMORY);
+                                    }
+                                    set_vmreg_l (reg1, var, NORMAL);
+                                }
+                            }
+                            break;
+
+                        default:
+                            printf ("compile: error: not a int or lint or qint type at if: line: %li\n", plist_ind);
+                            return (FALSE);
+                            break;
+                    }
+                    
+                    reg2 = get_vmreg_l ();
+                    if (reg2 != FULL)
+                    {
+                        /* set NOT opcode (for if) */
+
+                        if (! set2 (NOT_L, reg1, reg2))
+                        {
+                            return (MEMORY);
+                        }
+
+                        if_pos = get_if_pos ();
+                        if (if_pos == -1)
+                        {
+                            printf ("compile: error: if: out of memory if-list line: %li\n", plist_ind);
+                            return (FALSE);
+                        }
+
+                        set_else_jmp (if_pos);
+
+                        if (! set2 (JMP_L, reg2, get_else_lab (if_pos)))
+                        {
+                            return (MEMORY);
+                        }
+                    }
+                }
             }
 
             if (src_line.args > 4)
@@ -6201,25 +6345,161 @@ U1 compile ()
                         }
                         break;
                 }
+                
+                if (src_line.opcode_n == COMP_IF_COMPLEX)
+                {
+                    if (nested_code_global_off == FALSE) nested_code = TRUE;
+                    
+                    var = getvarind_comp (src_line.arg[0]);
+                    if (var == NOTDEF)
+                    {
+                        printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[0], plist_ind);
+                        return (FALSE);
+                    }
+                    
+                    if (src_line.arg[0][0] == COMP_PRIVATE_VAR_SB)
+                    {
+                        type = pvarlist_obj[var].type;
+                        private_variable = TRUE;
+                    }
+                    else
+                    {
+                        type = varlist[var].type;
+                        private_variable = FALSE;
+                    }
+
+                    #if DEBUG
+                        printf ("type: %i\n", type);
+                    #endif
+                        
+                    switch (type)
+                    {
+                        /* get free L register */
+                        case INT_VAR:
+                            reg1 = get_vmreg_l ();
+                            if (reg1 != FULL)
+                            {
+                                /* set opcode using free register */
+
+                                if (private_variable == TRUE)
+                                {
+                                    if (! set2 (PPUSH_I, var, reg1))
+                                    {
+                                        return (MEMORY);
+                                    }
+                                    set_vmreg_l (reg1, var, PRIVATE);
+                                }
+                                else
+                                {
+                                    if (! set2 (PUSH_I, var, reg1))
+                                    {
+                                        return (MEMORY);
+                                    }
+                                    set_vmreg_l (reg1, var, NORMAL);
+                                }
+                            }
+                            break;
+
+                        case LINT_VAR:
+                            reg1 = get_vmreg_l ();
+                            if (reg1 != FULL)
+                            {
+                                /* set opcode using free register */
+
+                                if (private_variable == TRUE)
+                                {
+                                    if (! set2 (PPUSH_L, var, reg1))
+                                    {
+                                        return (MEMORY);
+                                    }
+                                    set_vmreg_l (reg1, var, PRIVATE);
+                                }
+                                else
+                                {
+                                    if (! set2 (PUSH_L, var, reg1))
+                                    {
+                                        return (MEMORY);
+                                    }
+                                    set_vmreg_l (reg1, var, NORMAL);
+                                }
+                            }
+                            break;
+
+                        case QINT_VAR:
+                            reg1 = get_vmreg_l ();
+                            if (reg1 != FULL)
+                            {
+                                /* set opcode using free register */
+
+                                if (private_variable == TRUE)
+                                {
+                                    if (! set2 (PPUSH_Q, var, reg1))
+                                    {
+                                        return (MEMORY);
+                                    }
+                                    set_vmreg_l (reg1, var, PRIVATE);
+                                }
+                                else
+                                {
+                                    if (! set2 (PUSH_Q, var, reg1))
+                                    {
+                                        return (MEMORY);
+                                    }
+                                    set_vmreg_l (reg1, var, NORMAL);
+                                }
+                            }
+                            break;
+
+                        default:
+                            printf ("compile: error: not a int or lint or qint type at if: line: %li\n", plist_ind);
+                            return (FALSE);
+                            break;
+                    }
+                    
+                    reg2 = get_vmreg_l ();
+                    if (reg2 != FULL)
+                    {
+                        /* set NOT opcode (for if) */
+
+                        if (! set2 (NOT_L, reg1, reg2))
+                        {
+                            return (MEMORY);
+                        }
+
+                        if_pos = get_if_pos ();
+                        if (if_pos == -1)
+                        {
+                            printf ("compile: error: if: out of memory if-list line: %li\n", plist_ind);
+                            return (FALSE);
+                        }
+
+                        set_else_jmp (if_pos);
+
+                        if (! set2 (JMP_L, reg2, get_else_lab (if_pos)))
+                        {
+                            return (MEMORY);
+                        }
+                    }
+                }
             }
             break;
 
         case COMP_IF:
             if (nested_code_global_off == FALSE) nested_code = TRUE;
-            if (src_line.args != 1)
+            if (src_line.args != 0)
             {
                  printf ("compile: error: if expression too complex: line %li\n", plist_ind);
                  return (FALSE);
             }
 
-            var = getvarind_comp (src_line.arg[1]);
+            var = getvarind_comp (src_line.arg[0]);
             if (var == NOTDEF)
             {
-                printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[1], plist_ind);
+                printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[0], plist_ind);
                 return (FALSE);
             }
 
-            if (src_line.arg[1][0] == COMP_PRIVATE_VAR_SB)
+            if (src_line.arg[0][0] == COMP_PRIVATE_VAR_SB)
             {
                 type = pvarlist_obj[var].type;
                 private_variable = TRUE;
@@ -6315,7 +6595,7 @@ U1 compile ()
             }
 
             reg2 = get_vmreg_l ();
-            if (reg1 != FULL)
+            if (reg2 != FULL)
             {
                 /* set NOT opcode (for if) */
 

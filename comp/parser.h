@@ -202,6 +202,8 @@
 #define TILDE_SB                        "~"
 #define TILDE                           53
 
+#define COMP_IF_COMPLEX                 54              /* if x = y == 1 */
+
 #define ASSEMB_INLINE                   MAXOPCODE + 1
 
 #define SPACE_SB                        ' '
