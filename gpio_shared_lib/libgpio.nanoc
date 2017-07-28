@@ -1,0 +1,70 @@
+//	libgpio.nanoc
+//
+//	blinks led with gpio shared library
+//	Stefan Pietzonke 2017
+
+func main ()
+	#include <gpio.nch>
+	
+	lint null = 0; lint one = 1;
+	int f;
+	lint _dll;
+	
+	lint _setup;
+	lint _pinmode;
+	lint _digitalwrite;
+	
+	string dllname[256] = "libgpio.so";
+	string gpiosetup[256] = "gpio_setup";
+	string gpiopinmode[256] = "gpio_pinmode";
+	string gpiodigitalwrite[256] = "gpio_digital_write";
+	
+	#NESTED_CODE_ON;
+	
+//	open libi2c.so library in nanovm/lib directory
+	lopen (_dll, dllname);	
+
+//	set function handles
+	lfunc (_dll, _setup, gpiosetup);
+	lfunc (_dll, _pinmode, gpiopinmode);
+	lfunc (_dll, _digitalwrite, gpiodigitalwrite);
+	
+//	init GPIO
+	lcall (_dll, _setup);
+	
+//  pinmode pin: 0 = OUTPUT
+	#ATOMIC;
+	pushtostack> (0, gpio_output);
+	
+	lcall (_dll, _pinmode);
+	#ATOMIC_END;
+	
+lab loop;
+//  pin 0 = HIGH
+	#ATOMIC;
+	pushtostack> (0, gpio_high);
+	
+	lcall (_dll, _digitalwrite);
+	#ATOMIC_END;
+	
+//	delay half second	
+	waittick (500);
+	
+//  pin 0 = LOW
+	#ATOMIC;
+	pushtostack> (0, gpio_low);
+	
+	lcall (_dll, _digitalwrite);
+	#ATOMIC_END;
+
+//	delay half second
+	waittick (500);
+	goto loop;
+	
+	exit null;
+funcend
+	
+lab pushtostack;
+#ASSEMB
+	rts;
+#ASSEMB_END

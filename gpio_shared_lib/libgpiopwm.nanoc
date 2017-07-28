@@ -1,0 +1,67 @@
+//	libgpiopwm.nanoc
+//
+//	gpio shared library pwm demo, blink LED on PWM GPIO pin 
+//	Stefan Pietzonke 2017
+
+func main ()
+	#include <gpio.nch>
+	
+	lint null = 0; lint one = 1;
+	int f;
+	lint _dll;
+	
+	lint _setup;
+	lint _pinmode;
+	lint _pwmwrite;
+	
+	string dllname[256] = "libgpio.so";
+	string gpiosetup[256] = "gpio_setup";
+	string gpiopinmode[256] = "gpio_pinmode";
+	string gpiopwmwrite[256] = "gpio_pwm_write";
+	
+	int pwm = 0;
+	
+	#NESTED_CODE_ON;
+	
+//	open libgpio.so library in nanovm/lib directory
+	lopen (_dll, dllname);	
+
+//	set function handles
+	lfunc (_dll, _setup, gpiosetup);
+	lfunc (_dll, _pinmode, gpiopinmode);
+	lfunc (_dll, _pwmwrite, gpiopwmwrite);
+	
+//	init GPIO
+	lcall (_dll, _setup);
+	
+//  pinmode pin: 1 = OUTPUT
+	#ATOMIC;
+	pushtostack> (18, gpio_output);
+	
+	lcall (_dll, _pinmode);
+	#ATOMIC_END;
+	
+lab loop;
+	#ATOMIC;
+	pushtostack> (18, pwm);
+	
+	lcall (_dll, _pwmwrite);
+	#ATOMIC_END;
+
+	f = pwm < 1024;
+	if f;
+		pwm = ++;
+	else;
+		pwm = 0;
+	endif;
+	
+	waittick (20);
+	goto loop;
+	
+	exit null;
+funcend
+	
+lab pushtostack;
+#ASSEMB
+	rts;
+#ASSEMB_END

@@ -1,0 +1,17 @@
+//	Raspberry Pi GPIO library defines
+
+// pin modes
+int gpio_input = 0;
+int gpio_output = 1;
+
+int gpio_low = 0;
+int gpio_high = 1;
+
+// pull up/down/none
+int gpio_pud_off = 0;
+int gpio_pud_down = 1;
+int gpio_pud_up = 2;
+
+// PWM
+int gpio_pwm_mode_ms = 0;
+int gpio_pwm_mode_bal = 1;
