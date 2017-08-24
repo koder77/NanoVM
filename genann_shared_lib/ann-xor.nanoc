@@ -1,0 +1,115 @@
+// ann-xor.nanoc
+//
+// Train the XOR function with lib genann
+//
+// Compile the libgenann.so library by running the "make.sh" script.
+// Copy libgenann.so to the nanovm/lib directory.
+// Put ann-xor.nanoc into the nanovm/prog directory and compile and assemble it.
+
+func main ()
+    int null = 0; qint one = 1;
+
+    int i;
+    int f;
+    int ret;
+    
+    double input1[2];
+    double input2[2];
+    double input3[2];
+    double input4[2];
+    
+    double output[1];
+    double des_output_null[1];
+    double des_output_one[1];
+    
+    double out;
+    
+    input1 = [ 0.0 0.0 ] 0;
+    input2 = [ 0.0 1.0 ] 0;
+    input3 = [ 1.0 0.0 ] 0;
+    input4 = [ 1.0 1.0 ] 0;
+    
+    des_output_null = [ 0.0 ] 0;
+    des_output_one = [ 1.0 ] 0;
+    
+    output = [ 0.0 ] 0;
+    
+    qint input1_ptr; qint input2_ptr; qint input3_ptr; qint input4_ptr; 
+    qint output_ptr; 
+    qint des_output_null_ptr; qint des_output_one_ptr;
+    qint ann_ptr;
+
+// declare memory pointer used to store the ANN struct of lib genann
+    byte *ann_mem[1];
+
+// get memory pointers
+    getaddress (input1, input1_ptr);
+    getaddress (input2, input2_ptr);
+    getaddress (input3, input3_ptr);
+    getaddress (input4, input4_ptr);
+    
+    getaddress (output, output_ptr);
+    
+    getaddress (des_output_null, des_output_null_ptr);
+    getaddress (des_output_one, des_output_one_ptr);
+
+    getaddress (*ann_mem, ann_ptr);
+
+//  initialize ANN, 2 inputs, 1 hidden layer with 2 neurons, 1 output
+    genann_init_lib ();
+    @genann_init (ann_ptr, 2, 1, 2, 1);
+    get (ret);
+    
+    f = ret != 0;
+    if f;
+        print "ERROR: initializing ANN!"; printn one;
+        goto end;
+    endif;
+    
+    print "training ann for XOR function..."; printn one;
+    
+    i = 1000;
+    for;
+        genann_train (ann_ptr, input2_ptr, des_output_one_ptr, 3);
+        genann_train (ann_ptr, input3_ptr, des_output_one_ptr, 3);
+        genann_train (ann_ptr, input1_ptr, des_output_null_ptr, 3);
+        genann_train (ann_ptr, input4_ptr, des_output_null_ptr, 3);
+        i = --;
+        f = i > 0;
+    next f;
+    
+    print "running ann..."; printn one;
+    
+    print "0 XOR 0: ";
+    genann_run (ann_ptr, input1_ptr, output_ptr);
+//    out = output [ null ];
+    array2var (output, null, out);
+
+    print out; printn one;
+    
+    print "0 XOR 1: ";
+    genann_run (ann_ptr, input2_ptr, output_ptr);
+    out = output [ null ];
+    print out; printn one;
+    
+    print "1 XOR 0: ";
+    genann_run (ann_ptr, input3_ptr, output_ptr);
+    out = output [ null ];
+    print out; printn one;
+    
+    print "1 XOR 1: ";
+    genann_run (ann_ptr, input4_ptr, output_ptr);
+    out = output [ null ];
+    print out; printn one;
+   
+lab end;
+    dealloc (*ann_mem);
+    exit null;
+funcend
+
+#include <genann.nch>
+
+lab pushtostack;
+#ASSEMB
+	rts;
+#ASSEMB_END
