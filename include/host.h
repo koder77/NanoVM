@@ -278,6 +278,9 @@
 	#define HAVE_THREADING			0
 #endif
 
+#if OS_AROS
+    #define HAVE_THREADING          1 
+#endif
 
 /* do sane check... ------------------------------------------------- */
 

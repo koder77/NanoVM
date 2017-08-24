@@ -106,6 +106,35 @@ void showinfo (void)
     printf ("-stacks=stacksize[KB]\n\n");
 }
 
+#if OS_AROS
+
+S2 exe_elist_trampoline (S4 threadnum)
+{
+    int rc = FALSE;
+
+	SocketBase = (struct Library *) OpenLibrary ("bsdsocket.library", 3);
+    if (SocketBase == NULL)
+    {
+        return (FALSE);
+    }
+
+    if (SocketBaseTags (SBTM_SETVAL (SBTC_ERRNOPTR (sizeof (errno))), (IPTR) &errno, TAG_DONE ))
+    {
+		CloseLibrary(SocketBase);
+		SocketBase = NULL;
+        return (FALSE);
+    }
+
+    rc = exe_elist(threadnum);
+
+	CloseLibrary(SocketBase);
+	SocketBase = NULL;
+	
+    return rc;
+}
+
+#endif
+
 
 NINT main (NINT ac, char *av[])
 {

@@ -13,11 +13,13 @@ func main ()
 	lint _setup;
 	lint _pinmode;
 	lint _pwmwrite;
+	lint _digitalwrite;
 	
 	string dllname[256] = "libgpio.so";
 	string gpiosetup[256] = "gpio_setup";
 	string gpiopinmode[256] = "gpio_pinmode";
 	string gpiopwmwrite[256] = "gpio_pwm_write";
+	string gpiodigitalwrite[256] = "gpio_digital_write";
 	
 	int pwm = 0;
 	
@@ -30,20 +32,29 @@ func main ()
 	lfunc (_dll, _setup, gpiosetup);
 	lfunc (_dll, _pinmode, gpiopinmode);
 	lfunc (_dll, _pwmwrite, gpiopwmwrite);
+	lfunc (_dll, _digitalwrite, gpiodigitalwrite);
 	
 //	init GPIO
 	lcall (_dll, _setup);
 	
 //  pinmode pin: 1 = OUTPUT
 	#ATOMIC;
-	pushtostack> (18, gpio_output);
+	pushtostack> (1, gpio_output);
 	
 	lcall (_dll, _pinmode);
 	#ATOMIC_END;
 	
+//  pin 1 = HIGH
+	#ATOMIC;
+	pushtostack> (1, gpio_high);
+	
+	lcall (_dll, _digitalwrite);
+	#ATOMIC_END;
+	
+	
 lab loop;
 	#ATOMIC;
-	pushtostack> (18, pwm);
+	pushtostack> (1, pwm);
 	
 	lcall (_dll, _pwmwrite);
 	#ATOMIC_END;
@@ -55,7 +66,7 @@ lab loop;
 		pwm = 0;
 	endif;
 	
-	waittick (20);
+	waittick (500);
 	goto loop;
 	
 	exit null;

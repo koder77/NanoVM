@@ -299,4 +299,208 @@ int sdl_rectangle_fill_alpha (U1 *pthreads_ptr, U1 *varlist_ptr, U1 *vm_mem_ptr,
     return (0);
 }
 
+int sdl_circle_alpha (U1 *pthreads_ptr, U1 *varlist_ptr, U1 *vm_mem_ptr, S4 threadnum, S8 stacksize)
+{
+    S8 x, y, radius, r, g, b, alpha;
+    
+    struct pthreads *pthreads;
+	struct varlist *varlist;
+	struct vm_mem *vm_mem;
+	
+	pthreads = (struct pthreads *) pthreads_ptr;
+	varlist = (struct varlist *) varlist_ptr;
+	vm_mem = (struct vm_mem *) vm_mem_ptr;
+    
+    if (stpull_l (threadnum, pthreads, stacksize, &alpha) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: alpha stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &b) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: b stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &g) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: g stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &r) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: r stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &radius) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: radius stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &y) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: y stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &x) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: x stack error!\n");
+    
+    circleRGBA (surf, x, y, radius, r, g, b, alpha);
+    return (0);
+}
+
+int sdl_circle_fill_alpha (U1 *pthreads_ptr, U1 *varlist_ptr, U1 *vm_mem_ptr, S4 threadnum, S8 stacksize)
+{
+    S8 x, y, radius, r, g, b, alpha;
+    
+    struct pthreads *pthreads;
+	struct varlist *varlist;
+	struct vm_mem *vm_mem;
+	
+	pthreads = (struct pthreads *) pthreads_ptr;
+	varlist = (struct varlist *) varlist_ptr;
+	vm_mem = (struct vm_mem *) vm_mem_ptr;
+    
+    if (stpull_l (threadnum, pthreads, stacksize, &alpha) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: alpha stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &b) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: b stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &g) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: g stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &r) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: r stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &radius) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: radius stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &y) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: y stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &x) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: x stack error!\n");
+    
+    filledCircleRGBA (surf, x, y, radius, r, g, b, alpha);
+    return (0);
+}
+
+int sdl_ellipse_alpha (U1 *pthreads_ptr, U1 *varlist_ptr, U1 *vm_mem_ptr, S4 threadnum, S8 stacksize)
+{
+    S8 x, y, xradius, yradius, r, g, b, alpha;
+    
+    struct pthreads *pthreads;
+	struct varlist *varlist;
+	struct vm_mem *vm_mem;
+	
+	pthreads = (struct pthreads *) pthreads_ptr;
+	varlist = (struct varlist *) varlist_ptr;
+	vm_mem = (struct vm_mem *) vm_mem_ptr;
+    
+    if (stpull_l (threadnum, pthreads, stacksize, &alpha) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: alpha stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &b) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: b stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &g) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: g stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &r) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: r stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &yradius) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: yradius stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &xradius) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: xradius stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &y) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: y stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &x) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: x stack error!\n");
+    
+    ellipseRGBA (surf, x, y, xradius, yradius, r, g, b, alpha);
+    return (0);
+}
+
+int sdl_ellipse_fill_alpha (U1 *pthreads_ptr, U1 *varlist_ptr, U1 *vm_mem_ptr, S4 threadnum, S8 stacksize)
+{
+    S8 x, y, xradius, yradius, r, g, b, alpha;
+    
+    struct pthreads *pthreads;
+	struct varlist *varlist;
+	struct vm_mem *vm_mem;
+	
+	pthreads = (struct pthreads *) pthreads_ptr;
+	varlist = (struct varlist *) varlist_ptr;
+	vm_mem = (struct vm_mem *) vm_mem_ptr;
+    
+    if (stpull_l (threadnum, pthreads, stacksize, &alpha) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: alpha stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &b) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: b stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &g) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: g stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &r) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: r stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &yradius) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: yradius stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &xradius) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: xradius stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &y) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: y stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &x) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: x stack error!\n");
+    
+    filledEllipseRGBA (surf, x, y, xradius, yradius, r, g, b, alpha);
+    return (0);
+}
+
+int sdl_pie_alpha (U1 *pthreads_ptr, U1 *varlist_ptr, U1 *vm_mem_ptr, S4 threadnum, S8 stacksize)
+{
+    S8 x, y, radius, startangle, endangle, r, g, b, alpha;
+    
+    struct pthreads *pthreads;
+	struct varlist *varlist;
+	struct vm_mem *vm_mem;
+	
+	pthreads = (struct pthreads *) pthreads_ptr;
+	varlist = (struct varlist *) varlist_ptr;
+	vm_mem = (struct vm_mem *) vm_mem_ptr;
+    
+    if (stpull_l (threadnum, pthreads, stacksize, &alpha) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: alpha stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &b) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: b stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &g) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: g stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &r) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: r stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &endangle) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: endangle stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &startangle) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: startangle stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &radius) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: radius stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &y) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: y stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &x) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: x stack error!\n");
+    
+    pieRGBA (surf, x, y, radius, startangle, endangle, r, g, b, alpha);
+    return (0);
+}
+
+int sdl_pie_fill_alpha (U1 *pthreads_ptr, U1 *varlist_ptr, U1 *vm_mem_ptr, S4 threadnum, S8 stacksize)
+{
+    S8 x, y, radius, startangle, endangle, r, g, b, alpha;
+    
+    struct pthreads *pthreads;
+	struct varlist *varlist;
+	struct vm_mem *vm_mem;
+	
+	pthreads = (struct pthreads *) pthreads_ptr;
+	varlist = (struct varlist *) varlist_ptr;
+	vm_mem = (struct vm_mem *) vm_mem_ptr;
+    
+    if (stpull_l (threadnum, pthreads, stacksize, &alpha) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: alpha stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &b) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: b stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &g) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: g stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &r) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: r stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &endangle) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: endangle stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &startangle) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: startangle stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &radius) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: radius stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &y) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: y stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &x) != ERR_STACK_OK) printf ("sdl_rectangle_fill_alpha: x stack error!\n");
+    
+    filledPieRGBA (surf, x, y, radius, startangle, endangle, r, g, b, alpha);
+    return (0);
+}
+
+int sdl_trigon_alpha (U1 *pthreads_ptr, U1 *varlist_ptr, U1 *vm_mem_ptr, S4 threadnum, S8 stacksize)
+{
+    S8 x, y, x2, y2, x3, y3, r, g, b, alpha;
+    
+    struct pthreads *pthreads;
+	struct varlist *varlist;
+	struct vm_mem *vm_mem;
+	
+	pthreads = (struct pthreads *) pthreads_ptr;
+	varlist = (struct varlist *) varlist_ptr;
+	vm_mem = (struct vm_mem *) vm_mem_ptr;
+    
+    if (stpull_l (threadnum, pthreads, stacksize, &alpha) != ERR_STACK_OK) printf ("sdl_rectangle_alpha: alpha stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &b) != ERR_STACK_OK) printf ("sdl_rectangle_alpha: b stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &g) != ERR_STACK_OK) printf ("sdl_rectangle_alpha: g stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &r) != ERR_STACK_OK) printf ("sdl_rectangle_alpha: r stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &y3) != ERR_STACK_OK) printf ("sdl_rectangle_alpha: y3 stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &x3) != ERR_STACK_OK) printf ("sdl_rectangle_alpha: x3 stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &y2) != ERR_STACK_OK) printf ("sdl_rectangle_alpha: y2 stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &x2) != ERR_STACK_OK) printf ("sdl_rectangle_alpha: x2 stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &y) != ERR_STACK_OK) printf ("sdl_rectangle_alpha: y stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &x) != ERR_STACK_OK) printf ("sdl_rectangle_alpha: x stack error!\n");
+    
+    trigonRGBA (surf, x, y, x2, y2, x3, y3, r, g, b, alpha);
+    return (0);
+}
+
+int sdl_trigon_fill_alpha (U1 *pthreads_ptr, U1 *varlist_ptr, U1 *vm_mem_ptr, S4 threadnum, S8 stacksize)
+{
+    S8 x, y, x2, y2, x3, y3, r, g, b, alpha;
+    
+    struct pthreads *pthreads;
+	struct varlist *varlist;
+	struct vm_mem *vm_mem;
+	
+	pthreads = (struct pthreads *) pthreads_ptr;
+	varlist = (struct varlist *) varlist_ptr;
+	vm_mem = (struct vm_mem *) vm_mem_ptr;
+    
+    if (stpull_l (threadnum, pthreads, stacksize, &alpha) != ERR_STACK_OK) printf ("sdl_rectangle_alpha: alpha stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &b) != ERR_STACK_OK) printf ("sdl_rectangle_alpha: b stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &g) != ERR_STACK_OK) printf ("sdl_rectangle_alpha: g stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &r) != ERR_STACK_OK) printf ("sdl_rectangle_alpha: r stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &y3) != ERR_STACK_OK) printf ("sdl_rectangle_alpha: y3 stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &x3) != ERR_STACK_OK) printf ("sdl_rectangle_alpha: x3 stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &y2) != ERR_STACK_OK) printf ("sdl_rectangle_alpha: y2 stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &x2) != ERR_STACK_OK) printf ("sdl_rectangle_alpha: x2 stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &y) != ERR_STACK_OK) printf ("sdl_rectangle_alpha: y stack error!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &x) != ERR_STACK_OK) printf ("sdl_rectangle_alpha: x stack error!\n");
+    
+    filledTrigonRGBA (surf, x, y, x2, y2, x3, y3, r, g, b, alpha);
+    return (0);
+}
+
 

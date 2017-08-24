@@ -51,8 +51,8 @@ extern S4 if_ind;
 
 extern U1 function_main_end;
 
-extern S2 plist_ind;
-extern S2 cclist_ind;
+extern S4 plist_ind;
+extern S4 cclist_ind;
 extern struct jumplist *jumplist;
 
 extern S4 jumplist_ind;
@@ -263,7 +263,7 @@ U1 compile ()
             /* new function: set all registers as EMPTY: */
             init_vmreg ();
 
-            nested_code = FALSE;        		/* only set if goto, lab, if and for used */
+            nested_code = TRUE;        		/* = FALSE only set if goto, lab, if and for used */
             nested_code_global_off = FALSE;		/* reset NESTED_CODE_GLOBAL_OFF */
 
             #if DEBUG
@@ -517,7 +517,7 @@ U1 compile ()
 
                         if (found == FALSE)
                         {
-                            printf ("compile: error: no argument type set: line %li\n", plist_ind);
+                            printf ("compile: error: no argument type set: line %i\n", plist_ind);
                             return (FALSE);
                         }
                     }
@@ -615,7 +615,7 @@ U1 compile ()
 					{
 						if (! make_string ())
 						{
-							printf ("compile: error: can't create string, line %li\n", plist_ind);
+							printf ("compile: error: can't create string, line %i\n", plist_ind);
 							return (FALSE);
 						}
 						var = t_var.varlist_ind;
@@ -642,7 +642,7 @@ U1 compile ()
 						var = getvarind_comp (src_line.arg[i]);
 						if (var == NOTDEF)
 						{
-							printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[i], plist_ind);
+							printf ("compile: error: variable not defined: %s, line: %i\n", src_line.arg[i], plist_ind);
 							return (FALSE);
 						}
 					}
@@ -967,7 +967,7 @@ U1 compile ()
 
             if (src_line.args == 0)
             {
-                printf ("compile: error: missing arguments in type definition, line %li\n", plist_ind);
+                printf ("compile: error: missing arguments in type definition, line %i\n", plist_ind);
                 return (FALSE);
             }
             if (compile_set_init_var (1, &var, src_line.opcode_n) != TRUE)
@@ -984,7 +984,7 @@ U1 compile ()
 
                 if (strcmp (src_line.arg[2], EQUAL_SB) != 0)
                 {
-                    printf ("compile: error: missing = in type definition, line %li\n", plist_ind);
+                    printf ("compile: error: missing = in type definition, line %i\n", plist_ind);
                     return (FALSE);
                 }
 
@@ -994,13 +994,13 @@ U1 compile ()
 
                     if (! checkstring (src_line.arg[3]))
                     {
-                        printf ("compile: error: string type definition: no string, line %li\n", plist_ind);
+                        printf ("compile: error: string type definition: no string, line %i\n", plist_ind);
                         return (FALSE);
                     }
 
                     if (! make_string ())
                     {
-                        printf ("compile: error: can't create string, line %li\n", plist_ind);
+                        printf ("compile: error: can't create string, line %i\n", plist_ind);
                         return (FALSE);
                     }
                     var2 = t_var.varlist_ind;
@@ -1059,7 +1059,7 @@ U1 compile ()
                     var2 = getvarind_comp (src_line.arg[3]);
                     if (var2 == NOTDEF)
                     {
-                        printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[3], plist_ind);
+                        printf ("compile: error: variable not defined: %s, line: %i\n", src_line.arg[3], plist_ind);
                         return (FALSE);
                     }
 
@@ -1368,7 +1368,7 @@ U1 compile ()
             print:
             if (src_line.args == 0)
             {
-                printf ("compile: error: missing arguments in print, line %li\n", plist_ind);
+                printf ("compile: error: missing arguments in print, line %i\n", plist_ind);
                 return (FALSE);
             }
 
@@ -1380,7 +1380,7 @@ U1 compile ()
                 {
                     if (! make_string ())
                     {
-                        printf ("compile: error: can't create string, line %li\n", plist_ind);
+                        printf ("compile: error: can't create string, line %i\n", plist_ind);
                         return (FALSE);
                     }
                     var = t_var.varlist_ind;
@@ -1407,7 +1407,7 @@ U1 compile ()
                     var = getvarind_comp (src_line.arg[i]);
                     if (var == NOTDEF)
                     {
-                        printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[i], plist_ind);
+                        printf ("compile: error: variable not defined: %s, line: %i\n", src_line.arg[i], plist_ind);
                         return (FALSE);
                     }
                 }
@@ -1635,7 +1635,7 @@ U1 compile ()
             print_newline:
             if (src_line.args == 0)
             {
-                printf ("compile: error: missing arguments in printn, line %li\n", plist_ind);
+                printf ("compile: error: missing arguments in printn, line %i\n", plist_ind);
                 return (FALSE);
             }
 
@@ -1660,7 +1660,7 @@ U1 compile ()
                     var = getvarind_comp (src_line.arg[i]);
                     if (var == NOTDEF)
                     {
-                        printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[i], plist_ind);
+                        printf ("compile: error: variable not defined: %s, line: %i\n", src_line.arg[i], plist_ind);
                         return (FALSE);
                     }
                 }
@@ -1668,7 +1668,7 @@ U1 compile ()
                 {
                     if (pvarlist_obj[var].type != INT_VAR && pvarlist_obj[var].type != LINT_VAR && pvarlist_obj[var].type != QINT_VAR)
                     {
-                        printf ("compile: error: variable not a number: %s, line: %li\n", src_line.arg[i], plist_ind);
+                        printf ("compile: error: variable not a number: %s, line: %i\n", src_line.arg[i], plist_ind);
                         return (FALSE);
                     }
                     type = pvarlist_obj[var].type;
@@ -1677,7 +1677,7 @@ U1 compile ()
                 {
                     if (varlist[var].type != INT_VAR && varlist[var].type != LINT_VAR && varlist[var].type != QINT_VAR)
                     {
-                        printf ("compile: error: variable not a number: %s, line: %li\n", src_line.arg[i], plist_ind);
+                        printf ("compile: error: variable not a number: %s, line: %i\n", src_line.arg[i], plist_ind);
                         return (FALSE);
                     }
                     type = varlist[var].type;
@@ -1827,7 +1827,7 @@ U1 compile ()
         case COMP_EXIT:
             if (src_line.args == 0)
             {
-                printf ("compile: error: missing arguments in exit, line %li\n", plist_ind);
+                printf ("compile: error: missing arguments in exit, line %i\n", plist_ind);
                 return (FALSE);
             }
 
@@ -1850,7 +1850,7 @@ U1 compile ()
                 var = getvarind_comp (src_line.arg[1]);
                 if (var == NOTDEF)
                 {
-                    printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[1], plist_ind);
+                    printf ("compile: error: variable not defined: %s, line: %i\n", src_line.arg[1], plist_ind);
                     return (FALSE);
                 }
             }
@@ -1858,7 +1858,7 @@ U1 compile ()
             {
                 if (pvarlist_obj[var].type != INT_VAR && pvarlist_obj[var].type != LINT_VAR && pvarlist_obj[var].type != QINT_VAR)
                 {
-                    printf ("compile: error: variable not a number: %s, line: %li\n", src_line.arg[1], plist_ind);
+                    printf ("compile: error: variable not a number: %s, line: %i\n", src_line.arg[1], plist_ind);
                     return (FALSE);
                 }
                 type = pvarlist_obj[var].type;
@@ -1867,7 +1867,7 @@ U1 compile ()
             {
                 if (varlist[var].type != INT_VAR && varlist[var].type != LINT_VAR && varlist[var].type != QINT_VAR)
                 {
-                    printf ("compile: error: variable not a number: %s, line: %li\n", src_line.arg[1], plist_ind);
+                    printf ("compile: error: variable not a number: %s, line: %i\n", src_line.arg[1], plist_ind);
                     return (FALSE);
                 }
                 type = varlist[var].type;
@@ -2042,7 +2042,7 @@ U1 compile ()
                     var = getvarind_comp (src_line.arg[i]);
                     if (var == NOTDEF)
                     {
-                        printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[i], plist_ind);
+                        printf ("compile: error: variable not defined: %s, line: %i\n", src_line.arg[i], plist_ind);
                         return (FALSE);
                     }
 
@@ -2270,7 +2270,7 @@ U1 compile ()
 				var = getvarind_comp (src_line.arg[1]);
 				if (var == NOTDEF)
 				{
-					printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[0], plist_ind);
+					printf ("compile: error: variable not defined: %s, line: %i\n", src_line.arg[0], plist_ind);
 					return (FALSE);
 				}
 
@@ -2451,7 +2451,7 @@ U1 compile ()
 			/* parse expressons like: i = 1 or i = i + 1 or i = x + 1 * y... etc. */
             if (strcmp (src_line.arg[1], EQUAL_SB) != 0)
             {
-                printf ("compile: error: missing = in expression %s, line: %li\n", src_line.arg[1], plist_ind);
+                printf ("compile: error: missing = in expression %s, line: %i\n", src_line.arg[1], plist_ind);
 				printf ("%s\n\n", plist[plist_ind].memptr);
                 return (FALSE);
             }
@@ -2460,7 +2460,7 @@ U1 compile ()
             var = getvarind_comp (src_line.arg[0]);
             if (var == NOTDEF)
             {
-                printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[0], plist_ind);
+                printf ("compile: error: variable not defined: %s, line: %i\n", src_line.arg[0], plist_ind);
                 return (FALSE);
             }
 
@@ -2502,7 +2502,7 @@ U1 compile ()
 					var3 = getvarind_comp (src_line.arg[src_line.args]);
 					if (var3 == NOTDEF)
 					{
-						printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[src_line.args], plist_ind);
+						printf ("compile: error: variable not defined: %s, line: %i\n", src_line.arg[src_line.args], plist_ind);
 						return (FALSE);
 					}
 
@@ -2521,7 +2521,7 @@ U1 compile ()
 				/* do sane check... */
 				if (type3 == DOUBLE_VAR || type3 == STRING_VAR)
 				{
-					printf ("compile: error index offset not integer number: %s, line: %li\n", src_line.arg[src_line.args], plist_ind);
+					printf ("compile: error index offset not integer number: %s, line: %i\n", src_line.arg[src_line.args], plist_ind);
 					return (FALSE);
 				}
 
@@ -2620,7 +2620,7 @@ U1 compile ()
 					{
 						if (! make_string ())
 						{
-							printf ("compile: error: can't create string, line %li\n", plist_ind);
+							printf ("compile: error: can't create string, line %i\n", plist_ind);
 							return (FALSE);
 						}
 						var2 = t_var.varlist_ind;
@@ -2638,7 +2638,7 @@ U1 compile ()
 						var2 = getvarind_comp (src_line.arg[list]);
 						if (var2 == NOTDEF)
 						{
-							printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[list], plist_ind);
+							printf ("compile: error: variable not defined: %s, line: %i\n", src_line.arg[list], plist_ind);
 							return (FALSE);
 						}
 
@@ -2665,14 +2665,14 @@ U1 compile ()
 							if (type2 == STRING_VAR)
 							{
 								/* can't assign string to number var */
-								printf ("compile: error: variable not of number type: %s, line: %li\n", src_line.arg[list], plist_ind);
+								printf ("compile: error: variable not of number type: %s, line: %i\n", src_line.arg[list], plist_ind);
 								return (FALSE);
 							}
 
 							if (type2 == DOUBLE_VAR)
 							{
 								/* can't assign double to integer number var */
-								printf ("compile: error: variable not of integer number type: %s, line: %li\n", src_line.arg[list], plist_ind);
+								printf ("compile: error: variable not of integer number type: %s, line: %i\n", src_line.arg[list], plist_ind);
 								return (FALSE);
 							}
 							break;
@@ -2681,7 +2681,7 @@ U1 compile ()
 							if (type2 != DOUBLE_VAR)
 							{
 								/* can't assign not double to double var */
-								printf ("compile: error: variable not of double type: %s, line: %li\n", src_line.arg[list], plist_ind);
+								printf ("compile: error: variable not of double type: %s, line: %i\n", src_line.arg[list], plist_ind);
 								return (FALSE);
 							}
 							break;
@@ -2690,7 +2690,7 @@ U1 compile ()
 							if (type2 != STRING_VAR)
 							{
 								/* can't assign string to not string var */
-								printf ("compile: error: variable not of string type: %s, line: %li\n", src_line.arg[list], plist_ind);
+								printf ("compile: error: variable not of string type: %s, line: %i\n", src_line.arg[list], plist_ind);
 								return (FALSE);
 							}
 							break;
@@ -2899,7 +2899,7 @@ U1 compile ()
 				var2 = getvarind_comp (src_line.arg[2]);
 				if (var2 == NOTDEF)
 				{
-					printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[2], plist_ind);
+					printf ("compile: error: variable not defined: %s, line: %i\n", src_line.arg[2], plist_ind);
 					return (FALSE);
 				}
 
@@ -3519,7 +3519,7 @@ U1 compile ()
                         var2 = getvarind_comp (src_line.arg[3]);
                         if (var == NOTDEF)
                         {
-                            printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[3], plist_ind);
+                            printf ("compile: error: variable not defined: %s, line: %i\n", src_line.arg[3], plist_ind);
                             return (FALSE);
                         }
 
@@ -3730,7 +3730,7 @@ U1 compile ()
 
                     if (! make_string ())
                     {
-                        printf ("compile: error: can't create string, line %li\n", plist_ind);
+                        printf ("compile: error: can't create string, line %i\n", plist_ind);
                         return (FALSE);
                     }
                     var2 = t_var.varlist_ind;
@@ -3769,7 +3769,7 @@ U1 compile ()
                     var2 = getvarind_comp (src_line.arg[2]);
                     if (var2 == NOTDEF)
                     {
-                        printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[2], plist_ind);
+                        printf ("compile: error: variable not defined: %s, line: %i\n", src_line.arg[2], plist_ind);
                         return (FALSE);
                     }
 
@@ -4184,7 +4184,7 @@ U1 compile ()
 						var3 = getvarind_comp (src_line.arg[4]);
 						if (var3 == NOTDEF)
 						{
-							printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[4], plist_ind);
+							printf ("compile: error: variable not defined: %s, line: %i\n", src_line.arg[4], plist_ind);
 							return (FALSE);
 						}
 
@@ -4197,7 +4197,7 @@ U1 compile ()
 							{
 								if (pvarlist_obj[var3].type != QINT_VAR && pvarlist_obj[var3].type != DOUBLE_VAR)
 								{
-									printf ("compile: error: variable must be qint or double variable: %s, line: %li\n", src_line.arg[4], plist_ind);
+									printf ("compile: error: variable must be qint or double variable: %s, line: %i\n", src_line.arg[4], plist_ind);
 									return (FALSE);
 								}
 
@@ -4212,7 +4212,7 @@ U1 compile ()
 							{
 								if (varlist[var3].type != QINT_VAR && varlist[var3].type != DOUBLE_VAR)
 								{
-									printf ("compile: error: variable must be qint or double variable: %s, line: %li\n", src_line.arg[4], plist_ind);
+									printf ("compile: error: variable must be qint or double variable: %s, line: %i\n", src_line.arg[4], plist_ind);
 									return (FALSE);
 								}
 
@@ -4342,7 +4342,7 @@ U1 compile ()
 								break;
 
 							case STRING_VAR:
-								printf ("compile: error: variable type must be a number: %s, line %li\n", src_line.arg[4], plist_ind);
+								printf ("compile: error: variable type must be a number: %s, line %i\n", src_line.arg[4], plist_ind);
 								return (FALSE);
 								break;
 
@@ -4385,7 +4385,7 @@ U1 compile ()
 					var2 = getvarind_comp (src_line.arg[2]);
 					if (var2 == NOTDEF)
 					{
-						printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[2], plist_ind);
+						printf ("compile: error: variable not defined: %s, line: %i\n", src_line.arg[2], plist_ind);
 						return (FALSE);
 					}
 
@@ -4398,7 +4398,7 @@ U1 compile ()
 						{
 							if (pvarlist_obj[var2].type != QINT_VAR && pvarlist_obj[var2].type != DOUBLE_VAR)
 							{
-								printf ("compile: error: variable must be qint or double variable: %s, line: %li\n", src_line.arg[2], plist_ind);
+								printf ("compile: error: variable must be qint or double variable: %s, line: %i\n", src_line.arg[2], plist_ind);
 								return (FALSE);
 							}
 
@@ -4413,7 +4413,7 @@ U1 compile ()
 						{
 							if (varlist[var2].type != QINT_VAR && varlist[var2].type != DOUBLE_VAR)
 							{
-								printf ("compile: error: variable must be qint or double variable: %s, line: %li\n", src_line.arg[2], plist_ind);
+								printf ("compile: error: variable must be qint or double variable: %s, line: %i\n", src_line.arg[2], plist_ind);
 								return (FALSE);
 							}
 
@@ -4667,7 +4667,7 @@ U1 compile ()
 
 						if (op_found == FALSE)
 						{
-							printf ("compile: error: unknown operator: %s, line %li\n", src_line.arg[i], plist_ind);
+							printf ("compile: error: unknown operator: %s, line %i\n", src_line.arg[i], plist_ind);
 							return (FALSE);
 						}
 
@@ -5052,7 +5052,7 @@ U1 compile ()
 
                 if (op_found == FALSE)
                 {
-                    printf ("compile: error: unknown operator: %s, line %li\n", src_line.arg[i], plist_ind);
+                    printf ("compile: error: unknown operator: %s, line %i\n", src_line.arg[i], plist_ind);
                     return (FALSE);
                 }
 
@@ -5062,7 +5062,7 @@ U1 compile ()
                 {
                     if (! make_string ())
                     {
-                        printf ("compile: error: can't create string, line %li\n", plist_ind);
+                        printf ("compile: error: can't create string, line %i\n", plist_ind);
                         return (FALSE);
                     }
                     var3 = t_var.varlist_ind;
@@ -5091,7 +5091,7 @@ U1 compile ()
                     var3 = getvarind_comp (src_line.arg[4]);
                     if (var3 == NOTDEF)
                     {
-                        printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[4], plist_ind);
+                        printf ("compile: error: variable not defined: %s, line: %i\n", src_line.arg[4], plist_ind);
                         return (FALSE);
                     }
 
@@ -5459,7 +5459,7 @@ U1 compile ()
                     var = getvarind_comp (src_line.arg[0]);
                     if (var == NOTDEF)
                     {
-                        printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[0], plist_ind);
+                        printf ("compile: error: variable not defined: %s, line: %i\n", src_line.arg[0], plist_ind);
                         return (FALSE);
                     }
                     
@@ -5557,7 +5557,7 @@ U1 compile ()
                             break;
 
                         default:
-                            printf ("compile: error: not a int or lint or qint type at if: line: %li\n", plist_ind);
+                            printf ("compile: error: not a int or lint or qint type at if: line: %i\n", plist_ind);
                             return (FALSE);
                             break;
                     }
@@ -5575,7 +5575,7 @@ U1 compile ()
                         if_pos = get_if_pos ();
                         if (if_pos == -1)
                         {
-                            printf ("compile: error: if: out of memory if-list line: %li\n", plist_ind);
+                            printf ("compile: error: if: out of memory if-list line: %i\n", plist_ind);
                             return (FALSE);
                         }
 
@@ -5962,7 +5962,7 @@ U1 compile ()
 
                     if (op_found == FALSE)
                     {
-                        printf ("compile: error: unknown operator: %s, line %li\n", src_line.arg[i], plist_ind);
+                        printf ("compile: error: unknown operator: %s, line %i\n", src_line.arg[i], plist_ind);
                         return (FALSE);
                     }
 
@@ -5972,7 +5972,7 @@ U1 compile ()
                     {
                         if (! make_string ())
                         {
-                            printf ("compile: error: can't create string, line %li\n", plist_ind);
+                            printf ("compile: error: can't create string, line %i\n", plist_ind);
                             return (FALSE);
                         }
                         var2 = t_var.varlist_ind;
@@ -6001,7 +6001,7 @@ U1 compile ()
                         var2 = getvarind_comp (src_line.arg[i + 1]);
                         if (var2 == NOTDEF)
                         {
-                            printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[i + 1], plist_ind);
+                            printf ("compile: error: variable not defined: %s, line: %i\n", src_line.arg[i + 1], plist_ind);
                             return (FALSE);
                         }
 
@@ -6353,7 +6353,7 @@ U1 compile ()
                     var = getvarind_comp (src_line.arg[0]);
                     if (var == NOTDEF)
                     {
-                        printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[0], plist_ind);
+                        printf ("compile: error: variable not defined: %s, line: %i\n", src_line.arg[0], plist_ind);
                         return (FALSE);
                     }
                     
@@ -6451,7 +6451,7 @@ U1 compile ()
                             break;
 
                         default:
-                            printf ("compile: error: not a int or lint or qint type at if: line: %li\n", plist_ind);
+                            printf ("compile: error: not a int or lint or qint type at if: line: %i\n", plist_ind);
                             return (FALSE);
                             break;
                     }
@@ -6469,7 +6469,7 @@ U1 compile ()
                         if_pos = get_if_pos ();
                         if (if_pos == -1)
                         {
-                            printf ("compile: error: if: out of memory if-list line: %li\n", plist_ind);
+                            printf ("compile: error: if: out of memory if-list line: %i\n", plist_ind);
                             return (FALSE);
                         }
 
@@ -6488,14 +6488,14 @@ U1 compile ()
             if (nested_code_global_off == FALSE) nested_code = TRUE;
             if (src_line.args != 0)
             {
-                 printf ("compile: error: if expression too complex: line %li\n", plist_ind);
+                 printf ("compile: error: if expression too complex: line %i\n", plist_ind);
                  return (FALSE);
             }
 
             var = getvarind_comp (src_line.arg[0]);
             if (var == NOTDEF)
             {
-                printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[0], plist_ind);
+                printf ("compile: error: variable not defined: %s, line: %i\n", src_line.arg[0], plist_ind);
                 return (FALSE);
             }
 
@@ -6589,7 +6589,7 @@ U1 compile ()
                     break;
 
                 default:
-                    printf ("compile: error: not a int or lint or qint type at if: line: %li\n", plist_ind);
+                    printf ("compile: error: not a int or lint or qint type at if: line: %i\n", plist_ind);
                     return (FALSE);
                     break;
             }
@@ -6607,7 +6607,7 @@ U1 compile ()
                 if_pos = get_if_pos ();
                 if (if_pos == -1)
                 {
-                    printf ("compile: error: if: out of memory if-list line: %li\n", plist_ind);
+                    printf ("compile: error: if: out of memory if-list line: %i\n", plist_ind);
                     return (FALSE);
                 }
 
@@ -6632,7 +6632,7 @@ U1 compile ()
 
             if (! set_else_label (if_pos))
             {
-                printf ("compile: error: else: out of memory line: %li\n", plist_ind);
+                printf ("compile: error: else: out of memory line: %i\n", plist_ind);
                 return (FALSE);
             }
             break;
@@ -6646,7 +6646,7 @@ U1 compile ()
 
                 if (! set_else_label (if_pos))
                 {
-                    printf ("compile: error: endif: out of memory line: %li\n", plist_ind);
+                    printf ("compile: error: endif: out of memory line: %i\n", plist_ind);
                     return (FALSE);
                 }
                 set_endif_finished (if_pos); /* new  ======================================================== */
@@ -6655,7 +6655,7 @@ U1 compile ()
             {
                 if (! set_endif_label (if_pos))
                 {
-                    printf ("compile: error: endif: out of memory line: %li\n", plist_ind);
+                    printf ("compile: error: endif: out of memory line: %i\n", plist_ind);
                     return (FALSE);
                 }
             }
@@ -6666,13 +6666,13 @@ U1 compile ()
             for_pos = get_for_pos ();
             if (for_pos == -1)
             {
-                printf ("compile: error: for: out of memory for-list line: %li\n", plist_ind);
+                printf ("compile: error: for: out of memory for-list line: %i\n", plist_ind);
                 return (FALSE);
             }
 
             if (! set_for_label (for_pos)) /* if_pos */
             {
-                printf ("compile: error: else: out of memory line: %li\n", plist_ind);
+                printf ("compile: error: else: out of memory line: %i\n", plist_ind);
                 return (FALSE);
             }
             break;
@@ -6680,7 +6680,7 @@ U1 compile ()
         case COMP_NEXT:
             if (src_line.args != 1)
             {
-                 printf ("compile: error: next expression too complex: line %li\n", plist_ind);
+                 printf ("compile: error: next expression too complex: line %i\n", plist_ind);
                  return (FALSE);
             }
 
@@ -6689,7 +6689,7 @@ U1 compile ()
             var = getvarind_comp (src_line.arg[1]);
             if (var == NOTDEF)
             {
-                printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[1], plist_ind);
+                printf ("compile: error: variable not defined: %s, line: %i\n", src_line.arg[1], plist_ind);
                 return (FALSE);
             }
 
@@ -6784,7 +6784,7 @@ U1 compile ()
                     break;
 
                 default:
-                    printf ("compile: error: not a int or lint or qint type at next: line: %li\n", plist_ind);
+                    printf ("compile: error: not a int or lint or qint type at next: line: %i\n", plist_ind);
                     return (FALSE);
                     break;
             }
@@ -6864,7 +6864,7 @@ U1 compile ()
                     var = getvarind_comp (src_line.arg[i]);
                     if (var == NOTDEF)
                     {
-                        printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[i], plist_ind);
+                        printf ("compile: error: variable not defined: %s, line: %i\n", src_line.arg[i], plist_ind);
                         return (FALSE);
                     }
 
@@ -7079,7 +7079,7 @@ U1 compile ()
                     var = getvarind_comp (src_line.arg[i]);
                     if (var == NOTDEF)
                     {
-                        printf ("compile: error: variable not defined: %s, line: %li\n", src_line.arg[i], plist_ind);
+                        printf ("compile: error: variable not defined: %s, line: %i\n", src_line.arg[i], plist_ind);
                         return (FALSE);
                     }
 

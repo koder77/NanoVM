@@ -56,8 +56,10 @@ extern "C" {
 #include <sys/stat.h>
 #include <limits.h>
 
-#else
+#endif
 
+#ifdef _WIN32
+    
 #include <windows.h>
 
 #endif

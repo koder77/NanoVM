@@ -30,12 +30,13 @@
 
 /* For more info and how to use this library, visit: http://www.teuniz.net/RS-232/ */
 
+#if ! defined(__AROS__)     // no rs232 code on AROS yet!!!
 
 #include "rs232.h"
 
 
 
-#if defined(__linux__) || defined(__FreeBSD__)   /* Linux & FreeBSD */
+#if defined(__linux__) || defined(__FreeBSD__) /* Linux & FreeBSD */
 
 
 int Cport[38],
@@ -744,4 +745,4 @@ void RS232_cputs(int comport_number, const char *text)  /* sends a string to ser
   while(*text != 0)   RS232_SendByte(comport_number, *(text++));
 }
 
-
+#endif
