@@ -91,9 +91,6 @@ func main ()
     out = output [ null ];
     print out; printn one;
    
-    @genann_write (ann_ptr, "/home/stefan/seafile/Seafile/nanovm/home/ann-xor.txt");
-    get (ret);
-   
 lab end;
     dealloc (*ann_mem);
     exit null;
