@@ -1,0 +1,82 @@
+// wrapper for genann ann neural newtorks library
+
+func genann_init_lib ()
+    lint _genann_dll;
+    lint _genann_init_ann;
+    lint _genann_train_ann;
+    lint _genann_run_ann;
+    lint _genann_read_ann;
+    lint _genann_write_ann;
+    
+    string genann_name[256] = "libgenann.so";
+    string genann_init[256] = "genann_init_ann";
+    string genann_train[256] = "genann_train_ann";
+    string genann_run[256] = "genann_run_ann";
+    string genann_read[256] = "genann_read_ann";
+    string genann_write[256] = "genann_write_ann";
+
+//  open library    
+    lopen (_genann_dll, genann_name);
+
+// set function handles
+    lfunc (_genann_dll, _genann_init_ann, genann_init);
+    lfunc (_genann_dll, _genann_train_ann, genann_train);
+    lfunc (_genann_dll, _genann_run_ann, genann_run);
+    lfunc (_genann_dll, _genann_read_ann, genann_read);
+    lfunc (_genann_dll, _genann_write_ann, genann_write);
+funcend
+
+func genann_read (qint ann_var_ptr, string genann_name[4096])
+    int ret;
+    
+    #ATOMIC;
+    pushtostack> (ann_var_ptr, genann_name);
+    
+    lcall (_genann_dll, _genann_read_ann);
+    get (ret, >);
+    #ATOMIC_END;
+    
+    return (ret);
+funcend
+
+func genann_write (qint ann_var_ptr, string genann_name[4096])
+    int ret;
+    
+    #ATOMIC;
+    pushtostack> (ann_var_ptr, genann_name);
+    
+    lcall (_genann_dll, _genann_write_ann);
+    get (ret, >);
+    #ATOMIC_END;
+    
+    return (ret);
+funcend
+
+func genann_init (qint ann_var_ptr, lint inputs, lint hidden_layers, lint hidden, lint outputs)
+    int ret;
+    
+    #ATOMIC;
+    pushtostack> (ann_var_ptr, inputs, hidden_layers, hidden, outputs);
+    
+    lcall (_genann_dll, _genann_init_ann);
+    get (ret, >);
+    #ATOMIC_END;
+    
+    return (ret);
+funcend
+
+func genann_train (qint ann_var_ptr, qint inputs_var_ptr, qint desired_ouputs_var_ptr, lint learning_rate)
+    #ATOMIC;
+    pushtostack> (ann_var_ptr, inputs_var_ptr, desired_ouputs_var_ptr, learning_rate);
+    
+    lcall (_genann_dll, _genann_train_ann);
+    #ATOMIC_END;
+funcend
+
+func genann_run (qint ann_var_ptr, qint inputs_var_ptr, qint outputs_var_ptr)
+    #ATOMIC;
+    pushtostack> (ann_var_ptr, inputs_var_ptr, outputs_var_ptr);
+    
+    lcall (_genann_dll, _genann_run_ann);
+    #ATOMIC_END;
+funcend
