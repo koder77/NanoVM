@@ -2,7 +2,10 @@ Nano VM (3.4.4)
     Compiler: #NESTED_CODE_ON is the default setting!
     VM: ceil () on 2int function for correct number rounding.
     
--- Stefan Pietzonke <jay-t@gmx.net>  Sat 19 Aug 2017 16:30 +0200   
+    Added library genann for ANN (artificial neural networks) training and run.
+    ANNs can also be saved and loaded.
+    
+-- Stefan Pietzonke <jay-t@gmx.net>  Fri 25 Aug 2017 07:30 +0200   
 
 Nano VM (3.4.3-7)
     BUGFIX: include path on portable install now set right.

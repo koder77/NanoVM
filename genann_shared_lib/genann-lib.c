@@ -13,6 +13,73 @@
 #include "../dll_shared_libs/nanovmlib.h"
 
 
+void genann_read_ann (U1 *pthreads_ptr, U1 *varlist_ptr, U1 *vm_mem_ptr, S4 threadnum, S8 stacksize)
+{
+    struct pthreads *pthreads;
+	struct varlist *varlist;
+	struct vm_mem *vm_mem;
+	
+	pthreads = (struct pthreads *) pthreads_ptr;
+	varlist = (struct varlist *) varlist_ptr;
+	vm_mem = (struct vm_mem *) vm_mem_ptr;
+    
+    S8 genann_var_ind;
+    U1 genann_name[4095];
+    
+    FILE *input;
+    
+    if (stpull_s (threadnum, pthreads, stacksize, genann_name) != ERR_STACK_OK) printf ("genann_read_ann: ERROR on stack genann_name!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &genann_var_ind) != ERR_STACK_OK) printf ("genann_read_ann: ERROR on stack genann_var_ind!\n");
+    
+    input = fopen (genann_name, "r");
+    if (input)
+    {
+        varlist[genann_var_ind].s_m = (genann *) genann_read (input);
+        fclose (input);
+        
+        if (stpush_l (threadnum, pthreads, stacksize, 0) != ERR_STACK_OK) printf ("genann_read_ann: ERROR on stack return code OK!\n");
+    }
+    else
+    {
+        // FAIL
+        if (stpush_l (threadnum, pthreads, stacksize, 1) != ERR_STACK_OK) printf ("genann_read_ann: ERROR on stack return code FAIL!\n");
+    }
+}
+
+void genann_write_ann (U1 *pthreads_ptr, U1 *varlist_ptr, U1 *vm_mem_ptr, S4 threadnum, S8 stacksize)
+{
+    struct pthreads *pthreads;
+	struct varlist *varlist;
+	struct vm_mem *vm_mem;
+	
+	pthreads = (struct pthreads *) pthreads_ptr;
+	varlist = (struct varlist *) varlist_ptr;
+	vm_mem = (struct vm_mem *) vm_mem_ptr;
+    
+    S8 genann_var_ind;
+    U1 genann_name[4095];
+    
+    FILE *output;
+    
+    if (stpull_s (threadnum, pthreads, stacksize, genann_name) != ERR_STACK_OK) printf ("genann_write_ann: ERROR on stack genann_name!\n");
+    if (stpull_l (threadnum, pthreads, stacksize, &genann_var_ind) != ERR_STACK_OK) printf ("genann_write_ann: ERROR on stack genann_var_ind!\n");
+    
+    output = fopen (genann_name, "w");
+    if (output)
+    {
+        genann_write (varlist[genann_var_ind].s_m, output);
+        fclose (output);
+        
+        if (stpush_l (threadnum, pthreads, stacksize, 0) != ERR_STACK_OK) printf ("genann_write_ann: ERROR on stack return code OK!\n");
+    }
+    else
+    {
+        // FAIL
+        if (stpush_l (threadnum, pthreads, stacksize, 1) != ERR_STACK_OK) printf ("genann_write_ann: ERROR on stack return code FAIL!\n");
+    }
+}
+        
+
 void genann_init_ann (U1 *pthreads_ptr, U1 *varlist_ptr, U1 *vm_mem_ptr, S4 threadnum, S8 stacksize)
 {
     struct pthreads *pthreads;
@@ -39,7 +106,7 @@ void genann_init_ann (U1 *pthreads_ptr, U1 *varlist_ptr, U1 *vm_mem_ptr, S4 thre
         varlist[genann_var_ind].dims = 0;
         
         // push return code 0 = OK, on stack
-        if (stpush_l (threadnum, pthreads, stacksize, 0) != ERR_STACK_OK) printf ("genann_init_ann: ERROR on stack return code OK!\n");
+        if (stpush_l (threadnum, pthreads, stacksize, 0) != ERR_STACK_OK) printf ("genann_init_ann: ERROR on stack return code FAIL!\n");
     }
     else
     {
