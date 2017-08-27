@@ -5,7 +5,9 @@ Nano VM (3.4.4)
     Added library genann for ANN (artificial neural networks) training and run.
     ANNs can also be saved and loaded.
     
--- Stefan Pietzonke <jay-t@gmx.net>  Fri 25 Aug 2017 07:30 +0200   
+    Merged I2C library to GPIO library.
+    
+-- Stefan Pietzonke <jay-t@gmx.net>  Sun 27 Aug 2017 06:00 +0200   
 
 Nano VM (3.4.3-7)
     BUGFIX: include path on portable install now set right.
