@@ -7,7 +7,10 @@ Nano VM (3.4.4)
     
     Merged I2C library to GPIO library.
     
--- Stefan Pietzonke <jay-t@gmx.net>  Sun 27 Aug 2017 06:00 +0200   
+    I did a quick port to DragonFly BSD, to check if Nano VM builds on BSD too!
+    I wrote an automake script for it too.
+    
+-- Stefan Pietzonke <jay-t@gmx.net>  Sat 2 Sep 2017 10:20 +0200   
 
 Nano VM (3.4.3-7)
     BUGFIX: include path on portable install now set right.

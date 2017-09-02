@@ -50,6 +50,11 @@ func main ()
         print "Android";
     endif;
     
+    x = _os == os_dragonfly;
+    if x;
+		print "DragonFly BSD";
+	endif;
+    
     printn two;
     exit null;
 funcend;

@@ -35,7 +35,7 @@
     #include <errno.h>
 #endif
 
-#if OS_LINUX || OS_WINDOWS_CYGWIN || OS_ANDROID
+#if OS_LINUX || OS_WINDOWS_CYGWIN || OS_ANDROID || OS_DRAGONFLY
     #include <sys/wait.h>
     #include <errno.h>
 #endif
@@ -164,7 +164,7 @@ U1 exe_wait_process (S8 process, S8 *retval)
 
 /* LINUX ------------------------------------------------------------ */
 
-#if OS_LINUX || OS_WINDOWS_CYGWIN || OS_ANDROID
+#if OS_LINUX || OS_WINDOWS_CYGWIN || OS_ANDROID || OS_DRAGONFLY
 
 U1 exe_run_process (U1 *name, S8 *process)
 {

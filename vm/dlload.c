@@ -62,7 +62,7 @@ U1 expand_dll_pathname (U1 *path, U1 *newpath)
 					strcpy (newpath, "Work:nanovm/");
 				}
 
-				if (OS_LINUX)
+				if (OS_LINUX || OS_DRAGONFLY)
 				{
 					strcpy (newpath, "~/nanovm/");
 				}
@@ -102,7 +102,7 @@ U1 expand_dll_pathname (U1 *path, U1 *newpath)
 					strcpy (newpath, "Work:nanovm/lib/");
 				}
 
-				if (OS_LINUX)
+				if (OS_LINUX || OS_DRAGONFLY)
 				{
 					strcpy (newpath, "~/nanovm/lib/");
 				}
@@ -230,7 +230,7 @@ U1 exe_lopen (S8 *llist_ind, U1 *lname)
         return (ERR_FILE_OPEN);
     }
 #else
-#if OS_LINUX
+#if OS_LINUX || OS_DRAGONFLY
     dlls[handle].lptr = dlopen (convname, RTLD_LAZY);
     if (!dlls[handle].lptr) 
 	{
@@ -250,7 +250,7 @@ U1 exe_lclose (S8 llist_ind)
 #if OS_WINDOWS
 	FreeLibrary	(dlls[llist_ind].lptr);
 #else
-#if OS_LINUX
+#if OS_LINUX || OS_DRAGONFLY
 	dlclose (dlls[llist_ind].lptr);
 #endif
 #endif
@@ -282,7 +282,7 @@ U1 exe_lfunc (S8 llist_ind, S8 *flist_ind, U1 *fname)
 		return (ERR_FILE_READ);
     }
 #else
-#if OS_LINUX
+#if OS_LINUX || OS_DRAGONFLY
     // reset errors
     dlerror ();
 

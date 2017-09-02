@@ -323,7 +323,7 @@ U1 conv_include_name (U1 *str, U1 *file, S2 type)
                     strcpy (file, "Work:nanovm/include/");
                 }
 
-                if (OS_LINUX)
+                if (OS_LINUX || OS_DRAGONFLY)
                 {
                     strcpy (file, "~/nanovm/include/");
                 }
@@ -383,7 +383,7 @@ U1 conv_include_name (U1 *str, U1 *file, S2 type)
                     strcpy (file, "Work:nanovm/prog/");
                 }
 
-                if (OS_LINUX)
+                if (OS_LINUX || OS_DRAGONFLY)
                 {
                     strcpy (file, "~/nanovm/prog/");
                 }

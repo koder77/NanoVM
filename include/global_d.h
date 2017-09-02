@@ -36,7 +36,7 @@
     #include <proto/thread.h>
     #include <proto/dos.h>
 #else
-#if OS_LINUX
+#if OS_LINUX || OS_DRAGONFLY
     #include <sched.h>
 #endif
     #include <pthread.h>            /* for POSIX threads */
@@ -54,7 +54,7 @@
     #include <malloc.h>
 #endif
 
-#if OS_LINUX || OS_WINDOWS_CYGWIN || OS_ANDROID
+#if OS_LINUX || OS_WINDOWS_CYGWIN || OS_ANDROID || OS_DRAGONFLY
     #include <unistd.h>         /* time functions */
     #include <sys/stat.h>       /* makedir */
 	#include <dirent.h>
@@ -87,7 +87,7 @@
 	#undef KERNEL
 #endif
 
-#if OS_AMIGA || OS_AROS || OS_LINUX || OS_WINDOWS_CYGWIN || OS_ANDROID
+#if OS_AMIGA || OS_AROS || OS_LINUX || OS_WINDOWS_CYGWIN || OS_ANDROID || OS_DRAGONFLY
     #include <errno.h>
     #include <sys/types.h>
     #include <sys/socket.h>
@@ -111,7 +111,7 @@
 #include <direct.h>
 #include <windows.h>
 #else
-#if OS_LINUX
+#if OS_LINUX || OS_DRAGONFLY
 #include <sys/types.h>
 #include <dlfcn.h>
 #endif

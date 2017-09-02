@@ -42,7 +42,7 @@
     #define EXE_WAIT_SEC();  Sleep (vmreg.l[ARG1] * CLOCKS_PER_SEC);
 #endif
 
-#if OS_LINUX || OS_WINDOWS_CYGWIN || OS_ANDROID
+#if OS_LINUX || OS_WINDOWS_CYGWIN || OS_ANDROID || OS_DRAGONFLY
     #define EXE_WAIT_SEC();  sleep (vmreg.l[ARG1]);
 #endif
 
@@ -56,7 +56,7 @@
     #define EXE_WAIT_TICK();  Sleep (vmreg.l[ARG1]);
 #endif
 
-#if OS_LINUX || OS_WINDOWS_CYGWIN || OS_ANDROID
+#if OS_LINUX || OS_WINDOWS_CYGWIN || OS_ANDROID || OS_DRAGONFLY
     #define EXE_WAIT_TICK();  usleep (vmreg.l[ARG1] * 1000);
 #endif
 
@@ -71,6 +71,6 @@
     #define PWAIT_TICK();  Sleep (40 * CLOCKS_PER_SEC / NANO_TIMER_TICKS);
 #endif
 
-#if OS_LINUX || OS_WINDOWS_CYGWIN || OS_ANDROID
+#if OS_LINUX || OS_WINDOWS_CYGWIN || OS_ANDROID || OS_DRAGONFLY
     #define PWAIT_TICK();  usleep (40 * CLOCKS_PER_SEC / NANO_TIMER_TICKS);
 #endif

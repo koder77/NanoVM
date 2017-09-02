@@ -138,7 +138,7 @@
 #define OS_TYPE_LINUX   3
 #define OS_TYPE_WINDOWS 4
 #define OS_TYPE_ANDROID 5
-
+#define OS_TYPE_DRAGONFLY 6
 
 /* unset all */
 
@@ -148,7 +148,7 @@
 #define OS_WINDOWS          FALSE
 #define OS_WINDOWS_CYGWIN   FALSE
 #define OS_ANDROID			FALSE
-
+#define OS_DRAGONFLY		FALSE
 
 #if __amigaos__
     #undef  OS_AMIGA
@@ -191,9 +191,14 @@
     #define OS_TYPE     OS_TYPE_WINDOWS
 
     #pragma message("OS = WINDOWS CYGWIN")
+
+#elif __DragonFly__
+	#undef OS_DRAGONFLY
+	#define OS_DRAGONFLY	TRUE
+	#define OS_TYPE			OS_TYPE_DRAGONFLY
+	
+	#pragma message("OS = DRAGONFLY BSD")
 #endif
-
-
 
 
 /* machine number --------------------------------------------------- */
@@ -240,7 +245,7 @@
     #define PATH_SLASH_CONV     TRUE
 #endif
 
-#if OS_LINUX || OS_ANDROID
+#if OS_LINUX || OS_ANDROID || OS_DRAGONFLY
     #define PATH_SLASH_CONV     FALSE
 #endif
 
@@ -259,14 +264,14 @@
     #define NEWLINE_SB          "\r\n"
 #endif
 
-#if OS_LINUX || OS_ANDROID
+#if OS_LINUX || OS_ANDROID || OS_DRAGONFLY
     #define NEWLINE_SB          "\n"
 #endif
 
 
 /* THREADING config ------------------------------------------------- */
 
-#if OS_LINUX
+#if OS_LINUX || OS_DRAGONFLY
 	#define HAVE_THREADING			1
 #endif
 
@@ -288,7 +293,7 @@
     #error "host.h: FATAL ERROR can't detect machine type!!!"
 #endif
 
-#if OS_AMIGA == FALSE && OS_AROS == FALSE && OS_WINDOWS == FALSE && OS_WINDOWS_CYGWIN == FALSE && OS_LINUX == FALSE && OS_ANDROID == FALSE
+#if OS_AMIGA == FALSE && OS_AROS == FALSE && OS_WINDOWS == FALSE && OS_WINDOWS_CYGWIN == FALSE && OS_LINUX == FALSE && OS_ANDROID == FALSE && OS_DRAGONFLY == FALSE
     #error "host.h: FATAL ERROR can't detect OS type!!!"
 #endif
 

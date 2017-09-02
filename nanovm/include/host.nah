@@ -1,7 +1,7 @@
 // $VER: host.nah 1.00 (23.02.14)
 
 int machine_68k; int machine_x86;
-int os_amiga; int os_aros; int os_linux; int os_windows;
+int os_amiga; int os_aros; int os_linux; int os_windows; int os_dragonfly;
 
 push_i          1, L0;
 pull_i          L0, machine_68k;
@@ -23,5 +23,8 @@ pull_i          L0, os_windows;
 
 push_i			5, L0;
 pull_i			L0, os_android;
+
+push_i			6, L0;
+pull_i			L0, os_dragonfly;
 // EOF
 

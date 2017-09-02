@@ -231,7 +231,7 @@ U1 expand_pathname (U1 *path, U1 *newpath)
 					strcpy (newpath, "Work:nanovm/");
 				}
 
-				if (OS_LINUX)
+				if (OS_LINUX || OS_DRAGONFLY)
 				{
 					strcpy (newpath, "~/nanovm/");
 				}
@@ -281,7 +281,7 @@ U1 expand_pathname (U1 *path, U1 *newpath)
 					strcpy (newpath, "Work:nanovm/home/");
 				}
 
-				if (OS_LINUX)
+				if (OS_LINUX || OS_DRAGONFLY)
 				{
 					strcpy (newpath, "~/nanovm/home/");
 				}
@@ -1404,7 +1404,7 @@ U1 exe_makedir (U1 *name)
 		return (ERR_FILE_WRITE);
 	}
 	
-#if OS_LINUX
+#if OS_LINUX || OS_DRAGONFLY
     if (mkdir (path, S_IRWXU) == 0)
     {
         return (ERR_FILE_OK);
@@ -1438,7 +1438,7 @@ U1 exe_makedir (U1 *name)
 /* source taken from: http://stackoverflow.com/questions/5734802/reading-directory-content-in-linux */
 /* and modified to fit */
 
-#if OS_LINUX || OS_ANDROID
+#if OS_LINUX || OS_ANDROID || OS_DRAGONFLY
 U1 exe_dobjects (U1 *directory, S8 *objects)
 {
 	U1 new_fname[MAXSTRING_VAR + 1], convname[MAXSTRING_VAR + 1], path[MAXSTRING_VAR + 1];
@@ -1543,7 +1543,7 @@ U1 exe_dobjects (U1 *directory, S8 *objects)
 /* exe_dnames () ------------------------------------------ */
 /* get directory names: file names and directory names      */
 
-#if OS_LINUX || OS_ANDROID
+#if OS_LINUX || OS_ANDROID || OS_DRAGONFLY
 U1 exe_dnames (U1 *directory, struct varlist *varlist, S8 sreg)
 {
 	U1 new_fname[MAXSTRING_VAR + 1], convname[MAXSTRING_VAR + 1], path[MAXSTRING_VAR + 1];

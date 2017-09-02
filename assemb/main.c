@@ -382,7 +382,7 @@ NINT main (NINT ac, char *av[])
 					strcpy (source, "Work:nanovm");
 				}
 
-				if (OS_LINUX)
+				if (OS_LINUX || OS_DRAGONFLY)
 				{
 					strcpy (source, "~/nanovm");
 				}

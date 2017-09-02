@@ -36,30 +36,33 @@
 
 
 
-#if defined(__linux__) || defined(__FreeBSD__) /* Linux & FreeBSD */
+#if defined(__linux__) || defined(__FreeBSD__) || defined(__DragonFly__) /* Linux & BSD */
 
 
 int Cport[38],
     error;
 
 struct termios new_port_settings,
-       old_port_settings[38];
+       old_port_settings[42];
 
-char comports[38][16]={"/dev/ttyS0","/dev/ttyS1","/dev/ttyS2","/dev/ttyS3","/dev/ttyS4","/dev/ttyS5",
+char comports[42][16]={"/dev/ttyS0","/dev/ttyS1","/dev/ttyS2","/dev/ttyS3","/dev/ttyS4","/dev/ttyS5",
                        "/dev/ttyS6","/dev/ttyS7","/dev/ttyS8","/dev/ttyS9","/dev/ttyS10","/dev/ttyS11",
                        "/dev/ttyS12","/dev/ttyS13","/dev/ttyS14","/dev/ttyS15","/dev/ttyUSB0",
                        "/dev/ttyUSB1","/dev/ttyUSB2","/dev/ttyUSB3","/dev/ttyUSB4","/dev/ttyUSB5",
                        "/dev/ttyAMA0","/dev/ttyAMA1","/dev/ttyACM0","/dev/ttyACM1",
                        "/dev/rfcomm0","/dev/rfcomm1","/dev/ircomm0","/dev/ircomm1",
                        "/dev/cuau0","/dev/cuau1","/dev/cuau2","/dev/cuau3",
-                       "/dev/cuaU0","/dev/cuaU1","/dev/cuaU2","/dev/cuaU3"};
+                       "/dev/cuaU0","/dev/cuaU1","/dev/cuaU2","/dev/cuaU3",
+					   "/dev/ttyd0", "/dev/ttyd1", "/dev/ttyd2", "/dev/ttyd3"
+					   
+};
 
 int RS232_OpenComport(int comport_number, int baudrate, const char *mode)
 {
   int baudr,
       status;
 
-  if((comport_number>37)||(comport_number<0))
+  if((comport_number>41)||(comport_number<0))
   {
     printf("illegal comport number\n");
     return(1);
@@ -103,6 +106,8 @@ int RS232_OpenComport(int comport_number, int baudrate, const char *mode)
                    break;
     case  230400 : baudr = B230400;
                    break;
+				   
+#if ! __DragonFly__				   
     case  460800 : baudr = B460800;
                    break;
     case  500000 : baudr = B500000;
@@ -127,6 +132,8 @@ int RS232_OpenComport(int comport_number, int baudrate, const char *mode)
                    break;
     case 4000000 : baudr = B4000000;
                    break;
+#endif				   
+				   
     default      : printf("invalid baudrate\n");
                    return(1);
                    break;

@@ -28,7 +28,7 @@
 #include "host.h"
 #include "global_d.h"
 
-#if OS_AMIGA || OS_AROS || OS_ANDROID
+#if OS_AMIGA || OS_AROS || OS_ANDROID || OS_DRAGONFLY
     #include "exe_socket_ipv4_amiga.h"
 #endif
 

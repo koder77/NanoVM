@@ -30,7 +30,7 @@
 #include "global_d.h"
 #include "arch.h"
 
-#if OS_LINUX || OS_WINDOWS_CYGWIN
+#if OS_LINUX || OS_WINDOWS_CYGWIN || OS_DRAGONFLY
 
 #include <stdio.h>
 #include <unistd.h>
